@@ -412,7 +412,7 @@ export default function CaseShowSection() {
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
+          viewport={{ once: false, margin: "-80px" }}
           transition={{ duration: 0.6 }}
         >
           <Typography
@@ -1249,7 +1249,7 @@ export default function CaseShowSection() {
             }}
           >
             {/* READ MORE */}
-            <Button
+            {/* <Button
               variant="outlined"
               sx={{
                 position: "relative",
@@ -1285,7 +1285,7 @@ export default function CaseShowSection() {
               }}
             >
               Read More
-            </Button>
+            </Button> */}
 
             {/* ARROWS */}
             <Box

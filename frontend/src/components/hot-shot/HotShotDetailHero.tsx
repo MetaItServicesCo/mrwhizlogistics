@@ -30,10 +30,10 @@ export default function HotShotDetailHero({
       sx={{
         position: "relative",
         minHeight: {
-          xs: 520,
-          sm: 580,
-          md: 680,
-          lg: 720,
+          xs: 480,
+          sm: 500,
+          md: 520,
+          lg: 540,
         },
         display: "flex",
         alignItems: "center",
@@ -49,10 +49,10 @@ export default function HotShotDetailHero({
       <Box
         component={motion.div}
         aria-hidden
-        initial={reduce ? {} : { scale: 1.12 }}
+        initial={reduce ? {} : { scale: 1.34 }}
         animate={reduce ? {} : { scale: 1 }}
         transition={{
-          duration: 9,
+          duration: 8,
           ease: "easeOut",
         }}
         sx={{

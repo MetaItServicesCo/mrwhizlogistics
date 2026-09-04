@@ -209,7 +209,7 @@ export default function TestimonialsSection() {
         <motion.div
           initial={{ opacity: 0, y: 28 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
+          viewport={{ once: false, margin: "-80px" }}
           transition={{ duration: 0.6, ease: EASE }}
         >
           <Typography
@@ -256,7 +256,7 @@ export default function TestimonialsSection() {
         component={motion.div}
         initial={{ opacity: 0, y: 36 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-80px" }}
+        viewport={{ once: false, margin: "-80px" }}
         transition={{ duration: 0.65, ease: EASE }}
         onMouseEnter={() => {
           pausedRef.current = true;

@@ -49,7 +49,7 @@ const MEGA: Record<
         icon: <LocalShippingRoundedIcon />,
       },
       {
-        title: "Sprinter Van with Lifters",
+        title: "Sprinter Van with Lift Gate",
         desc: "Hydraulic lift assistance",
         href: "/hot-shot/sprinter-van",
         icon: <DirectionsCarRoundedIcon />,

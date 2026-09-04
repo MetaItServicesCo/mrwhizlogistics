@@ -12,8 +12,6 @@ import PhoneInTalkRoundedIcon from "@mui/icons-material/PhoneInTalkRounded";
 
 import type { HotShotService } from "@/types/hotShot";
 
-import { HOT_SHOT_SERVICES } from "@/data/hotShotServices";
-
 import HotShotDetailHero from "@/components/hot-shot/HotShotDetailHero";
 import HotShotWhyChoose from "@/components/hot-shot/HotShotWhyChoose";
 import HotShotTransportOptions from "@/components/hot-shot/HotShotTransportOptions";
@@ -24,7 +22,19 @@ const LIME = "#c8ff00";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
-function Sidebar({ service }: { service: HotShotService }) {
+interface SidebarProps {
+  service: HotShotService;
+  services: HotShotService[];
+  basePath: string;
+  sectionTitle?: string;
+}
+
+function Sidebar({
+  service,
+  services = [],
+  basePath,
+  sectionTitle = "Services",
+}: SidebarProps) {
   return (
     <Box
       sx={{
@@ -33,7 +43,6 @@ function Sidebar({ service }: { service: HotShotService }) {
       }}
     >
       {/* SERVICE MENU */}
-
       <Typography
         sx={{
           color: "#fff",
@@ -42,7 +51,7 @@ function Sidebar({ service }: { service: HotShotService }) {
           mb: 1.5,
         }}
       >
-        Hot Shot Services
+        {sectionTitle}
       </Typography>
 
       <Box
@@ -51,149 +60,51 @@ function Sidebar({ service }: { service: HotShotService }) {
           borderTop: "1px solid rgba(255,255,255,.08)",
         }}
       >
-        {HOT_SHOT_SERVICES.map((item) => (
-          <Box
-            key={item.slug}
-            component={Link}
-            href={`/hot-shot/${item.slug}`}
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              minHeight: 48,
-              px: 1.5,
-              borderBottom: "1px solid rgba(255,255,255,.07)",
-              textDecoration: "none",
-
-              color:
-                item.slug === service.slug ? LIME : "rgba(255,255,255,.48)",
-
-              bgcolor:
-                item.slug === service.slug
-                  ? "rgba(200,255,0,.06)"
-                  : "transparent",
-
-              transition: "all .25s ease",
-
-              "&:hover": {
-                color: LIME,
-                bgcolor: "rgba(200,255,0,.05)",
-              },
-            }}
-          >
-            <Typography
+        {Array.isArray(services) &&
+          services.map((item) => (
+            <Box
+              key={item.slug}
+              component={Link}
+              href={`${basePath}/${item.slug}`}
               sx={{
-                fontSize: 16,
-                fontWeight: 800,
-                letterSpacing: 0.3,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                minHeight: 48,
+                px: 1.5,
+                borderBottom: "1px solid rgba(255,255,255,.07)",
+                textDecoration: "none",
+                color:
+                  item.slug === service?.slug ? LIME : "rgba(255,255,255,.48)",
+                bgcolor:
+                  item.slug === service?.slug
+                    ? "rgba(200,255,0,.06)"
+                    : "transparent",
+                transition: "all .25s ease",
+                "&:hover": {
+                  color: LIME,
+                  bgcolor: "rgba(200,255,0,.05)",
+                },
               }}
             >
-              {item.title}
-            </Typography>
+              <Typography
+                sx={{
+                  fontSize: 16,
+                  fontWeight: 800,
+                  letterSpacing: 0.3,
+                }}
+              >
+                {item.title}
+              </Typography>
 
-            <ArrowForwardRoundedIcon
-              sx={{
-                fontSize: 15,
-              }}
-            />
-          </Box>
-        ))}
+              <ArrowForwardRoundedIcon
+                sx={{
+                  fontSize: 15,
+                }}
+              />
+            </Box>
+          ))}
       </Box>
-
-      {/* QUOTE */}
-
-      {/* <Box
-        sx={{
-          position: "relative",
-          overflow: "hidden",
-          bgcolor: "#111",
-          border: "1px solid rgba(255,255,255,.08)",
-          p: 3,
-          mb: 3,
-        }}
-      >
-        <Box
-          sx={{
-            position: "absolute",
-            width: 180,
-            height: 180,
-            right: -90,
-            top: -90,
-            borderRadius: "50%",
-            background:
-              "radial-gradient(circle, rgba(200,255,0,.13), transparent 70%)",
-          }}
-        />
-
-        <Box
-          sx={{
-            position: "relative",
-            width: 40,
-            height: 40,
-            bgcolor: LIME,
-            color: "#080808",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            mb: 2,
-          }}
-        >
-          <ArrowForwardRoundedIcon
-            sx={{
-              fontSize: 20,
-            }}
-          />
-        </Box>
-
-        <Typography
-          sx={{
-            position: "relative",
-            color: "#fff",
-            fontSize: 15,
-            fontWeight: 900,
-            mb: 1,
-          }}
-        >
-          Get a hot shot quote
-        </Typography>
-
-        <Typography
-          sx={{
-            position: "relative",
-            color: "rgba(255,255,255,.45)",
-            fontSize: 10.5,
-            lineHeight: 1.7,
-            mb: 2.5,
-          }}
-        >
-          Tell us what needs to move and where it needs to go. Our dispatch team
-          will help build the right solution.
-        </Typography>
-
-        <Box
-          component={Link}
-          href="#contact"
-          sx={{
-            position: "relative",
-            display: "inline-flex",
-            alignItems: "center",
-            gap: 1,
-            color: LIME,
-            textDecoration: "none",
-            fontSize: 10,
-            fontWeight: 900,
-          }}
-        >
-          Request quote
-          <ArrowForwardRoundedIcon
-            sx={{
-              fontSize: 15,
-            }}
-          />
-        </Box>
-      </Box> */}
-
-      {/* HELP */}
 
       {/* HELP */}
       <Box
@@ -341,7 +252,7 @@ function Sidebar({ service }: { service: HotShotService }) {
           {/* phone */}
           <Box
             component="a"
-            href="tel:+1 (469) 767 8853"
+            href="tel:+14697678853"
             sx={{
               position: "relative",
               display: "inline-flex",
@@ -368,11 +279,19 @@ function Sidebar({ service }: { service: HotShotService }) {
   );
 }
 
+interface HotShotServiceDetailProps {
+  service: HotShotService;
+  services: HotShotService[];
+  basePath: string;
+  sectionTitle?: string;
+}
+
 export default function HotShotServiceDetail({
   service,
-}: {
-  service: HotShotService;
-}) {
+  services,
+  basePath,
+  sectionTitle,
+}: HotShotServiceDetailProps) {
   return (
     <Box
       component="main"
@@ -716,10 +635,15 @@ export default function HotShotServiceDetail({
                 xs: "none",
                 lg: "block",
               },
-              alignSelf: "stretch", // 👈 cell ko poori row height tak stretch karta hai → sticky ko jagah milti hai
+              alignSelf: "stretch",
             }}
           >
-            <Sidebar service={service} />
+            <Sidebar
+              service={service}
+              services={services}
+              basePath={basePath}
+              sectionTitle={sectionTitle}
+            />
           </Box>
         </Box>
       </Box>
