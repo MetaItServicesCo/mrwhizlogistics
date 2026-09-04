@@ -172,7 +172,7 @@ export default function HotShotWhy() {
         <motion.div
           initial={{ opacity: 0, y: 26 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
+          viewport={{ once: false, margin: "-80px" }}
           transition={{ duration: 0.6, ease: EASE }}
         >
           {/* eyebrow with side lines (reference jaisा) */}
@@ -235,7 +235,7 @@ export default function HotShotWhy() {
         }}
         initial="hidden"
         whileInView="show"
-        viewport={{ once: true, margin: "-90px" }}
+        viewport={{ once: false, margin: "-90px" }}
         sx={{
           position: "relative",
           zIndex: 1,

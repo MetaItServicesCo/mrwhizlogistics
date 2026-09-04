@@ -251,7 +251,7 @@ export default function ProcessSection() {
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
+          viewport={{ once: false, margin: "-80px" }}
           transition={{ duration: 0.6 }}
         >
           <Typography
@@ -302,7 +302,7 @@ export default function ProcessSection() {
         }}
         initial="hidden"
         whileInView="show"
-        viewport={{ once: true, margin: "-90px" }}
+        viewport={{ once: false, margin: "-90px" }}
         sx={{
           position: "relative",
           maxWidth: 1180,

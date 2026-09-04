@@ -415,7 +415,7 @@ export default function ContactSection() {
             y: 0,
           }}
           viewport={{
-            once: true,
+            once: false,
             margin: "-80px",
           }}
           transition={{
@@ -731,7 +731,7 @@ export default function ContactSection() {
                   initial="hidden"
                   whileInView="show"
                   viewport={{
-                    once: true,
+                    once: false,
                     margin: "-60px",
                   }}
                   sx={{

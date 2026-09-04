@@ -43,5 +43,11 @@ export default async function HotShotServiceDetailPage({
     notFound();
   }
 
-  return <HotShotServiceDetail service={service} />;
+  return (
+    <HotShotServiceDetail
+      service={service}
+      services={HOT_SHOT_SERVICES} // <--- Yeh add karein
+      basePath="/hot-shot" // <--- Yeh add karein (aapka route URL prefix)
+    />
+  );
 }

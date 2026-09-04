@@ -80,7 +80,7 @@ export const HOT_SHOT_SERVICES: HotShotService[] = [
         icon: "truck",
       },
       {
-        title: "Sprinter Van with Lifters",
+        title: "Sprinter Van with Lift Gate",
         label: "EXPEDITED",
         description:
           "Fast and flexible transportation for smaller nationwide shipments.",
@@ -120,7 +120,7 @@ export const HOT_SHOT_SERVICES: HotShotService[] = [
   {
     slug: "sprinter-van-with-lifters",
     number: "02",
-    title: "Sprinter Van with Lifters",
+    title: "Sprinter Van with Lift Gate",
     badge: "DEADLINE-DRIVEN FREIGHT",
     image: "/images/Hotshot/Sprinter-van/1.png",
 
@@ -184,7 +184,7 @@ export const HOT_SHOT_SERVICES: HotShotService[] = [
         icon: "truck",
       },
       {
-        title: "Sprinter Van with Lifters",
+        title: "Sprinter Van with Lift Gate",
         label: "EXPEDITED",
         description:
           "Fast and flexible transportation for smaller nationwide shipments.",
@@ -288,7 +288,7 @@ export const HOT_SHOT_SERVICES: HotShotService[] = [
         icon: "truck",
       },
       {
-        title: "Sprinter Van with Lifters",
+        title: "Sprinter Van with Lift Gate",
         label: "EXPEDITED",
         description:
           "Fast and flexible transportation for smaller nationwide shipments.",
@@ -392,7 +392,7 @@ export const HOT_SHOT_SERVICES: HotShotService[] = [
         icon: "truck",
       },
       {
-        title: "Sprinter Van with Lifters",
+        title: "Sprinter Van with Lift Gate",
         label: "EXPEDITED",
         description:
           "Fast and flexible transportation for smaller nationwide shipments.",

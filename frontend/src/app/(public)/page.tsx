@@ -26,15 +26,16 @@ import TestimonialsSection from "@/components/home/TestimonialsSection";
 
 // ===== Tuning levers =====
 const SECTION_HEIGHT = "300vh"; // zyada = dheema scrub + zyada scroll room
-const VIDEO_END = 0.5; // is scroll point tak video poori
+const VIDEO_END = 0.6; // is scroll point tak video poori
 const TEXT_START = 0.55; // words reveal shuru
 const TEXT_END = 0.95; // words reveal khatam
 
 const SENTENCE =
   "Fast, reliable trucking that moves your freight from pickup to delivery without the hassle";
 const WORDS = SENTENCE.split(" ");
-const GRADIENT =
-  "linear-gradient(90deg, #c8ff00 0%, #00e5ff 50%, #ff4dd8 100%)";
+// const GRADIENT =
+//   "linear-gradient(90deg, #c8ff00 0%, #00e5ff 50%, #ff4dd8 100%)";
+const GRADIENT = "#ffffff";
 const STEP = (TEXT_END - TEXT_START) / WORDS.length;
 
 const headingSx = {
