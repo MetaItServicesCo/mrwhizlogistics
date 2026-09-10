@@ -7,6 +7,9 @@ import RentalBenefits from "@/components/rentals/RentalBenefits";
 import RentalHowItWorks from "@/components/rentals/RentalHowItWorks";
 import RentalFaq from "@/components/rentals/RentalFaq";
 import RentalFinalCta from "@/components/rentals/RentalFinalCta";
+import RentalQuoteModal from "@/components/rentals/RentalQuoteModal";
+// import { useState } from "react";
+import { RentalItem } from "@/data/hotShotRentals";
 
 export const metadata: Metadata = {
   title: "Hot Shot Equipment Rentals | Flatbed, Gooseneck & Enclosed Trailers",

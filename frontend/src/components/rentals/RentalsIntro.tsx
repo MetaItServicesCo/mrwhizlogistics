@@ -21,7 +21,7 @@ export default function RentalsIntro() {
         component={motion.div}
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-80px" }}
+        viewport={{ once: false, margin: "-80px" }}
         transition={{ duration: 0.6, ease: EASE }}
         sx={{
           maxWidth: 1100,
@@ -44,7 +44,7 @@ export default function RentalsIntro() {
             lineHeight: 1.05,
           }}
         >
-          Hot Shot Equipment Rentals
+          Logistics Equipment Rental
         </Typography>
         <Typography
           sx={{

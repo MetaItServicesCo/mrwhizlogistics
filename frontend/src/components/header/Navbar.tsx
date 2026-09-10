@@ -23,6 +23,7 @@ import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined
 import FlatwareRoundedIcon from "@mui/icons-material/FlatwareRounded";
 import AcUnitRoundedIcon from "@mui/icons-material/AcUnitRounded";
 import Inventory2RoundedIcon from "@mui/icons-material/Inventory2Rounded";
+import Image from "next/image";
 
 const LIME = "#c8ff00";
 
@@ -175,33 +176,16 @@ export default function Navbar() {
         textDecoration: "none",
         display: "flex",
         alignItems: "center",
-        gap: 8,
       }}
     >
-      <Box
-        sx={{
-          width: 30,
-          height: 30,
-          borderRadius: "8px",
-          bgcolor: "#fff",
-          color: "#000",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <LocalShippingRoundedIcon sx={{ fontSize: 18 }} />
-      </Box>
-      <Typography
-        sx={{
-          color: "#fff",
-          fontWeight: 700,
-          fontSize: 19,
-          letterSpacing: "-0.3px",
-        }}
-      >
-        Terminal
-      </Typography>
+      <Image
+        src="/images/2.png" // Yahan apne logo ka path dein (e.g., public folder mein ho)
+        alt="Company Logo"
+        width={100} // Apni zaroorat ke mutabiq width set karein
+        height={35} // Apni zaroorat ke mutabiq height set karein
+        style={{ objectFit: "cover" }}
+        priority
+      />
     </Link>
   );
 
@@ -344,10 +328,67 @@ export default function Navbar() {
                 </Link>
               );
             })}
-
+            <Link
+              href="/rentals"
+              style={{ textDecoration: "none", position: "relative" }}
+              onMouseEnter={() => {
+                setHoveredTab("rentals");
+                openMenu(null);
+              }}
+            >
+              <Box component="span" sx={navItemSx}>
+                {hoveredTab === "rentals" && (
+                  <motion.div
+                    layoutId="navbarGradientBg"
+                    style={{
+                      position: "absolute",
+                      inset: 0,
+                      background: `linear-gradient(90deg, rgba(200,255,0,0.18) 0%, rgba(200,255,0,0.04) 100%)`,
+                      borderRadius: "999px",
+                      zIndex: -1,
+                      borderBottom: `2px solid ${LIME}`,
+                    }}
+                    initial={{ x: "-100%", opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    exit={{ x: "100%", opacity: 0 }}
+                    transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                  />
+                )}
+                Rental
+              </Box>
+            </Link>
+            <Link
+              href="/blog"
+              style={{ textDecoration: "none", position: "relative" }}
+              onMouseEnter={() => {
+                setHoveredTab("blog");
+                openMenu(null);
+              }}
+            >
+              <Box component="span" sx={navItemSx}>
+                {hoveredTab === "blog" && (
+                  <motion.div
+                    layoutId="navbarGradientBg"
+                    style={{
+                      position: "absolute",
+                      inset: 0,
+                      background: `linear-gradient(90deg, rgba(200,255,0,0.18) 0%, rgba(200,255,0,0.04) 100%)`,
+                      borderRadius: "999px",
+                      zIndex: -1,
+                      borderBottom: `2px solid ${LIME}`,
+                    }}
+                    initial={{ x: "-100%", opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    exit={{ x: "100%", opacity: 0 }}
+                    transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                  />
+                )}
+                Blog
+              </Box>
+            </Link>
             {/* About Link */}
             <Link
-              href="#"
+              href="/about"
               style={{ textDecoration: "none", position: "relative" }}
               onMouseEnter={() => {
                 setHoveredTab("about");
