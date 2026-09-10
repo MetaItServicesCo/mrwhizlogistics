@@ -128,7 +128,7 @@ export default function RentalFaq() {
           component={motion.div}
           initial={reduce ? {} : { opacity: 0, y: 25 }}
           whileInView={reduce ? {} : { opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
+          viewport={{ once: false, amount: 0.2 }}
           transition={{ duration: 0.65, ease: EASE }}
           sx={{
             textAlign: "center",
@@ -227,7 +227,7 @@ export default function RentalFaq() {
                 initial={reduce ? {} : { opacity: 0, y: 18 }}
                 whileInView={reduce ? {} : { opacity: 1, y: 0 }}
                 viewport={{
-                  once: true,
+                  once: false,
                   amount: 0.08,
                 }}
                 transition={{
@@ -379,7 +379,7 @@ export default function RentalFaq() {
           component={motion.div}
           initial={reduce ? {} : { opacity: 0, y: 15 }}
           whileInView={reduce ? {} : { opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: false, amount: 0.2 }}
           transition={{ duration: 0.5, ease: EASE }}
           sx={{
             mt: 4,

@@ -75,21 +75,24 @@ export default function RentalHowItWorks() {
           BACKGROUND DETAILS
       ========================================================= */}
 
+      {/* Very subtle lime ambient glow */}
       <Box
         aria-hidden
         sx={{
           position: "absolute",
-          top: "-15%",
+          top: "-12%",
           left: "-8%",
           width: 500,
           height: 500,
           borderRadius: "50%",
           background:
-            "radial-gradient(circle, rgba(200,255,0,0.08), transparent 68%)",
+            "radial-gradient(circle, rgba(200,255,0,0.02), transparent 68%)",
+          filter: "blur(15px)",
           pointerEvents: "none",
         }}
       />
 
+      {/* Very subtle cyan ambient glow */}
       <Box
         aria-hidden
         sx={{
@@ -100,7 +103,32 @@ export default function RentalHowItWorks() {
           height: 550,
           borderRadius: "50%",
           background:
-            "radial-gradient(circle, rgba(0,229,255,0.055), transparent 68%)",
+            "radial-gradient(circle, rgba(0,229,255,0.035), transparent 60%)",
+          filter: "blur(15px)",
+          pointerEvents: "none",
+        }}
+      />
+
+      {/* Center ambient glow - extremely subtle */}
+      <Box
+        aria-hidden
+        sx={{
+          position: "absolute",
+          top: "46%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          width: {
+            xs: 500,
+            md: 850,
+          },
+          height: {
+            xs: 180,
+            md: 260,
+          },
+          borderRadius: "50%",
+          background:
+            "radial-gradient(ellipse, rgba(200,255,0,0.025), transparent 20%)",
+          filter: "blur(70px)",
           pointerEvents: "none",
         }}
       />
@@ -111,7 +139,7 @@ export default function RentalHowItWorks() {
         sx={{
           position: "absolute",
           inset: 0,
-          opacity: 0.18,
+          opacity: 0.14,
           pointerEvents: "none",
           backgroundImage: `
             linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
@@ -148,7 +176,7 @@ export default function RentalHowItWorks() {
           component={motion.div}
           initial={reduce ? {} : { opacity: 0, y: 30 }}
           whileInView={reduce ? {} : { opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.25 }}
+          viewport={{ once: false, amount: 0.25 }}
           transition={{
             duration: 0.7,
             ease: EASE,
@@ -174,8 +202,8 @@ export default function RentalHowItWorks() {
               px: 1.6,
               py: 0.65,
               borderRadius: "999px",
-              border: `1px solid ${LIME}40`,
-              bgcolor: `${LIME}0d`,
+              border: `1px solid ${LIME}35`,
+              bgcolor: `${LIME}08`,
             }}
           >
             <Box
@@ -184,7 +212,7 @@ export default function RentalHowItWorks() {
                 height: 7,
                 borderRadius: "50%",
                 bgcolor: LIME,
-                boxShadow: `0 0 14px ${LIME}`,
+                boxShadow: `0 0 10px ${LIME}90`,
               }}
             />
 
@@ -271,8 +299,8 @@ export default function RentalHowItWorks() {
               background: `linear-gradient(
                 90deg,
                 transparent,
-                rgba(200,255,0,0.3) 12%,
-                rgba(200,255,0,0.3) 88%,
+                rgba(200,255,0,0.20) 12%,
+                rgba(200,255,0,0.20) 88%,
                 transparent
               )`,
             }}
@@ -314,7 +342,7 @@ export default function RentalHowItWorks() {
                       }
                 }
                 viewport={{
-                  once: true,
+                  once: false,
                   amount: 0.2,
                 }}
                 transition={{
@@ -326,7 +354,9 @@ export default function RentalHowItWorks() {
                   position: "relative",
                 }}
               >
-                {/* card */}
+                {/* =================================================
+                    CARD
+                ================================================= */}
 
                 <Box
                   sx={{
@@ -342,22 +372,35 @@ export default function RentalHowItWorks() {
                     },
                     borderRadius: "22px",
                     overflow: "hidden",
-                    bgcolor: "rgba(255,255,255,0.035)",
-                    border: "1px solid rgba(255,255,255,0.09)",
-                    transition: "all 0.35s ease",
+
+                    /* Cleaner black glass */
+                    bgcolor: "rgba(255,255,255,0.025)",
+
+                    border: "1px solid rgba(255,255,255,0.085)",
+
+                    transition:
+                      "transform 0.35s ease, border-color 0.35s ease, background-color 0.35s ease, box-shadow 0.35s ease",
 
                     "&:hover": {
                       transform: "translateY(-8px)",
-                      borderColor: `${LIME}55`,
-                      bgcolor: "rgba(200,255,0,0.045)",
-                      boxShadow: `0 25px 60px rgba(0,0,0,0.3), 0 0 30px ${LIME}0d`,
+
+                      /* subtle lime border */
+                      borderColor: `${LIME}42`,
+
+                      /* almost invisible green tint */
+                      bgcolor: "rgba(200,255,0,0.018)",
+
+                      boxShadow: `
+                        0 25px 60px rgba(0,0,0,0.32),
+                        0 0 24px rgba(200,255,0,0.035)
+                      `,
                     },
 
                     "&:hover .step-icon": {
                       bgcolor: LIME,
                       color: "#080a08",
                       transform: "rotate(-4deg) scale(1.06)",
-                      boxShadow: `0 0 30px ${LIME}35`,
+                      boxShadow: `0 0 24px ${LIME}25`,
                     },
 
                     "&:hover .step-arrow": {
@@ -366,7 +409,9 @@ export default function RentalHowItWorks() {
                     },
                   }}
                 >
-                  {/* number */}
+                  {/* =================================================
+                      NUMBER
+                  ================================================= */}
 
                   <Typography
                     aria-hidden
@@ -381,14 +426,19 @@ export default function RentalHowItWorks() {
                       lineHeight: 1,
                       fontWeight: 900,
                       letterSpacing: "-4px",
-                      color: "rgba(255,255,255,0.035)",
+
+                      /* slightly darker than before */
+                      color: "rgba(255,255,255,0.028)",
+
                       userSelect: "none",
                     }}
                   >
                     {step.number}
                   </Typography>
 
-                  {/* icon */}
+                  {/* =================================================
+                      ICON
+                  ================================================= */}
 
                   <Box
                     className="step-icon"
@@ -400,9 +450,12 @@ export default function RentalHowItWorks() {
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      bgcolor: "rgba(200,255,0,0.1)",
+
+                      /* subtle icon background */
+                      bgcolor: "rgba(200,255,0,0.075)",
+
                       color: LIME,
-                      border: `1px solid ${LIME}25`,
+                      border: `1px solid ${LIME}20`,
                       transition: "all 0.35s ease",
 
                       "& svg": {
@@ -428,7 +481,9 @@ export default function RentalHowItWorks() {
                     />
                   </Box>
 
-                  {/* content */}
+                  {/* =================================================
+                      CONTENT
+                  ================================================= */}
 
                   <Typography
                     sx={{
@@ -455,7 +510,9 @@ export default function RentalHowItWorks() {
                     {step.description}
                   </Typography>
 
-                  {/* bottom */}
+                  {/* =================================================
+                      BOTTOM
+                  ================================================= */}
 
                   <Box
                     sx={{
@@ -504,7 +561,7 @@ export default function RentalHowItWorks() {
           initial={reduce ? {} : { opacity: 0, y: 25 }}
           whileInView={reduce ? {} : { opacity: 1, y: 0 }}
           viewport={{
-            once: true,
+            once: false,
             amount: 0.3,
           }}
           transition={{
@@ -527,6 +584,8 @@ export default function RentalHowItWorks() {
             gap: 2,
           }}
         >
+          {/* Request Quote */}
+
           <Button
             variant="contained"
             href="/contact"
@@ -544,21 +603,25 @@ export default function RentalHowItWorks() {
               fontSize: 14,
               fontWeight: 900,
               textTransform: "none",
-              boxShadow: `0 12px 35px ${LIME}20`,
+              boxShadow: `0 12px 35px ${LIME}18`,
+
               "&:hover": {
                 bgcolor: "#d7ff3d",
                 transform: "translateY(-2px)",
-                boxShadow: `0 16px 40px ${LIME}30`,
+                boxShadow: `0 16px 40px ${LIME}25`,
               },
+
               transition: "all 0.25s ease",
             }}
           >
             Request a Quote
           </Button>
 
+          {/* Call Team */}
+
           <Button
             variant="outlined"
-            href="tel:+10000000000"
+            href="tel:+14697678853"
             sx={{
               minWidth: {
                 xs: "100%",
@@ -572,9 +635,10 @@ export default function RentalHowItWorks() {
               fontSize: 14,
               fontWeight: 800,
               textTransform: "none",
+
               "&:hover": {
-                borderColor: `${LIME}70`,
-                bgcolor: `${LIME}08`,
+                borderColor: `${LIME}60`,
+                bgcolor: `${LIME}06`,
               },
             }}
           >

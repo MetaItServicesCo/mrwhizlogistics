@@ -5,18 +5,18 @@ import { motion } from "motion/react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import RentalCard from "./RentalCard";
-import QuoteModal from "@/components/hot-shot/QuoteModal";
-import { HOT_SHOT_RENTALS } from "@/data/hotShotRentals";
+import RentalQuoteModal from "./RentalQuoteModal"; // Naya wala modal import kiya hai
+import { HOT_SHOT_RENTALS, type RentalItem } from "@/data/hotShotRentals";
 
 const LIME = "#c8ff00";
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 export default function HotShotRentals() {
   const [open, setOpen] = useState(false);
-  const [service, setService] = useState("Hot Shot Rental");
+  const [selectedRental, setSelectedRental] = useState<RentalItem | null>(null);
 
-  const openQuote = (title: string) => {
-    setService(title);
+  const openQuote = (item: RentalItem) => {
+    setSelectedRental(item);
     setOpen(true);
   };
 
@@ -108,7 +108,7 @@ export default function HotShotRentals() {
               "@media (prefers-reduced-motion: reduce)": { animation: "none" },
             }}
           >
-            Hot Shot rental equipment
+            Rental Equipment
           </Typography>
           <Typography
             sx={{
@@ -147,11 +147,11 @@ export default function HotShotRentals() {
         ))}
       </Box>
 
-      <QuoteModal
+      {/* Naya RentalQuoteModal yahan properly bind kar diya hai */}
+      <RentalQuoteModal
         open={open}
         onClose={() => setOpen(false)}
-        service={service}
-        lockService
+        rental={selectedRental}
       />
     </Box>
   );

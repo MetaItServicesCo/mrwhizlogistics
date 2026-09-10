@@ -152,7 +152,7 @@ export default function RentalBenefits() {
           component={motion.div}
           initial={reduce ? {} : { opacity: 0, y: 25 }}
           whileInView={reduce ? {} : { opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.25 }}
+          viewport={{ once: false, amount: 0.25 }}
           transition={{
             duration: 0.7,
             ease: EASE,
@@ -273,7 +273,7 @@ export default function RentalBenefits() {
           component={motion.div}
           initial={reduce ? {} : { opacity: 0, y: 25 }}
           whileInView={reduce ? {} : { opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
+          viewport={{ once: false, amount: 0.2 }}
           transition={{
             duration: 0.7,
             delay: 0.15,
@@ -375,7 +375,7 @@ function BenefitCard({
             }
       }
       viewport={{
-        once: true,
+        once: false,
         amount: 0.2,
       }}
       transition={{

@@ -1,0 +1,38 @@
+import type { Metadata } from "next";
+import HotShotHero from "@/components/hot-shot/HotShotHero";
+import AboutExpertise from "@/components/about/AboutExpertise";
+import WhyChooseUs from "@/components/about/WhyChooseUs";
+import FleetOverview from "@/components/about/FleetOverview";
+import TeamSection from "@/components/about/TeamSection";
+import AboutCTA from "@/components/about/AboutCTA";
+
+export const metadata: Metadata = {
+  title: "About Us | Trusted Trucking & Logistics Partner",
+  description:
+    "Learn about our trucking company — hot shot, box truck and semi truck freight across all 50 states, with 24/7 dispatch and reliable, on-time delivery.",
+  alternates: { canonical: "/about" },
+  openGraph: {
+    title: "About Us | Trucking & Logistics",
+    description: "Reliable freight across all 50 states with 24/7 dispatch.",
+    url: "/about",
+    type: "website",
+  },
+};
+
+export default function AboutPage() {
+  return (
+    <main>
+      <HotShotHero
+        title="About Us"
+        crumb="About"
+        badge="WHO WE ARE"
+        image="/images/about-hero.jpg"
+      />
+      <AboutExpertise />
+      <WhyChooseUs />
+      {/* <FleetOverview /> */}
+      <TeamSection />
+      <AboutCTA />
+    </main>
+  );
+}

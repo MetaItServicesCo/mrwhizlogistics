@@ -37,7 +37,7 @@ export default function RentalFinalCta() {
         py: { xs: 8, sm: 10, md: 12 },
       }}
     >
-      {/* Main lime glow */}
+      {/* Main lime glow - softened opacity */}
       <Box
         aria-hidden
         sx={{
@@ -49,7 +49,7 @@ export default function RentalFinalCta() {
           top: "50%",
           transform: "translateY(-50%)",
           background:
-            "radial-gradient(circle, rgba(200,255,0,0.13), rgba(200,255,0,0.03) 35%, transparent 70%)",
+            "radial-gradient(circle, rgba(200,255,0,0.02), rgba(200,255,0,0.015) 35%, transparent 20%)",
           pointerEvents: "none",
         }}
       />
@@ -99,9 +99,9 @@ export default function RentalFinalCta() {
             position: "relative",
             overflow: "hidden",
             borderRadius: { xs: "24px", md: "32px" },
-            border: "1px solid rgba(200,255,0,0.2)",
+            border: "1px solid rgba(200,255,0,0.15)",
             background:
-              "linear-gradient(135deg, rgba(200,255,0,0.075), rgba(255,255,255,0.025) 45%, rgba(255,255,255,0.015))",
+              "linear-gradient(135deg, rgba(200,255,0,0.04), rgba(255,255,255,0.015) 45%, rgba(255,255,255,0.008))",
             boxShadow: "0 35px 100px rgba(0,0,0,0.45)",
           }}
         >
@@ -115,12 +115,12 @@ export default function RentalFinalCta() {
               width: 350,
               height: 350,
               borderRadius: "50%",
-              border: `1px solid ${LIME}18`,
-              boxShadow: `0 0 0 45px ${LIME}08, 0 0 0 90px ${LIME}04`,
+              border: `1px solid ${LIME}12`,
+              boxShadow: `0 0 0 45px ${LIME}04, 0 0 0 90px ${LIME}02`,
             }}
           />
 
-          {/* Animated horizontal line */}
+          {/* Animated horizontal line - lighter opacity */}
           {!reduce && (
             <Box
               component={motion.div}
@@ -139,7 +139,7 @@ export default function RentalFinalCta() {
                 left: 0,
                 width: "35%",
                 height: 1,
-                background: `linear-gradient(90deg, transparent, ${LIME}, transparent)`,
+                background: `linear-gradient(90deg, transparent, rgba(200,255,0,0.6), transparent)`,
               }}
             />
           )}
@@ -167,7 +167,7 @@ export default function RentalFinalCta() {
                 component={motion.div}
                 initial={reduce ? {} : { opacity: 0, y: 15 }}
                 whileInView={reduce ? {} : { opacity: 1, y: 0 }}
-                viewport={{ once: true }}
+                viewport={{ once: false, amount: 0.2 }}
                 transition={{
                   duration: 0.5,
                   ease: EASE,
@@ -180,8 +180,8 @@ export default function RentalFinalCta() {
                   py: 0.65,
                   mb: 2.5,
                   borderRadius: "999px",
-                  bgcolor: "rgba(200,255,0,0.1)",
-                  border: `1px solid ${LIME}40`,
+                  bgcolor: "rgba(200,255,0,0.07)",
+                  border: `1px solid ${LIME}30`,
                 }}
               >
                 <BoltRoundedIcon
@@ -264,7 +264,7 @@ export default function RentalFinalCta() {
                     component={motion.div}
                     initial={reduce ? {} : { opacity: 0, x: -10 }}
                     whileInView={reduce ? {} : { opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
+                    viewport={{ once: false, amount: 0.2 }}
                     transition={{
                       duration: 0.4,
                       ease: EASE,
@@ -368,7 +368,7 @@ export default function RentalFinalCta() {
                 position: "relative",
               }}
             >
-              {/* Glow */}
+              {/* Glow - softened */}
               <Box
                 aria-hidden
                 sx={{
@@ -377,7 +377,7 @@ export default function RentalFinalCta() {
                   aspectRatio: "1",
                   borderRadius: "50%",
                   background:
-                    "radial-gradient(circle, rgba(200,255,0,0.18), transparent 68%)",
+                    "radial-gradient(circle, rgba(200,255,0,0.1), transparent 68%)",
                   filter: "blur(12px)",
                 }}
               />
@@ -404,7 +404,7 @@ export default function RentalFinalCta() {
                       }
                 }
                 viewport={{
-                  once: true,
+                  once: false,
                   amount: 0.3,
                 }}
                 transition={{
@@ -432,13 +432,13 @@ export default function RentalFinalCta() {
                     md: 285,
                   },
                   borderRadius: "50%",
-                  border: `1px solid ${LIME}35`,
+                  border: `1px solid ${LIME}25`,
                   bgcolor: "rgba(0,0,0,0.3)",
                   backdropFilter: "blur(12px)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  boxShadow: `0 0 70px ${LIME}12`,
+                  boxShadow: `0 0 50px ${LIME}08`,
                 }}
               >
                 <Box
@@ -446,7 +446,7 @@ export default function RentalFinalCta() {
                     width: "76%",
                     height: "76%",
                     borderRadius: "50%",
-                    border: `1px dashed ${LIME}35`,
+                    border: `1px dashed ${LIME}25`,
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
@@ -460,7 +460,7 @@ export default function RentalFinalCta() {
                         md: 125,
                       },
                       color: LIME,
-                      filter: `drop-shadow(0 0 20px ${LIME}40)`,
+                      filter: `drop-shadow(0 0 10px ${LIME}30)`,
                     }}
                   />
                 </Box>
@@ -497,8 +497,8 @@ export default function RentalFinalCta() {
                   borderRadius: "13px",
                   bgcolor: "rgba(13,16,12,0.92)",
                   border: "1px solid rgba(255,255,255,0.1)",
-                  backdropFilter: "blur(12px)",
-                  boxShadow: "0 15px 40px rgba(0,0,0,0.4)",
+                  backdropFilter: "blur(5px)",
+                  boxShadow: "0 15px 40px rgba(0,0,0,0.2)",
                 }}
               >
                 <Box
