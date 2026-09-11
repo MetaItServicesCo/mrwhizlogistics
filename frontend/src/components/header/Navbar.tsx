@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { AnimatePresence, motion } from "motion/react";
 import {
   Box,
@@ -23,7 +24,6 @@ import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined
 import FlatwareRoundedIcon from "@mui/icons-material/FlatwareRounded";
 import AcUnitRoundedIcon from "@mui/icons-material/AcUnitRounded";
 import Inventory2RoundedIcon from "@mui/icons-material/Inventory2Rounded";
-import Image from "next/image";
 
 const LIME = "#c8ff00";
 
@@ -176,16 +176,25 @@ export default function Navbar() {
         textDecoration: "none",
         display: "flex",
         alignItems: "center",
+        flexShrink: 0,
       }}
     >
-      <Image
-        src="/images/2.png" // Yahan apne logo ka path dein (e.g., public folder mein ho)
-        alt="Company Logo"
-        width={100} // Apni zaroorat ke mutabiq width set karein
-        height={35} // Apni zaroorat ke mutabiq height set karein
-        style={{ objectFit: "cover" }}
-        priority
-      />
+      <Box
+        sx={{
+          position: "relative",
+          height: { xs: 50, md: 85 },
+          width: { xs: 110, md: 170 },
+        }}
+      >
+        <Image
+          src="/images/logo.png"
+          alt="Company Logo"
+          fill
+          sizes="100%"
+          style={{ objectFit: "cover", objectPosition: "left center" }}
+          priority
+        />
+      </Box>
     </Link>
   );
 
@@ -212,6 +221,7 @@ export default function Navbar() {
             justifyContent: "space-between",
             px: 2.5,
             py: { xs: 0.8, md: 0.8 },
+            minHeight: { xs: 56, md: 110 },
             borderRadius: "999px",
             bgcolor: "rgba(18,17,17,0.85)",
             backdropFilter: "blur(16px)",
@@ -233,7 +243,7 @@ export default function Navbar() {
               position: "relative",
             }}
           >
-            {/* Home Link */}
+            {/* Home */}
             <Link
               href="/"
               style={{ textDecoration: "none", position: "relative" }}
@@ -264,12 +274,11 @@ export default function Navbar() {
               </Box>
             </Link>
 
-            {/* Mega Menu Links */}
+            {/* Mega menu links */}
             {MEGA_KEYS.map((key) => {
               const isMegaOpen = active === key;
               const isHovered = hoveredTab === key;
               const isActiveState = isHovered || isMegaOpen;
-
               return (
                 <Link
                   key={key}
@@ -300,8 +309,6 @@ export default function Navbar() {
                           : "translateY(0) rotate(0)",
                       }}
                     />
-
-                    {/* Smooth Left-to-Right Gradient Sweep Background & Bottom Border */}
                     {isActiveState && (
                       <motion.div
                         layoutId="navbarGradientBg"
@@ -328,6 +335,8 @@ export default function Navbar() {
                 </Link>
               );
             })}
+
+            {/* Rental */}
             <Link
               href="/rentals"
               style={{ textDecoration: "none", position: "relative" }}
@@ -357,6 +366,8 @@ export default function Navbar() {
                 Rental
               </Box>
             </Link>
+
+            {/* Blog */}
             <Link
               href="/blog"
               style={{ textDecoration: "none", position: "relative" }}
@@ -386,7 +397,8 @@ export default function Navbar() {
                 Blog
               </Box>
             </Link>
-            {/* About Link */}
+
+            {/* About */}
             <Link
               href="/about"
               style={{ textDecoration: "none", position: "relative" }}
@@ -472,7 +484,7 @@ export default function Navbar() {
             </Button>
           </Stack>
 
-          {/* HAMBURGER (Mobile) */}
+          {/* HAMBURGER */}
           <IconButton
             onClick={() => setDrawerOpen(true)}
             sx={{ display: { xs: "inline-flex", lg: "none" }, color: "#fff" }}
@@ -481,7 +493,7 @@ export default function Navbar() {
           </IconButton>
         </Stack>
 
-        {/* ===== MEGA DROPDOWN PANEL ===== */}
+        {/* ===== MEGA DROPDOWN ===== */}
         <AnimatePresence>
           {active && (
             <Box
@@ -725,7 +737,25 @@ export default function Navbar() {
         ))}
 
         <Link
-          href="#"
+          href="/rentals"
+          style={{ textDecoration: "none" }}
+          onClick={() => setDrawerOpen(false)}
+        >
+          <Typography sx={{ ...mobileLinkSx, color: "#fff" }}>
+            Rental
+          </Typography>
+        </Link>
+        <Divider sx={{ borderColor: "rgba(255,255,255,0.06)" }} />
+        <Link
+          href="/blog"
+          style={{ textDecoration: "none" }}
+          onClick={() => setDrawerOpen(false)}
+        >
+          <Typography sx={{ ...mobileLinkSx, color: "#fff" }}>Blog</Typography>
+        </Link>
+        <Divider sx={{ borderColor: "rgba(255,255,255,0.06)" }} />
+        <Link
+          href="/about"
           style={{ textDecoration: "none" }}
           onClick={() => setDrawerOpen(false)}
         >
