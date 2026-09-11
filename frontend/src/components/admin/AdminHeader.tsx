@@ -72,6 +72,7 @@ export default function AdminHeader({
       </IconButton>
 
       {/* title */}
+
       <Box sx={{ minWidth: 0 }}>
         <Typography
           sx={{
