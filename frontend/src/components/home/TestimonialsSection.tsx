@@ -11,7 +11,7 @@ import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
 
 const LIME = "#c8ff00";
-const DURATION = 6500;
+const DURATION = 3000;
 const RING_R = 46;
 const RING_C = 2 * Math.PI * RING_R;
 const EASE = [0.22, 1, 0.36, 1] as const;
