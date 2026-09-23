@@ -1,0 +1,17 @@
+# Use this override when nginx is already installed on the Docker host.
+# It publishes only loopback ports; PostgreSQL remains private to Docker.
+
+services:
+  backend:
+    ports:
+      - "127.0.0.1:${BACKEND_HOST_PORT:-8002}:8000"
+
+  frontend:
+    ports:
+      - "127.0.0.1:${FRONTEND_HOST_PORT:-3003}:3000"
+
+  # Keep the bundled proxy disabled when this override is active. The host's
+  # nginx proxies to the loopback ports above instead.
+  nginx:
+    profiles:
+      - bundled-nginx

@@ -155,6 +155,31 @@ docker compose -f docker-compose.prod.yml logs -f backend
 The backend creates all tables and seeds the initial content on first boot.
 You should see `Seed data loaded from frontend content.` in its logs.
 
+### Existing host nginx / multi-site server
+
+If ports 80 and 443 are already owned by nginx on the host, do not start the
+bundled nginx container. Use the host override, which publishes the backend on
+`127.0.0.1:8002` and the frontend on `127.0.0.1:3003`:
+
+```bash
+docker compose -f docker-compose.prod.yml -f docker-compose.host.yml \
+  up -d --build
+```
+
+Install the included host nginx site after replacing the example domain:
+
+```bash
+sed 's/example\.com/YOURDOMAIN.com/g' nginx/host.conf.example \
+  > /etc/nginx/sites-available/mrwhizz
+ln -s /etc/nginx/sites-available/mrwhizz /etc/nginx/sites-enabled/mrwhizz
+nginx -t
+systemctl reload nginx
+certbot --nginx -d YOURDOMAIN.com -d www.YOURDOMAIN.com
+```
+
+For later deployments on this type of server, always include both Compose
+files so the bundled proxy remains disabled.
+
 ---
 
 ## 7. Verify the deployment
