@@ -13,4 +13,21 @@ build/
 .env
 .env.local
 frontend/.env
-backend/.env
+backend/.env.env.prod
+.env.production
+frontend/.env.local
+
+# Python
+backend/venv/
+backend/.venv/
+__pycache__/
+*.py[cod]
+
+# Uploaded media (served from a docker volume in production)
+backend/uploads/*
+!backend/uploads/.gitkeep
+
+# TLS material
+nginx/certbot/conf/
+nginx/certbot/www/
+frontend/tsconfig.tsbuildinfo

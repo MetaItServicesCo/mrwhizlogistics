@@ -4,6 +4,8 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
+import { useAuth } from "@/lib/auth";
+import { api, ApiError } from "@/lib/api";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
@@ -20,6 +22,7 @@ import GoogleIcon from "@mui/icons-material/Google";
 import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
 import LocalShippingRoundedIcon from "@mui/icons-material/LocalShippingRounded";
 import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
+import Alert from "@mui/material/Alert";
 
 const LIME = "#c8ff00";
 const EASE = [0.22, 1, 0.36, 1] as const;
@@ -53,9 +56,11 @@ const BRAND_POINTS = [
 export default function AuthForm({ mode }: { mode: "login" | "register" }) {
   const reduce = useReducedMotion() ?? false;
   const router = useRouter();
+  const { signIn } = useAuth();
   const isLogin = mode === "login";
 
   const [status, setStatus] = useState<"idle" | "loading">("idle");
+  const [error, setError] = useState<string | null>(null);
   const [showPw, setShowPw] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [form, setForm] = useState({
@@ -69,16 +74,59 @@ export default function AuthForm({ mode }: { mode: "login" | "register" }) {
     (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement>) =>
       setForm((p) => ({ ...p, [k]: e.target.value }));
 
-  const submit = () => {
-    if (!form.email.includes("@") || form.password.length < 4) return;
-    if (!isLogin && (!form.name.trim() || form.password !== form.confirm))
+  const submit = async () => {
+    setError(null);
+
+    if (!form.email.includes("@")) {
+      setError("Enter a valid email address.");
       return;
+    }
+    if (form.password.length < 6) {
+      setError("Password must be at least 6 characters.");
+      return;
+    }
+    if (!isLogin) {
+      if (!form.name.trim()) {
+        setError("Enter your full name.");
+        return;
+      }
+      if (form.password !== form.confirm) {
+        setError("Passwords do not match.");
+        return;
+      }
+    }
+
     setStatus("loading");
-    // TODO: API — login: POST /api/auth/login ; register: POST /api/auth/register
-    setTimeout(() => {
-      setStatus("idle");
+    try {
+      if (isLogin) {
+        await signIn(form.email.trim(), form.password);
+      } else {
+        // Creating an admin user requires an existing admin session
+        // (POST /api/users is guarded), then we sign the new user straight in.
+        await api.post("/api/users", {
+          username: form.name.trim(),
+          email: form.email.trim(),
+          password: form.password,
+          role: "admin",
+          is_active: true,
+        });
+        await signIn(form.email.trim(), form.password);
+      }
       router.push("/dashboard");
-    }, 1300);
+    } catch (e) {
+      const msg =
+        e instanceof ApiError
+          ? e.status === 401
+            ? "Incorrect email or password."
+            : e.message
+          : "Could not reach the server. Please try again.";
+      setError(msg);
+      setStatus("idle");
+    }
+  };
+
+  const onKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && status !== "loading") void submit();
   };
 
   return (
@@ -304,9 +352,26 @@ export default function AuthForm({ mode }: { mode: "login" | "register" }) {
               : "Fill in your details to get started."}
           </Typography>
 
+          {error && (
+            <Alert
+              severity="error"
+              variant="outlined"
+              sx={{
+                mb: 2.5,
+                color: "#ffb4b4",
+                borderColor: "rgba(255,107,107,0.4)",
+                borderRadius: "12px",
+                "& .MuiAlert-icon": { color: "#ff6b6b" },
+              }}
+            >
+              {error}
+            </Alert>
+          )}
+
           <AnimatePresence mode="wait">
             <motion.div
               key={mode}
+              onKeyDown={onKeyDown}
               initial={{ opacity: 0, x: isLogin ? -16 : 16 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: isLogin ? 16 : -16 }}
@@ -446,7 +511,7 @@ export default function AuthForm({ mode }: { mode: "login" | "register" }) {
           )}
 
           <Button
-            onClick={submit}
+            onClick={() => void submit()}
             disableElevation
             disabled={status === "loading"}
             endIcon={

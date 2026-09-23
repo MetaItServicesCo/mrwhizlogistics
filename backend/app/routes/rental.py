@@ -3,6 +3,7 @@ from fastapi import APIRouter, Depends, Query, status, HTTPException
 from sqlalchemy.orm import Session
 
 from app.database import get_db
+from app.core.security import get_current_admin
 from app.models.rental import RentalItem, RentalQuote
 from app.schemas.rental import (
     RentalItemCreate, 
@@ -62,7 +63,7 @@ def get_equipment_detail(slug: str, db: Session = Depends(get_db)):
     return item
 
 # 2. POST Add Equipment & Gallery (Dashboard Setup)
-@rental_router.post("/equipment", response_model=RentalItemRead, status_code=status.HTTP_201_CREATED, summary="Add Equipment & Gallery (Dashboard)")
+@rental_router.post("/equipment", response_model=RentalItemRead, status_code=status.HTTP_201_CREATED, summary="Add Equipment & Gallery (Dashboard)", dependencies=[Depends(get_current_admin)])
 def create_equipment_item(payload: RentalItemCreate, db: Session = Depends(get_db)):
     item = RentalItem(**payload.model_dump())
     db.add(item)
@@ -108,7 +109,7 @@ def submit_rental_quote(payload: RentalQuoteCreate, db: Session = Depends(get_db
         raise HTTPException(status_code=500, detail=f"Failed to submit quote: {str(e)}")
 
 # 4. GET Dashboard Quote List Control
-@rental_router.get("", summary="Get All Quotes (Dashboard)")
+@rental_router.get("", summary="Get All Quotes (Dashboard)", dependencies=[Depends(get_current_admin)])
 def list_rental_quotes(status_filter: Optional[str] = Query(None, alias="status"), db: Session = Depends(get_db)):
     q = db.query(RentalQuote)
     if status_filter:
@@ -117,7 +118,7 @@ def list_rental_quotes(status_filter: Optional[str] = Query(None, alias="status"
     return [format_quote_response(rec) for rec in records]
 
 # 5. DELETE Dashboard Record Control
-@rental_router.delete("/{quote_id}", status_code=status.HTTP_204_NO_CONTENT, summary="Delete Quote (Dashboard)")
+@rental_router.delete("/{quote_id}", status_code=status.HTTP_204_NO_CONTENT, summary="Delete Quote (Dashboard)", dependencies=[Depends(get_current_admin)])
 def delete_quote(quote_id: int, db: Session = Depends(get_db)):
     quote = db.query(RentalQuote).filter(RentalQuote.id == quote_id).first()
     if not quote:

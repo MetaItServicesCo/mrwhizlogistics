@@ -31,7 +31,6 @@ export default function BoxTruckPage() {
         title="Box Truck"
         crumb="Box Truck"
         badge="LOCAL & REGIONAL"
-        image="/images/box-truck-hero.jpg"
       />
 
       <ServiceGrid

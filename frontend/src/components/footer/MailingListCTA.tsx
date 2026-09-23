@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
+import { subscribe } from "@/lib/publicApi";
+import { errorMessage } from "@/lib/useResource";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
@@ -63,12 +65,19 @@ export default function MailingListCTA() {
   const reduce = useReducedMotion() ?? false;
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "done">("idle");
+  const [error, setError] = useState<string | null>(null);
 
-  const subscribe = () => {
+  const handleSubscribe = async () => {
     if (!email.includes("@")) return;
     setStatus("loading");
-    // TODO: backend banne par yahan real API call lagegi
-    setTimeout(() => setStatus("done"), 1200);
+    setError(null);
+    try {
+      await subscribe(email.trim());
+      setStatus("done");
+    } catch (e) {
+      setError(errorMessage(e));
+      setStatus("idle");
+    }
   };
 
   return (
@@ -87,7 +96,7 @@ export default function MailingListCTA() {
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-60px" }}
-        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] as const }}
         sx={{ position: "relative", zIndex: 2, maxWidth: 1120, mx: "auto" }}
       >
         <Box
@@ -208,7 +217,7 @@ export default function MailingListCTA() {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       onKeyDown={(e) => {
-                        if (e.key === "Enter") subscribe();
+                        if (e.key === "Enter") void handleSubscribe();
                       }}
                       sx={{
                         "& .MuiOutlinedInput-root": {
@@ -227,7 +236,7 @@ export default function MailingListCTA() {
                       }}
                     />
                     <Button
-                      onClick={subscribe}
+                      onClick={() => void handleSubscribe()}
                       disableElevation
                       disabled={status === "loading"}
                       endIcon={
@@ -278,6 +287,19 @@ export default function MailingListCTA() {
                       )}
                     </Button>
                   </Box>
+
+                  {error && (
+                    <Typography
+                      role="alert"
+                      sx={{
+                        color: "#c62828",
+                        fontSize: 12.5,
+                        mt: 1.5,
+                      }}
+                    >
+                      {error}
+                    </Typography>
+                  )}
 
                   <Typography
                     sx={{

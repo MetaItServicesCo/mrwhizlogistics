@@ -48,7 +48,7 @@ export type RentalQuoteFormData = {
   // Rental Information
   // --------------------------------------------------
 
-  rentalSlug: RentalType;
+  rentalSlug: string;
 
   rentalName: string;
 
@@ -113,7 +113,7 @@ export type RentalQuotePayload = {
   };
 
   rental: {
-    slug: RentalType;
+    slug: string;
 
     name: string;
 

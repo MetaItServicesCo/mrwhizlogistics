@@ -3,6 +3,10 @@ from typing import List, Optional
 from datetime import datetime
 
 class HotshotBase(BaseModel):
+    # Listing page headings
+    page_heading: Optional[str] = None
+    page_subheading: Optional[str] = None
+
     # Card Data
     card_number: str
     category_tag: str

@@ -24,7 +24,6 @@ export default function ContactPage() {
         title="Contact Us"
         crumb="Contact"
         badge="24/7 DISPATCH"
-        image="/images/contact-hero.jpg"
       />
       <ContactSection />
       <ContactMap />

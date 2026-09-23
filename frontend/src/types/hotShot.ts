@@ -1,4 +1,3 @@
-```ts
 // src/types/hotShot.ts
 
 export type HotShotFeature = {
@@ -31,7 +30,8 @@ export type HotShotService = {
   /**
    * Service number
    */
-  number: string;
+  /** Optional: only the Hot Shot dataset numbers its services. */
+  number?: string;
 
   /**
    * Main service title
@@ -81,4 +81,3 @@ export type HotShotService = {
    */
   options: HotShotOption[];
 };
-```

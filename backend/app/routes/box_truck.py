@@ -1,4 +1,5 @@
 import os
+import uuid
 import json
 import shutil
 from typing import List, Optional, Union
@@ -6,6 +7,7 @@ from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form, s
 from sqlalchemy.orm import Session
 
 from app.database import get_db
+from app.core.security import get_current_admin
 from app.models.box_truck import BoxTruck
 from app.schemas.box_truck import BoxTruckResponse
 
@@ -35,10 +37,17 @@ def save_uploaded_file(file: Union[UploadFile, str, None]) -> Optional[str]:
         if file_size == 0:
             return None
 
-        file_path = os.path.join(UPLOAD_DIR, filename)
+        # Uploads were stored under their original filename, so a second
+        # "truck.png" silently overwrote the first one and changed the image
+        # on an unrelated record. Prefix a short random token to keep them
+        # distinct while leaving the name readable.
+        safe_name = os.path.basename(filename)
+        stored_name = f"{uuid.uuid4().hex[:12]}_{safe_name}"
+
+        file_path = os.path.join(UPLOAD_DIR, stored_name)
         with open(file_path, "wb") as buffer:
             shutil.copyfileobj(file.file, buffer)
-        return f"/{UPLOAD_DIR}/{filename}"
+        return f"/{UPLOAD_DIR}/{stored_name}"
     except Exception:
         return None
 
@@ -81,7 +90,7 @@ def get_box_truck_by_slug(slug: str, db: Session = Depends(get_db)):
 
 
 # 3. CREATE NEW (POST)
-@router.post("/", response_model=BoxTruckResponse, status_code=status.HTTP_201_CREATED)
+@router.post("/", response_model=BoxTruckResponse, status_code=status.HTTP_201_CREATED, dependencies=[Depends(get_current_admin)])
 async def create_box_truck(
     card_number: str = Form(...),
     category_tag: str = Form(...),
@@ -157,7 +166,7 @@ async def create_box_truck(
 
 
 # 4. UPDATE EXISTING (PUT)
-@router.put("/{id}", response_model=BoxTruckResponse)
+@router.put("/{id}", response_model=BoxTruckResponse, dependencies=[Depends(get_current_admin)])
 async def update_box_truck(
     id: int,
     page_heading: Optional[str] = Form(None),
@@ -229,7 +238,7 @@ async def update_box_truck(
 
 
 # 5. DELETE
-@router.delete("/{id}")
+@router.delete("/{id}", dependencies=[Depends(get_current_admin)])
 def delete_box_truck(id: int, db: Session = Depends(get_db)):
     truck = db.query(BoxTruck).filter(BoxTruck.id == id).first()
     if not truck:

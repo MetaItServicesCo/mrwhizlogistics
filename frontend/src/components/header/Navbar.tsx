@@ -514,7 +514,10 @@ export default function Navbar() {
                 initial={{ opacity: 0, y: 10, scale: 0.98 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 6, scale: 0.98 }}
-                transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                transition={{
+                  duration: 0.2,
+                  ease: [0.22, 1, 0.36, 1] as const,
+                }}
                 style={{
                   width: "100%",
                   maxWidth: active === "Hot Shot" ? 760 : 640,
@@ -644,8 +647,8 @@ export default function Navbar() {
       >
         <Stack
           direction="row"
-          mb={3}
-          sx={{ justifyContent: "space-between", alignItems: "center" }}
+
+          sx={{ justifyContent: "space-between", alignItems: "center", mb: 3 }}
         >
           {Logo}
           <IconButton
@@ -762,7 +765,7 @@ export default function Navbar() {
           <Typography sx={{ ...mobileLinkSx, color: "#fff" }}>About</Typography>
         </Link>
 
-        <Stack spacing={1.2} mt={3}>
+        <Stack spacing={1.2} sx={{ mt: 3 }}>
           <Button
             fullWidth
             disableElevation

@@ -42,7 +42,6 @@ export default function SemiTruckPage() {
         title="Semi Truck"
         crumb="Semi Truck"
         badge="REGIONAL & LONG HAUL"
-        image="/images/semi-truck-hero.jpg"
       />
 
       <ServiceGrid

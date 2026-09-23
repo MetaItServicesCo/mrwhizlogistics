@@ -247,36 +247,7 @@ def delete_faq(
 
 
 # ==========================================================================
-# PUBLIC endpoint (frontend) — poora FAQ section ek hi call me
+# NOTE: the public FAQ endpoint (GET /api/public/faqs) lives in
+# app/routes/public.py alongside the other public website endpoints.
+# An identical copy used to be declared here, registering the same path twice.
 # ==========================================================================
-
-@router.get("/public/faqs", response_model=List[PublicFAQCategory])
-def public_faqs(db: Session = Depends(get_db)):
-    categories = (
-        db.query(FAQCategory)
-        .options(selectinload(FAQCategory.faqs))
-        .filter(FAQCategory.is_active.is_(True))
-        .order_by(FAQCategory.display_order.asc(), FAQCategory.id.asc())
-        .all()
-    )
-
-    result: List[PublicFAQCategory] = []
-    for c in categories:
-        active = sorted(
-            (f for f in c.faqs if f.is_active),
-            key=lambda f: (f.display_order, f.id),
-        )
-        result.append(
-            PublicFAQCategory(
-                id=c.id,
-                name=c.name,
-                icon=c.icon,
-                description=c.description,
-                faq_count=len(active),
-                faqs=[
-                    PublicFAQItem(id=f.id, question=f.question, answer=f.answer)
-                    for f in active
-                ],
-            )
-        )
-    return result

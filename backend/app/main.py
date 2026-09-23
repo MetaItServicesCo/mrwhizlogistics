@@ -37,22 +37,22 @@ os.makedirs(UPLOAD_DIR, exist_ok=True)
 app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
 
 app.add_middleware(SessionMiddleware, secret_key=settings.secret_key)
+# Credentials cannot be combined with a wildcard origin, so only send
+# allow_credentials when CORS_ORIGINS names explicit origins.
+_cors_origins = settings.cors_origin_list
+_allow_credentials = "*" not in _cors_origins
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
+    allow_origins=_cors_origins,
+    allow_credentials=_allow_credentials,
     allow_methods=["*"],
     allow_headers=["*"],
 )
-from app.routes import router as api_router
-app.include_router(api_router, prefix="/api")
-# Bus yeh ek router include karein aur saare endpoints (/api/team, /api/contact-us, etc.) active ho jayenge
-app.include_router(api_router, prefix="/api")
-# app.include_router(semi_truck_router)
-app.include_router(api_router, prefix="/api")
-app.include_router(blog_router, prefix="/api")  # <-- Included Blog Router under /api
-# 2. Team Router ko include karein (app.include_router wale block ke sath)
-app.include_router(team_router, prefix="/api")
+# app.routes.router already aggregates every sub-router (auth, team, blog,
+# contact-us, semi-trucks, ...), so including it once mounts the whole API.
+# It used to be included four times, plus blog and team a second time each,
+# which registered every path 4-5x and made /docs unusable.
 app.include_router(api_router, prefix="/api")
 setup_admin(app)
 

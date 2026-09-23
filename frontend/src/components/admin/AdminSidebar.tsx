@@ -11,6 +11,8 @@ import Collapse from "@mui/material/Collapse";
 import Tooltip from "@mui/material/Tooltip";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import { ADMIN_MENU, type NavItem } from "@/data/adminMenu";
+import { api } from "@/lib/api";
+import type { DashboardStats } from "@/lib/types";
 
 const LIME = "#c8ff00";
 
@@ -48,6 +50,35 @@ export default function AdminSidebar({
 }) {
   const pathname = usePathname();
   const [open, setOpen] = useState<string[]>([]);
+  const [counts, setCounts] = useState<DashboardStats | null>(null);
+
+  // Live "new item" counts for the nav badges.
+  useEffect(() => {
+    let active = true;
+    api
+      .get<DashboardStats>("/api/dashboard/stats")
+      .then((s) => {
+        if (active) setCounts(s);
+      })
+      .catch(() => {
+        /* badges are decoration - a failure here must not break the nav */
+      });
+    return () => {
+      active = false;
+    };
+  }, [pathname]);
+
+  const badgeFor = (key: string): number | undefined => {
+    if (!counts) return undefined;
+    const map: Record<string, number> = {
+      leads: counts.quotes.new + counts.contacts.new,
+      "/dashboard/leads/quotes": counts.quotes.new,
+      "/dashboard/leads/contact": counts.contacts.new,
+      messages: counts.quotes.new + counts.contacts.new,
+    };
+    const n = map[key];
+    return n && n > 0 ? n : undefined;
+  };
 
   const isActive = (href?: string) =>
     !!href && (pathname === href || pathname.startsWith(href + "/"));
@@ -200,7 +231,9 @@ export default function AdminSidebar({
                       {item.title}
                     </Typography>
                   )}
-                  {!collapsed && item.badge ? <Badge n={item.badge} /> : null}
+                  {!collapsed && badgeFor(item.key) ? (
+                    <Badge n={badgeFor(item.key)!} />
+                  ) : null}
                 </Box>
               );
               return collapsed ? (
@@ -239,7 +272,9 @@ export default function AdminSidebar({
                     {item.title}
                   </Typography>
                 )}
-                {!collapsed && item.badge ? <Badge n={item.badge} /> : null}
+                {!collapsed && badgeFor(item.key) ? (
+                  <Badge n={badgeFor(item.key)!} />
+                ) : null}
                 {!collapsed && (
                   <KeyboardArrowDownRoundedIcon
                     sx={{
@@ -318,7 +353,9 @@ export default function AdminSidebar({
                             >
                               {c.title}
                             </Typography>
-                            {c.badge ? <Badge n={c.badge} /> : null}
+                            {badgeFor(c.href) ? (
+                              <Badge n={badgeFor(c.href)!} />
+                            ) : null}
                           </Box>
                         );
                       })}

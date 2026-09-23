@@ -7,6 +7,10 @@ class Hotshot(Base):
 
     id = Column(Integer, primary_key=True, index=True)
 
+    # --- PAGE HEADINGS (listing page) ---
+    page_heading = Column(String(200), nullable=True, default="Hotshot")
+    page_subheading = Column(String(300), nullable=True)
+
     # --- LANDING PAGE / CARD DATA ---
     card_number = Column(String(20), nullable=False)          # e.g. "01"
     category_tag = Column(String(100), nullable=False)        # e.g. "CRITICAL PARTS DELIVERY"

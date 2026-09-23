@@ -93,7 +93,7 @@ function TruckDrawing() {
     whileInView: { pathLength: 1, opacity: 1 },
     viewport: { once: false },
     transition: {
-      pathLength: { duration: 1.4, ease: "easeInOut", delay },
+      pathLength: { duration: 1.4, ease: "easeInOut" as const, delay },
       opacity: { duration: 0.2, delay },
     },
   });

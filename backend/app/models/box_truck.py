@@ -6,9 +6,14 @@ class BoxTruck(Base):
     __tablename__ = "box_trucks"
 
     id = Column(Integer, primary_key=True, index=True)
+
+    # --- PAGE HEADINGS (listing page) ---
+    page_heading = Column(String(200), nullable=True, default="Box Truck")
+    page_subheading = Column(String(300), nullable=True)
     
     # Landing Page Card Fields
     card_number = Column(String, nullable=False)
+    category_tag = Column(String(100), nullable=True)
     title = Column(String, nullable=False)
     short_description = Column(Text, nullable=False)
     card_image = Column(String, nullable=False)

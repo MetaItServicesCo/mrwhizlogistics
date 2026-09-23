@@ -15,6 +15,16 @@ class Settings(BaseSettings):
     admin_email: str | None = None
     admin_password: str | None = None
 
+    # Comma-separated list of browser origins allowed to call this API.
+    # "*" is fine for local development but must be set to the real site
+    # origin(s) in production, because credentialed requests are rejected
+    # by browsers when the server answers Access-Control-Allow-Origin: *.
+    cors_origins: str = "*"
+
+    @property
+    def cors_origin_list(self) -> list[str]:
+        return [o.strip() for o in self.cors_origins.split(",") if o.strip()]
+
     model_config = SettingsConfigDict(
         env_file=BACKEND_DIR / ".env",
         env_file_encoding="utf-8",

@@ -26,7 +26,6 @@ export default function AboutPage() {
         title="About Us"
         crumb="About"
         badge="WHO WE ARE"
-        image="/images/about-hero.jpg"
       />
       <AboutExpertise />
       <WhyChooseUs />

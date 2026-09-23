@@ -27,10 +27,9 @@ export const ADMIN_MENU: NavItem[] = [
     key: "leads",
     title: "Leads",
     icon: <MoveToInboxRoundedIcon />,
-    badge: 8,
     children: [
-      { title: "Quote Requests", href: "/dashboard/leads/quotes", badge: 5 },
-      { title: "Contact Messages", href: "/dashboard/leads/contact", badge: 3 },
+      { title: "Quote Requests", href: "/dashboard/leads/quotes", },
+      { title: "Contact Messages", href: "/dashboard/leads/contact", },
       { title: "Newsletter", href: "/dashboard/leads/newsletter" },
     ],
   },
@@ -74,7 +73,7 @@ export const ADMIN_MENU: NavItem[] = [
     icon: <ArticleRoundedIcon />,
     children: [
       { title: "Posts", href: "/dashboard/blog/posts" },
-      { title: "Comments", href: "/dashboard/blog/comments", badge: 2 },
+      { title: "Comments", href: "/dashboard/blog/comments", },
     ],
   },
   {
@@ -82,7 +81,6 @@ export const ADMIN_MENU: NavItem[] = [
     title: "Messages",
     href: "/dashboard/messages",
     icon: <ChatRoundedIcon />,
-    badge: 4,
   },
   {
     key: "settings",

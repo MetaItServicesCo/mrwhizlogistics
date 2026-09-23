@@ -1,4 +1,5 @@
 import os
+import uuid
 import json
 import shutil
 from typing import List, Optional, Union
@@ -6,6 +7,7 @@ from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form, s
 from sqlalchemy.orm import Session, joinedload
 
 from app.database import get_db
+from app.core.security import get_current_admin
 from app.models.blog import Blog, BlogComment
 from app.schemas.blog import BlogResponse, CommentCreate, CommentResponse
 
@@ -26,10 +28,17 @@ def save_uploaded_file(file: Union[UploadFile, str, None]) -> Optional[str]:
         file.file.seek(0)
         if file_size == 0:
             return None
-        file_path = os.path.join(UPLOAD_DIR, filename)
+        # Uploads were stored under their original filename, so a second
+        # "truck.png" silently overwrote the first one and changed the image
+        # on an unrelated record. Prefix a short random token to keep them
+        # distinct while leaving the name readable.
+        safe_name = os.path.basename(filename)
+        stored_name = f"{uuid.uuid4().hex[:12]}_{safe_name}"
+
+        file_path = os.path.join(UPLOAD_DIR, stored_name)
         with open(file_path, "wb") as buffer:
             shutil.copyfileobj(file.file, buffer)
-        return f"/{UPLOAD_DIR}/{filename}"
+        return f"/{UPLOAD_DIR}/{stored_name}"
     except Exception:
         return None
 
@@ -76,7 +85,7 @@ def get_blog(card_id_or_slug: str, db: Session = Depends(get_db)):
 
 
 # 3. CREATE BLOG POST
-@router.post("/", response_model=BlogResponse, status_code=status.HTTP_201_CREATED)
+@router.post("/", response_model=BlogResponse, status_code=status.HTTP_201_CREATED, dependencies=[Depends(get_current_admin)])
 async def create_blog(
     card_id: str = Form(...),
     title: str = Form(...),
@@ -129,7 +138,7 @@ async def create_blog(
 
 
 # 4. UPDATE BLOG BY CARD_ID
-@router.put("/{card_id}", response_model=BlogResponse)
+@router.put("/{card_id}", response_model=BlogResponse, dependencies=[Depends(get_current_admin)])
 async def update_blog_by_card_id(
     card_id: str,
     title: Optional[str] = Form(None),
@@ -181,7 +190,7 @@ async def update_blog_by_card_id(
 
 
 # 5. DELETE BLOG BY CARD_ID
-@router.delete("/{card_id}", status_code=status.HTTP_200_OK)
+@router.delete("/{card_id}", status_code=status.HTTP_200_OK, dependencies=[Depends(get_current_admin)])
 def delete_blog_by_card_id(card_id: str, db: Session = Depends(get_db)):
     blog = db.query(Blog).filter(Blog.card_id == card_id).first()
     if not blog:
@@ -218,3 +227,24 @@ def post_blog_comment(card_id: str, payload: CommentCreate, db: Session = Depend
     db.commit()
     db.refresh(new_comment)
     return new_comment
+
+# 7. LIST ALL COMMENTS (Dashboard moderation)
+@router.get("/comments/all", response_model=List[CommentResponse], dependencies=[Depends(get_current_admin)])
+def list_all_comments(db: Session = Depends(get_db)):
+    """Flat list of every comment, newest first, for the dashboard moderation queue."""
+    return (
+        db.query(BlogComment)
+        .order_by(BlogComment.created_at.desc())
+        .all()
+    )
+
+
+# 8. DELETE COMMENT (Dashboard moderation)
+@router.delete("/comments/{comment_id}", status_code=status.HTTP_204_NO_CONTENT, dependencies=[Depends(get_current_admin)])
+def delete_blog_comment(comment_id: int, db: Session = Depends(get_db)):
+    """Remove a comment. Replies cascade via the blog_comments.parent_id FK."""
+    comment = db.query(BlogComment).filter(BlogComment.id == comment_id).first()
+    if not comment:
+        raise HTTPException(status_code=404, detail="Comment not found")
+    db.delete(comment)
+    db.commit()

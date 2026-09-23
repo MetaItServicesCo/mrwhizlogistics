@@ -1,7 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
+import { getBlogBySlug, postBlogComment } from "@/lib/publicApi";
+import { errorMessage } from "@/lib/useResource";
+import type { BlogComment as ApiComment } from "@/lib/types";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
@@ -22,29 +25,45 @@ type Comment = {
   replies?: Comment[];
 };
 
-// TODO: API — initial comments backend se aayenge (props ya fetch se)
-const INITIAL: Comment[] = [
-  {
-    id: "1",
-    name: "Cameron Williamson",
-    date: "3 hours ago",
-    text: "Great breakdown — the point about consistency over one-off performance really lands. This is exactly what we look for in a carrier.",
-    replies: [
-      {
-        id: "1-1",
-        name: "Robert Fox",
-        date: "2 hours ago",
-        text: "Appreciate that, Cameron. Consistency is everything — one good load means nothing if the next three are late.",
-      },
-    ],
-  },
-  {
-    id: "2",
-    name: "Jons Kihan",
-    date: "2 hours ago",
-    text: "Real-time tracking has genuinely changed our expectations. Hard to go back once you've had full visibility.",
-  },
-];
+/** "3 hours ago" style stamp for an ISO timestamp from the API. */
+function relativeDate(iso: string): string {
+  const then = new Date(iso).getTime();
+  if (Number.isNaN(then)) return "";
+
+  const seconds = Math.max(0, Math.round((Date.now() - then) / 1000));
+  if (seconds < 60) return "Just now";
+
+  const units: [number, Intl.RelativeTimeFormatUnit][] = [
+    [60, "minute"],
+    [3600, "hour"],
+    [86400, "day"],
+    [604800, "week"],
+    [2629800, "month"],
+    [31557600, "year"],
+  ];
+
+  let divisor = 1;
+  let unit: Intl.RelativeTimeFormatUnit = "second";
+  for (const [size, name] of units) {
+    if (seconds < size * 60 || name === "year") {
+      divisor = size;
+      unit = name;
+      break;
+    }
+  }
+
+  const rtf = new Intl.RelativeTimeFormat("en", { numeric: "auto" });
+  return rtf.format(-Math.round(seconds / divisor), unit);
+}
+
+/** Map the API's comment tree onto the shape this component renders. */
+const fromApi = (c: ApiComment): Comment => ({
+  id: String(c.id),
+  name: c.name,
+  date: relativeDate(c.created_at),
+  text: c.message,
+  replies: (c.replies ?? []).map(fromApi),
+});
 
 const AVATAR_COLORS = ["#c8ff00", "#00e5ff", "#ff4dd8", "#ffb340", "#a78bfa"];
 const colorFor = (name: string) =>
@@ -344,28 +363,65 @@ function CommentItem({
 
 /* ---------- main ---------- */
 export default function BlogComments({ postSlug }: { postSlug: string }) {
-  const [comments, setComments] = useState<Comment[]>(INITIAL);
+  const [comments, setComments] = useState<Comment[]>([]);
   const [replyingTo, setReplyingTo] = useState<string | null>(null);
   const [sort, setSort] = useState<"newest" | "oldest">("newest");
   const [sent, setSent] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  /**
+   * The comment endpoint is keyed by card_id, not slug, so we resolve it from
+   * the post itself. It stays null for posts that only exist in the bundled
+   * static content — then the thread is read-only rather than broken.
+   */
+  const [cardId, setCardId] = useState<string | null>(null);
+
+  const load = useCallback(async () => {
+    try {
+      const post = await getBlogBySlug(postSlug);
+      setCardId(post.card_id);
+      setComments((post.comments ?? []).map(fromApi));
+    } catch {
+      setCardId(null);
+      setComments([]);
+    }
+  }, [postSlug]);
+
+  useEffect(() => {
+    void load();
+  }, [load]);
 
   const flash = () => {
     setSent(true);
     setTimeout(() => setSent(false), 3500);
   };
 
+  const send = async (
+    data: { name: string; email: string; text: string },
+    parentId?: string,
+  ) => {
+    if (!cardId) {
+      setError("Comments are not available for this post yet.");
+      return;
+    }
+    setError(null);
+    try {
+      await postBlogComment(cardId, {
+        name: data.name.trim(),
+        email: data.email.trim(),
+        message: data.text.trim(),
+        parent_id: parentId ? Number(parentId) : null,
+      });
+      // Refetch so nesting and ordering match whatever the server stored.
+      await load();
+      flash();
+    } catch (e) {
+      setError(errorMessage(e));
+    }
+  };
+
   // top-level comment add
   const addComment = (data: { name: string; email: string; text: string }) => {
-    // TODO: API — POST /api/blog/${postSlug}/comments  { ...data }
-    const newC: Comment = {
-      id: String(Date.now()),
-      name: data.name,
-      date: "Just now",
-      text: data.text,
-      replies: [],
-    };
-    setComments((c) => [...c, newC]);
-    flash();
+    void send(data);
   };
 
   // reply add (nested under parentId)
@@ -373,22 +429,7 @@ export default function BlogComments({ postSlug }: { postSlug: string }) {
     parentId: string,
     data: { name: string; email: string; text: string },
   ) => {
-    // TODO: API — POST /api/blog/${postSlug}/comments  { ...data, parentId }
-    const reply: Comment = {
-      id: `${parentId}-${Date.now()}`,
-      name: data.name,
-      date: "Just now",
-      text: data.text,
-    };
-    setComments((list) =>
-      list.map((c) =>
-        c.id === parentId
-          ? { ...c, replies: [...(c.replies || []), reply] }
-          : c,
-      ),
-    );
-    setReplyingTo(null);
-    flash();
+    void send(data, parentId).then(() => setReplyingTo(null));
   };
 
   const ordered = sort === "newest" ? [...comments].reverse() : comments;
@@ -458,6 +499,11 @@ export default function BlogComments({ postSlug }: { postSlug: string }) {
 
       {/* list */}
       <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mb: 6 }}>
+        {ordered.length === 0 && (
+          <Typography sx={{ fontSize: 14, color: "rgba(255,255,255,0.45)" }}>
+            No comments yet — start the conversation below.
+          </Typography>
+        )}
         <AnimatePresence initial={false}>
           {ordered.map((c) => (
             <CommentItem
@@ -513,6 +559,24 @@ export default function BlogComments({ postSlug }: { postSlug: string }) {
           </Box>
         )}
       </AnimatePresence>
+
+      {error && (
+        <Typography
+          role="alert"
+          sx={{
+            mb: 2.5,
+            px: 2,
+            py: 1.4,
+            fontSize: 13.5,
+            color: "#ff8a80",
+            borderRadius: "12px",
+            bgcolor: "rgba(255,82,82,0.08)",
+            border: "1px solid rgba(255,82,82,0.3)",
+          }}
+        >
+          {error}
+        </Typography>
+      )}
 
       <CommentForm onSubmit={addComment} />
     </Box>

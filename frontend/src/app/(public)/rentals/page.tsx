@@ -31,7 +31,6 @@ export default function HotShotRentalsPage() {
         title="Hot Shot Rentals"
         crumb="Rentals"
         badge="EQUIPMENT RENTALS"
-        image="/images/hot-shot-hero.jpg"
       />
       <RentalsIntro />
       <HotShotRentals />

@@ -44,11 +44,18 @@ class BlogComment(Base):
 
     blog = relationship("Blog", back_populates="comments")
     
-    # single_parent=True add kiya hai taake SQLAdmin error na de
+    # Self-referential thread. remote_side belongs on the MANY-TO-ONE side
+    # (the parent), so that `replies` is the collection. It used to sit on
+    # `replies`, which inverted the relationship: `replies` returned the single
+    # parent row (None for top-level comments) and every response serialisation
+    # failed with "replies: Input should be a valid list".
     replies = relationship(
-        "BlogComment", 
-        backref="parent", 
-        remote_side=[id], 
+        "BlogComment",
+        back_populates="parent",
         cascade="all, delete-orphan",
-        single_parent=True
+    )
+    parent = relationship(
+        "BlogComment",
+        back_populates="replies",
+        remote_side=[id],
     )

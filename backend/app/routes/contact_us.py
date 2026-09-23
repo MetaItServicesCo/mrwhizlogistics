@@ -1,10 +1,9 @@
-from datetime import datetime
 from typing import Optional, List
 from fastapi import APIRouter, Depends, Query, status, HTTPException
-from sqlalchemy import Column, DateTime, Integer, String, Text
 from sqlalchemy.orm import Session
 
-from app.database import Base, get_db
+from app.database import get_db
+from app.core.security import get_current_admin
 
 # Schemas
 from app.schemas.contact_us import (
@@ -17,25 +16,13 @@ from app.schemas.truck_type import PublicTruckType
 from app.models.truck_type import TruckType
 
 # ==========================================================================
-# 1. DATABASE MODEL (Fixes 500 & Table Redefinition Error)
+# 1. DATABASE MODEL
 # ==========================================================================
-
-class ContactUs(Base):
-    __tablename__ = "contact_inquiries"
-    __table_args__ = {'extend_existing': True}
-
-    id = Column(Integer, primary_key=True, index=True)
-    full_name = Column(String, nullable=False)
-    email = Column(String, nullable=False)
-    phone_number = Column(String, nullable=True)
-    service_needed = Column(String, nullable=True)
-    truck_type = Column(String, nullable=True)
-    company_name = Column(String, nullable=True)
-    message = Column(Text, nullable=True)
-    status = Column(String, default="new", nullable=True)
-    created_at = Column(DateTime, default=datetime.utcnow)
-
-ContactInquiry = ContactUs
+# The model lives in app/models/contact_us.py and is imported here. It used to
+# be re-declared in this module with extend_existing=True, which appended a
+# second copy of the `id` index to the same Table object -- create_all() then
+# emitted "CREATE INDEX ix_contact_inquiries_id" twice and startup aborted.
+from app.models.contact_us import ContactInquiry, ContactUs
 
 # ==========================================================================
 # 2. ROUTER DEFINITION
@@ -82,7 +69,7 @@ def submit_contact_form(
     "", 
     response_model=List[ContactUsRead],
     summary="2. List All Submissions"
-)
+, dependencies=[Depends(get_current_admin)])
 def list_contact_inquiries(
     status_filter: Optional[str] = Query(default=None, alias="status"),
     db: Session = Depends(get_db),
@@ -132,7 +119,7 @@ def get_contact_info():
     "/{inquiry_id}", 
     response_model=ContactUsRead,
     summary="5. Get Single Inquiry"
-)
+, dependencies=[Depends(get_current_admin)])
 def get_single_inquiry(
     inquiry_id: int,
     db: Session = Depends(get_db),
@@ -148,7 +135,7 @@ def get_single_inquiry(
     "/{inquiry_id}", 
     response_model=ContactUsRead,
     summary="6. Update Inquiry Data / Status"
-)
+, dependencies=[Depends(get_current_admin)])
 def update_inquiry(
     inquiry_id: int,
     payload: ContactUsUpdate,
@@ -172,7 +159,7 @@ def update_inquiry(
     "/{inquiry_id}", 
     status_code=status.HTTP_204_NO_CONTENT,
     summary="7. Delete Inquiry"
-)
+, dependencies=[Depends(get_current_admin)])
 def delete_contact_inquiry(
     inquiry_id: int,
     db: Session = Depends(get_db),

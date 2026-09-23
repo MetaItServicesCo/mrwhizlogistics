@@ -127,7 +127,7 @@ export default function FleetOverview() {
         {/* 3-Column Grid Layout */}
         <Grid container spacing={3}>
           {fleets.map((fleet, index) => (
-            <Grid item xs={12} md={4} key={fleet.title}>
+            <Grid size={{ xs: 12, md: 4 }} key={fleet.title}>
               <Box
                 component={motion.div}
                 initial={{ opacity: 0, y: 30 }}

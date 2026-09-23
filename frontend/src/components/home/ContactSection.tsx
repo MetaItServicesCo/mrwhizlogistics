@@ -1,6 +1,8 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { submitContact } from "@/lib/publicApi";
+import { errorMessage } from "@/lib/useResource";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 
 import Box from "@mui/material/Box";
@@ -257,6 +259,8 @@ export default function ContactSection() {
 
   const [status, setStatus] = useState<"idle" | "loading" | "sent">("idle");
 
+  const [error, setError] = useState<string | null>(null);
+
   const [truckAnchor, setTruckAnchor] = useState<HTMLElement | null>(null);
 
   const [truckSearch, setTruckSearch] = useState("");
@@ -331,17 +335,31 @@ export default function ContactSection() {
   // SUBMIT
   // --------------------------------------------------
 
-  const submit = () => {
+  const submit = async () => {
     if (!form.name || !form.email.includes("@") || !form.truckType) {
       return;
     }
 
     setStatus("loading");
+    setError(null);
 
-    // TODO: backend banne par yahan real API call lagegi
-    setTimeout(() => {
+    try {
+      await submitContact({
+        full_name: form.name.trim(),
+        email: form.email.trim(),
+        phone_number: form.phone.trim(),
+        service_needed: form.truckType,
+        company_name: form.company.trim(),
+        // `role` has no column of its own, so it rides along with the message.
+        message: [form.message.trim(), form.role.trim() && `Role: ${form.role.trim()}`]
+          .filter(Boolean)
+          .join("\n\n"),
+      });
       setStatus("sent");
-    }, 1300);
+    } catch (e) {
+      setError(errorMessage(e));
+      setStatus("idle");
+    }
   };
 
   // --------------------------------------------------
@@ -359,7 +377,7 @@ export default function ContactSection() {
       y: 0,
       transition: {
         duration: 0.45,
-        ease: [0.22, 1, 0.36, 1],
+        ease: [0.22, 1, 0.36, 1] as const,
       },
     },
   };
@@ -1070,40 +1088,42 @@ export default function ContactSection() {
                               opacity: 1,
                             },
                           }}
-                          InputProps={{
-                            startAdornment: (
-                              <InputAdornment position="start">
-                                <SearchRoundedIcon
-                                  sx={{
-                                    color: "rgba(255,255,255,0.4)",
-                                  }}
-                                />
-                              </InputAdornment>
-                            ),
-
-                            endAdornment: truckSearch ? (
-                              <InputAdornment position="end">
-                                <Box
-                                  component="button"
-                                  type="button"
-                                  onClick={() => setTruckSearch("")}
-                                  sx={{
-                                    border: 0,
-                                    bgcolor: "transparent",
-                                    color: "rgba(255,255,255,0.5)",
-                                    display: "flex",
-                                    cursor: "pointer",
-                                    p: 0.5,
-                                  }}
-                                >
-                                  <CloseRoundedIcon
+                          slotProps={{
+                            input: {
+                              startAdornment: (
+                                <InputAdornment position="start">
+                                  <SearchRoundedIcon
                                     sx={{
-                                      fontSize: 18,
+                                      color: "rgba(255,255,255,0.4)",
                                     }}
                                   />
-                                </Box>
-                              </InputAdornment>
-                            ) : null,
+                                </InputAdornment>
+                              ),
+
+                              endAdornment: truckSearch ? (
+                                <InputAdornment position="end">
+                                  <Box
+                                    component="button"
+                                    type="button"
+                                    onClick={() => setTruckSearch("")}
+                                    sx={{
+                                      border: 0,
+                                      bgcolor: "transparent",
+                                      color: "rgba(255,255,255,0.5)",
+                                      display: "flex",
+                                      cursor: "pointer",
+                                      p: 0.5,
+                                    }}
+                                  >
+                                    <CloseRoundedIcon
+                                      sx={{
+                                        fontSize: 18,
+                                      }}
+                                    />
+                                  </Box>
+                                </InputAdornment>
+                              ) : null,
+                            },
                           }}
                         />
                       </Box>
@@ -1284,6 +1304,31 @@ export default function ContactSection() {
                     />
                   </Box>
 
+                  {error && (
+                    <Box
+                      sx={{
+                        gridColumn: {
+                          sm: "span 2",
+                        },
+                      }}
+                    >
+                      <Typography
+                        role="alert"
+                        sx={{
+                          px: 2,
+                          py: 1.4,
+                          fontSize: 13.5,
+                          color: "#ff8a80",
+                          borderRadius: "12px",
+                          bgcolor: "rgba(255,82,82,0.08)",
+                          border: "1px solid rgba(255,82,82,0.3)",
+                        }}
+                      >
+                        {error}
+                      </Typography>
+                    </Box>
+                  )}
+
                   {/* SUBMIT BUTTON */}
 
                   <Box
@@ -1299,7 +1344,7 @@ export default function ContactSection() {
                     <Button
                       fullWidth
                       disableElevation
-                      onClick={submit}
+                      onClick={() => void submit()}
                       disabled={status === "loading"}
                       sx={{
                         position: "relative",

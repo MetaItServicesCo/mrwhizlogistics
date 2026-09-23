@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { submitQuote } from "@/lib/publicApi";
+import { errorMessage } from "@/lib/useResource";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -97,6 +99,7 @@ export default function QuoteModal({
 }) {
   const reduce = useReducedMotion() ?? false;
   const [status, setStatus] = useState<"idle" | "loading" | "done">("idle");
+  const [error, setError] = useState<string | null>(null);
 
   const [form, setForm] = useState({
     name: "",
@@ -116,17 +119,32 @@ export default function QuoteModal({
     (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement>) =>
       setForm((p) => ({ ...p, [k]: e.target.value }));
 
-  const submit = () => {
+  const submit = async () => {
     if (!form.name || !form.email.includes("@")) return;
     setStatus("loading");
-    // TODO: backend banne par yahan real API call lagegi (form + selectedService bhejein)
-    setTimeout(() => setStatus("done"), 1300);
+    setError(null);
+    try {
+      await submitQuote({
+        name: form.name.trim(),
+        email: form.email.trim(),
+        phone: form.phone.trim(),
+        pickup: form.pickup.trim(),
+        drop: form.drop.trim(),
+        selected_service: form.selectedService,
+        details: form.details.trim(),
+      });
+      setStatus("done");
+    } catch (e) {
+      setError(errorMessage(e));
+      setStatus("idle");
+    }
   };
 
   const close = () => {
     onClose();
     setTimeout(() => {
       setStatus("idle");
+      setError(null);
       setForm({
         name: "",
         phone: "",
@@ -180,7 +198,7 @@ export default function QuoteModal({
             }
             animate={reduce ? { opacity: 1 } : { opacity: 1, scale: 1, y: 0 }}
             exit={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.96, y: 12 }}
-            transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] as const }}
             sx={{
               position: "relative",
               width: "100%",
@@ -518,10 +536,28 @@ export default function QuoteModal({
                       </Box>
                     </Box>
 
+                    {error && (
+                      <Typography
+                        role="alert"
+                        sx={{
+                          mt: 2.5,
+                          px: 2,
+                          py: 1.4,
+                          fontSize: 13.5,
+                          color: "#ff8a80",
+                          borderRadius: "12px",
+                          bgcolor: "rgba(255,82,82,0.08)",
+                          border: "1px solid rgba(255,82,82,0.3)",
+                        }}
+                      >
+                        {error}
+                      </Typography>
+                    )}
+
                     <Button
                       fullWidth
                       disableElevation
-                      onClick={submit}
+                      onClick={() => void submit()}
                       disabled={status === "loading"}
                       sx={{
                         position: "relative",

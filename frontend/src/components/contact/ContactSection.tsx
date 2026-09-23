@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
+import { submitContact } from "@/lib/publicApi";
+import { errorMessage } from "@/lib/useResource";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
@@ -93,6 +95,7 @@ const menuSx = {
 export default function ContactSection() {
   const reduce = useReducedMotion() ?? false;
   const [status, setStatus] = useState<"idle" | "loading" | "done">("idle");
+  const [error, setError] = useState<string | null>(null);
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -106,11 +109,24 @@ export default function ContactSection() {
     (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement>) =>
       setForm((p) => ({ ...p, [k]: e.target.value }));
 
-  const submit = () => {
+  const submit = async () => {
     if (!form.name.trim() || !form.email.includes("@")) return;
     setStatus("loading");
-    // TODO: API — POST /api/contact { ...form }
-    setTimeout(() => setStatus("done"), 1300);
+    setError(null);
+    try {
+      await submitContact({
+        full_name: form.name.trim(),
+        email: form.email.trim(),
+        phone_number: form.phone.trim(),
+        service_needed: form.service,
+        company_name: form.company.trim(),
+        message: form.message.trim(),
+      });
+      setStatus("done");
+    } catch (e) {
+      setError(errorMessage(e));
+      setStatus("idle");
+    }
   };
 
   return (
@@ -468,8 +484,26 @@ export default function ContactSection() {
                   </Box>
                 </Box>
 
+                {error && (
+                  <Typography
+                    role="alert"
+                    sx={{
+                      mt: 2.5,
+                      px: 2,
+                      py: 1.4,
+                      fontSize: 13.5,
+                      color: "#ff8a80",
+                      borderRadius: "12px",
+                      bgcolor: "rgba(255,82,82,0.08)",
+                      border: "1px solid rgba(255,82,82,0.3)",
+                    }}
+                  >
+                    {error}
+                  </Typography>
+                )}
+
                 <Button
-                  onClick={submit}
+                  onClick={() => void submit()}
                   disableElevation
                   disabled={status === "loading"}
                   endIcon={

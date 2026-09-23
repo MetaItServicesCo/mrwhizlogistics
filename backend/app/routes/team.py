@@ -1,4 +1,5 @@
 import os
+import uuid
 import json
 import shutil
 from typing import List, Optional, Union
@@ -6,6 +7,7 @@ from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form, s
 from sqlalchemy.orm import Session
 
 from app.database import get_db
+from app.core.security import get_current_admin
 from app.models.team import TeamMember
 from app.schemas.team import TeamMemberResponse
 
@@ -26,10 +28,17 @@ def save_uploaded_file(file: Union[UploadFile, str, None]) -> Optional[str]:
         file.file.seek(0)
         if file_size == 0:
             return None
-        file_path = os.path.join(UPLOAD_DIR, filename)
+        # Uploads were stored under their original filename, so a second
+        # "truck.png" silently overwrote the first one and changed the image
+        # on an unrelated record. Prefix a short random token to keep them
+        # distinct while leaving the name readable.
+        safe_name = os.path.basename(filename)
+        stored_name = f"{uuid.uuid4().hex[:12]}_{safe_name}"
+
+        file_path = os.path.join(UPLOAD_DIR, stored_name)
         with open(file_path, "wb") as buffer:
             shutil.copyfileobj(file.file, buffer)
-        return f"/{UPLOAD_DIR}/{filename}"
+        return f"/{UPLOAD_DIR}/{stored_name}"
     except Exception:
         return None
 
@@ -49,7 +58,7 @@ def get_all_team_members(db: Session = Depends(get_db)):
 
 
 # 2. CREATE TEAM MEMBER
-@router.post("/", response_model=TeamMemberResponse, status_code=status.HTTP_201_CREATED)
+@router.post("/", response_model=TeamMemberResponse, status_code=status.HTTP_201_CREATED, dependencies=[Depends(get_current_admin)])
 async def create_team_member(
     name: str = Form(...),
     role: str = Form(...),
@@ -72,7 +81,7 @@ async def create_team_member(
 
 
 # 3. UPDATE TEAM MEMBER BY ID
-@router.put("/{member_id}", response_model=TeamMemberResponse)
+@router.put("/{member_id}", response_model=TeamMemberResponse, dependencies=[Depends(get_current_admin)])
 async def update_team_member(
     member_id: int,
     name: Optional[str] = Form(None),
@@ -99,7 +108,7 @@ async def update_team_member(
 
 
 # 4. DELETE TEAM MEMBER BY ID
-@router.delete("/{member_id}", status_code=status.HTTP_200_OK)
+@router.delete("/{member_id}", status_code=status.HTTP_200_OK, dependencies=[Depends(get_current_admin)])
 def delete_team_member(member_id: int, db: Session = Depends(get_db)):
     member = db.query(TeamMember).filter(TeamMember.id == member_id).first()
     if not member:

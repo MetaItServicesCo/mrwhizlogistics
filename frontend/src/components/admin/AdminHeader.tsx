@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useAuth } from "@/lib/auth";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
@@ -32,7 +33,12 @@ export default function AdminHeader({
   onToggleCollapse: () => void;
 }) {
   const pathname = usePathname();
+  const router = useRouter();
+  const { user, signOut } = useAuth();
   const [anchor, setAnchor] = useState<null | HTMLElement>(null);
+
+  const displayName = user?.username || "Admin";
+  const initial = displayName.charAt(0).toUpperCase();
 
   return (
     <Box
@@ -94,7 +100,7 @@ export default function AdminHeader({
             color: "rgba(255,255,255,0.4)",
           }}
         >
-          Welcome back, Admin
+          Welcome back, {displayName}
         </Typography>
       </Box>
 
@@ -198,7 +204,7 @@ export default function AdminHeader({
               fontSize: 13,
             }}
           >
-            A
+            {initial}
           </Box>
           <Typography
             sx={{
@@ -208,7 +214,7 @@ export default function AdminHeader({
               color: "#fff",
             }}
           >
-            Admin
+            {displayName}
           </Typography>
         </Box>
 
@@ -238,15 +244,39 @@ export default function AdminHeader({
             },
           }}
         >
-          <MenuItem onClick={() => setAnchor(null)}>
-            <PersonRoundedIcon /> Profile
+          <MenuItem disabled sx={{ opacity: "1 !important" }}>
+            <PersonRoundedIcon />
+            <Box sx={{ minWidth: 0 }}>
+              <Typography sx={{ fontSize: 13, fontWeight: 700, color: "#fff" }}>
+                {displayName}
+              </Typography>
+              <Typography
+                sx={{
+                  fontSize: 11.5,
+                  color: "rgba(255,255,255,0.45)",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                }}
+              >
+                {user?.email}
+              </Typography>
+            </Box>
           </MenuItem>
-          <MenuItem onClick={() => setAnchor(null)}>
+          <Divider sx={{ borderColor: "rgba(255,255,255,0.08)" }} />
+          <MenuItem
+            onClick={() => {
+              setAnchor(null);
+              router.push("/dashboard/settings");
+            }}
+          >
             <SettingsRoundedIcon /> Settings
           </MenuItem>
           <Divider sx={{ borderColor: "rgba(255,255,255,0.08)" }} />
           <MenuItem
-            onClick={() => setAnchor(null)}
+            onClick={() => {
+              setAnchor(null);
+              signOut();
+            }}
             sx={{ color: "#ff6b6b !important" }}
           >
             <LogoutRoundedIcon /> Logout

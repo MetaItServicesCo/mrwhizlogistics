@@ -16,6 +16,8 @@ type Props = {
   title?: string;
   crumb?: string;
   badge?: string;
+  /** Optional banner override; falls back to HERO_IMAGE. */
+  image?: string;
 };
 
 export default function HotShotHero({
