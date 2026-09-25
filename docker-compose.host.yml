@@ -4,11 +4,11 @@
 services:
   backend:
     ports:
-      - "127.0.0.1:${BACKEND_HOST_PORT:-8002}:8000"
+      - "127.0.0.1:${BACKEND_HOST_PORT:-8020}:8000"
 
   frontend:
     ports:
-      - "127.0.0.1:${FRONTEND_HOST_PORT:-3003}:3000"
+      - "127.0.0.1:${FRONTEND_HOST_PORT:-3020}:3000"
 
   # Keep the bundled proxy disabled when this override is active. The host's
   # nginx proxies to the loopback ports above instead.
