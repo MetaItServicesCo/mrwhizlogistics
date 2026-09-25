@@ -151,7 +151,8 @@ export default function ContactMessagesPage() {
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
             size="small"
-            sx={{ minWidth: 150 }}
+            fullWidth={false}
+            sx={{ minWidth: 170 }}
             options={[{ value: "all", label: "All statuses" }, ...STATUS_OPTIONS]}
           />
         </Box>

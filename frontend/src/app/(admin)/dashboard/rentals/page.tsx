@@ -12,11 +12,21 @@ import {
   FormDialog,
   PageHeader,
   SearchBox,
+  SelectField,
   StatusChip,
   Toast,
   fmtDate,
   fmtDateTime,
 } from "@/components/admin/ui";
+
+/** The website form creates "pending"; the rest is the dashboard workflow. */
+const STATUS_OPTIONS = [
+  { value: "pending", label: "Pending (new)" },
+  { value: "contacted", label: "Contacted" },
+  { value: "quoted", label: "Quoted" },
+  { value: "booked", label: "Booked" },
+  { value: "closed", label: "Closed" },
+];
 
 function DetailBlock({
   heading,
@@ -76,18 +86,22 @@ function DetailBlock({
 export default function RentalsPage() {
   const { items, loading, error, reload } =
     useResource<RentalQuote>("/api/rental-quotes");
-  const { busy, setError, run } = useAction();
+  const { busy, error: actionError, setError, run } = useAction();
 
   const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
   const [viewing, setViewing] = useState<RentalQuote | null>(null);
+  const [status, setStatus] = useState("pending");
   const [deleting, setDeleting] = useState<RentalQuote | null>(null);
   const [toast, setToast] = useState<string | null>(null);
 
   const rows = useMemo(() => {
     const q = search.trim().toLowerCase();
-    if (!q) return items;
-    return items.filter((r) =>
-      [
+    return items.filter((r) => {
+      if (statusFilter !== "all" && (r.status || "pending") !== statusFilter)
+        return false;
+      if (!q) return true;
+      return [
         r.customer?.fullName,
         r.customer?.email,
         r.customer?.phone,
@@ -96,9 +110,33 @@ export default function RentalsPage() {
         r.rental?.slug,
       ]
         .filter(Boolean)
-        .some((v) => String(v).toLowerCase().includes(q)),
+        .some((v) => String(v).toLowerCase().includes(q));
+    });
+  }, [items, search, statusFilter]);
+
+  const openView = (r: RentalQuote) => {
+    setError(null);
+    setStatus(r.status || "pending");
+    setViewing(r);
+  };
+
+  const statusChanged = !!viewing && status !== (viewing.status || "pending");
+
+  const saveStatus = async () => {
+    if (!viewing) return;
+    if (!statusChanged) {
+      setViewing(null);
+      return;
+    }
+    const ok = await run(() =>
+      api.patch(`/api/rental-quotes/${viewing.id}`, { status }),
     );
-  }, [items, search]);
+    if (ok) {
+      setViewing(null);
+      setToast("Rental quote status updated.");
+      void reload();
+    }
+  };
 
   const remove = async () => {
     if (!deleting) return;
@@ -158,11 +196,22 @@ export default function RentalsPage() {
         title="Rentals"
         subtitle={`${items.length} rental quote${items.length === 1 ? "" : "s"} submitted from the website.`}
       >
-        <SearchBox
-          value={search}
-          onChange={setSearch}
-          placeholder="Search customer, equipment…"
-        />
+        <Box sx={{ display: "flex", gap: 1.5, flexWrap: "wrap" }}>
+          <SearchBox
+            value={search}
+            onChange={setSearch}
+            placeholder="Search customer, equipment…"
+          />
+          <SelectField
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            size="small"
+            fullWidth={false}
+            sx={{ minWidth: 170 }}
+            slotProps={{ htmlInput: { "aria-label": "Filter by status" } }}
+            options={[{ value: "all", label: "All statuses" }, ...STATUS_OPTIONS]}
+          />
+        </Box>
       </PageHeader>
 
       <DataTable
@@ -174,17 +223,14 @@ export default function RentalsPage() {
         emptyTitle={items.length ? "No matching quotes" : "No rental quotes yet"}
         emptyHint={
           items.length
-            ? "Try a different search."
+            ? "Try a different search or status."
             : "Submissions from the rental quote form will appear here."
         }
         actions={[
           {
             icon: "view",
-            label: "View details",
-            onClick: (r) => {
-              setError(null);
-              setViewing(r);
-            },
+            label: "View & update status",
+            onClick: openView,
           },
           {
             icon: "delete",
@@ -203,13 +249,22 @@ export default function RentalsPage() {
         title={
           viewing ? `Rental quote — ${viewing.customer?.fullName ?? ""}` : ""
         }
-        submitLabel="Close"
-        onSubmit={() => setViewing(null)}
+        busy={busy}
+        error={actionError}
+        submitLabel={statusChanged ? "Save status" : "Close"}
+        onSubmit={() => void saveStatus()}
         onClose={() => setViewing(null)}
         maxWidth="md"
       >
         {viewing && (
           <>
+            <SelectField
+              label="Status"
+              value={status}
+              onChange={(e) => setStatus(e.target.value)}
+              options={STATUS_OPTIONS}
+              helperText="Move the request along as you handle it. New submissions start as Pending."
+            />
             <DetailBlock
               heading="Customer"
               rows={[
@@ -261,7 +316,6 @@ export default function RentalsPage() {
             <DetailBlock
               heading="Meta"
               rows={[
-                ["Status", viewing.status],
                 ["Submitted", fmtDateTime(viewing.submittedAt)],
               ]}
             />

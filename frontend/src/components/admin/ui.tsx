@@ -268,6 +268,8 @@ export function ErrorState({
 
 const STATUS_COLORS: Record<string, { fg: string; bg: string }> = {
   new: { fg: LIME, bg: "rgba(200,255,0,0.12)" },
+  pending: { fg: LIME, bg: "rgba(200,255,0,0.12)" },
+  booked: { fg: "#4ade80", bg: "rgba(74,222,128,0.12)" },
   contacted: { fg: "#66b2ff", bg: "rgba(102,178,255,0.12)" },
   quoted: { fg: "#ffc46b", bg: "rgba(255,196,107,0.12)" },
   closed: { fg: "rgba(255,255,255,0.55)", bg: "rgba(255,255,255,0.07)" },
@@ -500,17 +502,25 @@ export function Field(props: React.ComponentProps<typeof TextField>) {
 
 export function SelectField({
   options,
+  sx,
+  slotProps,
   ...props
 }: React.ComponentProps<typeof TextField> & {
   options: { value: string; label: string }[];
 }) {
+  // Merge rather than replace: a page passing its own sx (e.g. a minWidth on
+  // a filter) used to wipe out the dark field styling, leaving unreadable
+  // dark-on-dark text; its own slotProps likewise dropped the menu styling.
+  const extra = (slotProps ?? {}) as Record<string, object | undefined>;
   return (
     <TextField
       select
       fullWidth
-      sx={fieldSx}
+      sx={[fieldSx, ...(Array.isArray(sx) ? sx : sx ? [sx] : [])]}
       slotProps={{
+        ...extra,
         select: {
+          ...extra.select,
           MenuProps: {
             slotProps: {
               paper: {

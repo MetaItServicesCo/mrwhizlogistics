@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Optional, List, Any, Dict
+from typing import Optional, List, Any, Dict, Literal
 from pydantic import BaseModel, EmailStr
 
 # --- Equipment Schemas ---
@@ -59,3 +59,12 @@ class RentalQuoteCreate(BaseModel):
     load: LoadInfoSchema
     requirements: RequirementsSchema
     metadata: Optional[Dict[str, Any]] = None
+
+
+# Dashboard workflow for a rental request. "pending" is what the website form
+# creates, so it stays the first step rather than being renamed.
+RentalQuoteStatus = Literal["pending", "contacted", "quoted", "booked", "closed"]
+
+
+class RentalQuoteStatusUpdate(BaseModel):
+    status: RentalQuoteStatus

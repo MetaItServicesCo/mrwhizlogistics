@@ -8,7 +8,8 @@ from app.models.rental import RentalItem, RentalQuote
 from app.schemas.rental import (
     RentalItemCreate, 
     RentalItemRead, 
-    RentalQuoteCreate
+    RentalQuoteCreate,
+    RentalQuoteStatusUpdate,
 )
 
 rental_router = APIRouter(
@@ -117,7 +118,18 @@ def list_rental_quotes(status_filter: Optional[str] = Query(None, alias="status"
     records = q.order_by(RentalQuote.submitted_at.desc()).all()
     return [format_quote_response(rec) for rec in records]
 
-# 5. DELETE Dashboard Record Control
+# 5. PATCH Dashboard status update (pending -> contacted -> quoted -> booked -> closed)
+@rental_router.patch("/{quote_id}", summary="Update Quote Status (Dashboard)", dependencies=[Depends(get_current_admin)])
+def update_quote_status(quote_id: int, payload: RentalQuoteStatusUpdate, db: Session = Depends(get_db)):
+    quote = db.query(RentalQuote).filter(RentalQuote.id == quote_id).first()
+    if not quote:
+        raise HTTPException(status_code=404, detail="Quote request not found")
+    quote.status = payload.status
+    db.commit()
+    db.refresh(quote)
+    return format_quote_response(quote)
+
+# 6. DELETE Dashboard Record Control
 @rental_router.delete("/{quote_id}", status_code=status.HTTP_204_NO_CONTENT, summary="Delete Quote (Dashboard)", dependencies=[Depends(get_current_admin)])
 def delete_quote(quote_id: int, db: Session = Depends(get_db)):
     quote = db.query(RentalQuote).filter(RentalQuote.id == quote_id).first()
