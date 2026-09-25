@@ -39,6 +39,14 @@ export const fieldSx = {
   "& .MuiFormHelperText-root": { color: "rgba(255,255,255,0.4)" },
   "& .MuiSvgIcon-root": { color: "rgba(255,255,255,0.4)" },
   "& textarea": { color: "#fff" },
+  // Chrome paints autofilled fields light blue with dark text, which broke the
+  // dark design. Paint over it with the field's own colour instead.
+  "& input:-webkit-autofill, & input:-webkit-autofill:hover, & input:-webkit-autofill:focus": {
+    WebkitBoxShadow: "0 0 0 1000px #151715 inset",
+    WebkitTextFillColor: "#fff",
+    caretColor: "#fff",
+    transition: "background-color 600000s 0s",
+  },
 } as const;
 
 /* ------------------------------------------------------------------ */
