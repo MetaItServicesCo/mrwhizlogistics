@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import HotShotServiceDetail from "@/components/hot-shot/HotShotServiceDetail";
 import { HOT_SHOT_SERVICES, getHotShotService } from "@/data/hotShotServices";
 import { truckCardToService } from "@/lib/contentAdapters";
+import { detailMetadata } from "@/lib/seo";
 import {
   getHotshotCard,
   getHotshotCards,
@@ -33,10 +34,15 @@ export async function generateMetadata({
     };
   }
 
-  return {
-    title: `${service.title} | Hot Shot Transportation`,
-    description: service.shortDescription,
-  };
+  const name = service.name || service.title;
+  return detailMetadata({
+    seo: service,
+    fallbackTitle: `${name} | Hot Shot Transportation`,
+    fallbackDescription: service.shortDescription,
+    path: `/hot-shot/${service.slug}`,
+    image: service.image,
+    imageAlt: name,
+  });
 }
 
 export default async function HotShotServiceDetailPage({

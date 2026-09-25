@@ -77,6 +77,8 @@ export function truckCardToService(
   return {
     slug: card.slug,
     number: card.card_number,
+    // The detail page shows its own heading; SEO fallbacks use the name.
+    name: card.title,
     title: detail ? card.detail_heading || card.title : card.title,
     badge: card.category_tag || fallback?.badge || "TRANSPORTATION SERVICE",
     image:
@@ -94,6 +96,10 @@ export function truckCardToService(
     options: fallback?.options || [],
     // Only the detail page renders the full body; listings use the summary.
     contentHtml: detail ? card.content_html || undefined : undefined,
+    metaTitle: card.meta_title || undefined,
+    metaDescription: card.meta_description || undefined,
+    metaKeywords: card.meta_keywords || undefined,
+    canonicalUrl: card.canonical_url || undefined,
   };
 }
 
@@ -123,6 +129,9 @@ export function apiBlogToView(post: ApiBlogPost): BlogPost {
     contentHtml: post.content_html || undefined,
     schemaMarkup: post.schema_markup || undefined,
     keywords: post.meta_keywords || undefined,
+    metaTitle: post.meta_title || undefined,
+    metaDescription: post.meta_description || undefined,
+    canonicalUrl: post.canonical_url || undefined,
   };
 }
 

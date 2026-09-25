@@ -11,6 +11,7 @@ import {
   loadDetailForMetadata,
 } from "@/lib/serverContent";
 import { buildBlogSchema, serializeJsonLd } from "@/lib/blogSchema";
+import { detailMetadata } from "@/lib/seo";
 import type { BlogPost } from "@/data/blogPosts";
 
 export const dynamic = "force-dynamic";
@@ -43,7 +44,8 @@ function jsonLdFor(post: BlogPost, origin: string): unknown {
     {
       title: post.title,
       slug: post.slug,
-      excerpt: post.excerpt,
+      // Same description the page's <meta> uses.
+      excerpt: post.metaDescription || post.excerpt,
       image: post.image,
       author: post.author,
       datePublished: post.date,
@@ -66,18 +68,16 @@ export async function generateMetadata({
   const apiPost = await loadDetailForMetadata(() => getBlog(slug));
   const post = apiPost ? apiBlogToView(apiPost) : getBlogPost(slug);
   if (!post) return { title: "Blog" };
-  return {
-    title: `${post.title} | Blog`,
-    description: post.excerpt,
-    alternates: { canonical: `/blog/${post.slug}` },
-    openGraph: {
-      title: post.title,
-      description: post.excerpt,
-      url: `/blog/${post.slug}`,
-      type: "article",
-      images: post.image ? [{ url: post.image }] : undefined,
-    },
-  };
+
+  return detailMetadata({
+    seo: { ...post, metaKeywords: post.keywords },
+    fallbackTitle: `${post.title} | Blog`,
+    fallbackDescription: post.excerpt,
+    path: `/blog/${post.slug}`,
+    image: post.image,
+    imageAlt: post.title,
+    type: "article",
+  });
 }
 
 export default async function BlogDetailPage({

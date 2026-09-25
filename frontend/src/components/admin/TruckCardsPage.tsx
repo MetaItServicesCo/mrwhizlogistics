@@ -488,6 +488,7 @@ export default function TruckCardsPage({
         value={form.detail_heading}
         onChange={set("detail_heading")}
         required={isCreate}
+        helperText="The big heading on the service page. It does not change the SEO title."
       />
       <Field
         label="Features"
@@ -535,6 +536,7 @@ export default function TruckCardsPage({
         label="Meta title"
         value={form.meta_title}
         onChange={set("meta_title")}
+        helperText={`${form.meta_title.length}/60 - browser tab and Google title. Empty = the title above.`}
       />
       <Field
         label="Meta description"
@@ -542,6 +544,7 @@ export default function TruckCardsPage({
         onChange={set("meta_description")}
         multiline
         minRows={2}
+        helperText={`${form.meta_description.length}/160 - Google snippet. Empty = the short description.`}
       />
       <Field
         label="Meta keywords"

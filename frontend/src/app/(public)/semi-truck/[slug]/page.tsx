@@ -8,6 +8,7 @@ import {
   getSemiTruckService,
 } from "@/data/semiTruckContent";
 import { truckCardToService } from "@/lib/contentAdapters";
+import { detailMetadata } from "@/lib/seo";
 import {
   getSemiTruckCard,
   getSemiTruckCards,
@@ -50,36 +51,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return {};
   }
 
-  return {
-    title: `${service.title} Services | Reliable Semi Truck Freight Transportation`,
-
-    description: service.shortDescription,
-
-    alternates: {
-      canonical: `/semi-truck/${service.slug}`,
-    },
-
-    openGraph: {
-      title: `${service.title} Services | Semi Truck Freight`,
-
-      description: service.shortDescription,
-
-      url: `/semi-truck/${service.slug}`,
-
-      type: "website",
-
-      images: service.image
-        ? [
-            {
-              url: service.image,
-              width: 1200,
-              height: 630,
-              alt: service.title,
-            },
-          ]
-        : undefined,
-    },
-  };
+  const name = service.name || service.title;
+  return detailMetadata({
+    seo: service,
+    fallbackTitle: `${name} Services | Reliable Semi Truck Freight Transportation`,
+    fallbackDescription: service.shortDescription,
+    path: `/semi-truck/${service.slug}`,
+    image: service.image,
+    imageAlt: name,
+  });
 }
 
 /* =========================================================

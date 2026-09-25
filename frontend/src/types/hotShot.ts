@@ -62,6 +62,18 @@ export type HotShotService = {
   contentHtml?: string;
 
   /**
+   * Service name from the dashboard card. `title` holds the detail page's
+   * heading on detail pages, so SEO fallbacks use this instead.
+   */
+  name?: string;
+
+  /** Dedicated SEO fields from the dashboard */
+  metaTitle?: string | null;
+  metaDescription?: string | null;
+  metaKeywords?: string | null;
+  canonicalUrl?: string | null;
+
+  /**
    * Service features
    */
   features: HotShotFeature[];

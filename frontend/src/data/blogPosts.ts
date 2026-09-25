@@ -12,6 +12,9 @@ export type BlogPost = {
   contentHtml?: string; // rich-text body from the dashboard; wins over content
   schemaMarkup?: string; // stored JSON-LD, if the post has custom markup
   keywords?: string;
+  metaTitle?: string | null;
+  metaDescription?: string | null;
+  canonicalUrl?: string | null;
 };
 
 export const BLOG_POSTS: BlogPost[] = [
