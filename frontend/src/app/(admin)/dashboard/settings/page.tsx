@@ -12,7 +12,7 @@ import { useAction, useResource } from "@/lib/useResource";
 import type { SiteSetting, User } from "@/lib/types";
 import DataTable, { type Column } from "@/components/admin/DataTable";
 import LogoSettingsPanel from "@/components/admin/LogoSettingsPanel";
-import { LOGO_SCALE_KEY, LOGO_URL_KEY } from "@/lib/branding";
+import { BRANDING_KEYS as BRANDING_KEY_LIST } from "@/lib/branding";
 import {
   ConfirmDialog,
   Field,
@@ -29,7 +29,7 @@ import {
 } from "@/components/admin/ui";
 
 /** Managed by the Branding tab, so they're kept out of the generic table. */
-const BRANDING_KEYS = new Set([LOGO_URL_KEY, LOGO_SCALE_KEY]);
+const BRANDING_KEYS = new Set(BRANDING_KEY_LIST);
 
 type SettingsTab = "branding" | "settings" | "users";
 

@@ -2,7 +2,7 @@ import ChatWidget from "@/components/chat/ChatWidget";
 import AdvancedFooterCTA from "@/components/footer/AdvancedFooterCTA";
 import MailingListCTA from "@/components/footer/MailingListCTA";
 import Navbar from "@/components/header/Navbar";
-import { logoFromSettings } from "@/lib/branding";
+import { footerLogoFromSettings, logoFromSettings } from "@/lib/branding";
 import { settingsMap } from "@/lib/contentAdapters";
 import {
   getBoxTruckCards,
@@ -25,12 +25,13 @@ export default async function PublicLayout({
     getSemiTruckCards(),
   ]);
   const settings = settingsMap(settingRows || []);
+  const logo = logoFromSettings(settings);
 
   return (
     <>
       <Navbar
         phone={settings.phone}
-        logo={logoFromSettings(settings)}
+        logo={logo}
         menu={{
           "Hot Shot": hotshots,
           "Box Truck": boxTrucks,
@@ -48,6 +49,8 @@ export default async function PublicLayout({
         linkedinUrl={settings.linkedin_url}
         xUrl={settings.x_url}
         youtubeUrl={settings.youtube_url}
+        logo={logo}
+        footerLogo={footerLogoFromSettings(settings)}
       />
     </>
   );

@@ -44,3 +44,44 @@ export function logoFromSettings(map: Record<string, string | null | undefined>)
     scale: parseLogoScale(map[LOGO_SCALE_KEY]),
   };
 }
+
+/* ------------------------------------------------------------------ */
+/* Footer logo                                                          */
+/* ------------------------------------------------------------------ */
+
+export const FOOTER_LOGO_URL_KEY = "footer_logo_url";
+export const FOOTER_LOGO_SCALE_KEY = "footer_logo_scale";
+export const FOOTER_SHOW_NAME_KEY = "footer_show_name";
+
+export interface FooterLogoSettings {
+  /** Footer-only logo, or "" to reuse the header logo. */
+  url: string;
+  scale: number;
+  /** Show the company name as text beside the logo. */
+  showName: boolean;
+}
+
+export const DEFAULT_FOOTER_LOGO_SETTINGS: FooterLogoSettings = {
+  url: "",
+  scale: LOGO_SCALE_DEFAULT,
+  showName: false,
+};
+
+export function footerLogoFromSettings(
+  map: Record<string, string | null | undefined>,
+): FooterLogoSettings {
+  return {
+    url: parseLogoUrl(map[FOOTER_LOGO_URL_KEY]),
+    scale: parseLogoScale(map[FOOTER_LOGO_SCALE_KEY]),
+    showName: (map[FOOTER_SHOW_NAME_KEY] || "").trim().toLowerCase() === "true",
+  };
+}
+
+/** Every settings key the Branding tab manages. */
+export const BRANDING_KEYS = [
+  LOGO_URL_KEY,
+  LOGO_SCALE_KEY,
+  FOOTER_LOGO_URL_KEY,
+  FOOTER_LOGO_SCALE_KEY,
+  FOOTER_SHOW_NAME_KEY,
+];

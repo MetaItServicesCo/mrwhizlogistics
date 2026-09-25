@@ -10,6 +10,12 @@ import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import XIcon from "@mui/icons-material/X";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import { externalUrl, mailtoHref, telHref } from "@/lib/contact";
+import {
+  DEFAULT_FOOTER_LOGO_SETTINGS,
+  type FooterLogoSettings,
+  type LogoSettings,
+} from "@/lib/branding";
+import SiteLogo from "@/components/common/SiteLogo";
 
 const LIME = "#c8ff00";
 
@@ -20,6 +26,8 @@ export default function AdvancedFooterCTA({
   linkedinUrl,
   xUrl,
   youtubeUrl,
+  logo,
+  footerLogo,
 }: {
   companyName?: string;
   phone?: string;
@@ -28,7 +36,12 @@ export default function AdvancedFooterCTA({
   linkedinUrl?: string;
   xUrl?: string;
   youtubeUrl?: string;
+  /** Header logo; the footer reuses it unless a footer logo is uploaded. */
+  logo?: LogoSettings;
+  /** Footer logo image, size and name toggle from the Branding tab. */
+  footerLogo?: FooterLogoSettings;
 }) {
+  const footer = footerLogo ?? DEFAULT_FOOTER_LOGO_SETTINGS;
   // Every social icon used to link to "#". Only show the ones that have a
   // real URL configured under Dashboard -> Settings.
   const socials = [
@@ -229,53 +242,42 @@ export default function AdvancedFooterCTA({
               lg: 4,
             }}
           >
+            {/* Logo: set under Dashboard -> Settings -> Branding -> Footer logo.
+                A block-level row (not fit-content) so the logo can cap at the
+                column width on small phones. */}
             <Link
               href="/"
+              aria-label={`${companyName} home`}
               style={{
                 textDecoration: "none",
                 display: "flex",
+                flexWrap: "wrap",
                 alignItems: "center",
-                gap: 10,
-                width: "fit-content",
+                gap: "10px 14px",
+                maxWidth: "100%",
               }}
             >
-              <Box
-                sx={{
-                  width: 32,
-                  height: 32,
-                  borderRadius: "8px",
-                  bgcolor: LIME,
-                  color: "#000",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  flexShrink: 0,
-                }}
-              >
-                <Box
-                  component="span"
+              <SiteLogo
+                slot="footer"
+                url={footer.url || logo?.url}
+                scale={footer.scale}
+                alt={companyName}
+              />
+              {footer.showName && (
+                <Typography
                   sx={{
-                    fontWeight: 900,
-                    fontSize: "16px",
+                    color: "#fff",
+                    fontWeight: 700,
+                    fontSize: {
+                      xs: 20,
+                      sm: 21,
+                    },
+                    letterSpacing: "-0.5px",
                   }}
                 >
-                  T
-                </Box>
-              </Box>
-
-              <Typography
-                sx={{
-                  color: "#fff",
-                  fontWeight: 700,
-                  fontSize: {
-                    xs: 20,
-                    sm: 21,
-                  },
-                  letterSpacing: "-0.5px",
-                }}
-              >
-                {companyName}
-              </Typography>
+                  {companyName}
+                </Typography>
+              )}
             </Link>
 
             <Stack spacing={0.5}>
