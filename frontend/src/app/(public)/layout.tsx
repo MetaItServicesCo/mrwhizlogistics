@@ -2,6 +2,7 @@ import ChatWidget from "@/components/chat/ChatWidget";
 import AdvancedFooterCTA from "@/components/footer/AdvancedFooterCTA";
 import MailingListCTA from "@/components/footer/MailingListCTA";
 import Navbar from "@/components/header/Navbar";
+import { logoFromSettings } from "@/lib/branding";
 import { settingsMap } from "@/lib/contentAdapters";
 import {
   getBoxTruckCards,
@@ -29,6 +30,7 @@ export default async function PublicLayout({
     <>
       <Navbar
         phone={settings.phone}
+        logo={logoFromSettings(settings)}
         menu={{
           "Hot Shot": hotshots,
           "Box Truck": boxTrucks,

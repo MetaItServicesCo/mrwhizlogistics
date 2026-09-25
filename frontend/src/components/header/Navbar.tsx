@@ -2,9 +2,10 @@
 
 import { useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { AnimatePresence, motion } from "motion/react";
 import { telHref } from "@/lib/contact";
+import type { LogoSettings } from "@/lib/branding";
+import SiteLogo from "@/components/common/SiteLogo";
 import {
   Box,
   Button,
@@ -207,11 +208,14 @@ const mobileLinkSx = { py: 1.4, fontSize: 17, fontWeight: 500 } as const;
 export default function Navbar({
   menu,
   phone,
+  logo,
 }: {
   /** Published services per dropdown, loaded by the public layout. */
   menu?: NavMenu;
   /** Company phone from site settings. */
   phone?: string;
+  /** Logo image and size from Dashboard -> Settings -> Branding. */
+  logo?: LogoSettings;
 } = {}) {
   const MEGA = useMemo(() => buildMega(menu), [menu]);
   const tel = telHref(phone);
@@ -243,22 +247,7 @@ export default function Navbar({
         flexShrink: 0,
       }}
     >
-      <Box
-        sx={{
-          position: "relative",
-          height: { xs: 50, md: 85 },
-          width: { xs: 110, md: 170 },
-        }}
-      >
-        <Image
-          src="/images/logo.png"
-          alt="Company Logo"
-          fill
-          sizes="100%"
-          style={{ objectFit: "cover", objectPosition: "left center" }}
-          priority
-        />
-      </Box>
+      <SiteLogo url={logo?.url} scale={logo?.scale} priority />
     </Link>
   );
 

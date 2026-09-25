@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth";
 import Box from "@mui/material/Box";
@@ -17,6 +18,7 @@ import NotificationsRoundedIcon from "@mui/icons-material/NotificationsRounded";
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
+import LanguageRoundedIcon from "@mui/icons-material/LanguageRounded";
 
 const LIME = "#c8ff00";
 
@@ -147,6 +149,37 @@ export default function AdminHeader({
           ml: { xs: "auto", md: 0 },
         }}
       >
+        {/* back to the public website (icon-only on phones) */}
+        <Box
+          component={Link}
+          href="/"
+          aria-label="Back to website"
+          title="Back to website"
+          sx={{
+            display: "inline-flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: 0.8,
+            height: 40,
+            minWidth: 40,
+            px: { xs: 0, sm: 1.8 },
+            borderRadius: "999px",
+            border: `1px solid ${LIME}55`,
+            color: LIME,
+            fontSize: 13,
+            fontWeight: 700,
+            textDecoration: "none",
+            whiteSpace: "nowrap",
+            transition: "background-color .2s, color .2s",
+            "&:hover": { bgcolor: LIME, color: "#0a0a0a" },
+          }}
+        >
+          <LanguageRoundedIcon sx={{ fontSize: 19 }} />
+          <Box component="span" sx={{ display: { xs: "none", sm: "inline" } }}>
+            View site
+          </Box>
+        </Box>
+
         <IconButton
           sx={{
             position: "relative",
@@ -270,6 +303,14 @@ export default function AdminHeader({
             }}
           >
             <SettingsRoundedIcon /> Settings
+          </MenuItem>
+          <MenuItem
+            onClick={() => {
+              setAnchor(null);
+              router.push("/");
+            }}
+          >
+            <LanguageRoundedIcon /> Back to website
           </MenuItem>
           <Divider sx={{ borderColor: "rgba(255,255,255,0.08)" }} />
           <MenuItem

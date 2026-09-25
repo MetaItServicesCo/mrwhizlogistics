@@ -11,6 +11,8 @@ import { useAuth } from "@/lib/auth";
 import { useAction, useResource } from "@/lib/useResource";
 import type { SiteSetting, User } from "@/lib/types";
 import DataTable, { type Column } from "@/components/admin/DataTable";
+import LogoSettingsPanel from "@/components/admin/LogoSettingsPanel";
+import { LOGO_SCALE_KEY, LOGO_URL_KEY } from "@/lib/branding";
 import {
   ConfirmDialog,
   Field,
@@ -20,9 +22,16 @@ import {
   SearchBox,
   SelectField,
   StatusChip,
+  ErrorState,
+  LoadingState,
   Toast,
   fmtDate,
 } from "@/components/admin/ui";
+
+/** Managed by the Branding tab, so they're kept out of the generic table. */
+const BRANDING_KEYS = new Set([LOGO_URL_KEY, LOGO_SCALE_KEY]);
+
+type SettingsTab = "branding" | "settings" | "users";
 
 const ROLE_OPTIONS = [
   { value: "admin", label: "Admin" },
@@ -35,7 +44,7 @@ export default function SettingsPage() {
   const users = useResource<User>("/api/users");
   const { busy, error: actionError, setError, run } = useAction();
 
-  const [tab, setTab] = useState(0);
+  const [tab, setTab] = useState<SettingsTab>("branding");
   const [search, setSearch] = useState("");
   const [toast, setToast] = useState<string | null>(null);
 
@@ -57,15 +66,20 @@ export default function SettingsPage() {
   const [creatingU, setCreatingU] = useState(false);
   const [deletingU, setDeletingU] = useState<User | null>(null);
 
+  const generalSettings = useMemo(
+    () => settings.items.filter((s) => !BRANDING_KEYS.has(s.key)),
+    [settings.items],
+  );
+
   const settingRows = useMemo(() => {
     const q = search.trim().toLowerCase();
-    if (!q) return settings.items;
-    return settings.items.filter((s) =>
+    if (!q) return generalSettings;
+    return generalSettings.filter((s) =>
       [s.key, s.label, s.value]
         .filter(Boolean)
         .some((v) => String(v).toLowerCase().includes(q)),
     );
-  }, [settings.items, search]);
+  }, [generalSettings, search]);
 
   const userRows = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -282,17 +296,18 @@ export default function SettingsPage() {
     },
   ];
 
-  const onUsersTab = tab === 1;
+  const onUsersTab = tab === "users";
+  const onBrandingTab = tab === "branding";
 
   return (
     <Box>
       <PageHeader
         title="Settings"
-        subtitle="Site-wide values used across the website, and the admin accounts that can sign in."
-        actionLabel={onUsersTab ? "Add user" : "Add setting"}
+        subtitle="Your logo, the site-wide values used across the website, and the admin accounts that can sign in."
+        actionLabel={onBrandingTab ? undefined : onUsersTab ? "Add user" : "Add setting"}
         onAction={onUsersTab ? openCreateU : openCreateS}
       >
-        <SearchBox value={search} onChange={setSearch} />
+        {!onBrandingTab && <SearchBox value={search} onChange={setSearch} />}
       </PageHeader>
 
       <Tabs
@@ -312,11 +327,26 @@ export default function SettingsPage() {
           "& .MuiTabs-indicator": { backgroundColor: LIME },
         }}
       >
-        <Tab label={`Site settings (${settings.items.length})`} />
-        <Tab label={`Admin users (${users.items.length})`} />
+        <Tab value="branding" label="Branding" />
+        <Tab value="settings" label={`Site settings (${generalSettings.length})`} />
+        <Tab value="users" label={`Admin users (${users.items.length})`} />
       </Tabs>
 
-      {onUsersTab ? (
+      {onBrandingTab ? (
+        settings.loading && !settings.items.length ? (
+          <LoadingState label="Loading branding…" />
+        ) : settings.error ? (
+          <ErrorState message={settings.error} onRetry={settings.reload} />
+        ) : (
+          <LogoSettingsPanel
+            settings={settings.items}
+            onSaved={(msg) => {
+              setToast(msg);
+              void settings.reload();
+            }}
+          />
+        )
+      ) : onUsersTab ? (
         <DataTable
           columns={userColumns}
           rows={userRows}
@@ -346,10 +376,10 @@ export default function SettingsPage() {
           error={settings.error}
           onRetry={settings.reload}
           emptyTitle={
-            settings.items.length ? "No matching settings" : "No settings yet"
+            generalSettings.length ? "No matching settings" : "No settings yet"
           }
           emptyHint={
-            settings.items.length
+            generalSettings.length
               ? "Try a different search."
               : "Add key/value pairs the website reads, e.g. phone or address."
           }

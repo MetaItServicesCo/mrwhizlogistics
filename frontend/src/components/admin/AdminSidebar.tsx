@@ -11,7 +11,8 @@ import Collapse from "@mui/material/Collapse";
 import Tooltip from "@mui/material/Tooltip";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import { ADMIN_MENU, type NavItem } from "@/data/adminMenu";
-import { api } from "@/lib/api";
+import { api, mediaUrl } from "@/lib/api";
+import { useSiteLogo } from "@/lib/useSiteLogo";
 import type { DashboardStats } from "@/lib/types";
 
 const LIME = "#c8ff00";
@@ -51,6 +52,7 @@ export default function AdminSidebar({
   const pathname = usePathname();
   const [open, setOpen] = useState<string[]>([]);
   const [counts, setCounts] = useState<DashboardStats | null>(null);
+  const logo = useSiteLogo();
 
   // Live "new item" counts for the nav badges.
   useEffect(() => {
@@ -169,13 +171,29 @@ export default function AdminSidebar({
             </Box>
           ) : (
             <Box sx={{ position: "relative", width: 150, height: 42 }}>
-              <Image
-                src="/images/logo.png"
-                alt="Logo"
-                fill
-                sizes="150px"
-                style={{ objectFit: "contain", objectPosition: "left center" }}
-              />
+              {/* Empty until the settings load, so an uploaded logo doesn't
+                  flash the default one first. */}
+              {logo?.url ? (
+                <Box
+                  component="img"
+                  src={mediaUrl(logo.url)}
+                  alt="Logo"
+                  sx={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "contain",
+                    objectPosition: "left center",
+                  }}
+                />
+              ) : logo ? (
+                <Image
+                  src="/images/logo.png"
+                  alt="Logo"
+                  fill
+                  sizes="150px"
+                  style={{ objectFit: "contain", objectPosition: "left center" }}
+                />
+              ) : null}
             </Box>
           )}
         </Link>
