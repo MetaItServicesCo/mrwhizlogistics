@@ -10,6 +10,9 @@ import { api, mediaUrl } from "@/lib/api";
 import { useAction, useResource } from "@/lib/useResource";
 import type { BlogPost } from "@/lib/types";
 import DataTable, { type Column } from "@/components/admin/DataTable";
+import RichTextEditor from "@/components/admin/RichTextEditor";
+import SchemaMarkupEditor, { schemaMarkupError } from "@/components/admin/SchemaMarkupEditor";
+import { paragraphsToHtml } from "@/lib/richText";
 import {
   BORDER,
   ConfirmDialog,
@@ -30,21 +33,14 @@ const EMPTY = {
   category_tag: "",
   short_description: "",
   author_name: "Admin",
-  content_paragraphs: "",
+  content_html: "",
   tags: "",
   meta_title: "",
   meta_description: "",
   meta_keywords: "",
   canonical_url: "",
+  schema_markup: "",
 };
-
-const linesToJson = (v: string) =>
-  JSON.stringify(
-    v
-      .split("\n")
-      .map((s) => s.trim())
-      .filter(Boolean),
-  );
 
 const csvToJson = (v: string) =>
   JSON.stringify(
@@ -104,12 +100,13 @@ export default function BlogPostsPage() {
       category_tag: p.category_tag || "",
       short_description: p.short_description || "",
       author_name: p.author_name || "Admin",
-      content_paragraphs: (p.content_paragraphs || []).join("\n"),
+      content_html: p.content_html || paragraphsToHtml(p.content_paragraphs),
       tags: (p.tags || []).join(", "),
       meta_title: p.meta_title || "",
       meta_description: p.meta_description || "",
       meta_keywords: p.meta_keywords || "",
       canonical_url: p.canonical_url || "",
+      schema_markup: p.schema_markup || "",
     });
     setCardImage(null);
     setDetailImage(null);
@@ -134,7 +131,13 @@ export default function BlogPostsPage() {
     put("meta_keywords", form.meta_keywords);
     put("canonical_url", form.canonical_url);
 
-    fd.append("content_paragraphs", linesToJson(form.content_paragraphs));
+    // The editor HTML is now the body. Legacy paragraphs were loaded into it
+    // on open, so clearing them loses nothing and stops stale text from
+    // resurfacing as a fallback if the editor is later emptied.
+    fd.append("content_html", form.content_html);
+    fd.append("content_paragraphs", "[]");
+    // Always sent (even empty) so "Reset to automatic" clears stored markup.
+    fd.append("schema_markup", form.schema_markup);
     fd.append("tags", csvToJson(form.tags));
 
     if (cardImage) fd.append("card_image_file", cardImage);
@@ -143,6 +146,11 @@ export default function BlogPostsPage() {
   };
 
   const create = async () => {
+    const schemaError = schemaMarkupError(form.schema_markup);
+    if (schemaError) {
+      setError(schemaError);
+      return;
+    }
     if (!cardImage) {
       setError("A card image is required.");
       return;
@@ -157,6 +165,11 @@ export default function BlogPostsPage() {
 
   const update = async () => {
     if (!editing) return;
+    const schemaError = schemaMarkupError(form.schema_markup);
+    if (schemaError) {
+      setError(schemaError);
+      return;
+    }
     const ok = await run(() =>
       api.put(`/api/blogs/${editing.card_id}`, buildFormData(false)),
     );
@@ -368,13 +381,12 @@ export default function BlogPostsPage() {
           onChange={set("author_name")}
         />
       </Box>
-      <Field
+      <RichTextEditor
         label="Content"
-        value={form.content_paragraphs}
-        onChange={set("content_paragraphs")}
-        multiline
-        minRows={8}
-        helperText="One paragraph per line"
+        value={form.content_html}
+        onChange={(html) => setForm((f) => ({ ...f, content_html: html }))}
+        placeholder="Write the article. Use the toolbar for headings, lists, links and images."
+        minHeight={320}
       />
       <Field
         label="Tags"
@@ -428,6 +440,20 @@ export default function BlogPostsPage() {
         label="Canonical URL"
         value={form.canonical_url}
         onChange={set("canonical_url")}
+      />
+
+      <SchemaMarkupEditor
+        value={form.schema_markup}
+        onChange={(v) => setForm((f) => ({ ...f, schema_markup: v }))}
+        post={{
+          title: form.title,
+          slug: form.slug,
+          excerpt: form.meta_description || form.short_description,
+          image: editing?.card_image,
+          author: form.author_name,
+          datePublished: form.publish_date,
+          keywords: form.meta_keywords,
+        }}
       />
     </>
   );

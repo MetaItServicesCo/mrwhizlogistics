@@ -409,9 +409,12 @@ function TierCard({ tier }: { tier: Tier }) {
 export default function TiersSection() {
   return (
     <Box
+      // Target of the navbar's "Explore Product" button (/#our-fleet).
+      id="our-fleet"
       component="section"
       aria-labelledby="fleet-title"
       sx={{
+        scrollMarginTop: 96,
         position: "relative",
         bgcolor: "#0a0a0a",
         color: "#fff",

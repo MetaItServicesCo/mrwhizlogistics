@@ -8,6 +8,7 @@ from sqlalchemy.orm import Session, joinedload
 
 from app.database import get_db
 from app.core.security import get_current_admin
+from app.core.html import sanitize_html
 from app.models.blog import Blog, BlogComment
 from app.schemas.blog import BlogResponse, CommentCreate, CommentResponse
 
@@ -50,6 +51,35 @@ def parse_to_list(data: Optional[str]) -> list:
         return parsed if isinstance(parsed, list) else [str(parsed)]
     except Exception:
         return [item.strip() for item in data.split(",") if item.strip()]
+
+
+def parse_schema_markup(value: Optional[str]) -> Optional[str]:
+    """
+    Validate JSON-LD from the dashboard and return it normalised.
+
+    The public page embeds this inside <script type="application/ld+json">,
+    so it has to be real JSON (an object, or an array of objects for
+    @graph-style markup). Blank input clears it, which makes the site fall
+    back to the auto-generated BlogPosting schema.
+    """
+    if value is None:
+        return None
+    value = value.strip()
+    if not value:
+        return None
+    try:
+        parsed = json.loads(value)
+    except json.JSONDecodeError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=f"Schema markup is not valid JSON: {exc.msg} (line {exc.lineno}, column {exc.colno})",
+        )
+    if not isinstance(parsed, (dict, list)):
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="Schema markup must be a JSON object or an array of objects.",
+        )
+    return json.dumps(parsed, ensure_ascii=False, indent=2)
 
 
 # 1. READ ALL BLOGS (Grid / Card View)
@@ -96,11 +126,13 @@ async def create_blog(
     short_description: str = Form(...),
     author_name: Optional[str] = Form("Admin"),
     content_paragraphs: Optional[str] = Form("[]"),
+    content_html: Optional[str] = Form(None),
     tags: Optional[str] = Form("[]"),
     meta_title: Optional[str] = Form(None),
     meta_description: Optional[str] = Form(None),
     meta_keywords: Optional[str] = Form(None),
     canonical_url: Optional[str] = Form(None),
+    schema_markup: Optional[str] = Form(None),
     card_image_file: UploadFile = File(...),
     detail_image_file: Union[UploadFile, str, None] = File(default=None),
     db: Session = Depends(get_db)
@@ -125,11 +157,13 @@ async def create_blog(
         card_image=card_image_path,
         detail_image=detail_image_path,
         content_paragraphs=parse_to_list(content_paragraphs),
+        content_html=sanitize_html(content_html),
         tags=parse_to_list(tags),
         meta_title=meta_title,
         meta_description=meta_description,
         meta_keywords=meta_keywords,
-        canonical_url=canonical_url
+        canonical_url=canonical_url,
+        schema_markup=parse_schema_markup(schema_markup),
     )
     db.add(new_blog)
     db.commit()
@@ -149,11 +183,13 @@ async def update_blog_by_card_id(
     short_description: Optional[str] = Form(None),
     author_name: Optional[str] = Form(None),
     content_paragraphs: Optional[str] = Form(None),
+    content_html: Optional[str] = Form(None),
     tags: Optional[str] = Form(None),
     meta_title: Optional[str] = Form(None),
     meta_description: Optional[str] = Form(None),
     meta_keywords: Optional[str] = Form(None),
     canonical_url: Optional[str] = Form(None),
+    schema_markup: Optional[str] = Form(None),
     card_image_file: Union[UploadFile, str, None] = File(default=None),
     detail_image_file: Union[UploadFile, str, None] = File(default=None),
     db: Session = Depends(get_db)
@@ -170,11 +206,13 @@ async def update_blog_by_card_id(
     if short_description is not None: blog.short_description = short_description
     if author_name is not None: blog.author_name = author_name
     if content_paragraphs is not None: blog.content_paragraphs = parse_to_list(content_paragraphs)
+    if content_html is not None: blog.content_html = sanitize_html(content_html)
     if tags is not None: blog.tags = parse_to_list(tags)
     if meta_title is not None: blog.meta_title = meta_title
     if meta_description is not None: blog.meta_description = meta_description
     if meta_keywords is not None: blog.meta_keywords = meta_keywords
     if canonical_url is not None: blog.canonical_url = canonical_url
+    if schema_markup is not None: blog.schema_markup = parse_schema_markup(schema_markup)
 
     new_card_image = save_uploaded_file(card_image_file)
     if new_card_image:

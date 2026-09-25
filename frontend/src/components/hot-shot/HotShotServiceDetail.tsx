@@ -1,5 +1,6 @@
 "use client";
 
+import RichContent from "@/components/common/RichContent";
 import { motion } from "motion/react";
 
 import Box from "@mui/material/Box";
@@ -499,7 +500,19 @@ export default function HotShotServiceDetail({
                 maxWidth: 900,
               }}
             >
-              {service.description.map((paragraph, index) => (
+              {service.contentHtml ? (
+                // Rich text from the dashboard editor: one block, so headings
+                // and lists keep their structure instead of being split up.
+                <motion.div
+                  initial={{ opacity: 0, y: 35 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-80px" }}
+                  transition={{ duration: 0.65, ease: EASE }}
+                >
+                  <RichContent html={service.contentHtml} tone="service" />
+                </motion.div>
+              ) : (
+              service.description.map((paragraph, index) => (
                 <motion.div
                   key={paragraph}
                   initial={{
@@ -534,7 +547,8 @@ export default function HotShotServiceDetail({
                     {paragraph}
                   </Typography>
                 </motion.div>
-              ))}
+              ))
+              )}
             </Box>
 
             {/* STATS */}

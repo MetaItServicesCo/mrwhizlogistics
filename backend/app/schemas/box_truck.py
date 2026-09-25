@@ -17,6 +17,7 @@ class BoxTruckBase(BaseModel):
     
     detail_heading: str
     detail_paragraphs: List[str] = []
+    content_html: Optional[str] = None
     
     slug: str
     meta_title: Optional[str] = None

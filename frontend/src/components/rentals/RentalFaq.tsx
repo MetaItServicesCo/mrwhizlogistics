@@ -5,7 +5,6 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import IconButton from "@mui/material/IconButton";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import RemoveRoundedIcon from "@mui/icons-material/RemoveRounded";
 import HelpOutlineRoundedIcon from "@mui/icons-material/HelpOutlineRounded";
@@ -282,7 +281,9 @@ export default function RentalFaq() {
                 >
                   {/* Number */}
                   <Typography
+                    component="span"
                     sx={{
+                      display: "block",
                       width: 30,
                       flexShrink: 0,
                       color: isOpen ? LIME : "rgba(255,255,255,0.3)",
@@ -295,7 +296,9 @@ export default function RentalFaq() {
                   </Typography>
 
                   <Typography
+                    component="span"
                     sx={{
+                      display: "block",
                       flex: 1,
                       fontSize: { xs: 14, md: 15.5 },
                       fontWeight: 750,
@@ -306,10 +309,17 @@ export default function RentalFaq() {
                     {faq.question}
                   </Typography>
 
-                  <IconButton
-                    tabIndex={-1}
-                    disableRipple
+                  {/* Decorative: the whole row is the button. A nested
+                      <IconButton> here was a <button> inside a <button>, which
+                      the browser "repairs" while parsing - breaking hydration. */}
+                  <Box
+                    component="span"
+                    aria-hidden="true"
                     sx={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      transition: "background-color .2s, color .2s",
                       width: 34,
                       height: 34,
                       flexShrink: 0,
@@ -327,7 +337,7 @@ export default function RentalFaq() {
                     ) : (
                       <AddRoundedIcon sx={{ fontSize: 18 }} />
                     )}
-                  </IconButton>
+                  </Box>
                 </Box>
 
                 <AnimatePresence initial={false}>

@@ -10,6 +10,8 @@ import { api, mediaUrl } from "@/lib/api";
 import { useAction, useResource } from "@/lib/useResource";
 import type { TruckCard } from "@/lib/types";
 import DataTable, { type Column } from "./DataTable";
+import RichTextEditor from "./RichTextEditor";
+import { paragraphsToHtml } from "@/lib/richText";
 import {
   BORDER,
   ConfirmDialog,
@@ -31,7 +33,7 @@ type FormState = {
   page_heading: string;
   page_subheading: string;
   features: string;
-  detail_paragraphs: string;
+  content_html: string;
   trailer_length: string;
   max_payload: string;
   cargo_type: string;
@@ -51,7 +53,7 @@ const EMPTY: FormState = {
   page_heading: "",
   page_subheading: "",
   features: "",
-  detail_paragraphs: "",
+  content_html: "",
   trailer_length: "",
   max_payload: "",
   cargo_type: "",
@@ -240,7 +242,7 @@ export default function TruckCardsPage({
       page_heading: row.page_heading || "",
       page_subheading: row.page_subheading || "",
       features: jsonToLines(row.features),
-      detail_paragraphs: jsonToLines(row.detail_paragraphs),
+      content_html: row.content_html || paragraphsToHtml(row.detail_paragraphs),
       trailer_length: row.trailer_length || "",
       max_payload: row.max_payload || "",
       cargo_type: row.cargo_type || "",
@@ -280,7 +282,11 @@ export default function TruckCardsPage({
     put("canonical_url", form.canonical_url);
 
     fd.append("features", linesToJson(form.features));
-    fd.append("detail_paragraphs", linesToJson(form.detail_paragraphs));
+    // The editor HTML is now the detail body. Legacy paragraphs were loaded
+    // into it on open, so clearing them loses nothing and stops stale text
+    // from resurfacing as a fallback if the editor is later emptied.
+    fd.append("content_html", form.content_html);
+    fd.append("detail_paragraphs", "[]");
 
     if (cardImage) fd.append("card_image_file", cardImage);
     if (detailImage) fd.append("detail_image_file", detailImage);
@@ -492,13 +498,12 @@ export default function TruckCardsPage({
         minRows={3}
         helperText="One feature per line"
       />
-      <Field
-        label="Detail paragraphs"
-        value={form.detail_paragraphs}
-        onChange={set("detail_paragraphs")}
-        multiline
-        minRows={4}
-        helperText="One paragraph per line"
+      <RichTextEditor
+        label="Detail page content"
+        value={form.content_html}
+        onChange={(html) => setForm((f) => ({ ...f, content_html: html }))}
+        placeholder="Describe the service. Use the toolbar for headings, lists, links and images."
+        helperText="Shown on this service's own page"
       />
 
       <ImagePicker

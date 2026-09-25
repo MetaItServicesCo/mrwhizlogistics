@@ -112,6 +112,8 @@ export interface TruckCard {
   detail_heading: string;
   detail_image: string | null;
   detail_paragraphs: string[];
+  /** Sanitised rich-text body; overrides detail_paragraphs when set. */
+  content_html?: string | null;
   slug: string;
   // semi-truck only
   trailer_length?: string | null;
@@ -146,6 +148,8 @@ export interface BlogPost {
   detail_image: string | null;
   short_description: string;
   content_paragraphs: string[];
+  /** Sanitised rich-text body; overrides content_paragraphs when set. */
+  content_html?: string | null;
   tags: string[];
   comments_count: number;
   comments: BlogComment[];
@@ -153,6 +157,8 @@ export interface BlogPost {
   meta_description: string | null;
   meta_keywords: string | null;
   canonical_url: string | null;
+  /** JSON-LD string; empty means auto-generate on the public page. */
+  schema_markup?: string | null;
 }
 
 export interface RentalQuote {

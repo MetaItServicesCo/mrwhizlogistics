@@ -31,6 +31,7 @@ from app.routes.box_truck import router as box_truck_router
 from app.routes.semi_truck import router as semi_truck_router
 from app.routes.blog import router as blog_router
 from app.routes.team import router as team_router
+from app.routes.uploads import router as uploads_router
 
 router = APIRouter()
 router.include_router(auth_router)
@@ -58,3 +59,4 @@ router.include_router(semi_truck_router)
 router.include_router(blog_router)
 router.include_router(team_router)
 router.include_router(rental_router)
+router.include_router(uploads_router)

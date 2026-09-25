@@ -1,9 +1,54 @@
 import { notFound } from "next/navigation";
+import { headers } from "next/headers";
 import BlogDetailHero from "@/components/blog/BlogDetailHero";
 import BlogDetail from "@/components/blog/BlogDetail";
 import { BLOG_POSTS, getBlogPost } from "@/data/blogPosts";
 import { apiBlogToView } from "@/lib/contentAdapters";
-import { getBlog, getBlogs } from "@/lib/serverContent";
+import {
+  getBlog,
+  getBlogs,
+  loadDetail,
+  loadDetailForMetadata,
+} from "@/lib/serverContent";
+import { buildBlogSchema, serializeJsonLd } from "@/lib/blogSchema";
+import type { BlogPost } from "@/data/blogPosts";
+
+/**
+ * Public origin for absolute URLs in the JSON-LD. NEXT_PUBLIC_SITE_URL wins
+ * when set; otherwise use the host nginx forwarded, which is correct in every
+ * environment without extra configuration.
+ */
+async function requestOrigin(): Promise<string> {
+  const configured = process.env.NEXT_PUBLIC_SITE_URL;
+  if (configured) return configured.replace(/\/$/, "");
+  const h = await headers();
+  const host = h.get("x-forwarded-host") || h.get("host") || "localhost";
+  const proto = h.get("x-forwarded-proto") || (host.startsWith("localhost") ? "http" : "https");
+  return `${proto}://${host}`;
+}
+
+/** Stored markup when the post has its own, otherwise a generated BlogPosting. */
+function jsonLdFor(post: BlogPost, origin: string): unknown {
+  if (post.schemaMarkup) {
+    try {
+      return JSON.parse(post.schemaMarkup);
+    } catch {
+      // The API validates on save, so this only guards hand-edited rows.
+    }
+  }
+  return buildBlogSchema(
+    {
+      title: post.title,
+      slug: post.slug,
+      excerpt: post.excerpt,
+      image: post.image,
+      author: post.author,
+      datePublished: post.date,
+      keywords: post.keywords,
+    },
+    origin,
+  );
+}
 
 export function generateStaticParams() {
   return BLOG_POSTS.map((p) => ({ slug: p.slug }));
@@ -15,7 +60,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const apiPost = await getBlog(slug);
+  const apiPost = await loadDetailForMetadata(() => getBlog(slug));
   const post = apiPost ? apiBlogToView(apiPost) : getBlogPost(slug);
   if (!post) return { title: "Blog" };
   return {
@@ -38,14 +83,24 @@ export default async function BlogDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const [apiPost, apiPosts] = await Promise.all([getBlog(slug), getBlogs()]);
-  const post = apiPost ? apiBlogToView(apiPost) : getBlogPost(slug);
+  const bundled = getBlogPost(slug);
+  const [apiPost, apiPosts] = await Promise.all([
+    loadDetail(() => getBlog(slug), Boolean(bundled)),
+    getBlogs(),
+  ]);
+  const post = apiPost ? apiBlogToView(apiPost) : bundled;
   if (!post) notFound();
 
   const allPosts = apiPosts ? apiPosts.map(apiBlogToView) : BLOG_POSTS;
+  const jsonLd = jsonLdFor(post, await requestOrigin());
 
   return (
     <main>
+      <script
+        type="application/ld+json"
+        // serializeJsonLd escapes "<" so no value can close this tag early.
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
+      />
       <BlogDetailHero post={post} />
       <BlogDetail post={post} allPosts={allPosts} />
     </main>

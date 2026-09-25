@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import {
   motion,
   useScroll,
-  useMotionValueEvent,
   useTransform,
 } from "motion/react";
 import type { MotionValue } from "motion/react";
@@ -31,6 +30,20 @@ const SECTION_HEIGHT = "300vh"; // zyada = dheema scrub + zyada scroll room
 const VIDEO_END = 0.6; // is scroll point tak video poori
 const TEXT_START = 0.55; // words reveal shuru
 const TEXT_END = 0.95; // words reveal khatam
+
+const DEFAULT_VIDEO = "/video/hero-video.mp4";
+// First frame of DEFAULT_VIDEO, shown instantly while the video downloads.
+const DEFAULT_POSTER = "/video/hero-video-poster.webp";
+// The same footage at 640x360 (1.9 MB vs 11 MB), every frame a keyframe. It is
+// downloaded first so the hero can scrub within ~2 s on a mobile connection,
+// then replaced by the full-quality file as soon as that arrives.
+const DEFAULT_PREVIEW = "/video/hero-video-preview.mp4";
+// hero-video.mp4 is 30 fps with every frame a keyframe, so any frame can be
+// shown directly. Seeks are snapped to whole frames to skip redundant work.
+const VIDEO_FPS = 30;
+// How quickly the shown frame catches up with the scroll position. Small
+// enough to feel tied to the scroll, large enough to smooth mouse-wheel steps.
+const SMOOTHING_SEC = 0.06;
 
 const SENTENCE =
   "Fast, reliable trucking that moves your freight from pickup to delivery without the hassle";
@@ -67,15 +80,22 @@ export default function PublicHomePage() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const durationRef = useRef(0);
-  const targetTimeRef = useRef(0);
-  const [heroVideo, setHeroVideo] = useState("/video/hero-video.mp4");
+  const shownTimeRef = useRef(0);
+  // Which video to use: the bundled one, unless the "hero_video" site setting
+  // names another. Starts as the default so its download begins immediately
+  // instead of waiting for the settings request (which on a mobile connection
+  // pushed the preview's arrival from ~2 s to ~6 s).
+  const [heroVideo, setHeroVideo] = useState<string>(DEFAULT_VIDEO);
+
+  // What the <video> element actually plays: a local blob once downloaded.
+  const [videoSrc, setVideoSrc] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     let mounted = true;
     void getPublicSettings()
       .then((items) => {
-        const video = settingsMap(items).hero_video;
-        if (mounted && video) setHeroVideo(video);
+        const configured = settingsMap(items).hero_video;
+        if (mounted && configured) setHeroVideo(configured);
       })
       .catch(() => {
         // Keep the bundled video when settings cannot be loaded.
@@ -85,59 +105,109 @@ export default function PublicHomePage() {
     };
   }, []);
 
+  // Progressive loading. Each file is downloaded in full and played from
+  // memory, because scrubbing a *streamed* file is what broke the hero: on a
+  // typical mobile connection every scroll jumped into a part not yet
+  // downloaded, so each frame waited on the network (measured on 4G: frames
+  // ~4 s behind the scroll, 98% of them wrong, 12 painted in a whole scroll).
+  // The small preview makes it scrub within ~2 s; the full file then swaps in.
+  // A file that can't be fetched (e.g. a cross-origin URL in the setting) is
+  // streamed directly as a last resort.
+  useEffect(() => {
+    const controller = new AbortController();
+    const objectUrls: string[] = [];
+    const sources =
+      heroVideo === DEFAULT_VIDEO ? [DEFAULT_PREVIEW, DEFAULT_VIDEO] : [heroVideo];
+
+    const download = async (url: string) => {
+      const res = await fetch(url, { signal: controller.signal });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const objectUrl = URL.createObjectURL(await res.blob());
+      objectUrls.push(objectUrl);
+      return objectUrl;
+    };
+
+    (async () => {
+      let loadedAny = false;
+      // Sequential on purpose: the preview gets the whole connection first.
+      for (const url of sources) {
+        try {
+          setVideoSrc(await download(url));
+          loadedAny = true;
+        } catch (error) {
+          if ((error as Error)?.name === "AbortError") return;
+          // Not fatal - the next source (or streaming) takes over - but say so,
+          // since a silent failure here once left the hero on its poster.
+          console.warn(`[hero] could not load ${url}; trying the next source`, error);
+        }
+      }
+      if (!loadedAny) setVideoSrc(heroVideo);
+    })();
+
+    return () => {
+      controller.abort();
+      objectUrls.forEach((u) => URL.revokeObjectURL(u));
+    };
+  }, [heroVideo]);
+
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start start", "end end"],
   });
 
-  // Video duration robustly resolve (Infinity-duration bug fix)
-  useEffect(() => {
+  const onVideoMetadata = () => {
     const v = videoRef.current;
     if (!v) return;
-    const setDur = () => {
-      if (isFinite(v.duration) && v.duration > 0) {
-        durationRef.current = v.duration;
-        return true;
-      }
-      return false;
-    };
-    if (!setDur()) {
-      const forceSeek = () => {
-        const onSeeked = () => {
-          v.removeEventListener("seeked", onSeeked);
-          setDur();
-          v.currentTime = 0;
-        };
-        v.addEventListener("seeked", onSeeked);
-        v.currentTime = 1e7;
-      };
-      if (v.readyState >= 1) forceSeek();
-      else v.addEventListener("loadedmetadata", forceSeek, { once: true });
-    }
-  }, []);
+    if (isFinite(v.duration) && v.duration > 0) durationRef.current = v.duration;
+    // iOS Safari will not paint frames for a video that has never played;
+    // a muted play+pause primes it. Harmless elsewhere.
+    v.play()
+      .then(() => v.pause())
+      .catch(() => {});
+  };
 
-  // Scroll → video target time (0→100% pehle VIDEO_END tak)
-  useMotionValueEvent(scrollYProgress, "change", (p) => {
-    const d = durationRef.current;
-    if (!d) return;
-    const vp = Math.min(Math.max(p, 0) / VIDEO_END, 1);
-    targetTimeRef.current = Math.min(vp * d, d - 0.05);
-  });
-
-  // rAF easing → smooth scrub
+  // Scroll -> video frame. Reads the scroll position every animation frame
+  // (so a page loaded mid-hero is right immediately) and eases toward it.
+  //
+  // Two changes fix the lag:
+  // 1. The old loop closed only 25% of the gap per frame, so during a normal
+  //    scroll the video trailed by 0.5-2.5 s of footage and kept moving after
+  //    scrolling stopped. This smoothing is time-based and catches up in ~60 ms.
+  // 2. The old loop set currentTime every frame even while the previous seek
+  //    was still decoding. On slower devices seeks queued up faster than they
+  //    finished and the picture froze. Now a new seek starts only when the
+  //    last one has been shown.
   useEffect(() => {
     let raf = 0;
-    const tick = () => {
+    let last = performance.now();
+    const halfFrame = 0.5 / VIDEO_FPS;
+
+    const tick = (now: number) => {
+      const dt = Math.min((now - last) / 1000, 0.1);
+      last = now;
       const v = videoRef.current;
-      if (v && durationRef.current && v.readyState >= 2) {
-        const diff = targetTimeRef.current - v.currentTime;
-        if (Math.abs(diff) > 0.015) v.currentTime += diff * 0.25;
+      const d = durationRef.current;
+
+      if (v && d && v.readyState >= 1) {
+        const p = Math.max(scrollYProgress.get(), 0);
+        const target = Math.min((Math.min(p / VIDEO_END, 1)) * d, d - 0.05);
+
+        const ease = 1 - Math.exp(-dt / SMOOTHING_SEC);
+        let shown = shownTimeRef.current + (target - shownTimeRef.current) * ease;
+        if (Math.abs(target - shown) < halfFrame) shown = target;
+        shownTimeRef.current = shown;
+
+        const frameTime = Math.min(Math.round(shown * VIDEO_FPS) / VIDEO_FPS, d - 0.05);
+        if (!v.seeking && Math.abs(v.currentTime - frameTime) >= halfFrame) {
+          v.currentTime = frameTime;
+        }
       }
       raf = requestAnimationFrame(tick);
     };
+
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, []);
+  }, [scrollYProgress]);
 
   // Heading video poori hone par reveal
   const headingReveal = useTransform(
@@ -175,10 +245,17 @@ export default function PublicHomePage() {
             {/* Full background video — no overlay */}
             <video
               ref={videoRef}
-              src={heroVideo}
+              src={videoSrc}
+              poster={
+                heroVideo === DEFAULT_VIDEO ? DEFAULT_POSTER : undefined
+              }
+              onLoadedMetadata={onVideoMetadata}
+              onDurationChange={onVideoMetadata}
               muted
               playsInline
               preload="auto"
+              disablePictureInPicture
+              aria-hidden="true"
               style={{
                 position: "absolute",
                 inset: 0,

@@ -6,6 +6,7 @@ import FacebookRoundedIcon from "@mui/icons-material/FacebookRounded";
 import XIcon from "@mui/icons-material/X";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import type { BlogPost } from "@/data/blogPosts";
+import RichContent from "@/components/common/RichContent";
 
 const LIME = "#c8ff00";
 
@@ -39,20 +40,24 @@ export default function BlogArticle({ post }: { post: BlogPost }) {
         </Box>
       )}
 
-      {/* body */}
-      {paras.map((p, i) => (
-        <Typography
-          key={i}
-          sx={{
-            color: "rgba(255,255,255,0.7)",
-            fontSize: { xs: 15, md: 16 },
-            lineHeight: 1.9,
-            mb: 2.5,
-          }}
-        >
-          {p}
-        </Typography>
-      ))}
+      {/* body: rich text from the dashboard editor, else legacy paragraphs */}
+      {post.contentHtml ? (
+        <RichContent html={post.contentHtml} tone="blog" />
+      ) : (
+        paras.map((p, i) => (
+          <Typography
+            key={i}
+            sx={{
+              color: "rgba(255,255,255,0.7)",
+              fontSize: { xs: 15, md: 16 },
+              lineHeight: 1.9,
+              mb: 2.5,
+            }}
+          >
+            {p}
+          </Typography>
+        ))
+      )}
 
       {/* tags + share */}
       <Box

@@ -3,18 +3,38 @@ import AdvancedFooterCTA from "@/components/footer/AdvancedFooterCTA";
 import MailingListCTA from "@/components/footer/MailingListCTA";
 import Navbar from "@/components/header/Navbar";
 import { settingsMap } from "@/lib/contentAdapters";
-import { getPublicSettings } from "@/lib/serverContent";
+import {
+  getBoxTruckCards,
+  getHotshotCards,
+  getPublicSettings,
+  getSemiTruckCards,
+} from "@/lib/serverContent";
 
 export default async function PublicLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const settings = settingsMap((await getPublicSettings()) || []);
+  // One round of parallel calls. The service lists are memoised per request,
+  // so a listing page that also needs them doesn't fetch twice.
+  const [settingRows, hotshots, boxTrucks, semiTrucks] = await Promise.all([
+    getPublicSettings(),
+    getHotshotCards(),
+    getBoxTruckCards(),
+    getSemiTruckCards(),
+  ]);
+  const settings = settingsMap(settingRows || []);
 
   return (
     <>
-      <Navbar />
+      <Navbar
+        phone={settings.phone}
+        menu={{
+          "Hot Shot": hotshots,
+          "Box Truck": boxTrucks,
+          "Semi Truck": semiTrucks,
+        }}
+      />
 
       {children}
       {/* <MailingListCTA /> */}
@@ -23,6 +43,9 @@ export default async function PublicLayout({
         companyName={settings.company_name}
         phone={settings.phone}
         email={settings.email}
+        linkedinUrl={settings.linkedin_url}
+        xUrl={settings.x_url}
+        youtubeUrl={settings.youtube_url}
       />
     </>
   );

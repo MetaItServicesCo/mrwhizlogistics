@@ -159,7 +159,7 @@ You should see `Seed data loaded from frontend content.` in its logs.
 
 If ports 80 and 443 are already owned by nginx on the host, do not start the
 bundled nginx container. Use the host override, which publishes the backend on
-`127.0.0.1:8002` and the frontend on `127.0.0.1:3003`:
+`127.0.0.1:8020` and the frontend on `127.0.0.1:3020`:
 
 ```bash
 docker compose -f docker-compose.prod.yml -f docker-compose.host.yml \
@@ -257,6 +257,38 @@ docker run --rm -v mrwhizz_uploads:/data -v /var/backups/mrwhizz:/backup \
 
 ## Day-two operations
 
+**Updating an existing deployment (rich-text editor + schema release)**
+
+```bash
+cd /var/www/mrwhizz          # or wherever the project lives
+git pull
+docker compose -f docker-compose.prod.yml -f docker-compose.host.yml up -d --build
+```
+
+On the first boot after this release the backend, automatically and once:
+
+- adds the `content_html` and `schema_markup` columns;
+- copies the 9 original blog articles into the database (existing posts with
+  the same slug are left alone), so the blog listing is managed from the
+  dashboard from then on.
+
+Check it worked:
+
+```bash
+docker compose -f docker-compose.prod.yml logs backend | grep -E "Seed|Error"
+docker compose -f docker-compose.prod.yml logs frontend | grep public-content
+```
+
+The second command should print **nothing**. Any `[public-content]` line means
+the website cannot reach the API and is serving its bundled fallback copy -
+which looks exactly like "published content never appears". Check that
+`API_INTERNAL_URL` is `http://backend:8000` and both containers are running.
+
+`NEXT_PUBLIC_SITE_URL` (optional) sets the origin used for absolute URLs in the
+blog JSON-LD. Without it the site uses the host nginx forwards, which is
+correct as long as nginx sends `Host` and `X-Forwarded-Proto` (the bundled
+configs do).
+
 **Deploy a code change**
 
 ```bash
@@ -294,18 +326,22 @@ docker exec -it mrwhiz-db psql -U mrwhiz -d truck_dispatch
 
 ## Schema changes
 
-This project has no migration tool. `Base.metadata.create_all()` runs on every
-boot, which **creates missing tables but never alters existing ones**.
+`Base.metadata.create_all()` runs on every boot, but it only **creates missing
+tables** - it never adds columns to a table that already exists.
 
-A fresh deployment is therefore always correct. But if you later add a column to
-a model on a database that already has that table, apply it by hand:
+Additive column changes are handled by `backend/app/core/schema_upgrade.py`,
+which runs `ALTER TABLE ... ADD COLUMN IF NOT EXISTS` for every entry in its
+`COLUMN_UPGRADES` list on each startup. It is safe on fresh and existing
+databases, and it runs under a Postgres advisory lock, so the two uvicorn
+workers cannot race each other. **Redeploying is enough; no manual SQL.**
 
-```bash
-docker exec -i mrwhiz-db psql -U mrwhiz -d truck_dispatch -c \
-  "ALTER TABLE hotshot_cards ADD COLUMN IF NOT EXISTS page_heading VARCHAR(200);"
-```
+When you add a column to a model:
 
-If you expect frequent schema changes, adding Alembic is worth the hour it takes.
+1. Add the column to the model as usual.
+2. Append a matching `(table, column, type)` tuple to `COLUMN_UPGRADES`.
+
+Only ever append additive changes there. Renames, type changes and drops need a
+real migration tool; if those become common, Alembic is worth adding.
 
 ---
 
@@ -313,6 +349,8 @@ If you expect frequent schema changes, adding Alembic is worth the hour it takes
 
 | Symptom | Cause | Fix |
 | --- | --- | --- |
+| Content published in the dashboard never appears; new slugs 404 | The website cannot reach the API and falls back to its bundled copy | `docker compose logs frontend \| grep public-content`; fix `API_INTERNAL_URL` |
+| Images uploaded in the dashboard show broken on the site | Frontend image built without `API_INTERNAL_URL` (used by the `/uploads` rewrite at build time) | `up -d --build frontend` |
 | Dashboard loads but every list is empty and the console shows CORS errors | `CORS_ORIGINS` does not include the exact scheme + host you browse to | Fix `.env`, then `up -d backend` |
 | Login works, then every request 401s | `SECRET_KEY` changed since the token was issued | Sign out and back in |
 | Frontend calls `localhost:8000` in production | `NEXT_PUBLIC_API_URL` was not set at **build** time | `up -d --build frontend` |

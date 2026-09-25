@@ -8,7 +8,12 @@ import {
   getSemiTruckService,
 } from "@/data/semiTruckContent";
 import { truckCardToService } from "@/lib/contentAdapters";
-import { getSemiTruckCard, getSemiTruckCards } from "@/lib/serverContent";
+import {
+  getSemiTruckCard,
+  getSemiTruckCards,
+  loadDetail,
+  loadDetailForMetadata,
+} from "@/lib/serverContent";
 
 type Props = {
   params: Promise<{
@@ -37,7 +42,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
 
-  const card = await getSemiTruckCard(slug);
+  const card = await loadDetailForMetadata(() => getSemiTruckCard(slug));
   const fallback = getSemiTruckService(slug);
   const service = card ? truckCardToService(card, fallback, true) : fallback;
 
@@ -84,11 +89,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function SemiTruckServiceDetailPage({ params }: Props) {
   const { slug } = await params;
 
+  const fallback = getSemiTruckService(slug);
   const [card, cards] = await Promise.all([
-    getSemiTruckCard(slug),
+    loadDetail(() => getSemiTruckCard(slug), Boolean(fallback)),
     getSemiTruckCards(),
   ]);
-  const fallback = getSemiTruckService(slug);
   const service = card ? truckCardToService(card, fallback, true) : fallback;
 
   if (!service) {

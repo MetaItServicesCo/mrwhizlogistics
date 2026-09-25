@@ -1,9 +1,10 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { AnimatePresence, motion } from "motion/react";
+import { telHref } from "@/lib/contact";
 import {
   Box,
   Button,
@@ -35,7 +36,9 @@ type MenuItem = {
 };
 type MegaKey = "Hot Shot" | "Box Truck" | "Semi Truck";
 
-const MEGA: Record<
+// Fallback menu, used only when the published service list can't be loaded.
+// The live menu is built from the dashboard content (see buildMega below).
+const DEFAULT_MEGA: Record<
   MegaKey,
   { tagline: string; href: string; items: MenuItem[] }
 > = {
@@ -52,31 +55,31 @@ const MEGA: Record<
       {
         title: "Sprinter Van with Lift Gate",
         desc: "Hydraulic lift assistance",
-        href: "/hot-shot/sprinter-van",
+        href: "/hot-shot/sprinter-van-with-lifters",
         icon: <DirectionsCarRoundedIcon />,
       },
       {
         title: "16 Feet Enclosed Trailer",
         desc: "Secure weatherproof hauling",
-        href: "/hot-shot/16ft-enclosed-trailer",
+        href: "/hot-shot/16-feet-enclosed-trailer",
         icon: <Inventory2RoundedIcon />,
       },
       {
         title: "24 Feet Enclosed Trailer",
         desc: "Large capacity cargo box",
-        href: "/hot-shot/24ft-enclosed-trailer",
+        href: "/hot-shot/24-feet-enclosed-trailer",
         icon: <Inventory2RoundedIcon />,
       },
       {
         title: "40 Feet Flat Bed",
         desc: "Extra-long open deck transport",
-        href: "/hot-shot/40ft-flat-bed",
+        href: "/hot-shot/40-feet-flat-bed",
         icon: <LocalShippingOutlinedIcon />,
       },
       {
         title: "20 Feet Flat Bed",
         desc: "Standard open deck hauling",
-        href: "/hot-shot/20ft-flat-bed",
+        href: "/hot-shot/20-feet-flat-bed",
         icon: <LocalShippingOutlinedIcon />,
       },
     ],
@@ -88,13 +91,13 @@ const MEGA: Record<
       {
         title: "16 Feet Box Truck",
         desc: "Compact urban cargo delivery",
-        href: "/box-truck/16ft-box-truck",
+        href: "/box-truck/16-feet-box-truck",
         icon: <LocalShippingRoundedIcon />,
       },
       {
         title: "26 Feet Box Truck",
         desc: "High-capacity commercial moving",
-        href: "/box-truck/26ft-box-truck",
+        href: "/box-truck/26-feet-box-truck",
         icon: <LocalShippingRoundedIcon />,
       },
     ],
@@ -125,7 +128,58 @@ const MEGA: Record<
   },
 };
 
-const MEGA_KEYS = Object.keys(MEGA) as MegaKey[];
+const MEGA_KEYS = Object.keys(DEFAULT_MEGA) as MegaKey[];
+
+/** A published service as the navbar needs it. */
+export type NavService = { slug: string; title: string; short_description?: string | null };
+export type NavMenu = Partial<Record<MegaKey, NavService[] | null>>;
+
+const CATEGORY_ICON: Record<MegaKey, React.ReactNode> = {
+  "Hot Shot": <LocalShippingRoundedIcon />,
+  "Box Truck": <Inventory2RoundedIcon />,
+  "Semi Truck": <LocalShippingOutlinedIcon />,
+};
+
+function summary(text?: string | null): string {
+  const t = (text || "").trim();
+  return t.length > 42 ? `${t.slice(0, 40).trimEnd()}…` : t;
+}
+
+/**
+ * Build the dropdowns from the services published in the dashboard, so the
+ * links always match real pages and new services appear automatically.
+ *
+ * The menu used to be hardcoded: 5 of the 6 Hot Shot links pointed at slugs
+ * that don't exist (404), and both Box Truck links reached the old bundled
+ * copy instead of the managed page, so dashboard edits never showed there.
+ * Hand-written descriptions and icons are kept for services that already had
+ * them; new services get their summary and a category icon.
+ */
+function buildMega(menu?: NavMenu) {
+  const result = { ...DEFAULT_MEGA };
+  for (const key of MEGA_KEYS) {
+    const services = menu?.[key];
+    if (!services) continue; // not loaded: keep the fallback list
+    const base = DEFAULT_MEGA[key];
+    result[key] = {
+      ...base,
+      items: services.map((svc) => {
+        const href = `${base.href}/${svc.slug}`;
+        const curated = base.items.find(
+          (it) => it.href === href || it.title.toLowerCase() === svc.title.toLowerCase(),
+        );
+        return {
+          title: svc.title,
+          desc: curated?.desc || summary(svc.short_description),
+          href,
+          icon: curated?.icon || CATEGORY_ICON[key],
+        };
+      }),
+    };
+  }
+  return result;
+}
+
 
 const navItemSx = {
   display: "flex",
@@ -150,7 +204,17 @@ const navItemSx = {
 
 const mobileLinkSx = { py: 1.4, fontSize: 17, fontWeight: 500 } as const;
 
-export default function Navbar() {
+export default function Navbar({
+  menu,
+  phone,
+}: {
+  /** Published services per dropdown, loaded by the public layout. */
+  menu?: NavMenu;
+  /** Company phone from site settings. */
+  phone?: string;
+} = {}) {
+  const MEGA = useMemo(() => buildMega(menu), [menu]);
+  const tel = telHref(phone);
   const [active, setActive] = useState<MegaKey | null>(null);
   const [hoveredTab, setHoveredTab] = useState<string | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -437,6 +501,9 @@ export default function Navbar() {
             sx={{ alignItems: "center", display: { xs: "none", lg: "flex" } }}
           >
             <IconButton
+              component="a"
+              href={tel}
+              aria-label="Call us"
               sx={{
                 border: "1px solid rgba(255,255,255,0.15)",
                 color: "#fff",
@@ -451,6 +518,8 @@ export default function Navbar() {
               <PhoneInTalkRoundedIcon sx={{ fontSize: 16 }} />
             </IconButton>
             <Button
+              component={Link}
+              href="/#our-fleet"
               disableElevation
               sx={{
                 bgcolor: LIME,
@@ -466,6 +535,8 @@ export default function Navbar() {
               Explore Product
             </Button>
             <Button
+              component={Link}
+              href="/contact"
               sx={{
                 color: "#fff",
                 fontWeight: 600,
@@ -688,6 +759,8 @@ export default function Navbar() {
               </Link>
               <IconButton
                 size="small"
+                aria-label={`Show ${key} services`}
+                aria-expanded={mobileExpand === key}
                 onClick={() =>
                   setMobileExpand(mobileExpand === key ? null : key)
                 }
@@ -767,6 +840,9 @@ export default function Navbar() {
 
         <Stack spacing={1.2} sx={{ mt: 3 }}>
           <Button
+            component={Link}
+            href="/#our-fleet"
+            onClick={() => setDrawerOpen(false)}
             fullWidth
             disableElevation
             sx={{
@@ -780,6 +856,9 @@ export default function Navbar() {
             Explore Product
           </Button>
           <Button
+            component={Link}
+            href="/contact"
+            onClick={() => setDrawerOpen(false)}
             fullWidth
             variant="outlined"
             sx={{
@@ -792,6 +871,8 @@ export default function Navbar() {
             Request Demo
           </Button>
           <Button
+            component="a"
+            href={tel}
             fullWidth
             startIcon={<PhoneInTalkRoundedIcon />}
             variant="outlined"

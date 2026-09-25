@@ -23,6 +23,9 @@ class Hotshot(Base):
     detail_heading = Column(String(300), nullable=False)      # Main Title on Detail Page
     detail_image = Column(String(500), nullable=True)        # Banner/Detail image path/URL
     detail_paragraphs = Column(JSON, default=[])              # Array of paragraphs for detailed description
+    # Rich-text body from the dashboard editor (sanitised HTML). When set it
+    # replaces the legacy paragraph list on the public detail page.
+    content_html = Column(Text, nullable=True)
 
     # --- ROUTING & SEO DATA ---
     slug = Column(String(200), unique=True, index=True, nullable=False) # Route identifier (e.g. truck-trailers)

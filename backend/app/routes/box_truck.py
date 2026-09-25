@@ -8,6 +8,7 @@ from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.core.security import get_current_admin
+from app.core.html import sanitize_html
 from app.models.box_truck import BoxTruck
 from app.schemas.box_truck import BoxTruckResponse
 
@@ -105,6 +106,7 @@ async def create_box_truck(
     
     features: Optional[str] = Form("[]"),
     detail_paragraphs: Optional[str] = Form("[]"),
+    content_html: Optional[str] = Form(None),
     meta_title: Optional[str] = Form(None),
     meta_description: Optional[str] = Form(None),
     meta_keywords: Optional[str] = Form(None),
@@ -149,6 +151,7 @@ async def create_box_truck(
         detail_heading=detail_heading,
         detail_image=detail_image_path,
         detail_paragraphs=parse_to_list(detail_paragraphs),
+        content_html=sanitize_html(content_html),
         slug=slug,
         meta_title=clean_string(meta_title),
         meta_description=clean_string(meta_description),
@@ -180,6 +183,7 @@ async def update_box_truck(
     
     features: Optional[str] = Form(None),
     detail_paragraphs: Optional[str] = Form(None),
+    content_html: Optional[str] = Form(None),
     meta_title: Optional[str] = Form(None),
     meta_description: Optional[str] = Form(None),
     meta_keywords: Optional[str] = Form(None),
@@ -231,6 +235,11 @@ async def update_box_truck(
 
     if detail_paragraphs is not None:
         truck.detail_paragraphs = parse_to_list(detail_paragraphs)
+
+    # Sent as "" to clear the rich-text body, which falls back to the
+    # legacy paragraphs; omitted entirely to leave it untouched.
+    if content_html is not None:
+        truck.content_html = sanitize_html(content_html)
 
     db.commit()
     db.refresh(truck)

@@ -8,6 +8,7 @@ import {
   useMotionValue,
   useSpring,
   useTransform,
+  useInView,
 } from "motion/react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -47,7 +48,7 @@ const CASES: Case[] = [
     ticker:
       "Expedited delivery · Flexible scheduling · Direct transport · Fast response",
     icon: <LocalShippingRoundedIcon />,
-    image: "/images/Hotshot/24-feet-flat-bed/24.png",
+    image: "/images/Hotshot/24-feet-flat-bed/24-web.webp",
   },
   {
     label: "Box Truck",
@@ -58,7 +59,7 @@ const CASES: Case[] = [
       "Local delivery · Regional routes · Commercial freight · Flexible scheduling",
     icon: <Inventory2RoundedIcon />,
     image:
-      "/images/BoxTruck/16-feet-box-truck/half_side_view_box_truck_isolated_on_background.jpg",
+      "/images/BoxTruck/16-feet-box-truck/half_side_view_box_truck_isolated_on_background-web.webp",
   },
   {
     label: "Reefer",
@@ -68,7 +69,7 @@ const CASES: Case[] = [
     ticker:
       "Refrigerated freight · Temperature control · Cold-chain transport · Reliable delivery",
     icon: <AcUnitRoundedIcon />,
-    image: "/images/Semi-truck/reefer/das.jpeg",
+    image: "/images/Semi-truck/reefer/das-web.webp",
   },
   {
     label: "Dry Van",
@@ -78,7 +79,7 @@ const CASES: Case[] = [
     ticker:
       "General cargo · Commercial goods · Full loads · Secure transportation",
     icon: <LocalShippingRoundedIcon />,
-    image: "/images/Semi-truck/dryvan/5.jpeg",
+    image: "/images/Semi-truck/dryvan/5-web.webp",
   },
   {
     label: "Flatbed",
@@ -88,7 +89,7 @@ const CASES: Case[] = [
     ticker:
       "Flatbed hauling · Oversized freight · Equipment transport · Open-deck loads",
     icon: <LocalShippingRoundedIcon />,
-    image: "/images/Semi-truck/flatbed/ssjfksd.jpeg",
+    image: "/images/Semi-truck/flatbed/ssjfksd-web.webp",
   },
 ];
 
@@ -155,6 +156,11 @@ export default function CaseShowSection() {
   const stripRef = useRef<HTMLDivElement>(null);
   const thumbRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const rootRef = useRef<HTMLDivElement>(null);
+  // These are CSS background images, which browsers fetch immediately and can't
+  // lazy-load. Loaded on page open they competed with the hero video for the
+  // connection (the hero is three screens tall, so this section is far below).
+  // Only set them once the section is within ~1.5 screens of the viewport.
+  const photosNear = useInView(rootRef, { once: true, margin: "1200px 0px" });
 
   const c = CASES[active];
 
@@ -727,7 +733,7 @@ export default function CaseShowSection() {
                     inset: -24,
                     ...(c.image
                       ? {
-                          backgroundImage: `url(${c.image})`,
+                          backgroundImage: photosNear ? `url(${c.image})` : "none",
                           backgroundSize: "cover",
                           backgroundPosition: "center",
                         }
@@ -1193,7 +1199,7 @@ export default function CaseShowSection() {
 
                       ...(item.image
                         ? {
-                            backgroundImage: `url(${item.image})`,
+                            backgroundImage: photosNear ? `url(${item.image})` : "none",
                             backgroundSize: "cover",
                             backgroundPosition: "center",
                           }

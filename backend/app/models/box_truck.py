@@ -23,6 +23,9 @@ class BoxTruck(Base):
     detail_heading = Column(String, nullable=False)
     detail_image = Column(String, nullable=True)
     detail_paragraphs = Column(JSON, default=[])
+    # Rich-text body from the dashboard editor (sanitised HTML). When set it
+    # replaces the legacy paragraph list on the public detail page.
+    content_html = Column(Text, nullable=True)
     
     # Dynamic Routing & SEO Fields
     slug = Column(String, unique=True, index=True, nullable=False)

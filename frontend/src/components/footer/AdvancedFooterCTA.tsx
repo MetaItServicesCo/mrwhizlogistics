@@ -7,8 +7,9 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
-import CloseIcon from "@mui/icons-material/Close";
+import XIcon from "@mui/icons-material/X";
 import YouTubeIcon from "@mui/icons-material/YouTube";
+import { externalUrl, mailtoHref, telHref } from "@/lib/contact";
 
 const LIME = "#c8ff00";
 
@@ -16,11 +17,26 @@ export default function AdvancedFooterCTA({
   companyName = "Mr. Whiz Logistics",
   phone = "+1 (469) 767 8853",
   email = "dispatch@mrwhizlogistics.com",
+  linkedinUrl,
+  xUrl,
+  youtubeUrl,
 }: {
   companyName?: string;
   phone?: string;
   email?: string;
+  /** Social profile URLs from site settings; an icon is shown only when set. */
+  linkedinUrl?: string;
+  xUrl?: string;
+  youtubeUrl?: string;
 }) {
+  // Every social icon used to link to "#". Only show the ones that have a
+  // real URL configured under Dashboard -> Settings.
+  const socials = [
+    { label: "LinkedIn", url: externalUrl(linkedinUrl), icon: <LinkedInIcon sx={{ fontSize: 18 }} /> },
+    { label: "X (Twitter)", url: externalUrl(xUrl), icon: <XIcon sx={{ fontSize: 16 }} /> },
+    { label: "YouTube", url: externalUrl(youtubeUrl), icon: <YouTubeIcon sx={{ fontSize: 18 }} /> },
+  ].filter((s): s is typeof s & { url: string } => Boolean(s.url));
+
   return (
     <Box
       component="footer"
@@ -264,7 +280,10 @@ export default function AdvancedFooterCTA({
 
             <Stack spacing={0.5}>
               <Typography
+                component="a"
+                href={mailtoHref(email)}
                 sx={{
+                  display: "inline-block",
                   fontWeight: 800,
                   fontSize: {
                     xs: "1.1rem",
@@ -272,7 +291,9 @@ export default function AdvancedFooterCTA({
                   },
                   letterSpacing: "0.5px",
                   color: "#fff",
+                  textDecoration: "none",
                   mb: 0.5,
+                  "&:hover": { color: LIME },
                 }}
               >
                 {email}
@@ -323,7 +344,7 @@ export default function AdvancedFooterCTA({
             </Typography>
 
             <Link
-              href="#"
+              href="/hot-shot"
               style={{
                 textDecoration: "none",
                 color: "#fff",
@@ -335,7 +356,7 @@ export default function AdvancedFooterCTA({
             </Link>
 
             <Link
-              href="#"
+              href="/box-truck"
               style={{
                 textDecoration: "none",
                 color: "#fff",
@@ -347,7 +368,7 @@ export default function AdvancedFooterCTA({
             </Link>
 
             <Link
-              href="#"
+              href="/semi-truck"
               style={{
                 textDecoration: "none",
                 color: "#fff",
@@ -385,7 +406,7 @@ export default function AdvancedFooterCTA({
             </Typography>
 
             <Link
-              href="#"
+              href="/about"
               style={{
                 textDecoration: "none",
                 color: "#fff",
@@ -397,7 +418,7 @@ export default function AdvancedFooterCTA({
             </Link>
 
             <Link
-              href="#"
+              href="/blog"
               style={{
                 textDecoration: "none",
                 color: "#fff",
@@ -409,7 +430,7 @@ export default function AdvancedFooterCTA({
             </Link>
 
             <Link
-              href="#"
+              href="/contact"
               style={{
                 textDecoration: "none",
                 color: "#fff",
@@ -495,10 +516,13 @@ export default function AdvancedFooterCTA({
               Contact us today for a customized trucking quote!
               <br />
               <Box
-                component="span"
+                component="a"
+                href={telHref(phone)}
                 sx={{
                   color: LIME,
                   fontWeight: 700,
+                  textDecoration: "none",
+                  "&:hover": { textDecoration: "underline" },
                 }}
               >
                 {phone}
@@ -516,73 +540,37 @@ export default function AdvancedFooterCTA({
             </Typography>
 
             {/* SOCIAL ICONS */}
-            <Stack direction="row" spacing={1.5}>
-              <Box
-                component="a"
-                href="#"
-                sx={{
-                  width: 38,
-                  height: 38,
-                  borderRadius: "50%",
-                  bgcolor: "rgba(255,255,255,0.06)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  color: "#fff",
-                  transition: "0.2s",
-                  "&:hover": {
-                    bgcolor: LIME,
-                    color: "#000",
-                  },
-                }}
-              >
-                <LinkedInIcon sx={{ fontSize: 18 }} />
-              </Box>
-
-              <Box
-                component="a"
-                href="#"
-                sx={{
-                  width: 38,
-                  height: 38,
-                  borderRadius: "50%",
-                  bgcolor: "rgba(255,255,255,0.06)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  color: "#fff",
-                  transition: "0.2s",
-                  "&:hover": {
-                    bgcolor: LIME,
-                    color: "#000",
-                  },
-                }}
-              >
-                <CloseIcon sx={{ fontSize: 18 }} />
-              </Box>
-
-              <Box
-                component="a"
-                href="#"
-                sx={{
-                  width: 38,
-                  height: 38,
-                  borderRadius: "50%",
-                  bgcolor: "rgba(255,255,255,0.06)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  color: "#fff",
-                  transition: "0.2s",
-                  "&:hover": {
-                    bgcolor: LIME,
-                    color: "#000",
-                  },
-                }}
-              >
-                <YouTubeIcon sx={{ fontSize: 18 }} />
-              </Box>
-            </Stack>
+            {socials.length > 0 && (
+              <Stack direction="row" spacing={1.5}>
+                {socials.map((social) => (
+                  <Box
+                    key={social.label}
+                    component="a"
+                    href={social.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`${companyName} on ${social.label}`}
+                    sx={{
+                      width: 38,
+                      height: 38,
+                      borderRadius: "50%",
+                      bgcolor: "rgba(255,255,255,0.06)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      color: "#fff",
+                      transition: "0.2s",
+                      "&:hover": {
+                        bgcolor: LIME,
+                        color: "#000",
+                      },
+                    }}
+                  >
+                    {social.icon}
+                  </Box>
+                ))}
+              </Stack>
+            )}
           </Box>
         </Box>
 

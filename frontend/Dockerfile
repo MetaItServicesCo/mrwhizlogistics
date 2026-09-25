@@ -14,6 +14,10 @@ COPY . .
 # supplied here as a build arg - setting it only at runtime has no effect.
 ARG NEXT_PUBLIC_API_URL
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+# The /uploads rewrite in next.config.ts is resolved at build time, so the
+# private address of the backend has to be known here too.
+ARG API_INTERNAL_URL=http://backend:8000
+ENV API_INTERNAL_URL=$API_INTERNAL_URL
 ENV NEXT_TELEMETRY_DISABLED=1
 
 RUN npm run build

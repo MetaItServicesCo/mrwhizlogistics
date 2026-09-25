@@ -58,6 +58,9 @@ export type HotShotService = {
    */
   description: string[];
 
+  /** Rich-text body from the dashboard; rendered instead of description when set. */
+  contentHtml?: string;
+
   /**
    * Service features
    */

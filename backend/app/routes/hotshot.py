@@ -8,6 +8,7 @@ from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.core.security import get_current_admin
+from app.core.html import sanitize_html
 from app.models.hotshot import Hotshot
 from app.schemas.hotshot import HotshotResponse
 
@@ -105,6 +106,7 @@ async def create_hotshot(
     
     features: Optional[str] = Form("[]"),
     detail_paragraphs: Optional[str] = Form("[]"),
+    content_html: Optional[str] = Form(None),
     meta_title: Optional[str] = Form(None),
     meta_description: Optional[str] = Form(None),
     meta_keywords: Optional[str] = Form(None),
@@ -150,6 +152,7 @@ async def create_hotshot(
         detail_heading=detail_heading,
         detail_image=detail_image_path,
         detail_paragraphs=parse_to_list(detail_paragraphs),
+        content_html=sanitize_html(content_html),
         slug=slug,
         meta_title=clean_string(meta_title),
         meta_description=clean_string(meta_description),
@@ -181,6 +184,7 @@ async def update_hotshot(
     
     features: Optional[str] = Form(None),
     detail_paragraphs: Optional[str] = Form(None),
+    content_html: Optional[str] = Form(None),
     meta_title: Optional[str] = Form(None),
     meta_description: Optional[str] = Form(None),
     meta_keywords: Optional[str] = Form(None),
@@ -232,6 +236,11 @@ async def update_hotshot(
 
     if detail_paragraphs is not None:
         hotshot.detail_paragraphs = parse_to_list(detail_paragraphs)
+
+    # Sent as "" to clear the rich-text body, which falls back to the
+    # legacy paragraphs; omitted entirely to leave it untouched.
+    if content_html is not None:
+        hotshot.content_html = sanitize_html(content_html)
 
     db.commit()
     db.refresh(hotshot)

@@ -11,3 +11,4 @@ python-multipart==0.*
 psycopg2-binary==2.*
 sqladmin==0.20.*
 itsdangerous==2.*
+nh3==0.3.*

@@ -19,6 +19,7 @@ class SemiTruckBase(BaseModel):
     detail_heading: str
     detail_image: Optional[str] = None
     detail_paragraphs: List[str] = []
+    content_html: Optional[str] = None
 
     # Specs
     trailer_length: Optional[str] = None

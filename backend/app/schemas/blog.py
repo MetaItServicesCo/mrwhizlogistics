@@ -35,6 +35,7 @@ class BlogResponse(BaseModel):
     detail_image: Optional[str]
     short_description: str
     content_paragraphs: List[str]
+    content_html: Optional[str] = None
     tags: List[str]
     comments_count: int = 0
     comments: List[CommentResponse] = []
@@ -43,6 +44,7 @@ class BlogResponse(BaseModel):
     meta_description: Optional[str]
     meta_keywords: Optional[str]
     canonical_url: Optional[str]
+    schema_markup: Optional[str] = None
 
     class Config:
         from_attributes = True

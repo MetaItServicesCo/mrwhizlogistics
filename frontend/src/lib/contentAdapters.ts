@@ -92,6 +92,8 @@ export function truckCardToService(
     features,
     stats: stats.length > 0 ? stats : fallback?.stats || [],
     options: fallback?.options || [],
+    // Only the detail page renders the full body; listings use the summary.
+    contentHtml: detail ? card.content_html || undefined : undefined,
   };
 }
 
@@ -118,6 +120,9 @@ export function apiBlogToView(post: ApiBlogPost): BlogPost {
     image: post.detail_image || post.card_image,
     readTime: post.read_time,
     content: post.content_paragraphs,
+    contentHtml: post.content_html || undefined,
+    schemaMarkup: post.schema_markup || undefined,
+    keywords: post.meta_keywords || undefined,
   };
 }
 

@@ -19,12 +19,18 @@ class Blog(Base):
     detail_image = Column(String, nullable=True)
     short_description = Column(Text, nullable=False)
     content_paragraphs = Column(JSON, default=[])
+    # Rich-text body from the dashboard editor (sanitised HTML). When set it
+    # replaces the legacy paragraph list on the public detail page.
+    content_html = Column(Text, nullable=True)
     tags = Column(JSON, default=[])
     
     meta_title = Column(String, nullable=True)
     meta_description = Column(Text, nullable=True)
     meta_keywords = Column(String, nullable=True)
     canonical_url = Column(String, nullable=True)
+    # JSON-LD structured data for this post, stored as a JSON string and
+    # emitted verbatim in a <script type="application/ld+json"> tag.
+    schema_markup = Column(Text, nullable=True)
 
     # Jab blog delete hoga, to uske saare comments auto delete honge
     comments = relationship("BlogComment", back_populates="blog", cascade="all, delete-orphan")

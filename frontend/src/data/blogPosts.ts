@@ -9,6 +9,9 @@ export type BlogPost = {
   image?: string;
   readTime?: string;
   content?: string[]; // article paragraphs (detail page)
+  contentHtml?: string; // rich-text body from the dashboard; wins over content
+  schemaMarkup?: string; // stored JSON-LD, if the post has custom markup
+  keywords?: string;
 };
 
 export const BLOG_POSTS: BlogPost[] = [

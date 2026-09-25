@@ -3,7 +3,12 @@ import { notFound } from "next/navigation";
 import HotShotServiceDetail from "@/components/hot-shot/HotShotServiceDetail";
 import { HOT_SHOT_SERVICES, getHotShotService } from "@/data/hotShotServices";
 import { truckCardToService } from "@/lib/contentAdapters";
-import { getHotshotCard, getHotshotCards } from "@/lib/serverContent";
+import {
+  getHotshotCard,
+  getHotshotCards,
+  loadDetail,
+  loadDetailForMetadata,
+} from "@/lib/serverContent";
 
 export function generateStaticParams() {
   return HOT_SHOT_SERVICES.map((service) => ({
@@ -18,7 +23,7 @@ export async function generateMetadata({
 }) {
   const { slug } = await params;
 
-  const card = await getHotshotCard(slug);
+  const card = await loadDetailForMetadata(() => getHotshotCard(slug));
   const fallback = getHotShotService(slug);
   const service = card ? truckCardToService(card, fallback, true) : fallback;
 
@@ -41,11 +46,11 @@ export default async function HotShotServiceDetailPage({
 }) {
   const { slug } = await params;
 
+  const fallback = getHotShotService(slug);
   const [card, cards] = await Promise.all([
-    getHotshotCard(slug),
+    loadDetail(() => getHotshotCard(slug), Boolean(fallback)),
     getHotshotCards(),
   ]);
-  const fallback = getHotShotService(slug);
   const service = card ? truckCardToService(card, fallback, true) : fallback;
 
   if (!service) {

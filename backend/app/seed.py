@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+import json
+from pathlib import Path
+
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 
@@ -17,8 +20,15 @@ from app.models.hotshot import Hotshot
 from app.models.box_truck import BoxTruck
 from app.models.semi_truck import SemiTruck
 from app.models.seed_run import SeedRun
+from app.models.blog import Blog
+from app.core.schema_upgrade import upgrade_schema
 
-SEED_VERSION = "cms-content-v2"
+# Bump when the seed gains new backfills; rows are only ever inserted when
+# missing, so re-running on an existing database never overwrites edits.
+SEED_VERSION = "cms-content-v4"
+
+# The 9 launch articles, exported verbatim from frontend/src/data/blogPosts.ts.
+BLOG_SEED_FILE = Path(__file__).parent / "seed_data" / "blog_posts.json"
 
 HOT_SHOT_OPTIONS = [
     {
@@ -376,7 +386,15 @@ def seed(db: Session | None = None) -> None:
         if db.bind is not None and db.bind.dialect.name == "postgresql":
             db.execute(text("SELECT pg_advisory_xact_lock(8597002)"))
 
+        # Add columns introduced since this database was created. This must run
+        # before any ORM query on those tables, and on every boot - not only
+        # when the seed version changes.
+        upgrade_schema(db)
+
         if db.query(SeedRun).filter(SeedRun.key == SEED_VERSION).first():
+            # Commit rather than return straight away, or the column upgrades
+            # above would be rolled back when the session closes.
+            db.commit()
             return
 
         home = _upsert_by(
@@ -588,6 +606,11 @@ def seed(db: Session | None = None) -> None:
             ("phone", "(469) 767 8853", "Primary phone"),
             ("email", "dispatch@mrwhizlogistics.com", "Dispatch email"),
             ("hero_video", "/video/hero-video.mp4", "Homepage hero video path"),
+            # Footer social icons. Left empty on purpose: an icon only appears on
+            # the site once its URL is filled in under Dashboard -> Settings.
+            ("linkedin_url", "", "LinkedIn page URL (footer icon)"),
+            ("x_url", "", "X / Twitter profile URL (footer icon)"),
+            ("youtube_url", "", "YouTube channel URL (footer icon)"),
         ]
         for key, value, label in settings:
             _upsert_by(
@@ -596,6 +619,36 @@ def seed(db: Session | None = None) -> None:
                 "key",
                 key,
                 {"key": key, "value": value, "label": label},
+            )
+
+        # --- Blog: backfill the launch articles -------------------------------
+        # Until now the public blog read these from a TypeScript constant, so a
+        # fresh database had an empty blogs table and the listing page showed no
+        # articles at all. Insert them once so the dashboard owns them. Reverse
+        # order because the API lists newest-id first: this keeps the original
+        # article order, and anything published later still appears on top.
+        for post in reversed(json.loads(BLOG_SEED_FILE.read_text(encoding="utf-8"))):
+            if db.query(Blog).filter(Blog.slug == post["slug"]).first():
+                continue
+            if db.query(Blog).filter(Blog.card_id == post["slug"]).first():
+                continue
+            db.add(
+                Blog(
+                    card_id=post["slug"],
+                    title=post["title"],
+                    slug=post["slug"],
+                    author_name=post.get("author") or "Admin",
+                    publish_date=post["date"],
+                    read_time=post.get("readTime") or "5 min read",
+                    category_tag=post.get("category") or "News",
+                    card_image=post.get("image") or "/images/blog/breadcumb.jpg",
+                    short_description=post["excerpt"],
+                    content_paragraphs=post.get("content") or [],
+                    tags=[],
+                    meta_title=post["title"],
+                    meta_description=post["excerpt"],
+                    canonical_url=f"/blog/{post['slug']}",
+                )
             )
 
         db.add(SeedRun(key=SEED_VERSION))

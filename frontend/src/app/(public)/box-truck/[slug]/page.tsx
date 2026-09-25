@@ -5,7 +5,11 @@ import {
 } from "@/data/boxTruckServices";
 import { notFound } from "next/navigation";
 import { truckCardToService } from "@/lib/contentAdapters";
-import { getBoxTruckCard, getBoxTruckCards } from "@/lib/serverContent";
+import {
+  getBoxTruckCard,
+  getBoxTruckCards,
+  loadDetail,
+} from "@/lib/serverContent";
 
 export default async function BoxTruckServiceDetailPage({
   params,
@@ -13,11 +17,11 @@ export default async function BoxTruckServiceDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
+  const fallback = getBoxTruckService(slug);
   const [card, cards] = await Promise.all([
-    getBoxTruckCard(slug),
+    loadDetail(() => getBoxTruckCard(slug), Boolean(fallback)),
     getBoxTruckCards(),
   ]);
-  const fallback = getBoxTruckService(slug);
   const service = card ? truckCardToService(card, fallback, true) : fallback;
 
   if (!service) notFound();
