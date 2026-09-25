@@ -9,6 +9,7 @@ import FormatQuoteRoundedIcon from "@mui/icons-material/FormatQuoteRounded";
 import StarRoundedIcon from "@mui/icons-material/StarRounded";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
+import { getPublicTestimonials } from "@/lib/publicApi";
 
 const LIME = "#c8ff00";
 const DURATION = 3000;
@@ -107,16 +108,51 @@ function Stars({ rating }: { rating: number }) {
 export default function TestimonialsSection() {
   const reduce = useReducedMotion() ?? false;
   const [active, setActive] = useState(0);
+  const [testimonials, setTestimonials] = useState<T[]>(TESTIMONIALS);
   const pausedRef = useRef(false);
   const ringRef = useRef<SVGCircleElement | null>(null);
   const dragRef = useRef({ down: false, startX: 0 });
-  const N = TESTIMONIALS.length;
-  const t = TESTIMONIALS[active];
+  const N = testimonials.length;
+  const t = testimonials[active];
+
+  useEffect(() => {
+    let mounted = true;
+    void getPublicTestimonials()
+      .then((items) => {
+        if (!mounted) return;
+        setTestimonials(
+          items.map((item) => ({
+            quote: item.quote,
+            name: item.name,
+            role: item.role || "Customer",
+            rating: item.rating,
+            initials:
+              item.initials ||
+              item.name
+                .split(/\s+/)
+                .map((part) => part[0])
+                .join("")
+                .slice(0, 2)
+                .toUpperCase(),
+            accent:
+              item.accent || "linear-gradient(135deg, #c8ff00, #7fb800)",
+            image: item.image || undefined,
+          })),
+        );
+        setActive(0);
+      })
+      .catch(() => {
+        // Keep bundled testimonials if the API is temporarily unavailable.
+      });
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   const go = (i: number) => setActive((i + N) % N);
 
   useEffect(() => {
-    if (reduce) return;
+    if (reduce || N === 0) return;
     if (ringRef.current)
       ringRef.current.style.strokeDashoffset = String(RING_C);
     let raf = 0,
@@ -153,6 +189,8 @@ export default function TestimonialsSection() {
     if (dx < -60) go(active + 1);
     else if (dx > 60) go(active - 1);
   };
+
+  if (!t) return null;
 
   return (
     <Box
@@ -409,7 +447,7 @@ export default function TestimonialsSection() {
             gap: { xs: 1.5, md: 2 },
           }}
         >
-          {TESTIMONIALS.map((item, i) => {
+          {testimonials.map((item, i) => {
             const on = i === active;
             return (
               <Box

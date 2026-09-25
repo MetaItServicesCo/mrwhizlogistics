@@ -9,8 +9,31 @@
 import { api } from "./api";
 import type { BlogComment, BlogPost } from "./types";
 import type { RentalQuotePayload } from "@/types/rentalQuote";
+import type { TruckCard } from "./types";
+import type {
+  PublicFaqCategory,
+  PublicSiteSetting,
+  PublicTeamMember,
+  PublicTestimonial,
+} from "./contentAdapters";
 
 const PUBLIC = { auth: false } as const;
+
+export const getPublicFaqs = () =>
+  api.get<PublicFaqCategory[]>("/api/public/faqs", PUBLIC);
+
+export const getPublicTestimonials = () =>
+  api.get<PublicTestimonial[]>("/api/public/testimonials", PUBLIC);
+
+export const getPublicTeam = () =>
+  api.get<PublicTeamMember[]>("/api/team/", PUBLIC);
+
+export const getPublicSettings = () =>
+  api.get<PublicSiteSetting[]>("/api/public/settings", PUBLIC);
+
+export const getPublicTruckCards = (
+  kind: "hotshots" | "box-trucks" | "semi-trucks",
+) => api.get<TruckCard[]>(`/api/${kind}/`, PUBLIC);
 
 /** Drop empty strings so optional columns stay NULL instead of "". */
 function compact<T extends Record<string, unknown>>(obj: T): Record<string, unknown> {

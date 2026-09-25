@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 
 import HotShotServiceDetail from "@/components/hot-shot/HotShotServiceDetail";
 import { HOT_SHOT_SERVICES, getHotShotService } from "@/data/hotShotServices";
+import { truckCardToService } from "@/lib/contentAdapters";
+import { getHotshotCard, getHotshotCards } from "@/lib/serverContent";
 
 export function generateStaticParams() {
   return HOT_SHOT_SERVICES.map((service) => ({
@@ -16,7 +18,9 @@ export async function generateMetadata({
 }) {
   const { slug } = await params;
 
-  const service = getHotShotService(slug);
+  const card = await getHotshotCard(slug);
+  const fallback = getHotShotService(slug);
+  const service = card ? truckCardToService(card, fallback, true) : fallback;
 
   if (!service) {
     return {
@@ -37,16 +41,30 @@ export default async function HotShotServiceDetailPage({
 }) {
   const { slug } = await params;
 
-  const service = getHotShotService(slug);
+  const [card, cards] = await Promise.all([
+    getHotshotCard(slug),
+    getHotshotCards(),
+  ]);
+  const fallback = getHotShotService(slug);
+  const service = card ? truckCardToService(card, fallback, true) : fallback;
 
   if (!service) {
     notFound();
   }
 
+  const services = cards
+    ? cards.map((item) =>
+        truckCardToService(
+          item,
+          HOT_SHOT_SERVICES.find((fallbackItem) => fallbackItem.slug === item.slug),
+        ),
+      )
+    : HOT_SHOT_SERVICES;
+
   return (
     <HotShotServiceDetail
       service={service}
-      services={HOT_SHOT_SERVICES} // <--- Yeh add karein
+      services={services}
       basePath="/hot-shot" // <--- Yeh add karein (aapka route URL prefix)
     />
   );

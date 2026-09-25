@@ -11,7 +11,7 @@ import EmailRoundedIcon from "@mui/icons-material/EmailRounded";
 const LIME = "#c8ff00";
 const EASE = [0.22, 1, 0.36, 1] as const;
 
-type Member = {
+export type Member = {
   name: string;
   role: string;
   image?: string;
@@ -237,7 +237,7 @@ function MemberCard({ m }: { m: Member }) {
   );
 }
 
-export default function TeamSection() {
+export default function TeamSection({ members = TEAM }: { members?: Member[] }) {
   return (
     <Box
       component="section"
@@ -356,7 +356,7 @@ export default function TeamSection() {
           alignItems: "stretch",
         }}
       >
-        {TEAM.map((m) => (
+        {members.map((m) => (
           <MemberCard key={m.name} m={m} />
         ))}
       </Box>

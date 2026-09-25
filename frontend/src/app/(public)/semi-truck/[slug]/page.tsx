@@ -7,6 +7,8 @@ import {
   SEMI_TRUCK_SERVICES,
   getSemiTruckService,
 } from "@/data/semiTruckContent";
+import { truckCardToService } from "@/lib/contentAdapters";
+import { getSemiTruckCard, getSemiTruckCards } from "@/lib/serverContent";
 
 type Props = {
   params: Promise<{
@@ -35,7 +37,9 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
 
-  const service = getSemiTruckService(slug);
+  const card = await getSemiTruckCard(slug);
+  const fallback = getSemiTruckService(slug);
+  const service = card ? truckCardToService(card, fallback, true) : fallback;
 
   if (!service) {
     return {};
@@ -80,16 +84,30 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function SemiTruckServiceDetailPage({ params }: Props) {
   const { slug } = await params;
 
-  const service = getSemiTruckService(slug);
+  const [card, cards] = await Promise.all([
+    getSemiTruckCard(slug),
+    getSemiTruckCards(),
+  ]);
+  const fallback = getSemiTruckService(slug);
+  const service = card ? truckCardToService(card, fallback, true) : fallback;
 
   if (!service) {
     notFound();
   }
 
+  const services = cards
+    ? cards.map((item) =>
+        truckCardToService(
+          item,
+          SEMI_TRUCK_SERVICES.find((fallbackItem) => fallbackItem.slug === item.slug),
+        ),
+      )
+    : SEMI_TRUCK_SERVICES;
+
   return (
     <HotShotServiceDetail
       service={service}
-      services={SEMI_TRUCK_SERVICES}
+      services={services}
       basePath="/semi-truck"
     />
   );

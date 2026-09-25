@@ -12,6 +12,12 @@ from app.models.site_setting import SiteSetting
 from app.models.testimonial import Testimonial
 from app.models.service_option import ServiceOption
 from app.models.truck_type import TruckType
+from app.models.hotshot import Hotshot
+from app.models.box_truck import BoxTruck
+from app.models.semi_truck import SemiTruck
+from app.models.seed_run import SeedRun
+
+SEED_VERSION = "cms-content-v2"
 
 HOT_SHOT_OPTIONS = [
     {
@@ -363,6 +369,9 @@ def seed(db: Session | None = None) -> None:
         db = SessionLocal()
         close = True
     try:
+        if db.query(SeedRun).filter(SeedRun.key == SEED_VERSION).first():
+            return
+
         home = _upsert_by(
             db,
             Page,
@@ -392,6 +401,56 @@ def seed(db: Session | None = None) -> None:
             existing = db.query(Service).filter(Service.slug == data["slug"]).first()
             if not existing:
                 db.add(Service(**data, is_active=True))
+
+        # The public truck pages were originally backed by TypeScript constants,
+        # while the dashboard writes to three dedicated CMS tables. Backfill the
+        # dedicated tables once so those tables can become the authoritative
+        # source without dropping the original catalog. Existing slugs are never
+        # overwritten, preserving all administrator edits made before migration.
+        page_copy = {
+            "Hot Shot": (Hotshot, "Hot Shot", "Choose the right Hot Shot service"),
+            "Box Truck": (BoxTruck, "Box Truck", "Choose the right box truck"),
+            "Semi Truck": (SemiTruck, "Semi Truck", "Choose the right semi truck"),
+        }
+        for data in SERVICES:
+            model, page_heading, page_subheading = page_copy[data["category"]]
+            if db.query(model).filter(model.slug == data["slug"]).first():
+                continue
+
+            feature_titles = [item["title"] for item in data.get("features", [])]
+            values = {
+                "page_heading": page_heading,
+                "page_subheading": page_subheading,
+                "card_number": data.get("number") or "",
+                "category_tag": data.get("badge") or data["category"],
+                "title": data["title"],
+                "short_description": data.get("short_description") or "",
+                "card_image": data.get("image") or "/images/breadcumb.jpg",
+                "features": feature_titles,
+                "detail_heading": data["title"],
+                "detail_image": data.get("image"),
+                "detail_paragraphs": data.get("description") or [],
+                "slug": data["slug"],
+                "meta_title": data["title"],
+                "meta_description": data.get("short_description"),
+                "canonical_url": data.get("nav_href"),
+            }
+
+            if model is SemiTruck:
+                stats = {
+                    item.get("label", "").lower(): item.get("value")
+                    for item in data.get("stats", [])
+                }
+                values.update(
+                    trailer_length=stats.get("trailer length")
+                    or stats.get("deck length"),
+                    max_payload=stats.get("max payload"),
+                    cargo_type=stats.get("cargo type")
+                    or stats.get("cargo space")
+                    or stats.get("load type"),
+                )
+
+            db.add(model(**values))
 
         # --- Quote form dropdown options (Hot Shot / Box Truck / Semi Truck) ---
         for name, order in SERVICE_OPTIONS:
@@ -532,6 +591,7 @@ def seed(db: Session | None = None) -> None:
                 {"key": key, "value": value, "label": label},
             )
 
+        db.add(SeedRun(key=SEED_VERSION))
         db.commit()
         print("Seed data loaded from frontend content.")
     except Exception:

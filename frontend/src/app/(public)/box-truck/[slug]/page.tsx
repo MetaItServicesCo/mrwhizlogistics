@@ -4,6 +4,8 @@ import {
   getBoxTruckService,
 } from "@/data/boxTruckServices";
 import { notFound } from "next/navigation";
+import { truckCardToService } from "@/lib/contentAdapters";
+import { getBoxTruckCard, getBoxTruckCards } from "@/lib/serverContent";
 
 export default async function BoxTruckServiceDetailPage({
   params,
@@ -11,14 +13,28 @@ export default async function BoxTruckServiceDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const service = getBoxTruckService(slug);
+  const [card, cards] = await Promise.all([
+    getBoxTruckCard(slug),
+    getBoxTruckCards(),
+  ]);
+  const fallback = getBoxTruckService(slug);
+  const service = card ? truckCardToService(card, fallback, true) : fallback;
 
   if (!service) notFound();
+
+  const services = cards
+    ? cards.map((item) =>
+        truckCardToService(
+          item,
+          BOX_TRUCK_SERVICES.find((fallbackItem) => fallbackItem.slug === item.slug),
+        ),
+      )
+    : BOX_TRUCK_SERVICES;
 
   return (
     <HotShotServiceDetail
       service={service}
-      services={BOX_TRUCK_SERVICES} // <--- Yeh add karna zaroori hai
+      services={services}
       basePath="/box-truck"
     />
   );

@@ -5,6 +5,7 @@ import WhyChooseUs from "@/components/about/WhyChooseUs";
 import FleetOverview from "@/components/about/FleetOverview";
 import TeamSection from "@/components/about/TeamSection";
 import AboutCTA from "@/components/about/AboutCTA";
+import { getPublicTeam } from "@/lib/serverContent";
 
 export const metadata: Metadata = {
   title: "About Us | Trusted Trucking & Logistics Partner",
@@ -19,7 +20,15 @@ export const metadata: Metadata = {
   },
 };
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const apiMembers = await getPublicTeam();
+  const members = apiMembers?.map((member) => ({
+    name: member.name,
+    role: member.role,
+    image: member.image || undefined,
+    socials: member.socials,
+  }));
+
   return (
     <main>
       <HotShotHero
@@ -30,7 +39,7 @@ export default function AboutPage() {
       <AboutExpertise />
       <WhyChooseUs />
       {/* <FleetOverview /> */}
-      <TeamSection />
+      <TeamSection members={members || undefined} />
       <AboutCTA />
     </main>
   );

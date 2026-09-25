@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -9,6 +9,7 @@ import LocalShippingRoundedIcon from "@mui/icons-material/LocalShippingRounded";
 import Inventory2RoundedIcon from "@mui/icons-material/Inventory2Rounded";
 import ContactPhoneRoundedIcon from "@mui/icons-material/ContactPhoneRounded";
 import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
+import { getPublicFaqs } from "@/lib/publicApi";
 const LIME = "#c8ff00";
 
 // --------------------------------------------------
@@ -22,7 +23,7 @@ const CATEGORIES = [
   "General FAQ",
 ] as const;
 
-type Cat = (typeof CATEGORIES)[number];
+type Cat = string;
 
 // --------------------------------------------------
 // FAQ TYPE
@@ -391,10 +392,40 @@ function FaqRow({
 
 export default function FaqSection() {
   const [cat, setCat] = useState<Cat>("Hot Shot Trucking");
-
   const [openKey, setOpenKey] = useState<string | null>(null);
+  const [categories, setCategories] = useState<string[]>([...CATEGORIES]);
+  const [faqs, setFaqs] = useState<Faq[]>(FAQS);
 
-  const list = FAQS.filter((faq) => faq.cat === cat);
+  useEffect(() => {
+    let active = true;
+    void getPublicFaqs()
+      .then((items) => {
+        if (!active) return;
+        const names = items.map((item) => item.name);
+        const nextFaqs = items.flatMap((item) =>
+          item.faqs.map((faq) => ({
+            cat: item.name,
+            q: faq.question,
+            a: faq.answer,
+          })),
+        );
+        setCategories(names);
+        setFaqs(nextFaqs);
+        setCat((current) =>
+          names.includes(current) ? current : names[0] || "",
+        );
+      })
+      .catch(() => {
+        // Keep the bundled fallback when the public API is temporarily down.
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const list = faqs.filter((faq) => faq.cat === cat);
+
+  if (categories.length === 0) return null;
 
   // --------------------------------------------------
   // FAQ SCHEMA
@@ -404,7 +435,7 @@ export default function FaqSection() {
     "@context": "https://schema.org",
     "@type": "FAQPage",
 
-    mainEntity: FAQS.map((faq) => ({
+    mainEntity: faqs.map((faq) => ({
       "@type": "Question",
 
       name: faq.q,
@@ -690,7 +721,7 @@ export default function FaqSection() {
                 },
               }}
             >
-              {CATEGORIES.map((category) => {
+              {categories.map((category) => {
                 const active = category === cat;
 
                 return (

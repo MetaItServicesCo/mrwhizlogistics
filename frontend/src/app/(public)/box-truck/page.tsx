@@ -9,6 +9,8 @@ import {
   BOX_TRUCK_FEATURES,
   BOX_TRUCK_STEPS,
 } from "@/data/boxTruckContent";
+import { truckCardToGridItem } from "@/lib/contentAdapters";
+import { getBoxTruckCards } from "@/lib/serverContent";
 
 export const metadata: Metadata = {
   title: "Box Truck Delivery Services | Local, Retail & Last-Mile Freight",
@@ -24,7 +26,14 @@ export const metadata: Metadata = {
   },
 };
 
-export default function BoxTruckPage() {
+export default async function BoxTruckPage() {
+  const cards = await getBoxTruckCards();
+  const services = cards ? cards.map(truckCardToGridItem) : BOX_TRUCK_SERVICES;
+  const heading = cards?.[0]?.page_heading || "Choose the right box truck";
+  const subtitle =
+    cards?.[0]?.page_subheading ||
+    "Two sizes, one standard of service — pick the truck that fits your load.";
+
   return (
     <main>
       <HotShotHero
@@ -35,9 +44,9 @@ export default function BoxTruckPage() {
 
       <ServiceGrid
         eyebrow="Our Fleet"
-        title="Choose the right box truck"
-        subtitle="Two sizes, one standard of service — pick the truck that fits your load."
-        items={BOX_TRUCK_SERVICES}
+        title={heading}
+        subtitle={subtitle}
+        items={services}
         basePath="/box-truck"
         columns={2}
       />

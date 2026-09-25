@@ -11,6 +11,8 @@ import {
   SEMI_TRUCK_FEATURES,
   SEMI_TRUCK_STEPS,
 } from "@/data/semiTruckContent";
+import { truckCardToGridItem } from "@/lib/contentAdapters";
+import { getSemiTruckCards } from "@/lib/serverContent";
 
 export const metadata: Metadata = {
   title:
@@ -35,7 +37,16 @@ export const metadata: Metadata = {
   },
 };
 
-export default function SemiTruckPage() {
+export default async function SemiTruckPage() {
+  const cards = await getSemiTruckCards();
+  const services = cards
+    ? cards.map(truckCardToGridItem)
+    : SEMI_TRUCK_GRID_SERVICES;
+  const heading = cards?.[0]?.page_heading || "Choose the right semi truck";
+  const subtitle =
+    cards?.[0]?.page_subheading ||
+    "Three specialized trailer options, one standard of reliable freight service — choose the equipment that fits your load.";
+
   return (
     <main>
       <HotShotHero
@@ -46,9 +57,9 @@ export default function SemiTruckPage() {
 
       <ServiceGrid
         eyebrow="Our Fleet"
-        title="Choose the right semi truck"
-        subtitle="Three specialized trailer options, one standard of reliable freight service — choose the equipment that fits your load."
-        items={SEMI_TRUCK_GRID_SERVICES}
+        title={heading}
+        subtitle={subtitle}
+        items={services}
         basePath="/semi-truck"
         columns={3}
       />

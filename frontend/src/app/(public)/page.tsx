@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   motion,
   useScroll,
@@ -23,6 +23,8 @@ import ProcessSection from "@/components/home/ProcessSection";
 import ContactSection from "@/components/home/ContactSection";
 import FaqSection from "@/components/home/FaqSection";
 import TestimonialsSection from "@/components/home/TestimonialsSection";
+import { settingsMap } from "@/lib/contentAdapters";
+import { getPublicSettings } from "@/lib/publicApi";
 
 // ===== Tuning levers =====
 const SECTION_HEIGHT = "300vh"; // zyada = dheema scrub + zyada scroll room
@@ -66,6 +68,22 @@ export default function PublicHomePage() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const durationRef = useRef(0);
   const targetTimeRef = useRef(0);
+  const [heroVideo, setHeroVideo] = useState("/video/hero-video.mp4");
+
+  useEffect(() => {
+    let mounted = true;
+    void getPublicSettings()
+      .then((items) => {
+        const video = settingsMap(items).hero_video;
+        if (mounted && video) setHeroVideo(video);
+      })
+      .catch(() => {
+        // Keep the bundled video when settings cannot be loaded.
+      });
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -157,7 +175,7 @@ export default function PublicHomePage() {
             {/* Full background video — no overlay */}
             <video
               ref={videoRef}
-              src="/video/hero-video.mp4"
+              src={heroVideo}
               muted
               playsInline
               preload="auto"

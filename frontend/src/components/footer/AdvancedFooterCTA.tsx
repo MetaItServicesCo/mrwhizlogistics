@@ -12,7 +12,15 @@ import YouTubeIcon from "@mui/icons-material/YouTube";
 
 const LIME = "#c8ff00";
 
-export default function AdvancedFooterCTA() {
+export default function AdvancedFooterCTA({
+  companyName = "Mr. Whiz Logistics",
+  phone = "+1 (469) 767 8853",
+  email = "dispatch@mrwhizlogistics.com",
+}: {
+  companyName?: string;
+  phone?: string;
+  email?: string;
+}) {
   return (
     <Box
       component="footer"
@@ -250,7 +258,7 @@ export default function AdvancedFooterCTA() {
                   letterSpacing: "-0.5px",
                 }}
               >
-                Terminal
+                {companyName}
               </Typography>
             </Link>
 
@@ -267,7 +275,7 @@ export default function AdvancedFooterCTA() {
                   mb: 0.5,
                 }}
               >
-                Gartner.
+                {email}
               </Typography>
 
               <Typography
@@ -493,7 +501,7 @@ export default function AdvancedFooterCTA() {
                   fontWeight: 700,
                 }}
               >
-                +1 (469) 767 8853
+                {phone}
               </Box>
             </Typography>
 
@@ -626,7 +634,7 @@ export default function AdvancedFooterCTA() {
                 color: "#fff",
               }}
             >
-              Mr.Whiz Logisttics © 2025 All Rights Reserved
+              {companyName} © {new Date().getFullYear()} All Rights Reserved
             </Typography>
           </Stack>
         </Box>

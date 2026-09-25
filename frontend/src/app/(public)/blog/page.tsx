@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import BlogGrid from "@/components/blog/BlogGrid";
 import { BLOG_POSTS } from "@/data/blogPosts";
 import BlogHero from "@/components/blog/BlogHero";
+import { apiBlogToView } from "@/lib/contentAdapters";
+import { getBlogs } from "@/lib/serverContent";
 
 export const metadata: Metadata = {
   title: "Blog | Logistics News, Freight Tips & Industry Insights",
@@ -16,7 +18,10 @@ export const metadata: Metadata = {
   },
 };
 
-export default function BlogPage() {
+export default async function BlogPage() {
+  const apiPosts = await getBlogs();
+  const posts = apiPosts ? apiPosts.map(apiBlogToView) : BLOG_POSTS;
+
   return (
     <main>
       <BlogHero
@@ -24,7 +29,7 @@ export default function BlogPage() {
         crumb="Blog"
         badge="TRUCKING INSIGHTS"
       />
-      <BlogGrid posts={BLOG_POSTS} />
+      <BlogGrid posts={posts} />
     </main>
   );
 }

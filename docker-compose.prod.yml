@@ -53,6 +53,10 @@ services:
     restart: unless-stopped
     depends_on:
       - backend
+    environment:
+      # Server Components use the private Docker network instead of making a
+      # public round trip through host nginx.
+      API_INTERNAL_URL: http://backend:8000
     expose:
       - "3000"
 

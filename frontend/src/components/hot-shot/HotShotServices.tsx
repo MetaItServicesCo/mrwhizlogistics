@@ -15,6 +15,7 @@ import Inventory2RoundedIcon from "@mui/icons-material/Inventory2Rounded";
 import StorefrontRoundedIcon from "@mui/icons-material/StorefrontRounded";
 
 import { HOT_SHOT_SERVICES } from "@/data/hotShotServices";
+import type { HotShotService } from "@/types/hotShot";
 
 const LIME = "#c8ff00";
 const EASE = [0.22, 1, 0.36, 1] as const;
@@ -45,7 +46,7 @@ function ServiceCard({
   service,
   index,
 }: {
-  service: (typeof HOT_SHOT_SERVICES)[number];
+  service: HotShotService;
   index: number;
 }) {
   return (
@@ -332,7 +333,16 @@ function ServiceCard({
   );
 }
 
-export default function HotShotServices() {
+export default function HotShotServices({
+  services = HOT_SHOT_SERVICES,
+  heading = "HotShot freight. Every kind of load.",
+  subheading =
+    "Whatever needs to be there today, we have a dedicated transportation solution built to move it fast.",
+}: {
+  services?: HotShotService[];
+  heading?: string;
+  subheading?: string;
+}) {
   return (
     <Box
       component="section"
@@ -410,16 +420,7 @@ export default function HotShotServices() {
             letterSpacing: "-1.5px",
           }}
         >
-          HotShot freight.
-          <Box
-            component="span"
-            sx={{
-              color: LIME,
-            }}
-          >
-            {" "}
-            Every kind of load.
-          </Box>
+          {heading}
         </Typography>
 
         <Typography
@@ -430,8 +431,7 @@ export default function HotShotServices() {
             lineHeight: 1.7,
           }}
         >
-          Whatever needs to be there today, we have a dedicated transportation
-          solution built to move it fast.
+          {subheading}
         </Typography>
       </Box>
 
@@ -455,7 +455,7 @@ export default function HotShotServices() {
           },
         }}
       >
-        {HOT_SHOT_SERVICES.map((service, index) => (
+        {services.map((service, index) => (
           <ServiceCard key={service.slug} service={service} index={index} />
         ))}
       </Box>
