@@ -5,6 +5,7 @@ from fastapi.staticfiles import StaticFiles
 from starlette.middleware.sessions import SessionMiddleware
 from app.admin import setup_admin
 from app.core.config import settings
+from app.core.schema_upgrade import apply_schema_upgrades
 from app.core.security import get_password_hash
 from app.database import Base, SessionLocal, engine
 from app.models import *  # noqa: F401,F403
@@ -62,6 +63,9 @@ def on_startup():
     Base.metadata.create_all(bind=engine)
     db = SessionLocal()
     try:
+        # Before the admin lookup below: querying User fails if one of its
+        # columns was added since this database was created.
+        apply_schema_upgrades(db)
         if settings.admin_email and settings.admin_password:
             existing = db.query(User).filter(User.email == settings.admin_email).first()
             if not existing:

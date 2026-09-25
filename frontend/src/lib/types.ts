@@ -21,6 +21,25 @@ export interface DashboardStats {
   pages: number;
 }
 
+export type NotificationKind = "quote" | "contact" | "rental" | "comment" | "subscriber";
+
+export interface NotificationItem {
+  id: string;
+  kind: NotificationKind;
+  title: string;
+  detail: string | null;
+  /** ISO timestamp in UTC. */
+  created_at: string;
+  /** Dashboard page where the item is handled. */
+  href: string;
+  unread: boolean;
+}
+
+export interface NotificationFeed {
+  unread: number;
+  items: NotificationItem[];
+}
+
 export interface Quote {
   id: number;
   name: string;

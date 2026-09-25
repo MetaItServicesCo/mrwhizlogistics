@@ -30,6 +30,8 @@ COLUMN_UPGRADES: list[tuple[str, str, str]] = [
     ("box_trucks", "category_tag", "VARCHAR(100)"),
     # Comment approval
     ("blog_comments", "is_approved", "BOOLEAN DEFAULT FALSE"),
+    # Notification bell: per-admin "seen up to" marker
+    ("users", "notifications_seen_at", "TIMESTAMP"),
 ]
 
 
@@ -40,3 +42,18 @@ def upgrade_schema(db: Session) -> None:
     for table, column, ddl_type in COLUMN_UPGRADES:
         # Identifiers come from the constant list above, never from input.
         db.execute(text(f'ALTER TABLE "{table}" ADD COLUMN IF NOT EXISTS "{column}" {ddl_type}'))
+
+
+# Same key the seed uses, so a startup's upgrade and another worker's seed
+# never run at the same time.
+ADVISORY_LOCK_KEY = 8597002
+
+
+def apply_schema_upgrades(db: Session) -> None:
+    """Upgrade and commit on its own. Call this before the first ORM query at
+    startup: loading a model whose new column is still missing fails outright."""
+    if db.bind is None or db.bind.dialect.name != "postgresql":
+        return
+    db.execute(text("SELECT pg_advisory_xact_lock(:key)"), {"key": ADVISORY_LOCK_KEY})
+    upgrade_schema(db)
+    db.commit()

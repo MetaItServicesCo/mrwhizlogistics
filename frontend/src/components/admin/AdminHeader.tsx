@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth";
+import NotificationBell from "@/components/admin/NotificationBell";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
@@ -14,7 +15,6 @@ import Divider from "@mui/material/Divider";
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import MenuOpenRoundedIcon from "@mui/icons-material/MenuOpenRounded";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
-import NotificationsRoundedIcon from "@mui/icons-material/NotificationsRounded";
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
@@ -180,30 +180,7 @@ export default function AdminHeader({
           </Box>
         </Box>
 
-        <IconButton
-          sx={{
-            position: "relative",
-            color: "rgba(255,255,255,0.7)",
-            border: "1px solid rgba(255,255,255,0.1)",
-            width: 40,
-            height: 40,
-            "&:hover": { color: LIME, borderColor: `${LIME}55` },
-          }}
-        >
-          <NotificationsRoundedIcon sx={{ fontSize: 20 }} />
-          <Box
-            sx={{
-              position: "absolute",
-              top: 8,
-              right: 9,
-              width: 7,
-              height: 7,
-              borderRadius: "50%",
-              bgcolor: LIME,
-              border: "2px solid #0c0d0c",
-            }}
-          />
-        </IconButton>
+        <NotificationBell />
 
         {/* user */}
         <Box

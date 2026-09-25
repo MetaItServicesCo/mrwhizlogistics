@@ -15,3 +15,5 @@ class User(Base):
     role = Column(String(50), nullable=False, default="admin")
     is_active = Column(Boolean, default=True, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    # When this admin last opened the notification bell (naive UTC).
+    notifications_seen_at = Column(DateTime, nullable=True)

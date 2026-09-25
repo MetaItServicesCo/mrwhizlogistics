@@ -1,4 +1,5 @@
-from typing import Any, Optional
+from datetime import datetime
+from typing import Any, Literal, Optional
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -63,3 +64,18 @@ class DashboardStats(BaseModel):
     faqs: int
     testimonials: int
     pages: int
+
+
+class NotificationItem(BaseModel):
+    id: str
+    kind: Literal["quote", "contact", "rental", "comment", "subscriber"]
+    title: str
+    detail: Optional[str] = None
+    created_at: datetime
+    href: str
+    unread: bool
+
+
+class NotificationFeed(BaseModel):
+    unread: int
+    items: list[NotificationItem]
