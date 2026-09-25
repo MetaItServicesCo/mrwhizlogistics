@@ -28,6 +28,8 @@ COLUMN_UPGRADES: list[tuple[str, str, str]] = [
     ("box_trucks", "page_heading", "VARCHAR(200)"),
     ("box_trucks", "page_subheading", "VARCHAR(300)"),
     ("box_trucks", "category_tag", "VARCHAR(100)"),
+    # Comment approval
+    ("blog_comments", "is_approved", "BOOLEAN DEFAULT FALSE"),
 ]
 
 
