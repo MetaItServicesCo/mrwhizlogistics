@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation"; // Next.js router import kiya
 
 import {
@@ -336,7 +337,16 @@ export default function RentalCard({
             transition: "color .2s ease",
           }}
         >
-          {item.title}
+          {/* A real <a href> so search engines can follow it; the whole card
+              still opens the rental on click. */}
+          <Box
+            component={Link}
+            href={`/rentals/${item.slug}`}
+            onClick={(e: React.MouseEvent) => e.stopPropagation()}
+            sx={{ color: "inherit", textDecoration: "none" }}
+          >
+            {item.title}
+          </Box>
         </Typography>
 
         <Typography

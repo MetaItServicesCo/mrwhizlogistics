@@ -11,7 +11,7 @@ import {
   loadDetailForMetadata,
 } from "@/lib/serverContent";
 import { buildBlogSchema, serializeJsonLd } from "@/lib/blogSchema";
-import { detailMetadata } from "@/lib/seo";
+import { detailMetadata, usableCanonical } from "@/lib/seo";
 import type { BlogPost } from "@/data/blogPosts";
 
 export const dynamic = "force-dynamic";
@@ -69,8 +69,13 @@ export async function generateMetadata({
   const post = apiPost ? apiBlogToView(apiPost) : getBlogPost(slug);
   if (!post) return { title: "Blog" };
 
+  const siblings = await getBlogs();
   return detailMetadata({
-    seo: { ...post, metaKeywords: post.keywords },
+    seo: {
+      ...post,
+      metaKeywords: post.keywords,
+      canonicalUrl: usableCanonical(post.canonicalUrl, "blog", siblings?.map((b) => b.slug)),
+    },
     name: post.title,
     fallbackTitle: post.title,
     fallbackDescription: post.excerpt,
@@ -92,7 +97,8 @@ export default async function BlogDetailPage({
     loadDetail(() => getBlog(slug), Boolean(bundled)),
     getBlogs(),
   ]);
-  const post = apiPost ? apiBlogToView(apiPost) : bundled;
+  // Bundled copy only while the API is down; otherwise an unknown slug 404s.
+  const post = apiPost.live ? apiBlogToView(apiPost.live) : apiPost.outage ? bundled : undefined;
   if (!post) notFound();
 
   const allPosts = apiPosts ? apiPosts.map(apiBlogToView) : BLOG_POSTS;

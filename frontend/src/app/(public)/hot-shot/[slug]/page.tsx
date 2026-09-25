@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import HotShotServiceDetail from "@/components/hot-shot/HotShotServiceDetail";
 import { HOT_SHOT_SERVICES, getHotShotService } from "@/data/hotShotServices";
 import { truckCardToService } from "@/lib/contentAdapters";
-import { detailMetadata, serviceTitle } from "@/lib/seo";
+import { detailMetadata, serviceTitle, usableCanonical } from "@/lib/seo";
 import {
   getHotshotCard,
   getHotshotCards,
@@ -35,8 +35,12 @@ export async function generateMetadata({
   }
 
   const name = service.name || service.title;
+  const siblings = await getHotshotCards();
   return detailMetadata({
-    seo: service,
+    seo: {
+      ...service,
+      canonicalUrl: usableCanonical(service.canonicalUrl, "hot-shot", siblings?.map((c) => c.slug)),
+    },
     name,
     fallbackTitle: serviceTitle(name, "hot-shot"),
     fallbackDescription: service.shortDescription,
@@ -58,7 +62,13 @@ export default async function HotShotServiceDetailPage({
     loadDetail(() => getHotshotCard(slug), Boolean(fallback)),
     getHotshotCards(),
   ]);
-  const service = card ? truckCardToService(card, fallback, true) : fallback;
+  // Bundled copy only while the API is down; a slug the dashboard doesn't
+  // have is a 404, not a duplicate page.
+  const service = card.live
+    ? truckCardToService(card.live, fallback, true)
+    : card.outage
+      ? fallback
+      : undefined;
 
   if (!service) {
     notFound();

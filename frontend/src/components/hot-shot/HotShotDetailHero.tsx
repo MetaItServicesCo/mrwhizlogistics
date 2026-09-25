@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import HeadingWords from "@/components/common/HeadingWords";
 import { motion, useReducedMotion } from "motion/react";
 
 import Box from "@mui/material/Box";
@@ -20,8 +21,6 @@ export default function HotShotDetailHero({
   service: HotShotService;
 }) {
   const reduce = useReducedMotion() ?? false;
-
-  const titleWords = service.title.split(" ");
 
   return (
     <Box
@@ -529,38 +528,7 @@ export default function HotShotDetailHero({
                 maxWidth: 1100,
               }}
             >
-              {titleWords.map((word, index) => (
-                <Box
-                  key={`${word}-${index}`}
-                  component={motion.span}
-                  initial={
-                    reduce
-                      ? {}
-                      : {
-                          opacity: 0,
-                          y: 35,
-                        }
-                  }
-                  animate={
-                    reduce
-                      ? {}
-                      : {
-                          opacity: 1,
-                          y: 0,
-                        }
-                  }
-                  transition={{
-                    duration: 0.6,
-                    ease: EASE,
-                    delay: 0.18 + index * 0.09,
-                  }}
-                  sx={{
-                    display: "inline-block",
-                  }}
-                >
-                  {word}
-                </Box>
-              ))}
+              <HeadingWords text={service.title} rise={35} duration={0.6} delay={0.18} stagger={0.09} />
             </Typography>
 
             {/* ===================================================

@@ -292,7 +292,9 @@ export default function HomePage() {
                   {/* <Box sx={{ ...headingSx, color: 'rgba(255,255,255,0.38)', textShadow: '0 2px 24px rgba(0,0,0,0.6)' }}>
                   {SENTENCE}
                 </Box> */}
+                  {/* The page's H1 (headingSx sets margin 0, so no visual change). */}
                   <Box
+                    component="h1"
                     sx={{
                       ...headingSx,
                       color: "#ffffff",

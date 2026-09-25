@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   motion,
@@ -109,15 +110,10 @@ function Card({ s, i, href }: { s: ServiceItem; i: number; href: string }) {
      NAVIGATION
   ========================================================= */
 
+  // The title is a real <a href> (crawlable, keyboard and ctrl/middle-click
+  // friendly); the rest of the card stays clickable for mouse users.
   const go = () => {
     router.push(href);
-  };
-
-  const onKey = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" || e.key === " ") {
-      e.preventDefault();
-      go();
-    }
   };
 
   return (
@@ -143,11 +139,7 @@ function Card({ s, i, href }: { s: ServiceItem; i: number; href: string }) {
       }}
     >
       <Box
-        role="link"
-        tabIndex={0}
-        aria-label={`${s.title} — view details`}
         onClick={go}
-        onKeyDown={onKey}
         onMouseMove={onMove}
         onMouseLeave={onLeave}
         component={motion.div}
@@ -169,12 +161,12 @@ function Card({ s, i, href }: { s: ServiceItem; i: number; href: string }) {
           transition: "border-color .4s ease, box-shadow .4s ease",
           outline: "none",
 
-          "&:hover, &:focus-visible": {
+          "&:hover, &:has(a:focus-visible)": {
             borderColor: `${LIME}66`,
             boxShadow: "0 26px 60px rgba(0,0,0,0.55)",
           },
 
-          "&:focus-visible": {
+          "&:has(a:focus-visible)": {
             boxShadow: `0 0 0 2px ${LIME}, 0 26px 60px rgba(0,0,0,0.55)`,
           },
 
@@ -394,7 +386,14 @@ function Card({ s, i, href }: { s: ServiceItem; i: number; href: string }) {
               color: "#fff",
             }}
           >
-            {s.title}
+            <Box
+              component={Link}
+              href={href}
+              onClick={(e: React.MouseEvent) => e.stopPropagation()}
+              sx={{ color: "inherit", textDecoration: "none", outline: "none" }}
+            >
+              {s.title}
+            </Box>
           </Typography>
 
           {/* DESCRIPTION */}

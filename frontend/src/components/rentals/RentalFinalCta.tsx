@@ -306,7 +306,7 @@ export default function RentalFinalCta() {
               >
                 <Button
                   component={Link}
-                  href="/quote"
+                  href="/contact"
                   endIcon={<ArrowForwardRoundedIcon />}
                   disableElevation
                   sx={{

@@ -92,26 +92,34 @@ async function getList<T>(path: string): Promise<T | null> {
  * Resolve a single item for a detail page without ever turning an outage
  * into a false "page not found".
  *
- * - API answers        -> the item
- * - API says 404       -> null (the page falls back to bundled content, then notFound)
- * - API unavailable and a bundled copy exists -> null (render the bundled copy)
+ * - API answers        -> { live: item }
+ * - API says 404       -> { live: null, outage: false } -> the page 404s
+ * - API unavailable and a bundled copy exists -> { live: null, outage: true }
+ *                         (render the bundled copy)
  * - API unavailable and no bundled copy       -> throw (temporary error page, HTTP 500)
+ *
+ * The bundled copy is only a stand-in while the API is down. It used to be
+ * served whenever the API said 404 too, which kept every old or renamed
+ * bundled slug live as a duplicate of the dashboard's page (e.g.
+ * /semi-truck/flatbed next to /semi-truck/flat-bed).
  *
  * Previously every failure became null, so a post that exists only in the
  * database returned 404 whenever the API hiccupped - telling visitors and
  * search engines the page did not exist.
  */
+export type Detail<T> = { live: T | null; outage: boolean };
+
 export async function loadDetail<T>(
   load: () => Promise<T | null>,
   hasBundledCopy: boolean,
-): Promise<T | null> {
+): Promise<Detail<T>> {
   try {
-    return await load();
+    return { live: await load(), outage: false };
   } catch (error) {
     if (!(error instanceof ContentUnavailableError)) throw error;
     if (hasBundledCopy) {
       logUnavailable(error, "serving the bundled copy of this page");
-      return null;
+      return { live: null, outage: true };
     }
     logUnavailable(error, "showing the temporary error page instead of a 404");
     throw error;

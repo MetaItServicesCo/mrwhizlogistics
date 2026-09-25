@@ -314,7 +314,7 @@ export default function RentalBenefits() {
           </Box>
 
           <Button
-            href="/quote"
+            href="/contact"
             variant="contained"
             endIcon={<ArrowForwardRoundedIcon />}
             disableElevation

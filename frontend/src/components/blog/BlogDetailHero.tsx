@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import HeadingWords from "@/components/common/HeadingWords";
 import { motion, useReducedMotion } from "motion/react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -22,7 +23,6 @@ function fmtLong(date: string) {
 
 export default function BlogDetailHero({ post }: { post: BlogPost }) {
   const reduce = useReducedMotion() ?? false;
-  const words = post.title.split(" ");
 
   return (
     <Box
@@ -167,22 +167,7 @@ export default function BlogDetailHero({ post }: { post: BlogPost }) {
                 maxWidth: 900,
               }}
             >
-              {words.map((w, i) => (
-                <Box
-                  key={i}
-                  component={motion.span}
-                  initial={{ opacity: 0, y: 26 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{
-                    duration: 0.5,
-                    ease: EASE,
-                    delay: 0.15 + i * 0.05,
-                  }}
-                  sx={{ display: "inline-block" }}
-                >
-                  {w}
-                </Box>
-              ))}
+              <HeadingWords text={post.title} rise={26} duration={0.5} delay={0.15} stagger={0.05} />
             </Typography>
 
             {/* meta + breadcrumb */}

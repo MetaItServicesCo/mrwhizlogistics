@@ -5,7 +5,7 @@ import {
 } from "@/data/boxTruckServices";
 import { notFound } from "next/navigation";
 import { truckCardToService } from "@/lib/contentAdapters";
-import { detailMetadata, serviceTitle } from "@/lib/seo";
+import { detailMetadata, serviceTitle, usableCanonical } from "@/lib/seo";
 import {
   getBoxTruckCard,
   getBoxTruckCards,
@@ -31,8 +31,12 @@ export async function generateMetadata({
   }
 
   const name = service.name || service.title;
+  const siblings = await getBoxTruckCards();
   return detailMetadata({
-    seo: service,
+    seo: {
+      ...service,
+      canonicalUrl: usableCanonical(service.canonicalUrl, "box-truck", siblings?.map((c) => c.slug)),
+    },
     name,
     fallbackTitle: serviceTitle(name, "box-truck"),
     fallbackDescription: service.shortDescription,
@@ -53,7 +57,13 @@ export default async function BoxTruckServiceDetailPage({
     loadDetail(() => getBoxTruckCard(slug), Boolean(fallback)),
     getBoxTruckCards(),
   ]);
-  const service = card ? truckCardToService(card, fallback, true) : fallback;
+  // Bundled copy only while the API is down; a slug the dashboard doesn't
+  // have is a 404, not a duplicate page.
+  const service = card.live
+    ? truckCardToService(card.live, fallback, true)
+    : card.outage
+      ? fallback
+      : undefined;
 
   if (!service) notFound();
 

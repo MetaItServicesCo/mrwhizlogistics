@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useRef, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import Box from "@mui/material/Box";
@@ -39,7 +40,10 @@ function Card({
   basePath: string;
 }) {
   const router = useRouter();
-  const go = () => router.push(`${basePath}/${p.slug}`);
+  const href = `${basePath}/${p.slug}`;
+  // The title is a real <a href> (crawlable, keyboard and ctrl/middle-click
+  // friendly); the rest of the card stays clickable for mouse users.
+  const go = () => router.push(href);
   const { day, mon } = fmt(p.date);
 
   return (
@@ -49,12 +53,6 @@ function Card({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: i * 0.08, ease: EASE }}
       onClick={go}
-      onKeyDown={(e: React.KeyboardEvent) => {
-        if (e.key === "Enter") go();
-      }}
-      tabIndex={0}
-      role="link"
-      aria-label={p.title}
       sx={{
         position: "relative",
         borderRadius: "18px",
@@ -67,12 +65,12 @@ function Card({
         outline: "none",
         transition:
           "transform .4s ease, border-color .4s ease, box-shadow .4s ease",
-        "&:hover, &:focus-visible": {
+        "&:hover, &:has(a:focus-visible)": {
           transform: "translateY(-8px)",
           borderColor: `${LIME}55`,
           boxShadow: "0 24px 55px rgba(0,0,0,0.5)",
         },
-        "&:focus-visible": {
+        "&:has(a:focus-visible)": {
           boxShadow: `0 0 0 2px ${LIME}, 0 24px 55px rgba(0,0,0,0.5)`,
         },
         "&:hover .bl-media": { transform: "scale(1.08)" },
@@ -231,7 +229,14 @@ function Card({
             transition: "color .3s",
           }}
         >
-          {p.title}
+          <Box
+            component={Link}
+            href={href}
+            onClick={(e: React.MouseEvent) => e.stopPropagation()}
+            sx={{ color: "inherit", textDecoration: "none", outline: "none" }}
+          >
+            {p.title}
+          </Box>
         </Typography>
         <Typography
           sx={{

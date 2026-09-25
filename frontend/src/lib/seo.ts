@@ -66,6 +66,29 @@ export function serviceTitle(name: string, category: "hot-shot" | "box-truck" | 
   }
 }
 
+/**
+ * A dashboard Canonical URL, unless it points at a page in the same section
+ * that doesn't exist (e.g. an old slug copied in by the launch content, such
+ * as /box-truck/26ft-box-truck for the card now at /box-truck/26-feet-box-truck).
+ * A canonical to a missing page would tell Google to index a 404.
+ */
+export function usableCanonical(
+  canonical: string | null | undefined,
+  section: string,
+  liveSlugs: string[] | null | undefined,
+): string | null {
+  const v = (canonical || "").trim();
+  if (!v || !liveSlugs) return v || null;
+  let path = v;
+  try {
+    if (/^https?:\/\//i.test(v)) path = new URL(v).pathname;
+  } catch {
+    return v;
+  }
+  const m = path.match(new RegExp(`^/${section}/([^/?#]+)/?$`));
+  return m && !liveSlugs.includes(decodeURIComponent(m[1])) ? null : v;
+}
+
 /** Roughly what Google shows of a title before cutting it off. */
 const MAX_TITLE_LENGTH = 60;
 

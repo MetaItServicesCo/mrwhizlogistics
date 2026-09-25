@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import HeadingWords from "@/components/common/HeadingWords";
 import { motion, useReducedMotion } from "motion/react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -26,7 +27,6 @@ export default function HotShotHero({
   badge = "SAME-DAY DISPATCH",
 }: Props) {
   const reduce = useReducedMotion() ?? false;
-  const words = title.split(" ");
 
   return (
     <Box
@@ -211,22 +211,7 @@ export default function HotShotHero({
                 columnGap: "0.25em",
               }}
             >
-              {words.map((w, i) => (
-                <Box
-                  key={i}
-                  component={motion.span}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{
-                    duration: 0.55,
-                    ease: EASE,
-                    delay: 0.15 + i * 0.1,
-                  }}
-                  sx={{ display: "inline-block" }}
-                >
-                  {w}
-                </Box>
-              ))}
+              <HeadingWords text={title} rise={30} duration={0.55} delay={0.15} stagger={0.1} />
             </Typography>
 
             {/* breadcrumb */}

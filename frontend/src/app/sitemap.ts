@@ -10,6 +10,7 @@ import {
   getHotshotCards,
   getSemiTruckCards,
 } from "@/lib/serverContent";
+import { usableCanonical } from "@/lib/seo";
 import { siteUrlFor } from "@/lib/site";
 
 // Built on every request so a post or service published in the dashboard is
@@ -35,8 +36,10 @@ function entries(
   items: Item[],
   options: Pick<Entry, "changeFrequency" | "priority">,
 ): Entry[] {
+  const slugs = items.map((i) => i.slug);
   return items.flatMap((item) => {
-    const url = siteUrlFor(item.canonical?.trim() || `/${section}/${item.slug}`);
+    const canonical = usableCanonical(item.canonical, section, slugs);
+    const url = siteUrlFor(canonical || `/${section}/${item.slug}`);
     return url ? [{ url, lastModified: toDate(item.modified), ...options }] : [];
   });
 }
