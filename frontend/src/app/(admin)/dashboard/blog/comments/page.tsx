@@ -95,6 +95,16 @@ export default function BlogCommentsPage() {
     }
   };
 
+  const toggleApprove = async (c: BlogComment) => {
+    const ok = await run(() =>
+      api.put(`/api/blogs/comments/${c.id}/approve`, {}),
+    );
+    if (ok) {
+      setToast(c.is_approved ? "Comment unapproved." : "Comment approved.");
+      void reload();
+    }
+  };
+
   const columns: Column<BlogComment>[] = [
     {
       key: "name",
@@ -151,6 +161,28 @@ export default function BlogCommentsPage() {
       ),
     },
     {
+      key: "is_approved",
+      label: "Status",
+      render: (c) => (
+        <Box
+          sx={{
+            display: "inline-flex",
+            alignItems: "center",
+            px: 1.2,
+            py: 0.4,
+            borderRadius: "999px",
+            fontSize: 11.5,
+            fontWeight: 800,
+            color: c.is_approved ? "#c8ff00" : "#ffb74d",
+            bgcolor: c.is_approved ? "rgba(200,255,0,0.12)" : "rgba(255,183,77,0.12)",
+            border: `1px solid ${c.is_approved ? "rgba(200,255,0,0.3)" : "rgba(255,183,77,0.3)"}`,
+          }}
+        >
+          {c.is_approved ? "Approved" : "Pending"}
+        </Box>
+      ),
+    },
+    {
       key: "created_at",
       label: "Posted",
       hideBelow: "sm",
@@ -192,6 +224,11 @@ export default function BlogCommentsPage() {
             : "Reader comments on blog posts will appear here for moderation."
         }
         actions={[
+          {
+            icon: "approve",
+            label: (c: BlogComment) => (c.is_approved ? "Unapprove" : "Approve"),
+            onClick: (c: BlogComment) => void toggleApprove(c),
+          },
           {
             icon: "view",
             label: "Reply",

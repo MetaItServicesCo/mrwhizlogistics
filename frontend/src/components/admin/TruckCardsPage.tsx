@@ -259,8 +259,7 @@ export default function TruckCardsPage({
   const buildFormData = (isCreate: boolean) => {
     const fd = new FormData();
     const put = (k: string, v: string) => {
-      // On update, only send fields that have a value (all are Optional there).
-      if (isCreate || v !== "") fd.append(k, v);
+      fd.append(k, v);
     };
 
     put("card_number", form.card_number);

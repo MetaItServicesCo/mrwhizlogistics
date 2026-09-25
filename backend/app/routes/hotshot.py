@@ -75,7 +75,7 @@ def parse_to_list(data: Optional[str]) -> list:
 # 1. GET ALL
 @router.get("/", response_model=List[HotshotResponse])
 def get_all_hotshots(db: Session = Depends(get_db)):
-    return db.query(Hotshot).order_by(Hotshot.id.asc()).all()
+    return db.query(Hotshot).order_by(Hotshot.id.desc()).all()
 
 
 # 2. GET BY SLUG

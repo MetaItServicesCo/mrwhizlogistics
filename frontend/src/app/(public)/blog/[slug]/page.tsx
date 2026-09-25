@@ -13,6 +13,9 @@ import {
 import { buildBlogSchema, serializeJsonLd } from "@/lib/blogSchema";
 import type { BlogPost } from "@/data/blogPosts";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 /**
  * Public origin for absolute URLs in the JSON-LD. NEXT_PUBLIC_SITE_URL wins
  * when set; otherwise use the host nginx forwarded, which is correct in every

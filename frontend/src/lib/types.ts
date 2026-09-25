@@ -131,6 +131,7 @@ export interface BlogComment {
   parent_id: number | null;
   name: string;
   message: string;
+  is_approved: boolean;
   created_at: string;
   replies: BlogComment[];
 }

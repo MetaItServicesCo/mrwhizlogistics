@@ -1,5 +1,5 @@
 from datetime import datetime
-from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey, JSON
+from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey, JSON, Boolean
 from sqlalchemy.orm import relationship
 from app.database import Base
 
@@ -46,6 +46,7 @@ class BlogComment(Base):
     name = Column(String, nullable=False)
     email = Column(String, nullable=False)
     message = Column(Text, nullable=False)
+    is_approved = Column(Boolean, default=False, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
 
     blog = relationship("Blog", back_populates="comments")

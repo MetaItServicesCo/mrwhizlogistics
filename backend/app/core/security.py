@@ -73,3 +73,24 @@ def get_current_admin(current_user=Depends(get_current_user)):
             detail="Admin access required",
         )
     return current_user
+
+
+oauth2_scheme_optional = OAuth2PasswordBearer(tokenUrl="/api/auth/login", auto_error=False)
+
+
+def get_optional_admin(token: Optional[str] = Depends(oauth2_scheme_optional), db: Session = Depends(get_db)):
+    if not token:
+        return None
+    try:
+        from app.models.user import User
+        payload = decode_token(token)
+        user_id = payload.get("sub")
+        if not user_id:
+            return None
+        user = db.query(User).filter(User.id == int(user_id)).first()
+        if user and user.is_active and user.role == "admin":
+            return user
+    except Exception:
+        pass
+    return None
+

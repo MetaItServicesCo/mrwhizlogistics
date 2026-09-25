@@ -5,6 +5,9 @@ import BlogHero from "@/components/blog/BlogHero";
 import { apiBlogToView } from "@/lib/contentAdapters";
 import { getBlogs } from "@/lib/serverContent";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export const metadata: Metadata = {
   title: "Blog | Logistics News, Freight Tips & Industry Insights",
   description:

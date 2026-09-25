@@ -7,7 +7,7 @@ from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form, s
 from sqlalchemy.orm import Session, joinedload
 
 from app.database import get_db
-from app.core.security import get_current_admin
+from app.core.security import get_current_admin, get_optional_admin
 from app.core.html import sanitize_html
 from app.models.blog import Blog, BlogComment
 from app.schemas.blog import BlogResponse, CommentCreate, CommentResponse
@@ -87,12 +87,15 @@ def parse_schema_markup(value: Optional[str]) -> Optional[str]:
 def get_all_blogs(db: Session = Depends(get_db)):
     blogs = db.query(Blog).order_by(Blog.id.desc()).all()
     for blog in blogs:
-        blog.comments_count = db.query(BlogComment).filter(BlogComment.blog_id == blog.id).count()
+        blog.comments_count = db.query(BlogComment).filter(
+            BlogComment.blog_id == blog.id,
+            BlogComment.is_approved == True
+        ).count()
         blog.comments = []
     return blogs
 
 
-# 2. READ SINGLE BLOG BY CARD_ID OR SLUG (Sirf Is Specific Blog Ke Comments Mileinge)
+# 2. READ SINGLE BLOG BY CARD_ID OR SLUG (Sirf Is Specific Blog Ke Approved Comments Mileinge)
 @router.get("/{card_id_or_slug}", response_model=BlogResponse)
 def get_blog(card_id_or_slug: str, db: Session = Depends(get_db)):
     blog = db.query(Blog).filter(
@@ -106,10 +109,17 @@ def get_blog(card_id_or_slug: str, db: Session = Depends(get_db)):
         joinedload(BlogComment.replies)
     ).filter(
         BlogComment.blog_id == blog.id, 
-        BlogComment.parent_id == None
+        BlogComment.parent_id == None,
+        BlogComment.is_approved == True
     ).order_by(BlogComment.id.desc()).all()
     
-    blog.comments_count = db.query(BlogComment).filter(BlogComment.blog_id == blog.id).count()
+    for comment in top_comments:
+        comment.replies = [r for r in (comment.replies or []) if r.is_approved]
+
+    blog.comments_count = db.query(BlogComment).filter(
+        BlogComment.blog_id == blog.id,
+        BlogComment.is_approved == True
+    ).count()
     blog.comments = top_comments
     return blog
 
@@ -241,7 +251,12 @@ def delete_blog_by_card_id(card_id: str, db: Session = Depends(get_db)):
 
 # 6. POST COMMENT BY CARD_ID
 @router.post("/{card_id}/comments", response_model=CommentResponse, status_code=status.HTTP_201_CREATED)
-def post_blog_comment(card_id: str, payload: CommentCreate, db: Session = Depends(get_db)):
+def post_blog_comment(
+    card_id: str,
+    payload: CommentCreate,
+    db: Session = Depends(get_db),
+    admin=Depends(get_optional_admin)
+):
     blog = db.query(Blog).filter(Blog.card_id == card_id).first()
     if not blog:
         raise HTTPException(status_code=404, detail=f"Blog with card_id '{card_id}' not found.")
@@ -259,7 +274,8 @@ def post_blog_comment(card_id: str, payload: CommentCreate, db: Session = Depend
         parent_id=payload.parent_id,
         name=payload.name,
         email=payload.email,
-        message=payload.message
+        message=payload.message,
+        is_approved=True if admin is not None else False
     )
     db.add(new_comment)
     db.commit()
@@ -286,3 +302,16 @@ def delete_blog_comment(comment_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Comment not found")
     db.delete(comment)
     db.commit()
+
+
+# 9. APPROVE / TOGGLE APPROVAL FOR COMMENT (Dashboard moderation)
+@router.put("/comments/{comment_id}/approve", response_model=CommentResponse, dependencies=[Depends(get_current_admin)])
+def approve_blog_comment(comment_id: int, db: Session = Depends(get_db)):
+    """Approve (or toggle approval of) a comment."""
+    comment = db.query(BlogComment).filter(BlogComment.id == comment_id).first()
+    if not comment:
+        raise HTTPException(status_code=404, detail="Comment not found")
+    comment.is_approved = not comment.is_approved
+    db.commit()
+    db.refresh(comment)
+    return comment

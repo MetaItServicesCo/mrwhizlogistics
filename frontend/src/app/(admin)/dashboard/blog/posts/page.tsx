@@ -116,7 +116,7 @@ export default function BlogPostsPage() {
   const buildFormData = (isCreate: boolean) => {
     const fd = new FormData();
     const put = (k: string, v: string) => {
-      if (isCreate || v !== "") fd.append(k, v);
+      fd.append(k, v);
     };
     put("card_id", form.card_id);
     put("title", form.title);

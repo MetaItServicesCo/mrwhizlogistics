@@ -14,6 +14,7 @@ class CommentResponse(BaseModel):
     parent_id: Optional[int]
     name: str
     message: str
+    is_approved: bool = False
     created_at: datetime
     replies: List["CommentResponse"] = []
 

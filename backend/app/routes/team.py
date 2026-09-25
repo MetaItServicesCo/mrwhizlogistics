@@ -54,7 +54,7 @@ def parse_socials(data: Optional[str]) -> dict:
 # 1. READ ALL TEAM MEMBERS
 @router.get("/", response_model=List[TeamMemberResponse])
 def get_all_team_members(db: Session = Depends(get_db)):
-    return db.query(TeamMember).order_by(TeamMember.id.asc()).all()
+    return db.query(TeamMember).order_by(TeamMember.id.desc()).all()
 
 
 # 2. CREATE TEAM MEMBER

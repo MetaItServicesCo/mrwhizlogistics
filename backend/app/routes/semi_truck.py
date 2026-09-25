@@ -65,7 +65,7 @@ def parse_to_list(data: Optional[str]) -> list:
 # 1. GET ALL
 @router.get("/", response_model=List[SemiTruckResponse])
 def get_all_semi_trucks(db: Session = Depends(get_db)):
-    return db.query(SemiTruck).order_by(SemiTruck.id.asc()).all()
+    return db.query(SemiTruck).order_by(SemiTruck.id.desc()).all()
 
 
 # 2. GET BY SLUG

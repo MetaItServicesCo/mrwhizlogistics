@@ -12,7 +12,7 @@ router = APIRouter(prefix="/seo", tags=["SEO"])
 
 @router.get("", response_model=list[SEORead])
 def list_seo(db: Session = Depends(get_db), _user=Depends(get_current_user)):
-    return db.query(SEO).order_by(SEO.id).all()
+    return db.query(SEO).order_by(SEO.id.desc()).all()
 
 
 @router.post("", response_model=SEORead, status_code=status.HTTP_201_CREATED)

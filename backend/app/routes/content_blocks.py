@@ -12,7 +12,7 @@ router = APIRouter(prefix="/content-blocks", tags=["Homepage Content"])
 
 @router.get("", response_model=list[ContentBlockRead])
 def list_blocks(db: Session = Depends(get_db), _user=Depends(get_current_user)):
-    return db.query(ContentBlock).order_by(ContentBlock.id).all()
+    return db.query(ContentBlock).order_by(ContentBlock.id.desc()).all()
 
 
 @router.post("", response_model=ContentBlockRead, status_code=status.HTTP_201_CREATED)

@@ -75,7 +75,7 @@ def parse_to_list(data: Optional[str]) -> list:
 # 1. GET ALL
 @router.get("/", response_model=List[BoxTruckResponse])
 def get_all_box_trucks(db: Session = Depends(get_db)):
-    return db.query(BoxTruck).order_by(BoxTruck.id.asc()).all()
+    return db.query(BoxTruck).order_by(BoxTruck.id.desc()).all()
 
 
 # 2. GET BY SLUG

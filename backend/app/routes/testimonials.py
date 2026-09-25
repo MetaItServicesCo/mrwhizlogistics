@@ -47,7 +47,7 @@ def list_testimonials(
 
     total = query.count()
     items = (
-        query.order_by(Testimonial.sort_order.asc(), Testimonial.id.asc())
+        query.order_by(Testimonial.id.desc())
         .offset((page - 1) * size)
         .limit(size)
         .all()

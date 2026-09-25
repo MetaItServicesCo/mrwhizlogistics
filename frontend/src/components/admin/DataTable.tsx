@@ -12,6 +12,7 @@ import Tooltip from "@mui/material/Tooltip";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import DeleteOutlineRoundedIcon from "@mui/icons-material/DeleteOutlineRounded";
 import VisibilityRoundedIcon from "@mui/icons-material/VisibilityRounded";
+import CheckCircleOutlineRoundedIcon from "@mui/icons-material/CheckCircleOutlineRounded";
 import { EmptyState, ErrorState, LoadingState, Panel, LIME } from "./ui";
 
 export type Column<T> = {
@@ -24,8 +25,8 @@ export type Column<T> = {
 };
 
 export type RowAction<T> = {
-  icon: "edit" | "delete" | "view";
-  label: string;
+  icon: "edit" | "delete" | "view" | "approve";
+  label: string | ((row: T) => string);
   onClick: (row: T) => void;
   danger?: boolean;
 };
@@ -34,6 +35,7 @@ const ICONS = {
   edit: EditRoundedIcon,
   delete: DeleteOutlineRoundedIcon,
   view: VisibilityRoundedIcon,
+  approve: CheckCircleOutlineRoundedIcon,
 };
 
 const headSx = {
@@ -151,13 +153,14 @@ export default function DataTable<T extends { id: number | string }>({
                         justifyContent: "flex-end",
                       }}
                     >
-                      {actions.map((a) => {
+                      {actions.map((a, idx) => {
                         const Icon = ICONS[a.icon];
+                        const labelStr = typeof a.label === "function" ? a.label(row) : a.label;
                         return (
-                          <Tooltip key={a.label} title={a.label} arrow>
+                          <Tooltip key={idx} title={labelStr} arrow>
                             <IconButton
                               size="small"
-                              aria-label={a.label}
+                              aria-label={labelStr}
                               onClick={() => a.onClick(row)}
                               sx={{
                                 color: a.danger

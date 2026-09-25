@@ -61,7 +61,7 @@ def list_faq_categories(
 
     total = query.count()
     items = (
-        query.order_by(FAQCategory.display_order.asc(), FAQCategory.id.asc())
+        query.order_by(FAQCategory.display_order.asc(), FAQCategory.id.desc())
         .offset((page - 1) * size)
         .limit(size)
         .all()
@@ -177,7 +177,7 @@ def list_faqs(
 
     total = query.count()
     items = (
-        query.order_by(FAQ.category_id.asc(), FAQ.display_order.asc(), FAQ.id.asc())
+        query.order_by(FAQ.id.desc())
         .offset((page - 1) * size)
         .limit(size)
         .all()
