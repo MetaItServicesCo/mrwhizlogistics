@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from sqlalchemy import text
 from sqlalchemy.orm import Session
 
 from app.database import SessionLocal
@@ -369,6 +370,12 @@ def seed(db: Session | None = None) -> None:
         db = SessionLocal()
         close = True
     try:
+        # Uvicorn runs multiple workers in production. Serialize seed work at
+        # the database level so two worker startups cannot insert the same
+        # default rows concurrently. The lock is released on commit/rollback.
+        if db.bind is not None and db.bind.dialect.name == "postgresql":
+            db.execute(text("SELECT pg_advisory_xact_lock(8597002)"))
+
         if db.query(SeedRun).filter(SeedRun.key == SEED_VERSION).first():
             return
 
