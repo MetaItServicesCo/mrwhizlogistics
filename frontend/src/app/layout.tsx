@@ -5,6 +5,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import theme from "@/theme/theme";
 import { AuthProvider } from "@/lib/auth";
+import { SITE_URL } from "@/lib/site";
 import "./globals.css";
 
 const roboto = Roboto({
@@ -15,8 +16,15 @@ const roboto = Roboto({
 });
 
 export const metadata: Metadata = {
+  // Resolves relative canonical / Open Graph URLs to absolute ones.
+  metadataBase: new URL(SITE_URL),
   title: "Trucking App",
   description: "Trucking management system",
+  // Google Search Console ownership check; renders as a single
+  // <meta name="google-site-verification" content="..."> tag in <head>.
+  verification: {
+    google: "MKqnyAIhuNgEmxJmP3G3PXH7fLMFfL4FvUhIQTOVvwI",
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

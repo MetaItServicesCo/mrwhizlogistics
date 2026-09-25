@@ -142,6 +142,8 @@ export interface TruckCard {
   meta_description: string | null;
   meta_keywords: string | null;
   canonical_url: string | null;
+  created_at?: string | null;
+  updated_at?: string | null;
 }
 
 export interface BlogComment {
