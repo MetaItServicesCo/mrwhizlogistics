@@ -10,19 +10,14 @@ import RentalFinalCta from "@/components/rentals/RentalFinalCta";
 import RentalQuoteModal from "@/components/rentals/RentalQuoteModal";
 // import { useState } from "react";
 import { RentalItem } from "@/data/hotShotRentals";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Hot Shot Equipment Rentals | Flatbed, Gooseneck & Enclosed Trailers",
+export const metadata: Metadata = pageMetadata({
+  title: "Hot Shot Equipment Rentals",
   description:
     "Rent hot shot trailers — flatbed, gooseneck and enclosed — on flexible daily, weekly and monthly terms for construction, job-site and specialty hauling.",
-  alternates: { canonical: "/hot-shot/rentals" },
-  openGraph: {
-    title: "Hot Shot Equipment Rentals",
-    description: "Flexible flatbed, gooseneck and enclosed trailer rentals.",
-    url: "/hot-shot/rentals",
-    type: "website",
-  },
-};
+  path: "/rentals",
+});
 
 export default function HotShotRentalsPage() {
   return (

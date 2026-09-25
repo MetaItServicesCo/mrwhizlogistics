@@ -71,7 +71,8 @@ export async function generateMetadata({
 
   return detailMetadata({
     seo: { ...post, metaKeywords: post.keywords },
-    fallbackTitle: `${post.title} | Blog`,
+    name: post.title,
+    fallbackTitle: post.title,
     fallbackDescription: post.excerpt,
     path: `/blog/${post.slug}`,
     image: post.image,

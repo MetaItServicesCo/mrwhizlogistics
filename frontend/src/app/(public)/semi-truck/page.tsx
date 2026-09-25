@@ -13,29 +13,14 @@ import {
 } from "@/data/semiTruckContent";
 import { truckCardToGridItem } from "@/lib/contentAdapters";
 import { getSemiTruckCards } from "@/lib/serverContent";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title:
-    "Semi Truck Freight Services | Reefer, Dry Van & Flatbed Transportation",
-
+export const metadata: Metadata = pageMetadata({
+  title: "Semi Truck Freight Services",
   description:
     "Reliable semi truck freight services including reefer, dry van and flatbed transportation for regional and long-distance commercial freight.",
-
-  alternates: {
-    canonical: "/semi-truck",
-  },
-
-  openGraph: {
-    title: "Semi Truck Freight Services | Reefer, Dry Van & Flatbed",
-
-    description:
-      "Reliable reefer, dry van and flatbed transportation for commercial freight, regional routes and long-distance shipping.",
-
-    url: "/semi-truck",
-
-    type: "website",
-  },
-};
+  path: "/semi-truck",
+});
 
 export default async function SemiTruckPage() {
   const cards = await getSemiTruckCards();

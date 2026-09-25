@@ -6,6 +6,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import theme from "@/theme/theme";
 import { AuthProvider } from "@/lib/auth";
 import { SITE_URL } from "@/lib/site";
+import { DEFAULT_DESCRIPTION, DEFAULT_TITLE, SITE_NAME, sharedOpenGraph } from "@/lib/seo";
 import "./globals.css";
 
 const roboto = Roboto({
@@ -18,8 +19,17 @@ const roboto = Roboto({
 export const metadata: Metadata = {
   // Resolves relative canonical / Open Graph URLs to absolute ones.
   metadataBase: new URL(SITE_URL),
-  title: "Trucking App",
-  description: "Trucking management system",
+  // Pages set a short title; the template adds the brand. The default is
+  // used by any page without its own title.
+  title: {
+    default: DEFAULT_TITLE,
+    template: `%s | ${SITE_NAME}`,
+  },
+  description: DEFAULT_DESCRIPTION,
+  // Pages that set their own openGraph spread sharedOpenGraph (Next.js
+  // replaces the whole object rather than merging it).
+  openGraph: sharedOpenGraph,
+  twitter: { card: "summary_large_image" },
   // Google Search Console ownership check; renders as a single
   // <meta name="google-site-verification" content="..."> tag in <head>.
   verification: {

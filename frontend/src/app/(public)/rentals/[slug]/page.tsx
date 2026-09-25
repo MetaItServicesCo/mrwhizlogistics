@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { HOT_SHOT_RENTALS, RentalItem } from "@/data/hotShotRentals";
+import { detailMetadata } from "@/lib/seo";
 import HotShotHero from "@/components/hot-shot/HotShotHero";
 import RentalDetailContent from "@/components/rentals/RentalDetailContent";
 import RentalFinalCta from "@/components/rentals/RentalFinalCta";
@@ -20,23 +21,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const item = HOT_SHOT_RENTALS.find((r) => r.slug === slug);
 
   if (!item) {
-    return {
-      title: "Rental Item Not Found | Hot Shot Rentals",
-    };
+    return { title: "Rental Not Found" };
   }
 
-  return {
-    title: `${item.title} | Hot Shot Equipment Rentals`,
-    description: item.desc.slice(0, 155),
-    alternates: { canonical: `/hot-shot/rentals/${item.slug}` },
-    openGraph: {
-      title: `${item.title} | Hot Shot Equipment Rentals`,
-      description: item.desc.slice(0, 155),
-      url: `/hot-shot/rentals/${item.slug}`,
-      type: "website",
-      images: item.images?.[0] ? [{ url: item.images[0] }] : undefined,
-    },
-  };
+  // Canonical used to be /hot-shot/rentals/<slug>, a URL that 404s.
+  return detailMetadata({
+    seo: {},
+    fallbackTitle: /rental/i.test(item.title) ? item.title : `${item.title} Rental`,
+    fallbackDescription: item.desc.slice(0, 155),
+    path: `/rentals/${item.slug}`,
+    image: item.images?.[0],
+    imageAlt: item.title,
+  });
 }
 
 export default async function RentalDetailPage({ params }: Props) {

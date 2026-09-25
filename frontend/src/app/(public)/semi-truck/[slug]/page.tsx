@@ -8,7 +8,7 @@ import {
   getSemiTruckService,
 } from "@/data/semiTruckContent";
 import { truckCardToService } from "@/lib/contentAdapters";
-import { detailMetadata } from "@/lib/seo";
+import { detailMetadata, serviceTitle } from "@/lib/seo";
 import {
   getSemiTruckCard,
   getSemiTruckCards,
@@ -54,7 +54,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const name = service.name || service.title;
   return detailMetadata({
     seo: service,
-    fallbackTitle: `${name} Services | Reliable Semi Truck Freight Transportation`,
+    name,
+    fallbackTitle: serviceTitle(name, "semi-truck"),
     fallbackDescription: service.shortDescription,
     path: `/semi-truck/${service.slug}`,
     image: service.image,

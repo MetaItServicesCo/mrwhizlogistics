@@ -5,7 +5,7 @@ import {
 } from "@/data/boxTruckServices";
 import { notFound } from "next/navigation";
 import { truckCardToService } from "@/lib/contentAdapters";
-import { detailMetadata } from "@/lib/seo";
+import { detailMetadata, serviceTitle } from "@/lib/seo";
 import {
   getBoxTruckCard,
   getBoxTruckCards,
@@ -33,7 +33,8 @@ export async function generateMetadata({
   const name = service.name || service.title;
   return detailMetadata({
     seo: service,
-    fallbackTitle: `${name} | Box Truck Transportation`,
+    name,
+    fallbackTitle: serviceTitle(name, "box-truck"),
     fallbackDescription: service.shortDescription,
     path: `/box-truck/${service.slug}`,
     image: service.image,

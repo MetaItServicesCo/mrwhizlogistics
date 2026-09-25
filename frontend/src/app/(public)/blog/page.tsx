@@ -4,22 +4,17 @@ import { BLOG_POSTS } from "@/data/blogPosts";
 import BlogHero from "@/components/blog/BlogHero";
 import { apiBlogToView } from "@/lib/contentAdapters";
 import { getBlogs } from "@/lib/serverContent";
+import { pageMetadata } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
-export const metadata: Metadata = {
-  title: "Blog | Logistics News, Freight Tips & Industry Insights",
+export const metadata: Metadata = pageMetadata({
+  title: "Blog: Logistics News & Freight Tips",
   description:
     "Read the latest logistics news, freight strategies and supply-chain insights from our transportation experts.",
-  alternates: { canonical: "/blog" },
-  openGraph: {
-    title: "Blog | Logistics Insights",
-    description: "Latest logistics news, freight tips and industry insights.",
-    url: "/blog",
-    type: "website",
-  },
-};
+  path: "/blog",
+});
 
 export default async function BlogPage() {
   const apiPosts = await getBlogs();

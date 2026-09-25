@@ -6,19 +6,14 @@ import FleetOverview from "@/components/about/FleetOverview";
 import TeamSection from "@/components/about/TeamSection";
 import AboutCTA from "@/components/about/AboutCTA";
 import { getPublicTeam } from "@/lib/serverContent";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "About Us | Trusted Trucking & Logistics Partner",
+export const metadata: Metadata = pageMetadata({
+  title: "About Us: Trusted Trucking Partner",
   description:
     "Learn about our trucking company — hot shot, box truck and semi truck freight across all 50 states, with 24/7 dispatch and reliable, on-time delivery.",
-  alternates: { canonical: "/about" },
-  openGraph: {
-    title: "About Us | Trucking & Logistics",
-    description: "Reliable freight across all 50 states with 24/7 dispatch.",
-    url: "/about",
-    type: "website",
-  },
-};
+  path: "/about",
+});
 
 export default async function AboutPage() {
   const apiMembers = await getPublicTeam();

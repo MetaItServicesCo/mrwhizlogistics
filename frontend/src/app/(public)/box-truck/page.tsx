@@ -11,20 +11,14 @@ import {
 } from "@/data/boxTruckContent";
 import { truckCardToGridItem } from "@/lib/contentAdapters";
 import { getBoxTruckCards } from "@/lib/serverContent";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Box Truck Delivery Services | Local, Retail & Last-Mile Freight",
+export const metadata: Metadata = pageMetadata({
+  title: "Box Truck Delivery in Dallas, TX",
   description:
-    "Reliable box truck delivery for local, regional, retail and last-mile freight. Liftgate-equipped, GPS-tracked and fully insured. Get a fast quote today.",
-  alternates: { canonical: "/box-truck" },
-  openGraph: {
-    title: "Box Truck Delivery Services",
-    description:
-      "Local, regional and last-mile box truck freight, liftgate-equipped and GPS-tracked.",
-    url: "/box-truck",
-    type: "website",
-  },
-};
+    "16 ft and 26 ft box trucks with liftgates for local, regional and last-mile freight in Dallas–Fort Worth. GPS-tracked and insured. Get a fast quote.",
+  path: "/box-truck",
+});
 
 export default async function BoxTruckPage() {
   const cards = await getBoxTruckCards();

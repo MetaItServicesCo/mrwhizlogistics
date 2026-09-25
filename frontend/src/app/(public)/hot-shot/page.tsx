@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import HotShotHero from "@/components/hot-shot/HotShotHero";
 import HotShotServices from "@/components/hot-shot/HotShotServices";
 import HotShotWhy from "@/components/hot-shot/HotShotWhy";
@@ -6,6 +7,14 @@ import HotShotCTA from "@/components/hot-shot/HotShotCTA";
 import { HOT_SHOT_SERVICES } from "@/data/hotShotServices";
 import { truckCardToService } from "@/lib/contentAdapters";
 import { getHotshotCards } from "@/lib/serverContent";
+import { pageMetadata } from "@/lib/seo";
+
+export const metadata: Metadata = pageMetadata({
+  title: "Hot Shot Trucking Services",
+  description:
+    "Same-day hot shot dispatch with flatbeds, enclosed trailers and sprinter vans for urgent freight. Whatever needs to be there today, we move it fast.",
+  path: "/hot-shot",
+});
 
 export default async function HotShotPage() {
   const cards = await getHotshotCards();
