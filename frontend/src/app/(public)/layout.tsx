@@ -1,4 +1,5 @@
 import ChatWidget from "@/components/chat/ChatWidget";
+import GoogleAnalytics from "@/components/common/GoogleAnalytics";
 import AdvancedFooterCTA from "@/components/footer/AdvancedFooterCTA";
 import MailingListCTA from "@/components/footer/MailingListCTA";
 import Navbar from "@/components/header/Navbar";
@@ -29,6 +30,8 @@ export default async function PublicLayout({
 
   return (
     <>
+      {/* GA4 on the public site only, so dashboard use doesn't count as visitors. */}
+      <GoogleAnalytics />
       <Navbar
         phone={settings.phone}
         logo={logo}
