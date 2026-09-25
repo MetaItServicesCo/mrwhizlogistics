@@ -29,6 +29,12 @@ const nextConfig: NextConfig = {
       // Rentals used to declare these as their canonical URLs (they 404ed).
       { source: "/hot-shot/rentals", destination: "/rentals", permanent: true },
       { source: "/hot-shot/rentals/:slug", destination: "/rentals/:slug", permanent: true },
+      // Old bundled slugs that used to render as duplicates of the dashboard
+      // pages (the Box Truck ones were also listed in the sitemap).
+      { source: "/box-truck/26ft-box-truck", destination: "/box-truck/26-feet-box-truck", permanent: true },
+      { source: "/box-truck/16ft-box-truck", destination: "/box-truck/16-feet-box-truck", permanent: true },
+      { source: "/semi-truck/flatbed", destination: "/semi-truck/flat-bed", permanent: true },
+      { source: "/semi-truck/reefer-truck", destination: "/semi-truck/reefer-trailer", permanent: true },
     ];
   },
 
