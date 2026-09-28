@@ -1,4 +1,5 @@
 import ChatWidget from "@/components/chat/ChatWidget";
+import AdminBar from "@/components/common/AdminBar";
 import GoogleAnalytics from "@/components/common/GoogleAnalytics";
 import { CtaProvider } from "@/components/common/CtaProvider";
 import { CTA_SETTING_KEY, parseCtaOverrides } from "@/lib/cta";
@@ -51,6 +52,7 @@ export default async function PublicLayout({
       {children}
       {/* <MailingListCTA /> */}
       <ChatWidget />
+      <AdminBar />
       <AdvancedFooterCTA
         companyName={settings.company_name}
         phone={settings.phone}

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth";
 import NotificationBell from "@/components/admin/NotificationBell";
+import { lastSitePath } from "@/lib/adminNav";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
@@ -153,6 +154,12 @@ export default function AdminHeader({
         <Box
           component={Link}
           href="/"
+          onClick={(e: React.MouseEvent) => {
+            // Back to the page the admin came from (remembered by the site's
+            // admin bar), not always the homepage.
+            e.preventDefault();
+            router.push(lastSitePath());
+          }}
           aria-label="Back to website"
           title="Back to website"
           sx={{
@@ -284,7 +291,7 @@ export default function AdminHeader({
           <MenuItem
             onClick={() => {
               setAnchor(null);
-              router.push("/");
+              router.push(lastSitePath());
             }}
           >
             <LanguageRoundedIcon /> Back to website

@@ -14,6 +14,7 @@ import RichTextEditor from "@/components/admin/RichTextEditor";
 import SchemaMarkupEditor, { schemaMarkupError } from "@/components/admin/SchemaMarkupEditor";
 import { paragraphsToHtml } from "@/lib/richText";
 import { isIsoDate, isValidCanonical, slugify, toIsoDate } from "@/lib/blogFields";
+import { useDeepLinkEdit } from "@/lib/adminNav";
 import {
   BORDER,
   ConfirmDialog,
@@ -134,6 +135,9 @@ export default function BlogPostsPage() {
         /* keep the row's copy; a real problem will surface on save */
       });
   };
+
+  // "Edit this post" from the site's admin bar lands here with ?edit=<slug>.
+  useDeepLinkEdit(items, loading, (b, slug) => b.slug === slug || b.card_id === slug, openEdit);
 
   /** Everything the server would reject (or that would break the post's URL). */
   const validate = (isCreate: boolean): string | null => {

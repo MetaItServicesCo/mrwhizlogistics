@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { Suspense, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import Box from "@mui/material/Box";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
@@ -52,13 +53,20 @@ const ROLE_OPTIONS = [
   { value: "editor", label: "Editor" },
 ];
 
-export default function SettingsPage() {
+function SettingsPage() {
+  const params = useSearchParams();
   const { user: me } = useAuth();
   const settings = useResource<SiteSetting>("/api/settings");
   const users = useResource<User>("/api/users");
   const { busy, error: actionError, setError, run } = useAction();
 
-  const [tab, setTab] = useState<SettingsTab>("branding");
+  // ?tab=contact etc. (links from the site's admin bar). useSearchParams, not
+  // window.location: on in-app navigation the address bar updates after the
+  // first render.
+  const [tab, setTab] = useState<SettingsTab>(() => {
+    const t = params.get("tab");
+    return t && ["branding", "buttons", "contact", "settings", "users"].includes(t) ? (t as SettingsTab) : "branding";
+  });
   const [search, setSearch] = useState("");
   const [toast, setToast] = useState<string | null>(null);
 
@@ -577,5 +585,14 @@ export default function SettingsPage() {
 
       <Toast message={toast} onClose={() => setToast(null)} />
     </Box>
+  );
+}
+
+// useSearchParams needs a Suspense boundary on a statically built page.
+export default function SettingsPageWithParams() {
+  return (
+    <Suspense fallback={null}>
+      <SettingsPage />
+    </Suspense>
   );
 }

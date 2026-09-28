@@ -22,6 +22,7 @@ import {
   SearchBox,
   Toast,
 } from "./ui";
+import { useDeepLinkEdit } from "@/lib/adminNav";
 
 type FormState = {
   card_number: string;
@@ -255,6 +256,9 @@ export default function TruckCardsPage({
     setDetailImage(null);
     setEditing(row);
   };
+
+  // "Edit this service" from the site's admin bar lands here with ?edit=<slug>.
+  useDeepLinkEdit(items, loading, (c, slug) => c.slug === slug, openEdit);
 
   const buildFormData = (isCreate: boolean) => {
     const fd = new FormData();
