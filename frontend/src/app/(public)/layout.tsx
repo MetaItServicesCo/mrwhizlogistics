@@ -1,5 +1,7 @@
 import ChatWidget from "@/components/chat/ChatWidget";
 import GoogleAnalytics from "@/components/common/GoogleAnalytics";
+import { CtaProvider } from "@/components/common/CtaProvider";
+import { CTA_SETTING_KEY, parseCtaOverrides } from "@/lib/cta";
 import MicrosoftClarity from "@/components/common/MicrosoftClarity";
 import AdvancedFooterCTA from "@/components/footer/AdvancedFooterCTA";
 import MailingListCTA from "@/components/footer/MailingListCTA";
@@ -28,9 +30,10 @@ export default async function PublicLayout({
   ]);
   const settings = settingsMap(settingRows || []);
   const logo = logoFromSettings(settings);
+  const ctaOverrides = parseCtaOverrides(settings[CTA_SETTING_KEY]);
 
   return (
-    <>
+    <CtaProvider overrides={ctaOverrides} phone={settings.phone}>
       {/* Analytics on the public site only, so dashboard use isn't counted as
           visitors and customer details shown there are never recorded. */}
       <GoogleAnalytics />
@@ -58,6 +61,6 @@ export default async function PublicLayout({
         logo={logo}
         footerLogo={footerLogoFromSettings(settings)}
       />
-    </>
+    </CtaProvider>
   );
 }

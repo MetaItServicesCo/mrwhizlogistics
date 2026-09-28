@@ -31,6 +31,7 @@ import CalendarMonthRoundedIcon from "@mui/icons-material/CalendarMonthRounded";
 import OpenInNewRoundedIcon from "@mui/icons-material/OpenInNewRounded";
 
 import type { RentalItem } from "@/data/hotShotRentals";
+import { ctaProps, useCta } from "@/components/common/CtaProvider";
 
 const LIME = "#c8ff00";
 const BG = "#070807";
@@ -46,6 +47,8 @@ export default function RentalDetailContent({
   relatedItems: RentalItem[];
 }) {
   const reduceMotion = useReducedMotion() ?? false;
+  const quoteCta = useCta("rental_detail_quote", item.slug);
+  const callCta = useCta("rental_detail_call");
 
   const [activeImage, setActiveImage] = useState(0);
 
@@ -1080,9 +1083,9 @@ export default function RentalDetailContent({
                     gap: 1.2,
                   }}
                 >
+                  {!quoteCta.hidden && (
                   <Button
-                    component={Link}
-                    href={`/contact?rental=${item.slug}`}
+                    {...ctaProps(quoteCta)}
                     endIcon={<ArrowForwardRoundedIcon />}
                     fullWidth
                     sx={{
@@ -1112,12 +1115,13 @@ export default function RentalDetailContent({
                       },
                     }}
                   >
-                    Request Rental Quote
+                    {quoteCta.label}
                   </Button>
+                  )}
 
+                  {!callCta.hidden && (
                   <Button
-                    component="a"
-                    href="tel:+14697678853"
+                    {...ctaProps(callCta)}
                     startIcon={<PhoneInTalkRoundedIcon />}
                     fullWidth
                     sx={{
@@ -1136,8 +1140,9 @@ export default function RentalDetailContent({
                       },
                     }}
                   >
-                    Call +1 (469) 767-8853
+                    {callCta.label}
                   </Button>
+                  )}
                 </Box>
 
                 {/* Trust */}

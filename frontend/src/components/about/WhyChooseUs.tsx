@@ -3,7 +3,7 @@
 import { Box, Typography, Container, Button } from "@mui/material";
 import { motion } from "motion/react";
 import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
-import Link from "next/link";
+import { ctaProps, useCta } from "@/components/common/CtaProvider";
 
 const LIME = "#c8ff00";
 const EASE = [0.22, 1, 0.36, 1] as const;
@@ -29,6 +29,7 @@ const skills = [
 ];
 
 export default function FleetOverview() {
+  const moreCta = useCta("about_why_more");
   return (
     <Box
       component="section"
@@ -121,9 +122,9 @@ export default function FleetOverview() {
                   >
                     {card.desc}
                   </Typography>
+                  {!moreCta.hidden && (
                   <Button
-                    component={Link}
-                    href="/rentals"
+                    {...ctaProps(moreCta)}
                     endIcon={
                       <ArrowForwardRoundedIcon
                         sx={{ fontSize: "16px !important" }}
@@ -138,8 +139,9 @@ export default function FleetOverview() {
                       "&:hover": { bgcolor: "transparent", color: "#d4ff33" },
                     }}
                   >
-                    Read More
+                    {moreCta.label}
                   </Button>
+                  )}
                 </Box>
               ))}
             </Box>

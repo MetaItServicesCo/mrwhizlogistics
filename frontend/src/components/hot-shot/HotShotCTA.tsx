@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { motion, useReducedMotion } from "motion/react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -10,16 +9,17 @@ import PhoneInTalkRoundedIcon from "@mui/icons-material/PhoneInTalkRounded";
 import BoltRoundedIcon from "@mui/icons-material/BoltRounded";
 import { useState } from "react";
 import QuoteModal from "./QuoteModal";
+import { ctaProps, useCta } from "@/components/common/CtaProvider";
 
 const LIME = "#c8ff00";
 const EASE = [0.22, 1, 0.36, 1] as const;
 
-const PHONE_DISPLAY = "+1 (469) 767 8853";
-const PHONE_HREF = "tel:+14697678853";
 
 export default function HotShotCTA() {
   const reduce = useReducedMotion() ?? false;
   const [quoteOpen, setQuoteOpen] = useState(false); // 👈 add
+  const quoteCta = useCta("services_quote");
+  const callCta = useCta("services_call");
   return (
     <Box
       component="section"
@@ -202,8 +202,9 @@ export default function HotShotCTA() {
               }}
             >
               {/* Get a Quote */}
+              {!quoteCta.hidden && (
               <Button
-                onClick={() => setQuoteOpen(true)}
+                {...ctaProps(quoteCta, () => setQuoteOpen(true))}
                 endIcon={<ArrowForwardRoundedIcon className="cta-a" />}
                 disableElevation
                 sx={{
@@ -235,13 +236,14 @@ export default function HotShotCTA() {
                   "&:hover::after": { left: "130%" },
                 }}
               >
-                Get a Quote
+                {quoteCta.label}
               </Button>
+              )}
 
               {/* Call now */}
+              {!callCta.hidden && (
               <Button
-                component="a"
-                href={PHONE_HREF}
+                {...ctaProps(callCta)}
                 startIcon={<PhoneInTalkRoundedIcon />}
                 variant="outlined"
                 sx={{
@@ -261,8 +263,9 @@ export default function HotShotCTA() {
                   },
                 }}
               >
-                {PHONE_DISPLAY}
+                {callCta.label}
               </Button>
+              )}
             </Box>
 
             <Typography

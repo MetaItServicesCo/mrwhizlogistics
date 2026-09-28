@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { motion, useReducedMotion } from "motion/react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -10,6 +9,7 @@ import SupportAgentRoundedIcon from "@mui/icons-material/SupportAgentRounded";
 import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
 import PhoneInTalkRoundedIcon from "@mui/icons-material/PhoneInTalkRounded";
 import LocalShippingRoundedIcon from "@mui/icons-material/LocalShippingRounded";
+import { ctaProps, useCta } from "@/components/common/CtaProvider";
 
 const LIME = "#c8ff00";
 const EASE = [0.22, 1, 0.36, 1] as const;
@@ -32,6 +32,9 @@ const FEATURES = [
 ];
 
 export default function AboutExpertise() {
+  const moreCta = useCta("about_expertise_more");
+  // Used to show and dial +1 (800) 204-8820, which is not the company number.
+  const callCta = useCta("about_expertise_call");
   const reduce = useReducedMotion() ?? false;
 
   return (
@@ -251,9 +254,9 @@ export default function AboutExpertise() {
               flexWrap: "wrap",
             }}
           >
+            {!moreCta.hidden && (
             <Button
-              component={Link}
-              href="/contact"
+              {...ctaProps(moreCta)}
               endIcon={<ArrowForwardRoundedIcon className="ab-a" />}
               disableElevation
               sx={{
@@ -285,12 +288,13 @@ export default function AboutExpertise() {
                 "&:hover::after": { left: "130%" },
               }}
             >
-              More About Us
+              {moreCta.label}
             </Button>
+            )}
 
+            {!callCta.hidden && (
             <Box
-              component="a"
-              href="tel:+18002048820"
+              {...ctaProps(callCta)}
               sx={{
                 display: "flex",
                 alignItems: "center",
@@ -321,10 +325,11 @@ export default function AboutExpertise() {
                 <Typography
                   sx={{ fontSize: 15, fontWeight: 800, color: "#fff" }}
                 >
-                  +1 (800) 204-8820
+                  {callCta.label}
                 </Typography>
               </Box>
             </Box>
+            )}
           </Box>
         </Box>
 

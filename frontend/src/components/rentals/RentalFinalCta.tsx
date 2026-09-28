@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { motion, useReducedMotion } from "motion/react";
 
 import Box from "@mui/material/Box";
@@ -12,6 +11,7 @@ import PhoneRoundedIcon from "@mui/icons-material/PhoneRounded";
 import LocalShippingRoundedIcon from "@mui/icons-material/LocalShippingRounded";
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 import BoltRoundedIcon from "@mui/icons-material/BoltRounded";
+import { ctaProps, useCta } from "@/components/common/CtaProvider";
 
 const LIME = "#c8ff00";
 const EASE = [0.22, 1, 0.36, 1] as const;
@@ -24,6 +24,9 @@ const BENEFITS = [
 ];
 
 export default function RentalFinalCta() {
+  const quoteCta = useCta("rentals_final_quote");
+  // Used to dial +1 (800) 000-0000, a placeholder number.
+  const callCta = useCta("rentals_final_call");
   const reduce = useReducedMotion() ?? false;
 
   return (
@@ -304,9 +307,9 @@ export default function RentalFinalCta() {
                   mt: 4,
                 }}
               >
+                {!quoteCta.hidden && (
                 <Button
-                  component={Link}
-                  href="/contact"
+                  {...ctaProps(quoteCta)}
                   endIcon={<ArrowForwardRoundedIcon />}
                   disableElevation
                   sx={{
@@ -325,12 +328,13 @@ export default function RentalFinalCta() {
                     transition: "all 0.25s ease",
                   }}
                 >
-                  Get a Rental Quote
+                  {quoteCta.label}
                 </Button>
+                )}
 
+                {!callCta.hidden && (
                 <Button
-                  component="a"
-                  href="tel:+18000000000"
+                  {...ctaProps(callCta)}
                   startIcon={<PhoneRoundedIcon />}
                   disableElevation
                   sx={{
@@ -349,8 +353,9 @@ export default function RentalFinalCta() {
                     },
                   }}
                 >
-                  Call Now
+                  {callCta.label}
                 </Button>
+                )}
               </Box>
             </Box>
 

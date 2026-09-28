@@ -25,6 +25,7 @@ import AcUnitRoundedIcon from "@mui/icons-material/AcUnitRounded";
 import PublicRoundedIcon from "@mui/icons-material/PublicRounded";
 import StorefrontRoundedIcon from "@mui/icons-material/StorefrontRounded";
 import TrainRoundedIcon from "@mui/icons-material/TrainRounded";
+import { ctaProps, useCta } from "@/components/common/CtaProvider";
 
 const LIME = "#c8ff00";
 const DURATION = 5000;
@@ -37,6 +38,8 @@ type Case = {
   ticker: string;
   icon: React.ReactNode;
   image?: string;
+  /** Where the Details button goes for this slide (unless set in the dashboard). */
+  href: string;
 };
 
 const CASES: Case[] = [
@@ -49,6 +52,7 @@ const CASES: Case[] = [
       "Expedited delivery · Flexible scheduling · Direct transport · Fast response",
     icon: <LocalShippingRoundedIcon />,
     image: "/images/Hotshot/24-feet-flat-bed/24-web.webp",
+    href: "/hot-shot",
   },
   {
     label: "Box Truck",
@@ -60,6 +64,7 @@ const CASES: Case[] = [
     icon: <Inventory2RoundedIcon />,
     image:
       "/images/BoxTruck/16-feet-box-truck/half_side_view_box_truck_isolated_on_background-web.webp",
+    href: "/box-truck",
   },
   {
     label: "Reefer",
@@ -70,6 +75,7 @@ const CASES: Case[] = [
       "Refrigerated freight · Temperature control · Cold-chain transport · Reliable delivery",
     icon: <AcUnitRoundedIcon />,
     image: "/images/Semi-truck/reefer/das-web.webp",
+    href: "/semi-truck",
   },
   {
     label: "Dry Van",
@@ -80,6 +86,7 @@ const CASES: Case[] = [
       "General cargo · Commercial goods · Full loads · Secure transportation",
     icon: <LocalShippingRoundedIcon />,
     image: "/images/Semi-truck/dryvan/5-web.webp",
+    href: "/semi-truck",
   },
   {
     label: "Flatbed",
@@ -90,6 +97,7 @@ const CASES: Case[] = [
       "Flatbed hauling · Oversized freight · Equipment transport · Open-deck loads",
     icon: <LocalShippingRoundedIcon />,
     image: "/images/Semi-truck/flatbed/ssjfksd-web.webp",
+    href: "/semi-truck",
   },
 ];
 
@@ -163,6 +171,7 @@ export default function CaseShowSection() {
   const photosNear = useInView(rootRef, { once: true, margin: "1200px 0px" });
 
   const c = CASES[active];
+  const showcaseCta = useCta("home_showcase");
 
   const go = (i: number) => {
     setActive((i + CASES.length) % CASES.length);
@@ -966,7 +975,9 @@ export default function CaseShowSection() {
                         display: "inline-flex",
                       }}
                     >
+                      {!showcaseCta.hidden && (
                       <Button
+                        {...ctaProps(showcaseCta.href ? showcaseCta : { ...showcaseCta, href: c.href })}
                         endIcon={
                           <ArrowOutwardRoundedIcon className="det-arrow" />
                         }
@@ -1013,8 +1024,9 @@ export default function CaseShowSection() {
                           },
                         }}
                       >
-                        Details
+                        {showcaseCta.label}
                       </Button>
+                      )}
                     </Box>
                   </Box>
                 </motion.div>

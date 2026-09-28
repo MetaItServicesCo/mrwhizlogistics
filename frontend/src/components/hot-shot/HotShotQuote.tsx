@@ -10,12 +10,16 @@ import RequestQuoteRoundedIcon from "@mui/icons-material/RequestQuoteRounded";
 import PhoneInTalkRoundedIcon from "@mui/icons-material/PhoneInTalkRounded";
 import type { HotShotService } from "@/types/hotShot";
 import QuoteModal from "@/components/hot-shot/QuoteModal";
+import { ctaProps, useCta } from "@/components/common/CtaProvider";
 
 const LIME = "#c8ff00";
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 export default function HotShotQuote({ service }: { service: HotShotService }) {
   const [open, setOpen] = useState(false);
+  const quoteCta = useCta("service_detail_quote");
+  // Used to dial +1 (800) 204-8820, which is not the company number.
+  const callCta = useCta("service_detail_call");
 
   return (
     <>
@@ -154,8 +158,9 @@ export default function HotShotQuote({ service }: { service: HotShotService }) {
                   width: { xs: "100%", sm: "auto" },
                 }}
               >
+                {!quoteCta.hidden && (
                 <Button
-                  onClick={() => setOpen(true)}
+                  {...ctaProps(quoteCta, () => setOpen(true))}
                   endIcon={<ArrowForwardRoundedIcon className="hq-a" />}
                   disableElevation
                   sx={{
@@ -188,12 +193,13 @@ export default function HotShotQuote({ service }: { service: HotShotService }) {
                     "&:hover::after": { left: "130%" },
                   }}
                 >
-                  Get a Quote
+                  {quoteCta.label}
                 </Button>
+                )}
 
+                {!callCta.hidden && (
                 <Button
-                  component="a"
-                  href="tel:+18002048820"
+                  {...ctaProps(callCta)}
                   startIcon={<PhoneInTalkRoundedIcon />}
                   variant="outlined"
                   sx={{
@@ -213,8 +219,9 @@ export default function HotShotQuote({ service }: { service: HotShotService }) {
                     },
                   }}
                 >
-                  Call
+                  {callCta.label}
                 </Button>
+                )}
               </Box>
             </Box>
           </Box>

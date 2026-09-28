@@ -26,6 +26,7 @@ import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined
 import FlatwareRoundedIcon from "@mui/icons-material/FlatwareRounded";
 import AcUnitRoundedIcon from "@mui/icons-material/AcUnitRounded";
 import Inventory2RoundedIcon from "@mui/icons-material/Inventory2Rounded";
+import { ctaProps, useCta } from "@/components/common/CtaProvider";
 
 const LIME = "#c8ff00";
 
@@ -219,6 +220,8 @@ export default function Navbar({
 } = {}) {
   const MEGA = useMemo(() => buildMega(menu), [menu]);
   const tel = telHref(phone);
+  const primaryCta = useCta("header_primary");
+  const secondaryCta = useCta("header_secondary");
   const [active, setActive] = useState<MegaKey | null>(null);
   const [hoveredTab, setHoveredTab] = useState<string | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -506,9 +509,9 @@ export default function Navbar({
             >
               <PhoneInTalkRoundedIcon sx={{ fontSize: 16 }} />
             </IconButton>
+            {!primaryCta.hidden && (
             <Button
-              component={Link}
-              href="/#our-fleet"
+              {...ctaProps(primaryCta)}
               disableElevation
               sx={{
                 bgcolor: LIME,
@@ -521,11 +524,12 @@ export default function Navbar({
                 "&:hover": { bgcolor: "#d4ff33" },
               }}
             >
-              Explore Product
+              {primaryCta.label}
             </Button>
+            )}
+            {!secondaryCta.hidden && (
             <Button
-              component={Link}
-              href="/contact"
+              {...ctaProps(secondaryCta)}
               sx={{
                 color: "#fff",
                 fontWeight: 600,
@@ -540,8 +544,9 @@ export default function Navbar({
                 },
               }}
             >
-              Request Demo
+              {secondaryCta.label}
             </Button>
+            )}
           </Stack>
 
           {/* HAMBURGER */}
@@ -828,9 +833,9 @@ export default function Navbar({
         </Link>
 
         <Stack spacing={1.2} sx={{ mt: 3 }}>
+          {!primaryCta.hidden && (
           <Button
-            component={Link}
-            href="/#our-fleet"
+            {...ctaProps(primaryCta)}
             onClick={() => setDrawerOpen(false)}
             fullWidth
             disableElevation
@@ -842,11 +847,12 @@ export default function Navbar({
               borderRadius: "999px",
             }}
           >
-            Explore Product
+            {primaryCta.label}
           </Button>
+          )}
+          {!secondaryCta.hidden && (
           <Button
-            component={Link}
-            href="/contact"
+            {...ctaProps(secondaryCta)}
             onClick={() => setDrawerOpen(false)}
             fullWidth
             variant="outlined"
@@ -857,8 +863,9 @@ export default function Navbar({
               borderRadius: "999px",
             }}
           >
-            Request Demo
+            {secondaryCta.label}
           </Button>
+          )}
           <Button
             component="a"
             href={tel}

@@ -11,6 +11,7 @@ import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
 import LocalShippingRoundedIcon from "@mui/icons-material/LocalShippingRounded";
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
+import { ctaProps, useCta } from "@/components/common/CtaProvider";
 
 const LIME = "#c8ff00";
 const EASE = [0.22, 1, 0.36, 1] as const;
@@ -54,6 +55,8 @@ const STEPS: Step[] = [
 ];
 
 export default function RentalHowItWorks() {
+  const quoteCta = useCta("rentals_how_quote");
+  const callCta = useCta("rentals_how_call");
   const reduce = useReducedMotion() ?? false;
 
   return (
@@ -586,9 +589,10 @@ export default function RentalHowItWorks() {
         >
           {/* Request Quote */}
 
+          {!quoteCta.hidden && (
           <Button
+            {...ctaProps(quoteCta)}
             variant="contained"
-            href="/contact"
             endIcon={<ArrowForwardRoundedIcon />}
             sx={{
               minWidth: {
@@ -614,14 +618,16 @@ export default function RentalHowItWorks() {
               transition: "all 0.25s ease",
             }}
           >
-            Request a Quote
+            {quoteCta.label}
           </Button>
+          )}
 
           {/* Call Team */}
 
+          {!callCta.hidden && (
           <Button
+            {...ctaProps(callCta)}
             variant="outlined"
-            href="tel:+14697678853"
             sx={{
               minWidth: {
                 xs: "100%",
@@ -642,8 +648,9 @@ export default function RentalHowItWorks() {
               },
             }}
           >
-            Call Our Team
+            {callCta.label}
           </Button>
+          )}
         </Box>
       </Box>
     </Box>

@@ -12,6 +12,8 @@ import { useAction, useResource } from "@/lib/useResource";
 import type { SiteSetting, User } from "@/lib/types";
 import DataTable, { type Column } from "@/components/admin/DataTable";
 import LogoSettingsPanel from "@/components/admin/LogoSettingsPanel";
+import CtaSettingsPanel from "@/components/admin/CtaSettingsPanel";
+import { CTA_SETTING_KEY } from "@/lib/cta";
 import { BRANDING_KEYS as BRANDING_KEY_LIST } from "@/lib/branding";
 import {
   ConfirmDialog,
@@ -29,9 +31,10 @@ import {
 } from "@/components/admin/ui";
 
 /** Managed by the Branding tab, so they're kept out of the generic table. */
-const BRANDING_KEYS = new Set(BRANDING_KEY_LIST);
+/** Managed by the Branding and Buttons tabs, so kept out of the generic table. */
+const BRANDING_KEYS = new Set([...BRANDING_KEY_LIST, CTA_SETTING_KEY]);
 
-type SettingsTab = "branding" | "settings" | "users";
+type SettingsTab = "branding" | "buttons" | "settings" | "users";
 
 const ROLE_OPTIONS = [
   { value: "admin", label: "Admin" },
@@ -298,16 +301,17 @@ export default function SettingsPage() {
 
   const onUsersTab = tab === "users";
   const onBrandingTab = tab === "branding";
+  const onButtonsTab = tab === "buttons";
 
   return (
     <Box>
       <PageHeader
         title="Settings"
-        subtitle="Your logo, the site-wide values used across the website, and the admin accounts that can sign in."
-        actionLabel={onBrandingTab ? undefined : onUsersTab ? "Add user" : "Add setting"}
+        subtitle="Your logo, website buttons, the site-wide values used across the website, and the admin accounts that can sign in."
+        actionLabel={onBrandingTab || onButtonsTab ? undefined : onUsersTab ? "Add user" : "Add setting"}
         onAction={onUsersTab ? openCreateU : openCreateS}
       >
-        {!onBrandingTab && <SearchBox value={search} onChange={setSearch} />}
+        {!onBrandingTab && !onButtonsTab && <SearchBox value={search} onChange={setSearch} />}
       </PageHeader>
 
       <Tabs
@@ -328,11 +332,26 @@ export default function SettingsPage() {
         }}
       >
         <Tab value="branding" label="Branding" />
+        <Tab value="buttons" label="Buttons" />
         <Tab value="settings" label={`Site settings (${generalSettings.length})`} />
         <Tab value="users" label={`Admin users (${users.items.length})`} />
       </Tabs>
 
-      {onBrandingTab ? (
+      {onButtonsTab ? (
+        settings.loading && !settings.items.length ? (
+          <LoadingState label="Loading buttons…" />
+        ) : settings.error ? (
+          <ErrorState message={settings.error} onRetry={settings.reload} />
+        ) : (
+          <CtaSettingsPanel
+            settings={settings.items}
+            onSaved={(msg) => {
+              setToast(msg);
+              void settings.reload();
+            }}
+          />
+        )
+      ) : onBrandingTab ? (
         settings.loading && !settings.items.length ? (
           <LoadingState label="Loading branding…" />
         ) : settings.error ? (

@@ -9,6 +9,7 @@ import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
 import PhoneInTalkRoundedIcon from "@mui/icons-material/PhoneInTalkRounded";
 import BoltRoundedIcon from "@mui/icons-material/BoltRounded";
 import QuoteModal from "@/components/hot-shot/QuoteModal";
+import { ctaProps, useCta } from "@/components/common/CtaProvider";
 
 const LIME = "#c8ff00";
 const EASE = [0.22, 1, 0.36, 1] as const;
@@ -18,18 +19,16 @@ export default function ServiceCTA({
   title = "Ready to move?",
   highlight = "Get started today.",
   subtitle = "Get a fast quote in minutes. Our dispatch team is standing by, 24/7.",
-  phoneDisplay = "+1 (469) 767 8853",
-  phoneHref = "tel:+14697678853",
 }: {
   service: string;
   title?: string;
   highlight?: string;
   subtitle?: string;
-  phoneDisplay?: string;
-  phoneHref?: string;
 }) {
   const reduce = useReducedMotion() ?? false;
   const [open, setOpen] = useState(false);
+  const quoteCta = useCta("services_quote");
+  const callCta = useCta("services_call");
 
   return (
     <Box
@@ -207,8 +206,9 @@ export default function ServiceCTA({
                 flexWrap: "wrap",
               }}
             >
+              {!quoteCta.hidden && (
               <Button
-                onClick={() => setOpen(true)}
+                {...ctaProps(quoteCta, () => setOpen(true))}
                 endIcon={<ArrowForwardRoundedIcon className="sc-a" />}
                 disableElevation
                 sx={{
@@ -240,12 +240,13 @@ export default function ServiceCTA({
                   "&:hover::after": { left: "130%" },
                 }}
               >
-                Get a Quote
+                {quoteCta.label}
               </Button>
+              )}
 
+              {!callCta.hidden && (
               <Button
-                component="a"
-                href={phoneHref}
+                {...ctaProps(callCta)}
                 startIcon={<PhoneInTalkRoundedIcon />}
                 variant="outlined"
                 sx={{
@@ -264,8 +265,9 @@ export default function ServiceCTA({
                   },
                 }}
               >
-                {phoneDisplay}
+                {callCta.label}
               </Button>
+              )}
             </Box>
 
             <Typography

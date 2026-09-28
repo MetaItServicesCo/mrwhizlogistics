@@ -18,6 +18,7 @@ import HotShotWhyChoose from "@/components/hot-shot/HotShotWhyChoose";
 import HotShotTransportOptions from "@/components/hot-shot/HotShotTransportOptions";
 import HotShotQuote from "@/components/hot-shot/HotShotQuote";
 import HotShotHowItWorks from "./HotShotHowItWorks";
+import { ctaProps, useCta } from "@/components/common/CtaProvider";
 
 const LIME = "#c8ff00";
 
@@ -36,6 +37,7 @@ function Sidebar({
   basePath,
   sectionTitle = "Services",
 }: SidebarProps) {
+  const helpCta = useCta("service_detail_help");
   return (
     <Box
       sx={{
@@ -251,9 +253,9 @@ function Sidebar({
           </Typography>
 
           {/* phone */}
+          {!helpCta.hidden && (
           <Box
-            component="a"
-            href="tel:+14697678853"
+            {...ctaProps(helpCta)}
             sx={{
               position: "relative",
               display: "inline-flex",
@@ -268,12 +270,13 @@ function Sidebar({
             }}
           >
             <PhoneInTalkRoundedIcon sx={{ fontSize: 17 }} />
-            +1 (469) 767 8853
+            {helpCta.label}
             <ArrowForwardRoundedIcon
               className="help-arrow"
               sx={{ fontSize: 16, transition: "transform .3s ease" }}
             />
           </Box>
+          )}
         </Box>
       </Box>
     </Box>

@@ -26,6 +26,7 @@ import LocalOfferRoundedIcon from "@mui/icons-material/LocalOfferRounded";
 import ReceiptLongRoundedIcon from "@mui/icons-material/ReceiptLongRounded";
 
 import type { RentalItem } from "@/data/hotShotRentals";
+import { ctaProps, useCta } from "@/components/common/CtaProvider";
 
 const LIME = "#c8ff00";
 const EASE = [0.22, 1, 0.36, 1] as const;
@@ -35,14 +36,14 @@ export default function RentalCard({
   item,
   index,
   onQuote,
-  phoneHref = "tel:+14697678853",
 }: {
   item: RentalItem;
   index: number;
   onQuote: (item: RentalItem) => void;
-  phoneHref?: string;
 }) {
   const router = useRouter(); // Router initialization
+  const quoteCta = useCta("rentals_card_quote");
+  const callCta = useCta("rentals_card_call");
   const reduce = useReducedMotion() ?? false;
   const flip = index % 2 === 1;
 
@@ -439,10 +440,13 @@ export default function RentalCard({
             flexWrap: "wrap",
           }}
         >
+          {!quoteCta.hidden && (
           <Button
-            onClick={(e) => {
+            {...ctaProps(quoteCta)}
+            onClick={(e: React.MouseEvent) => {
               e.stopPropagation(); // Card click trigger hone se roknay ke liye
-              onQuote(item);
+              // No link set in the dashboard -> open the rental quote form.
+              if (!quoteCta.href) onQuote(item);
             }}
             endIcon={<ArrowForwardRoundedIcon />}
             disableElevation
@@ -458,12 +462,13 @@ export default function RentalCard({
               "&:hover": { bgcolor: "#d4ff33" },
             }}
           >
-            {item.quoteLabel || "Get a Quote"}
+            {quoteCta.label}
           </Button>
+          )}
 
+          {!callCta.hidden && (
           <Button
-            component="a"
-            href={phoneHref}
+            {...ctaProps(callCta)}
             onClick={(e) => e.stopPropagation()} // Card click trigger hone se roknay ke liye
             startIcon={<PhoneInTalkRoundedIcon />}
             variant="outlined"
@@ -483,8 +488,9 @@ export default function RentalCard({
               },
             }}
           >
-            {item.callLabel || "Call Now"}
+            {callCta.label}
           </Button>
+          )}
         </Box>
       </Box>
     </Box>

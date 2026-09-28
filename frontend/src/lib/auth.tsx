@@ -39,7 +39,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         if (active) setUser(u);
       })
       .catch(() => {
-        clearToken();
+        // Only an expired/invalid token (401) should sign the admin out, and
+        // api.ts already clears it in that case. A network blip, a backend
+        // restart or a request cut short by navigating away used to delete
+        // the token here too, silently logging the admin out.
         if (active) setUser(null);
       })
       .finally(() => {

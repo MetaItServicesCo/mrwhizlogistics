@@ -3,11 +3,13 @@
 import { Box, Typography, Container, Button } from "@mui/material";
 import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
 import PhoneInTalkRoundedIcon from "@mui/icons-material/PhoneInTalkRounded";
-import Link from "next/link";
+import { ctaProps, useCta } from "@/components/common/CtaProvider";
 
 const LIME = "#c8ff00";
 
 export default function AboutCTA() {
+  const quoteCta = useCta("about_cta_quote");
+  const callCta = useCta("about_cta_call");
   return (
     <Box
       component="section"
@@ -77,9 +79,9 @@ export default function AboutCTA() {
               flexWrap: "wrap",
             }}
           >
+            {!quoteCta.hidden && (
             <Button
-              component={Link}
-              href="/contact"
+              {...ctaProps(quoteCta)}
               endIcon={<ArrowForwardRoundedIcon />}
               disableElevation
               sx={{
@@ -94,11 +96,12 @@ export default function AboutCTA() {
                 "&:hover": { bgcolor: "#d4ff33" },
               }}
             >
-              Get a Free Quote
+              {quoteCta.label}
             </Button>
+            )}
+            {!callCta.hidden && (
             <Button
-              component="a"
-              href="tel:+14697678853"
+              {...ctaProps(callCta)}
               startIcon={<PhoneInTalkRoundedIcon />}
               variant="outlined"
               sx={{
@@ -117,8 +120,9 @@ export default function AboutCTA() {
                 },
               }}
             >
-              (469) 767-8853
+              {callCta.label}
             </Button>
+            )}
           </Box>
         </Box>
       </Container>

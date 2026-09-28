@@ -14,6 +14,7 @@ import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
 import LocalShippingRoundedIcon from "@mui/icons-material/LocalShippingRounded";
 import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
 import FireTruckRoundedIcon from "@mui/icons-material/FireTruckRounded";
+import { ctaProps, useCta } from "@/components/common/CtaProvider";
 
 const LIME = "#c8ff00";
 
@@ -23,6 +24,8 @@ type Tier = {
   title: string;
   items: string[];
   cta: string;
+  /** CTA id in lib/cta.ts; label and link are editable in the dashboard. */
+  ctaId: string;
   icon: React.ReactNode;
   featured?: boolean;
 };
@@ -41,6 +44,7 @@ const TIERS: Tier[] = [
       "20' Flatbed",
     ],
     cta: "VIEW OPTIONS",
+    ctaId: "home_tier_hotshot",
     icon: <FireTruckRoundedIcon />,
   },
   {
@@ -49,6 +53,7 @@ const TIERS: Tier[] = [
     title: "Commercial Freight",
     items: ["16' Box Truck", "26' Box Truck"],
     cta: "VIEW OPTIONS",
+    ctaId: "home_tier_boxtruck",
     icon: <LocalShippingRoundedIcon />,
     featured: true,
   },
@@ -58,11 +63,13 @@ const TIERS: Tier[] = [
     title: "Full-Size Freight",
     items: ["Reefer Trailer", "Dry Van", "Flatbed"],
     cta: "VIEW OPTIONS",
+    ctaId: "home_tier_semitruck",
     icon: <LocalShippingOutlinedIcon />,
   },
 ];
 
 function TierCard({ tier }: { tier: Tier }) {
+  const cta = useCta(tier.ctaId);
   // 3D tilt
   const mx = useMotionValue(0);
   const my = useMotionValue(0);
@@ -354,7 +361,9 @@ function TierCard({ tier }: { tier: Tier }) {
               </Box>
 
               {/* CTA */}
+              {!cta.hidden && (
               <Button
+                {...ctaProps(cta)}
                 fullWidth
                 disableElevation
                 endIcon={
@@ -396,8 +405,9 @@ function TierCard({ tier }: { tier: Tier }) {
                       }
                 }
               >
-                {tier.cta}
+                {cta.label}
               </Button>
+              )}
             </Box>
           </Box>
         </Box>
