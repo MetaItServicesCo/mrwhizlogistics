@@ -49,7 +49,7 @@ export default function BlogAuthorBox({ post }: { post: BlogPost }) {
             mb: 0.5,
           }}
         >
-          WRITTEN BY
+          PUBLISHED BY
         </Typography>
         <Typography
           sx={{ fontSize: 18, fontWeight: 800, color: "#fff", mb: 0.5 }}

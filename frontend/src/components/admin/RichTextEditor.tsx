@@ -5,6 +5,8 @@ import { EditorContent, useEditor, useEditorState, type Editor } from "@tiptap/r
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
 import Placeholder from "@tiptap/extension-placeholder";
+import { Color, TextStyle } from "@tiptap/extension-text-style";
+import Highlight from "@tiptap/extension-highlight";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
@@ -17,6 +19,7 @@ import Divider from "@mui/material/Divider";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
+import Popover from "@mui/material/Popover";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import Tooltip from "@mui/material/Tooltip";
@@ -35,6 +38,9 @@ import HorizontalRuleRoundedIcon from "@mui/icons-material/HorizontalRuleRounded
 import FormatClearRoundedIcon from "@mui/icons-material/FormatClearRounded";
 import UndoRoundedIcon from "@mui/icons-material/UndoRounded";
 import RedoRoundedIcon from "@mui/icons-material/RedoRounded";
+import FormatColorTextRoundedIcon from "@mui/icons-material/FormatColorTextRounded";
+import BorderColorRoundedIcon from "@mui/icons-material/BorderColorRounded";
+import FormatColorResetRoundedIcon from "@mui/icons-material/FormatColorResetRounded";
 import { api } from "@/lib/api";
 import { errorMessage } from "@/lib/useResource";
 import { richContentSx } from "@/components/common/richContentSx";
@@ -108,6 +114,122 @@ const dialogPaperSx = {
   backgroundImage: "none",
 };
 
+/**
+ * Text colours picked to stay readable on the site's dark article background;
+ * highlight colours are light, and highlighted text is drawn dark (see
+ * .rich-content mark in globals.css).
+ */
+const TEXT_COLORS = [
+  { name: "Lime", value: "#c8ff00" },
+  { name: "White", value: "#ffffff" },
+  { name: "Grey", value: "#a3a3a3" },
+  { name: "Sky", value: "#4dd9ff" },
+  { name: "Green", value: "#4ade80" },
+  { name: "Yellow", value: "#facc15" },
+  { name: "Orange", value: "#fb923c" },
+  { name: "Red", value: "#f87171" },
+  { name: "Pink", value: "#f472b6" },
+  { name: "Violet", value: "#a78bfa" },
+];
+
+const HIGHLIGHT_COLORS = [
+  { name: "Yellow", value: "#fde047" },
+  { name: "Lime", value: "#c8ff00" },
+  { name: "Green", value: "#86efac" },
+  { name: "Sky", value: "#67e8f9" },
+  { name: "Pink", value: "#f9a8d4" },
+  { name: "Orange", value: "#fdba74" },
+];
+
+function ColorMenu({
+  anchor,
+  onClose,
+  title,
+  colors,
+  current,
+  onPick,
+  onClear,
+  clearLabel,
+}: {
+  anchor: HTMLElement | null;
+  onClose: () => void;
+  title: string;
+  colors: { name: string; value: string }[];
+  current: string | null;
+  onPick: (value: string) => void;
+  onClear: () => void;
+  clearLabel: string;
+}) {
+  return (
+    <Popover
+      open={!!anchor}
+      anchorEl={anchor}
+      onClose={onClose}
+      anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+      slotProps={{ paper: { sx: { mt: 0.5, p: 1.5, bgcolor: "#141514", color: "#fff", border: BORDER, borderRadius: "12px", width: 232 } } }}
+    >
+      <Typography sx={{ fontSize: 11.5, fontWeight: 800, letterSpacing: 0.6, color: "rgba(255,255,255,0.5)", textTransform: "uppercase", mb: 1 }}>
+        {title}
+      </Typography>
+      <Box role="listbox" aria-label={title} sx={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 0.75 }}>
+        {colors.map((c) => {
+          const selected = (current || "").toLowerCase() === c.value;
+          return (
+            <Tooltip key={c.value} title={c.name}>
+              <Box
+                component="button"
+                type="button"
+                role="option"
+                aria-selected={selected}
+                aria-label={c.name}
+                onMouseDown={(e: React.MouseEvent) => e.preventDefault()}
+                onClick={() => onPick(c.value)}
+                sx={{
+                  width: 34,
+                  height: 34,
+                  borderRadius: "8px",
+                  bgcolor: c.value,
+                  cursor: "pointer",
+                  border: selected ? "2px solid #fff" : "1px solid rgba(255,255,255,0.18)",
+                  outline: selected ? `2px solid ${c.value}` : "none",
+                  outlineOffset: 1,
+                  "&:hover": { transform: "scale(1.08)" },
+                  transition: "transform .15s",
+                }}
+              />
+            </Tooltip>
+          );
+        })}
+      </Box>
+      <Box sx={{ display: "flex", alignItems: "center", gap: 1, mt: 1.5 }}>
+        <Box
+          component="label"
+          sx={{ display: "flex", alignItems: "center", gap: 1, flex: 1, fontSize: 12.5, color: "rgba(255,255,255,0.7)", cursor: "pointer" }}
+        >
+          <Box
+            component="input"
+            type="color"
+            aria-label={`Custom ${title.toLowerCase()}`}
+            value={current && /^#[0-9a-f]{6}$/i.test(current) ? current : colors[0].value}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => onPick(e.target.value)}
+            sx={{ width: 28, height: 28, p: 0, border: "none", bgcolor: "transparent", cursor: "pointer" }}
+          />
+          Custom
+        </Box>
+        <Button
+          size="small"
+          onMouseDown={(e) => e.preventDefault()}
+          onClick={onClear}
+          startIcon={<FormatColorResetRoundedIcon sx={{ fontSize: 16 }} />}
+          sx={{ color: "rgba(255,255,255,0.7)", textTransform: "none", fontSize: 12.5 }}
+        >
+          {clearLabel}
+        </Button>
+      </Box>
+    </Popover>
+  );
+}
+
 function Toolbar({
   editor,
   onUploadImage,
@@ -137,6 +259,10 @@ function Toolbar({
       ordered: e.isActive("orderedList"),
       quote: e.isActive("blockquote"),
       link: e.isActive("link"),
+      color: (e.getAttributes("textStyle").color as string | undefined) ?? null,
+      highlight: e.isActive("highlight")
+        ? ((e.getAttributes("highlight").color as string | undefined) ?? HIGHLIGHT_COLORS[0].value)
+        : null,
       canUndo: e.can().undo(),
       canRedo: e.can().redo(),
     }),
@@ -149,6 +275,8 @@ function Toolbar({
   const [imageUrlOpen, setImageUrlOpen] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
   const [imageAlt, setImageAlt] = useState("");
+  const [colorMenu, setColorMenu] = useState<null | HTMLElement>(null);
+  const [highlightMenu, setHighlightMenu] = useState<null | HTMLElement>(null);
 
   const setBlock = (value: BlockType) => {
     const chain = editor.chain().focus();
@@ -252,6 +380,18 @@ function Toolbar({
         <ToolButton title="Strikethrough" active={state.strike} onClick={() => editor.chain().focus().toggleStrike().run()}>
           <StrikethroughSRoundedIcon />
         </ToolButton>
+        <ToolButton title="Text colour" active={!!state.color} onClick={(e) => setColorMenu(e.currentTarget)}>
+          <Box sx={{ position: "relative", display: "flex" }}>
+            <FormatColorTextRoundedIcon />
+            <Box sx={{ position: "absolute", left: 2, right: 2, bottom: -1, height: 3, borderRadius: 2, bgcolor: state.color || "rgba(255,255,255,0.35)" }} />
+          </Box>
+        </ToolButton>
+        <ToolButton title="Highlight" active={!!state.highlight} onClick={(e) => setHighlightMenu(e.currentTarget)}>
+          <Box sx={{ position: "relative", display: "flex" }}>
+            <BorderColorRoundedIcon />
+            <Box sx={{ position: "absolute", left: 2, right: 2, bottom: -1, height: 3, borderRadius: 2, bgcolor: state.highlight || "rgba(255,255,255,0.35)" }} />
+          </Box>
+        </ToolButton>
 
         <Divider orientation="vertical" flexItem sx={{ mx: 0.5, borderColor: "rgba(255,255,255,0.1)" }} />
 
@@ -303,6 +443,39 @@ function Toolbar({
           <RedoRoundedIcon />
         </ToolButton>
       </Box>
+
+      <ColorMenu
+        anchor={colorMenu}
+        onClose={() => setColorMenu(null)}
+        title="Text colour"
+        colors={TEXT_COLORS}
+        current={state.color}
+        onPick={(value) => {
+          editor.chain().focus().setColor(value).run();
+          setColorMenu(null);
+        }}
+        onClear={() => {
+          editor.chain().focus().unsetColor().run();
+          setColorMenu(null);
+        }}
+        clearLabel="Default"
+      />
+      <ColorMenu
+        anchor={highlightMenu}
+        onClose={() => setHighlightMenu(null)}
+        title="Highlight"
+        colors={HIGHLIGHT_COLORS}
+        current={state.highlight}
+        onPick={(value) => {
+          editor.chain().focus().setHighlight({ color: value }).run();
+          setHighlightMenu(null);
+        }}
+        onClear={() => {
+          editor.chain().focus().unsetHighlight().run();
+          setHighlightMenu(null);
+        }}
+        clearLabel="None"
+      />
 
       <Menu
         anchorEl={imageMenu}
@@ -450,6 +623,12 @@ export default function RichTextEditor({
       // Base64 images would bloat the database row; the backend also strips
       // data: URLs. Images go through the upload endpoint instead.
       Image.configure({ allowBase64: false }),
+      // Text colour (<span style="color: ...">) and multi-colour highlight
+      // (<mark style="background-color: ...">). The backend keeps exactly
+      // these two style properties and drops any other inline style.
+      TextStyle,
+      Color,
+      Highlight.configure({ multicolor: true }),
       Placeholder.configure({ placeholder }),
     ],
     content: value || "",
@@ -505,6 +684,7 @@ export default function RichTextEditor({
         )}
 
         <Box
+          className="rich-content"
           sx={{
             ...richContentSx("blog"),
             "& .ProseMirror": {

@@ -1,2 +1,36 @@
 @import "tailwindcss";
 
+
+/*
+ * Rich text from the dashboard editor (published articles and the editor
+ * itself). Tailwind's base layer resets `a { color: inherit;
+ * text-decoration: inherit }` and outranks MUI's layered styles, which made
+ * links look like plain text. These rules are un-layered so they win.
+ */
+.rich-content a {
+  color: #c8ff00;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  font-weight: 600;
+  transition: color 0.2s, text-decoration-thickness 0.2s;
+}
+.rich-content a:hover {
+  color: #d4ff33;
+  text-decoration-thickness: 2px;
+}
+/* Highlighted text: dark text on the highlight colour stays readable.
+   !important because the editor writes an inline `color: inherit` on marks
+   (the saved HTML has it stripped, but the editor view would show white on
+   yellow otherwise). */
+.rich-content mark {
+  color: #0a0a0a !important;
+  padding: 0.05em 0.25em;
+  border-radius: 4px;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+.rich-content mark a,
+.rich-content mark a:hover {
+  color: inherit;
+}
