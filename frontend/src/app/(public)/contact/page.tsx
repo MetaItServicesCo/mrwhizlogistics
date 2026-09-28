@@ -3,6 +3,9 @@ import HotShotHero from "@/components/hot-shot/HotShotHero";
 import ContactSection from "@/components/contact/ContactSection";
 import ContactMap from "@/components/contact/ContactMap";
 import { pageMetadata } from "@/lib/seo";
+import { contactContent } from "@/lib/contactPage";
+import { settingsMap } from "@/lib/contentAdapters";
+import { getPublicSettings } from "@/lib/serverContent";
 
 export const metadata: Metadata = pageMetadata({
   title: "Contact Us: Get a Freight Quote",
@@ -11,16 +14,14 @@ export const metadata: Metadata = pageMetadata({
   path: "/contact",
 });
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  // Same memoised settings call the layout makes, so no extra request.
+  const content = contactContent(settingsMap((await getPublicSettings()) || []));
   return (
     <main>
-      <HotShotHero
-        title="Contact Us"
-        crumb="Contact"
-        badge="24/7 DISPATCH"
-      />
-      <ContactSection />
-      <ContactMap />
+      <HotShotHero title={content.heroTitle} crumb="Contact" badge={content.heroBadge} />
+      <ContactSection content={content} />
+      <ContactMap address={content.address} label={content.mapLabel} />
     </main>
   );
 }

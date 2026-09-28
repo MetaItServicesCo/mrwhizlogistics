@@ -16,6 +16,7 @@ import {
   type LogoSettings,
 } from "@/lib/branding";
 import SiteLogo from "@/components/common/SiteLogo";
+import { addressLines } from "@/lib/contactPage";
 
 const LIME = "#c8ff00";
 
@@ -28,6 +29,7 @@ export default function AdvancedFooterCTA({
   youtubeUrl,
   logo,
   footerLogo,
+  address,
 }: {
   companyName?: string;
   phone?: string;
@@ -40,6 +42,8 @@ export default function AdvancedFooterCTA({
   logo?: LogoSettings;
   /** Footer logo image, size and name toggle from the Branding tab. */
   footerLogo?: FooterLogoSettings;
+  /** Company address (one line per row) from Settings -> Contact page. */
+  address?: string;
 }) {
   const footer = footerLogo ?? DEFAULT_FOOTER_LOGO_SETTINGS;
   // Every social icon used to link to "#". Only show the ones that have a
@@ -311,11 +315,13 @@ export default function AdvancedFooterCTA({
                   lineHeight: 1.5,
                 }}
               >
-                555 N 5th St 109 B,
-                <br />
-                Garland, TX 75040,
-                <br />
-                United States
+                {addressLines(address).map((line, i, all) => (
+                  <span key={i}>
+                    {line}
+                    {i < all.length - 1 ? "," : ""}
+                    {i < all.length - 1 && <br />}
+                  </span>
+                ))}
               </Typography>
             </Stack>
           </Stack>

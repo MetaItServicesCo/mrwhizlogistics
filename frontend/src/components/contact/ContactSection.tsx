@@ -4,6 +4,8 @@ import { useState } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { submitContact } from "@/lib/publicApi";
 import { errorMessage } from "@/lib/useResource";
+import { mailtoHref, telHref } from "@/lib/contact";
+import { DEFAULT_CONTACT_TEXT, type ContactContent } from "@/lib/contactPage";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
@@ -19,39 +21,6 @@ import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 
 const LIME = "#c8ff00";
 const EASE = [0.22, 1, 0.36, 1] as const;
-
-const SERVICES = [
-  "Hot Shot",
-  "Box Truck",
-  "Semi Truck",
-  "Equipment Rental",
-  "Other",
-];
-
-const INFO = [
-  {
-    icon: <LocationOnRoundedIcon />,
-    label: "Address",
-    value: "555 N 5th St 109 B, Garland, TX 75040, United States",
-  },
-  {
-    icon: <PhoneInTalkRoundedIcon />,
-    label: "Contact Number",
-    value: "+1 (469) 767 8853",
-    href: "tel:+14697678853",
-  },
-  {
-    icon: <EmailRoundedIcon />,
-    label: "Email Us",
-    value: "dispatch@yourcompany.com",
-    href: "mailto:dispatch@yourcompany.com",
-  },
-  {
-    icon: <AccessTimeRoundedIcon />,
-    label: "Working Hours",
-    value: "24/7 Dispatch — Always available",
-  },
-];
 
 const fieldSx = {
   "& .MuiInputLabel-root": { color: "rgba(255,255,255,0.5)", fontSize: 14 },
@@ -92,8 +61,20 @@ const menuSx = {
   },
 } as const;
 
-export default function ContactSection() {
+export default function ContactSection({
+  content,
+}: {
+  /** Text and company details from Dashboard -> Settings -> Contact page. */
+  content: ContactContent;
+}) {
   const reduce = useReducedMotion() ?? false;
+  const info = [
+    { icon: <LocationOnRoundedIcon />, label: content.addressLabel, value: content.address },
+    { icon: <PhoneInTalkRoundedIcon />, label: content.phoneLabel, value: content.phone, href: telHref(content.phone) },
+    { icon: <EmailRoundedIcon />, label: content.emailLabel, value: content.email, href: mailtoHref(content.email) },
+    { icon: <AccessTimeRoundedIcon />, label: content.hoursLabel, value: content.hours },
+  ];
+  const services = content.services.length ? content.services : DEFAULT_CONTACT_TEXT.services;
   const [status, setStatus] = useState<"idle" | "loading" | "done">("idle");
   const [error, setError] = useState<string | null>(null);
   const [form, setForm] = useState({
@@ -209,7 +190,7 @@ export default function ContactSection() {
               mb: 1,
             }}
           >
-            Contact Information
+            {content.infoHeading}
           </Typography>
           <Box
             sx={{
@@ -237,7 +218,7 @@ export default function ContactSection() {
               gap: 2,
             }}
           >
-            {INFO.map((it) => (
+            {info.map((it) => (
               <Box
                 key={it.label}
                 component={motion.div}
@@ -348,7 +329,7 @@ export default function ContactSection() {
               "@media (prefers-reduced-motion: reduce)": { animation: "none" },
             }}
           >
-            Get a Quote
+            {content.formHeading}
           </Typography>
           <Box
             sx={{
@@ -395,7 +376,7 @@ export default function ContactSection() {
                   <Typography
                     sx={{ fontSize: "1.5rem", fontWeight: 800, mt: 2 }}
                   >
-                    Message sent!
+                    {content.successTitle}
                   </Typography>
                   <Typography
                     sx={{
@@ -404,8 +385,9 @@ export default function ContactSection() {
                       mt: 1,
                     }}
                   >
-                    Thanks {form.name ? form.name.split(" ")[0] : ""} — our team
-                    will reply the same day.
+                    {content.successMessage
+                      .replace(/\{name\}/g, form.name ? form.name.split(" ")[0] : "")
+                      .replace(/\s+—/, " —")}
                   </Typography>
                 </Box>
               </motion.div>
@@ -456,7 +438,7 @@ export default function ContactSection() {
                     sx={fieldSx}
                     slotProps={{ select: { MenuProps: { sx: menuSx } } }}
                   >
-                    {SERVICES.map((s) => (
+                    {services.map((s) => (
                       <MenuItem key={s} value={s}>
                         {s}
                       </MenuItem>
@@ -549,7 +531,7 @@ export default function ContactSection() {
                   {status === "loading" ? (
                     <CircularProgress size={22} sx={{ color: "#0a0a0a" }} />
                   ) : (
-                    "Request Quote"
+                    content.submitLabel
                   )}
                 </Button>
               </motion.div>

@@ -60,6 +60,7 @@ export default async function PublicLayout({
         youtubeUrl={settings.youtube_url}
         logo={logo}
         footerLogo={footerLogoFromSettings(settings)}
+        address={settings.address}
       />
     </CtaProvider>
   );

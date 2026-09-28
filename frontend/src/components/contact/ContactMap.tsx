@@ -9,12 +9,16 @@ import DirectionsRoundedIcon from "@mui/icons-material/DirectionsRounded";
 const LIME = "#c8ff00";
 const EASE = [0.22, 1, 0.36, 1] as const;
 
-// 👇 apna address yahan daalein (map + directions dono isi se banenge)
-const ADDRESS = "555 N 5th St 109 B, Garland, TX 75040, United States";
-const MAP_SRC = `https://www.google.com/maps?q=${encodeURIComponent(ADDRESS)}&output=embed`;
-const DIRECTIONS = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(ADDRESS)}`;
-
-export default function ContactMap() {
+export default function ContactMap({
+  address,
+  label = "VISIT US",
+}: {
+  /** Company address from Dashboard -> Settings -> Contact page. */
+  address: string;
+  label?: string;
+}) {
+  const MAP_SRC = `https://www.google.com/maps?q=${encodeURIComponent(address)}&output=embed`;
+  const DIRECTIONS = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(address)}`;
   return (
     <Box
       component="section"
@@ -52,7 +56,7 @@ export default function ContactMap() {
           {/* map */}
           <Box
             component="iframe"
-            title={`Map showing ${ADDRESS}`}
+            title={`Map showing ${address}`}
             src={MAP_SRC}
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
@@ -110,7 +114,7 @@ export default function ContactMap() {
                   mb: 0.4,
                 }}
               >
-                VISIT US
+                {label}
               </Typography>
               <Typography
                 sx={{
@@ -120,7 +124,7 @@ export default function ContactMap() {
                   mb: 1,
                 }}
               >
-                {ADDRESS}
+                {address}
               </Typography>
               <Box
                 component="a"

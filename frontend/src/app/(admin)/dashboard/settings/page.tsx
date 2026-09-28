@@ -13,6 +13,8 @@ import type { SiteSetting, User } from "@/lib/types";
 import DataTable, { type Column } from "@/components/admin/DataTable";
 import LogoSettingsPanel from "@/components/admin/LogoSettingsPanel";
 import CtaSettingsPanel from "@/components/admin/CtaSettingsPanel";
+import ContactPageSettingsPanel from "@/components/admin/ContactPageSettingsPanel";
+import { ADDRESS_KEY, CONTACT_PAGE_KEY, WORKING_HOURS_KEY } from "@/lib/contactPage";
 import { CTA_SETTING_KEY } from "@/lib/cta";
 import { BRANDING_KEYS as BRANDING_KEY_LIST } from "@/lib/branding";
 import {
@@ -32,9 +34,18 @@ import {
 
 /** Managed by the Branding tab, so they're kept out of the generic table. */
 /** Managed by the Branding and Buttons tabs, so kept out of the generic table. */
-const BRANDING_KEYS = new Set([...BRANDING_KEY_LIST, CTA_SETTING_KEY]);
+const BRANDING_KEYS = new Set([
+  ...BRANDING_KEY_LIST,
+  CTA_SETTING_KEY,
+  // Contact page tab
+  "phone",
+  "email",
+  ADDRESS_KEY,
+  WORKING_HOURS_KEY,
+  CONTACT_PAGE_KEY,
+]);
 
-type SettingsTab = "branding" | "buttons" | "settings" | "users";
+type SettingsTab = "branding" | "buttons" | "contact" | "settings" | "users";
 
 const ROLE_OPTIONS = [
   { value: "admin", label: "Admin" },
@@ -302,16 +313,18 @@ export default function SettingsPage() {
   const onUsersTab = tab === "users";
   const onBrandingTab = tab === "branding";
   const onButtonsTab = tab === "buttons";
+  const onContactTab = tab === "contact";
+  const onPanelTab = onBrandingTab || onButtonsTab || onContactTab;
 
   return (
     <Box>
       <PageHeader
         title="Settings"
         subtitle="Your logo, website buttons, the site-wide values used across the website, and the admin accounts that can sign in."
-        actionLabel={onBrandingTab || onButtonsTab ? undefined : onUsersTab ? "Add user" : "Add setting"}
+        actionLabel={onPanelTab ? undefined : onUsersTab ? "Add user" : "Add setting"}
         onAction={onUsersTab ? openCreateU : openCreateS}
       >
-        {!onBrandingTab && !onButtonsTab && <SearchBox value={search} onChange={setSearch} />}
+        {!onPanelTab && <SearchBox value={search} onChange={setSearch} />}
       </PageHeader>
 
       <Tabs
@@ -333,11 +346,26 @@ export default function SettingsPage() {
       >
         <Tab value="branding" label="Branding" />
         <Tab value="buttons" label="Buttons" />
+        <Tab value="contact" label="Contact page" />
         <Tab value="settings" label={`Site settings (${generalSettings.length})`} />
         <Tab value="users" label={`Admin users (${users.items.length})`} />
       </Tabs>
 
-      {onButtonsTab ? (
+      {onContactTab ? (
+        settings.loading && !settings.items.length ? (
+          <LoadingState label="Loading contact page…" />
+        ) : settings.error ? (
+          <ErrorState message={settings.error} onRetry={settings.reload} />
+        ) : (
+          <ContactPageSettingsPanel
+            settings={settings.items}
+            onSaved={(msg) => {
+              setToast(msg);
+              void settings.reload();
+            }}
+          />
+        )
+      ) : onButtonsTab ? (
         settings.loading && !settings.items.length ? (
           <LoadingState label="Loading buttons…" />
         ) : settings.error ? (
