@@ -2,8 +2,11 @@ import os
 import uuid
 import json
 import shutil
+import re
+from datetime import date
 from typing import List, Optional, Union
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form, status
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session, joinedload
 
 from app.database import get_db
@@ -13,6 +16,33 @@ from app.models.blog import Blog, BlogComment
 from app.schemas.blog import BlogResponse, CommentCreate, CommentResponse
 
 router = APIRouter(prefix="/blogs", tags=["Blog Services"])
+
+
+def normalize_slug(value: str) -> str:
+    """The post's URL segment: lowercase letters, digits and hyphens."""
+    slug = re.sub(r"[^a-z0-9]+", "-", (value or "").lower()).strip("-")
+    if not slug:
+        raise HTTPException(status_code=422, detail="Slug must contain letters or numbers.")
+    return slug
+
+
+def validate_publish_date(value: str) -> str:
+    """Publish dates are stored as YYYY-MM-DD (the site sorts and formats them)."""
+    v = (value or "").strip()
+    try:
+        date.fromisoformat(v)
+    except ValueError:
+        raise HTTPException(status_code=422, detail="Publish date must be a date in YYYY-MM-DD format.")
+    return v
+
+
+def commit_or_conflict(db: Session) -> None:
+    """A unique-constraint race (two saves at once) becomes a clear 409, not a 500."""
+    try:
+        db.commit()
+    except IntegrityError:
+        db.rollback()
+        raise HTTPException(status_code=409, detail="Another post already uses this slug or ID.")
 
 UPLOAD_DIR = "uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
@@ -147,10 +177,13 @@ async def create_blog(
     detail_image_file: Union[UploadFile, str, None] = File(default=None),
     db: Session = Depends(get_db)
 ):
+    card_id = card_id.strip()
+    slug = normalize_slug(slug)
+    publish_date = validate_publish_date(publish_date)
     if db.query(Blog).filter(Blog.card_id == card_id).first():
-        raise HTTPException(status_code=400, detail="Card ID already exists.")
+        raise HTTPException(status_code=409, detail=f'A post with the ID "{card_id}" already exists.')
     if db.query(Blog).filter(Blog.slug == slug).first():
-        raise HTTPException(status_code=400, detail="Slug already exists.")
+        raise HTTPException(status_code=409, detail=f'Another post already uses the slug "{slug}".')
 
     card_image_path = save_uploaded_file(card_image_file)
     detail_image_path = save_uploaded_file(detail_image_file)
@@ -176,7 +209,7 @@ async def create_blog(
         schema_markup=parse_schema_markup(schema_markup),
     )
     db.add(new_blog)
-    db.commit()
+    commit_or_conflict(db)
     db.refresh(new_blog)
     return new_blog
 
@@ -209,8 +242,16 @@ async def update_blog_by_card_id(
         raise HTTPException(status_code=404, detail=f"Blog with card_id '{card_id}' not found.")
 
     if title is not None: blog.title = title
-    if slug is not None: blog.slug = slug
-    if publish_date is not None: blog.publish_date = publish_date
+    if slug is not None:
+        slug = normalize_slug(slug)
+        clash = db.query(Blog).filter(Blog.slug == slug, Blog.id != blog.id).first()
+        if clash:
+            raise HTTPException(
+                status_code=409,
+                detail=f'Another post ("{clash.title}") already uses the slug "{slug}".',
+            )
+        blog.slug = slug
+    if publish_date is not None: blog.publish_date = validate_publish_date(publish_date)
     if read_time is not None: blog.read_time = read_time
     if category_tag is not None: blog.category_tag = category_tag
     if short_description is not None: blog.short_description = short_description
@@ -232,7 +273,7 @@ async def update_blog_by_card_id(
     if new_detail_image:
         blog.detail_image = new_detail_image
 
-    db.commit()
+    commit_or_conflict(db)
     db.refresh(blog)
     return blog
 

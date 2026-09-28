@@ -141,11 +141,18 @@ export default function SchemaMarkupEditor({
   };
 
   const parsed = useMemo(() => parse(text), [text]);
-  const fields = parsed.state === "object" ? readFields(parsed.value) : null;
+  const autoPreview = useMemo(() => JSON.stringify(buildBlogSchema(post), null, 2), [post]);
+  // With no custom markup the page publishes the automatic schema. Show that
+  // same schema in the editable form, so any edit starts from it and turns it
+  // into custom markup (it used to be read-only until "Customise" was found).
+  const isAuto = parsed.state === "empty";
+  const viewText = isAuto ? autoPreview : text;
+  const view = useMemo(() => (isAuto ? parse(autoPreview) : parsed), [isAuto, autoPreview, parsed]);
+  const fields = view.state === "object" ? readFields(view.value) : null;
 
   const updateField = (key: keyof Fields, v: string) => {
-    if (parsed.state !== "object") return;
-    const next = writeFields(parsed.value, { ...readFields(parsed.value), [key]: v });
+    if (view.state !== "object") return;
+    const next = writeFields(view.value, { ...readFields(view.value), [key]: v });
     emit(JSON.stringify(next, null, 2));
   };
 
@@ -155,8 +162,6 @@ export default function SchemaMarkupEditor({
     const merged = parsed.state === "object" ? { ...generated, ...parsed.value } : generated;
     emit(JSON.stringify(merged, null, 2));
   };
-
-  const autoPreview = useMemo(() => JSON.stringify(buildBlogSchema(post), null, 2), [post]);
 
   const row = { display: "grid", gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" }, gap: 2 } as const;
 
@@ -178,8 +183,10 @@ export default function SchemaMarkupEditor({
             Schema Markup (JSON-LD)
           </Typography>
           <Typography sx={{ fontSize: 12.5, color: "rgba(255,255,255,0.5)", mt: 0.5 }}>
-            Structured data search engines read to show rich results. Leave empty and the site
-            generates a standard BlogPosting schema from this post automatically.
+            Structured data search engines read to show rich results.{" "}
+            {isAuto
+              ? "Currently automatic: generated from this post. Edit any field below to customise it."
+              : "Custom markup is published for this post."}
           </Typography>
         </Box>
         <Box sx={{ display: "flex", gap: 1 }}>
@@ -196,9 +203,9 @@ export default function SchemaMarkupEditor({
               "&:hover": { bgcolor: "rgba(200,255,0,0.08)" },
             }}
           >
-            {parsed.state === "empty" ? "Customise" : "Fill from post"}
+            Fill from post
           </Button>
-          {parsed.state !== "empty" && (
+          {!isAuto && (
             <Button
               size="small"
               onClick={() => emit("")}
@@ -210,29 +217,7 @@ export default function SchemaMarkupEditor({
         </Box>
       </Box>
 
-      {parsed.state === "empty" ? (
-        <Box>
-          <Typography sx={{ fontSize: 12, fontWeight: 800, letterSpacing: 0.8, color: "rgba(255,255,255,0.35)", textTransform: "uppercase", mb: 1 }}>
-            Automatic markup that will be published
-          </Typography>
-          <Box
-            component="pre"
-            sx={{
-              m: 0,
-              p: 2,
-              maxHeight: 220,
-              overflow: "auto",
-              borderRadius: "10px",
-              bgcolor: "rgba(0,0,0,0.35)",
-              color: "rgba(255,255,255,0.6)",
-              fontSize: 12,
-              fontFamily: "monospace",
-            }}
-          >
-            {autoPreview}
-          </Box>
-        </Box>
-      ) : (
+      {(
         <>
           {fields ? (
             <>
@@ -267,7 +252,7 @@ export default function SchemaMarkupEditor({
               </Box>
               <Field label="Keywords" value={fields.keywords} onChange={(e) => updateField("keywords", e.target.value)} helperText="Comma separated" />
             </>
-          ) : parsed.state === "complex" ? (
+          ) : view.state === "complex" ? (
             <Typography sx={{ fontSize: 12.5, color: "rgba(255,255,255,0.55)" }}>
               This markup contains multiple entities (an array or @graph), so it is edited as JSON only.
             </Typography>
@@ -290,7 +275,7 @@ export default function SchemaMarkupEditor({
             </Box>
             <Box
               component="textarea"
-              value={text}
+              value={viewText}
               spellCheck={false}
               onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => emit(e.target.value)}
               aria-label="JSON-LD schema markup"

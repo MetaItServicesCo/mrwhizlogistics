@@ -13,6 +13,7 @@ import DataTable, { type Column } from "@/components/admin/DataTable";
 import RichTextEditor from "@/components/admin/RichTextEditor";
 import SchemaMarkupEditor, { schemaMarkupError } from "@/components/admin/SchemaMarkupEditor";
 import { paragraphsToHtml } from "@/lib/richText";
+import { isIsoDate, isValidCanonical, slugify, toIsoDate } from "@/lib/blogFields";
 import {
   BORDER,
   ConfirmDialog,
@@ -62,6 +63,10 @@ export default function BlogPostsPage() {
   const [creating, setCreating] = useState(false);
   const [deleting, setDeleting] = useState<BlogPost | null>(null);
   const [toast, setToast] = useState<string | null>(null);
+  // Public URL of the post just saved, for the toast's "View live" link.
+  const [toastHref, setToastHref] = useState<string | null>(null);
+  // The stored date could not be read (e.g. "14-Feb-1978"); ask for a new one.
+  const [badStoredDate, setBadStoredDate] = useState<string | null>(null);
   const cardRef = useRef<HTMLInputElement>(null);
   const detailRef = useRef<HTMLInputElement>(null);
 
@@ -75,8 +80,10 @@ export default function BlogPostsPage() {
     );
   }, [items, search]);
 
-  const set = (k: keyof typeof form) => (e: { target: { value: string } }) =>
+  const set = (k: keyof typeof form) => (e: { target: { value: string } }) => {
+    setError(null); // the message was about the old value
     setForm((f) => ({ ...f, [k]: e.target.value }));
+  };
 
   const openCreate = () => {
     setError(null);
@@ -89,13 +96,11 @@ export default function BlogPostsPage() {
     setCreating(true);
   };
 
-  const openEdit = (p: BlogPost) => {
-    setError(null);
-    setForm({
+  const formFrom = (p: BlogPost) => ({
       card_id: p.card_id || "",
       title: p.title || "",
       slug: p.slug || "",
-      publish_date: p.publish_date || "",
+      publish_date: toIsoDate(p.publish_date),
       read_time: p.read_time || "",
       category_tag: p.category_tag || "",
       short_description: p.short_description || "",
@@ -107,10 +112,44 @@ export default function BlogPostsPage() {
       meta_keywords: p.meta_keywords || "",
       canonical_url: p.canonical_url || "",
       schema_markup: p.schema_markup || "",
-    });
+  });
+
+  const openEdit = (p: BlogPost) => {
+    setError(null);
+    setForm(formFrom(p));
+    setBadStoredDate(p.publish_date && !toIsoDate(p.publish_date) ? p.publish_date : null);
     setCardImage(null);
     setDetailImage(null);
     setEditing(p);
+    // The table row can be older than what is saved (another tab, a save
+    // whose list reload failed). Load the post itself so the editor always
+    // starts from the stored version.
+    api
+      .get<BlogPost>(`/api/blogs/${encodeURIComponent(p.card_id)}`)
+      .then((fresh) => {
+        setEditing((cur) => (cur && cur.card_id === p.card_id ? fresh : cur));
+        setForm((f) => (f.card_id === p.card_id ? formFrom(fresh) : f));
+      })
+      .catch(() => {
+        /* keep the row's copy; a real problem will surface on save */
+      });
+  };
+
+  /** Everything the server would reject (or that would break the post's URL). */
+  const validate = (isCreate: boolean): string | null => {
+    if (!form.title.trim()) return "Title is required.";
+    const slug = slugify(form.slug || form.title);
+    if (!slug) return "Slug is required (letters or numbers).";
+    const clash = items.find((b) => b.slug === slug && b.card_id !== editing?.card_id);
+    if (clash) return `Another post ("${clash.title}") already uses the slug "${slug}". Choose a different one.`;
+    if (!isIsoDate(form.publish_date)) return "Pick a valid publish date.";
+    if (!isValidCanonical(form.canonical_url))
+      return "Canonical URL must be a page path like /blog/my-post or a full https:// address.";
+    if (isCreate) {
+      const id = form.card_id.trim() || slug;
+      if (items.some((b) => b.card_id === id)) return `A post with the ID "${id}" already exists.`;
+    }
+    return schemaMarkupError(form.schema_markup);
   };
 
   const buildFormData = (isCreate: boolean) => {
@@ -118,9 +157,11 @@ export default function BlogPostsPage() {
     const put = (k: string, v: string) => {
       fd.append(k, v);
     };
-    put("card_id", form.card_id);
-    put("title", form.title);
-    put("slug", form.slug);
+    const slug = slugify(form.slug || form.title);
+    // The ID only matters on create; it defaults to the slug.
+    put("card_id", isCreate ? form.card_id.trim() || slug : form.card_id);
+    put("title", form.title.trim());
+    put("slug", slug);
     put("publish_date", form.publish_date);
     put("read_time", form.read_time);
     put("category_tag", form.category_tag);
@@ -146,9 +187,9 @@ export default function BlogPostsPage() {
   };
 
   const create = async () => {
-    const schemaError = schemaMarkupError(form.schema_markup);
-    if (schemaError) {
-      setError(schemaError);
+    const invalid = validate(true);
+    if (invalid) {
+      setError(invalid);
       return;
     }
     if (!cardImage) {
@@ -158,6 +199,7 @@ export default function BlogPostsPage() {
     const ok = await run(() => api.post("/api/blogs/", buildFormData(true)));
     if (ok) {
       setCreating(false);
+      setToastHref(`/blog/${slugify(form.slug || form.title)}`);
       setToast("Post published.");
       void reload();
     }
@@ -165,24 +207,31 @@ export default function BlogPostsPage() {
 
   const update = async () => {
     if (!editing) return;
-    const schemaError = schemaMarkupError(form.schema_markup);
-    if (schemaError) {
-      setError(schemaError);
+    const invalid = validate(false);
+    if (invalid) {
+      setError(invalid);
       return;
     }
-    const ok = await run(() =>
-      api.put(`/api/blogs/${editing.card_id}`, buildFormData(false)),
-    );
+    let savedSlug = slugify(form.slug || form.title);
+    const ok = await run(async () => {
+      // encodeURIComponent: IDs can contain spaces, "#", "?" or "/".
+      const saved = await api.put<BlogPost>(
+        `/api/blogs/${encodeURIComponent(editing.card_id)}`,
+        buildFormData(false),
+      );
+      if (saved?.slug) savedSlug = saved.slug;
+    });
     if (ok) {
       setEditing(null);
-      setToast("Post updated.");
+      setToastHref(`/blog/${savedSlug}`);
+      setToast("Post updated. The change is live on the website.");
       void reload();
     }
   };
 
   const remove = async () => {
     if (!deleting) return;
-    const ok = await run(() => api.del(`/api/blogs/${deleting.card_id}`));
+    const ok = await run(() => api.del(`/api/blogs/${encodeURIComponent(deleting.card_id)}`));
     if (ok) {
       setDeleting(null);
       setToast("Post deleted.");
@@ -321,11 +370,17 @@ export default function BlogPostsPage() {
         }}
       >
         <Field
-          label="Card ID"
+          label="Post ID"
           value={form.card_id}
           onChange={set("card_id")}
-          required={isCreate}
-          helperText="Unique reference, e.g. b1"
+          disabled={!isCreate}
+          placeholder={isCreate ? slugify(form.slug || form.title) : undefined}
+          slotProps={{ inputLabel: { shrink: true } }}
+          helperText={
+            isCreate
+              ? "Internal reference. Leave empty to use the slug."
+              : "Internal reference; it cannot be changed."
+          }
         />
         <Field
           label="Category"
@@ -344,7 +399,9 @@ export default function BlogPostsPage() {
         label="Slug"
         value={form.slug}
         onChange={set("slug")}
+        onBlur={() => setForm((f) => ({ ...f, slug: slugify(f.slug || f.title) }))}
         required={isCreate}
+        helperText={`Page address: /blog/${slugify(form.slug || form.title) || "..."}  (lowercase letters, numbers and hyphens)`}
       />
       <Field
         label="Short description"
@@ -363,10 +420,17 @@ export default function BlogPostsPage() {
       >
         <Field
           label="Publish date"
+          type="date"
           value={form.publish_date}
           onChange={set("publish_date")}
-          required={isCreate}
-          helperText="e.g. 2026-09-23"
+          required
+          error={Boolean(badStoredDate) && !form.publish_date}
+          helperText={
+            badStoredDate && !form.publish_date
+              ? `Stored as "${badStoredDate}", which is not a date. Pick one.`
+              : " "
+          }
+          slotProps={{ inputLabel: { shrink: true }, htmlInput: { style: { colorScheme: "dark" } } }}
         />
         <Field
           label="Read time"
@@ -446,6 +510,12 @@ export default function BlogPostsPage() {
         label="Canonical URL"
         value={form.canonical_url}
         onChange={set("canonical_url")}
+        error={!isValidCanonical(form.canonical_url)}
+        helperText={
+          isValidCanonical(form.canonical_url)
+            ? "Optional. Only set it if this article's original lives at another address."
+            : "Use a page path like /blog/my-post or a full https:// address."
+        }
       />
 
       <SchemaMarkupEditor
@@ -540,7 +610,26 @@ export default function BlogPostsPage() {
         onClose={() => setDeleting(null)}
       />
 
-      <Toast message={toast} onClose={() => setToast(null)} />
+      <Toast
+        message={toast}
+        onClose={() => {
+          setToast(null);
+          setToastHref(null);
+        }}
+        action={
+          toastHref ? (
+            <Button
+              href={toastHref}
+              target="_blank"
+              rel="noopener"
+              size="small"
+              sx={{ color: "inherit", fontWeight: 800, textTransform: "none", whiteSpace: "nowrap" }}
+            >
+              View live
+            </Button>
+          ) : undefined
+        }
+      />
     </Box>
   );
 }

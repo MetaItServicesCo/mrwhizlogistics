@@ -408,24 +408,31 @@ export function FormDialog({
     >
       <DialogTitle sx={{ fontWeight: 800, fontSize: 18 }}>{title}</DialogTitle>
       <DialogContent>
-        {error && (
-          <Alert
-            severity="error"
-            variant="outlined"
-            sx={{
-              mb: 2,
-              color: "#ffb4b4",
-              borderColor: "rgba(255,107,107,0.4)",
-              borderRadius: "12px",
-            }}
-          >
-            {error}
-          </Alert>
-        )}
         <Box sx={{ display: "flex", flexDirection: "column", gap: 2.2, pt: 1 }}>
           {children}
         </Box>
       </DialogContent>
+      {/* The error sits by the buttons: on long forms (e.g. blog posts) a
+          message at the top of the scrolled content was never seen, so a
+          failed save looked like nothing happened. */}
+      {error && (
+        <Box sx={{ px: 3, pt: 1.5 }}>
+          <Alert
+            severity="error"
+            variant="outlined"
+            role="alert"
+            sx={{
+              color: "#ffb4b4",
+              borderColor: "rgba(255,107,107,0.4)",
+              borderRadius: "12px",
+              maxHeight: 140,
+              overflow: "auto",
+            }}
+          >
+            {error}
+          </Alert>
+        </Box>
+      )}
       <DialogActions sx={{ px: 3, pb: 2.5 }}>
         <Button
           onClick={onClose}
@@ -468,15 +475,18 @@ export function Toast({
   message,
   severity = "success",
   onClose,
+  action,
 }: {
   message: string | null;
   severity?: "success" | "error" | "info";
   onClose: () => void;
+  /** Optional link/button shown in the toast, e.g. "View live". */
+  action?: React.ReactNode;
 }) {
   return (
     <Snackbar
       open={!!message}
-      autoHideDuration={4000}
+      autoHideDuration={action ? 8000 : 4000}
       onClose={onClose}
       anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
     >
@@ -484,7 +494,8 @@ export function Toast({
         severity={severity}
         variant="filled"
         onClose={onClose}
-        sx={{ borderRadius: "12px" }}
+        action={action}
+        sx={{ borderRadius: "12px", alignItems: "center" }}
       >
         {message}
       </Alert>
