@@ -3,15 +3,17 @@ import { headers } from "next/headers";
 import BlogDetailHero from "@/components/blog/BlogDetailHero";
 import BlogDetail from "@/components/blog/BlogDetail";
 import { BLOG_POSTS, getBlogPost } from "@/data/blogPosts";
-import { apiBlogToView } from "@/lib/contentAdapters";
+import { apiBlogToView, settingsMap } from "@/lib/contentAdapters";
 import {
   getBlog,
   getBlogs,
+  getPublicSettings,
   loadDetail,
   loadDetailForMetadata,
 } from "@/lib/serverContent";
 import { buildBlogSchema, serializeJsonLd } from "@/lib/blogSchema";
 import { detailMetadata, usableCanonical } from "@/lib/seo";
+import { AUTHOR_BIOS_KEY, authorBio, parseAuthorBios } from "@/lib/authors";
 import type { BlogPost } from "@/data/blogPosts";
 
 export const dynamic = "force-dynamic";
@@ -93,9 +95,10 @@ export default async function BlogDetailPage({
 }) {
   const { slug } = await params;
   const bundled = getBlogPost(slug);
-  const [apiPost, apiPosts] = await Promise.all([
+  const [apiPost, apiPosts, settingRows] = await Promise.all([
     loadDetail(() => getBlog(slug), Boolean(bundled)),
     getBlogs(),
+    getPublicSettings(),
   ]);
   // Bundled copy only while the API is down; otherwise an unknown slug 404s.
   const post = apiPost.live ? apiBlogToView(apiPost.live) : apiPost.outage ? bundled : undefined;
@@ -112,7 +115,11 @@ export default async function BlogDetailPage({
         dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
       />
       <BlogDetailHero post={post} />
-      <BlogDetail post={post} allPosts={allPosts} />
+      <BlogDetail
+        post={post}
+        allPosts={allPosts}
+        authorBio={authorBio(parseAuthorBios(settingsMap(settingRows || [])[AUTHOR_BIOS_KEY]), post.author)}
+      />
     </main>
   );
 }

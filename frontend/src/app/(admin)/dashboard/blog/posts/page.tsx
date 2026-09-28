@@ -8,13 +8,14 @@ import Typography from "@mui/material/Typography";
 import UploadRoundedIcon from "@mui/icons-material/UploadRounded";
 import { api, mediaUrl } from "@/lib/api";
 import { useAction, useResource } from "@/lib/useResource";
-import type { BlogPost } from "@/lib/types";
+import type { BlogPost, SiteSetting } from "@/lib/types";
 import DataTable, { type Column } from "@/components/admin/DataTable";
 import RichTextEditor from "@/components/admin/RichTextEditor";
 import SchemaMarkupEditor, { schemaMarkupError } from "@/components/admin/SchemaMarkupEditor";
 import { paragraphsToHtml } from "@/lib/richText";
 import { isIsoDate, isValidCanonical, slugify, toIsoDate } from "@/lib/blogFields";
 import { useDeepLinkEdit } from "@/lib/adminNav";
+import { AUTHOR_BIOS_KEY, AUTHOR_BIO_MAX, authorBio, authorKey, parseAuthorBios } from "@/lib/authors";
 import {
   BORDER,
   ConfirmDialog,
@@ -55,6 +56,13 @@ const csvToJson = (v: string) =>
 export default function BlogPostsPage() {
   const { items, loading, error, reload } = useResource<BlogPost>("/api/blogs/");
   const { busy, error: actionError, setError, run } = useAction();
+  // Author bios live in one site setting, shared by all posts per author.
+  const settings = useResource<SiteSetting>("/api/settings");
+  const biosRow = settings.items.find((s) => s.key === AUTHOR_BIOS_KEY);
+  const bios = useMemo(() => parseAuthorBios(biosRow?.value), [biosRow?.value]);
+  // null = not edited in this dialog; the field then shows the stored bio of
+  // whichever author name is typed.
+  const [bioDraft, setBioDraft] = useState<string | null>(null);
 
   const [search, setSearch] = useState("");
   const [form, setForm] = useState(EMPTY);
@@ -94,6 +102,7 @@ export default function BlogPostsPage() {
     });
     setCardImage(null);
     setDetailImage(null);
+    setBioDraft(null);
     setCreating(true);
   };
 
@@ -121,6 +130,7 @@ export default function BlogPostsPage() {
     setBadStoredDate(p.publish_date && !toIsoDate(p.publish_date) ? p.publish_date : null);
     setCardImage(null);
     setDetailImage(null);
+    setBioDraft(null);
     setEditing(p);
     // The table row can be older than what is saved (another tab, a save
     // whose list reload failed). Load the post itself so the editor always
@@ -153,7 +163,29 @@ export default function BlogPostsPage() {
       const id = form.card_id.trim() || slug;
       if (items.some((b) => b.card_id === id)) return `A post with the ID "${id}" already exists.`;
     }
+    if (bioDraft !== null && bioDraft.trim().length > AUTHOR_BIO_MAX)
+      return `Author bio is too long (${bioDraft.trim().length}/${AUTHOR_BIO_MAX} characters).`;
     return schemaMarkupError(form.schema_markup);
+  };
+
+  /** Save the author bio if it was edited (after the post itself saved). */
+  const saveBio = async () => {
+    if (bioDraft === null) return;
+    const key = authorKey(form.author_name);
+    const next = bioDraft.trim();
+    if (!key || next === authorBio(bios, form.author_name)) return;
+    const map = { ...bios };
+    if (next) map[key] = next;
+    else delete map[key];
+    const value = JSON.stringify(map);
+    if (biosRow) await api.patch(`/api/settings/${biosRow.id}`, { value });
+    else
+      await api.post("/api/settings", {
+        key: AUTHOR_BIOS_KEY,
+        value,
+        label: "Blog author bios (managed in the blog editor)",
+      });
+    void settings.reload();
   };
 
   const buildFormData = (isCreate: boolean) => {
@@ -200,7 +232,10 @@ export default function BlogPostsPage() {
       setError("A card image is required.");
       return;
     }
-    const ok = await run(() => api.post("/api/blogs/", buildFormData(true)));
+    const ok = await run(async () => {
+      await api.post("/api/blogs/", buildFormData(true));
+      await saveBio();
+    });
     if (ok) {
       setCreating(false);
       setToastHref(`/blog/${slugify(form.slug || form.title)}`);
@@ -224,6 +259,7 @@ export default function BlogPostsPage() {
         buildFormData(false),
       );
       if (saved?.slug) savedSlug = saved.slug;
+      await saveBio();
     });
     if (ok) {
       setEditing(null);
@@ -449,6 +485,22 @@ export default function BlogPostsPage() {
           onChange={set("author_name")}
         />
       </Box>
+      <Field
+        label="Author bio"
+        value={bioDraft ?? authorBio(bios, form.author_name)}
+        onChange={(e) => {
+          setError(null);
+          setBioDraft(e.target.value);
+        }}
+        multiline
+        minRows={2}
+        placeholder="e.g. Dispatch lead at Mr. Whiz Logistics, writing about freight and trucking."
+        slotProps={{ inputLabel: { shrink: true } }}
+        helperText={`Shown in the "Published by" box under every post by ${form.author_name.trim() || "this author"}. ${
+          (bioDraft ?? authorBio(bios, form.author_name)).trim().length
+        }/${AUTHOR_BIO_MAX}. Leave empty to show just the name.`}
+        error={(bioDraft ?? "").trim().length > AUTHOR_BIO_MAX}
+      />
       <RichTextEditor
         label="Content"
         value={form.content_html}

@@ -17,6 +17,7 @@ import CtaSettingsPanel from "@/components/admin/CtaSettingsPanel";
 import ContactPageSettingsPanel from "@/components/admin/ContactPageSettingsPanel";
 import { ADDRESS_KEY, CONTACT_PAGE_KEY, WORKING_HOURS_KEY } from "@/lib/contactPage";
 import { CTA_SETTING_KEY } from "@/lib/cta";
+import { AUTHOR_BIOS_KEY } from "@/lib/authors";
 import { BRANDING_KEYS as BRANDING_KEY_LIST } from "@/lib/branding";
 import {
   ConfirmDialog,
@@ -38,6 +39,8 @@ import {
 const BRANDING_KEYS = new Set([
   ...BRANDING_KEY_LIST,
   CTA_SETTING_KEY,
+  // Edited in the blog editor
+  AUTHOR_BIOS_KEY,
   // Contact page tab
   "phone",
   "email",

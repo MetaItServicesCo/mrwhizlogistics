@@ -7,7 +7,14 @@ import type { BlogPost } from "@/data/blogPosts";
 
 const LIME = "#c8ff00";
 
-export default function BlogAuthorBox({ post }: { post: BlogPost }) {
+export default function BlogAuthorBox({
+  post,
+  bio,
+}: {
+  post: BlogPost;
+  /** From the blog editor's "Author bio" (shared by all of this author's posts). */
+  bio?: string;
+}) {
   return (
     <Box
       sx={{
@@ -56,16 +63,18 @@ export default function BlogAuthorBox({ post }: { post: BlogPost }) {
         >
           {post.author}
         </Typography>
-        <Typography
-          sx={{
-            fontSize: 13.5,
-            color: "rgba(255,255,255,0.55)",
-            lineHeight: 1.7,
-          }}
-        >
-          Logistics writer covering freight, dispatch and the technology
-          reshaping how goods move across the country.
-        </Typography>
+        {bio && (
+          <Typography
+            sx={{
+              fontSize: 13.5,
+              color: "rgba(255,255,255,0.55)",
+              lineHeight: 1.7,
+              whiteSpace: "pre-line",
+            }}
+          >
+            {bio}
+          </Typography>
+        )}
       </Box>
     </Box>
   );

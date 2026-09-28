@@ -15,9 +15,11 @@ const EASE = [0.22, 1, 0.36, 1] as const;
 export default function BlogDetail({
   post,
   allPosts,
+  authorBio,
 }: {
   post: BlogPost;
   allPosts: BlogPost[];
+  authorBio?: string;
 }) {
   return (
     <Box
@@ -53,7 +55,7 @@ export default function BlogDetail({
             <BlogArticle post={post} />
           </motion.div>
 
-          <BlogAuthorBox post={post} />
+          <BlogAuthorBox post={post} bio={authorBio} />
           <BlogComments postSlug={post.slug} />
         </Box>
 
