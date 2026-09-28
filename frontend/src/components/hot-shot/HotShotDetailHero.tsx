@@ -233,11 +233,9 @@ export default function HotShotDetailHero({
             md: 7,
             lg: 9,
           },
-          py: {
-            xs: 8,
-            sm: 10,
-            md: 12,
-          },
+          // Clears the fixed navbar (130px on desktop); see BlogDetailHero.
+          pt: { xs: "112px", md: "190px" },
+          pb: { xs: "56px", md: "80px" },
         }}
       >
         {/* =======================================================

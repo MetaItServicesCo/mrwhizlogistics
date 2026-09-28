@@ -32,6 +32,12 @@ export default function BlogDetailHero({ post }: { post: BlogPost }) {
         minHeight: { xs: 340, sm: 420, md: 500 },
         display: "flex",
         alignItems: "center",
+        // The fixed navbar covers the top ~77px (phones) / ~130px (desktop).
+        // Top padding = navbar + breathing room, so the content is centred
+        // in the visible area below it, and a long title grows the banner
+        // instead of sliding under the navbar.
+        pt: { xs: "112px", md: "190px" },
+        pb: { xs: "48px", md: "72px" },
         overflow: "hidden",
         bgcolor: "#0a0a0a",
         color: "#fff",
@@ -241,7 +247,9 @@ export default function BlogDetailHero({ post }: { post: BlogPost }) {
 
               <Box
                 sx={{
-                  width: 1,
+                  // "1px", not 1: MUI reads a bare 1 as 100%, which drew a
+                  // full-width grey bar whenever this row wrapped.
+                  width: "1px",
                   height: 16,
                   bgcolor: "rgba(255,255,255,0.2)",
                   display: { xs: "none", md: "block" },

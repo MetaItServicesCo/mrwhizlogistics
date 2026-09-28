@@ -1517,7 +1517,7 @@ function RailDivider() {
           xs: "none",
           lg: "block",
         },
-        width: 1,
+        width: "1px", // a bare 1 means 100% in MUI
         height: 30,
         bgcolor: "rgba(255,255,255,0.08)",
       }}

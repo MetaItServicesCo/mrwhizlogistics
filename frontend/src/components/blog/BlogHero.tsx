@@ -38,6 +38,9 @@ export default function BlogHero({
           sm: 440,
           md: 560,
         },
+        // Clears the fixed navbar; see BlogDetailHero.
+        pt: { xs: "112px", md: "190px" },
+        pb: { xs: "48px", md: "72px" },
         display: "flex",
         alignItems: "center",
         overflow: "hidden",
