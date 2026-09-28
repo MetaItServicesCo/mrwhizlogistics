@@ -20,6 +20,7 @@ import {
   SearchBox,
   Toast,
 } from "@/components/admin/ui";
+import AltTextField, { ALT_TEXT_MAX } from "@/components/admin/AltTextField";
 
 const EMPTY = {
   name: "",
@@ -28,6 +29,7 @@ const EMPTY = {
   facebook: "#",
   x: "#",
   email: "mailto:info@company.com",
+  image_alt: "",
 };
 
 export default function TeamsPage() {
@@ -70,6 +72,7 @@ export default function TeamsPage() {
       facebook: m.socials?.facebook || "#",
       x: m.socials?.x || "#",
       email: m.socials?.email || "mailto:info@company.com",
+      image_alt: m.image_alt || "",
     });
     setImage(null);
     setEditing(m);
@@ -88,6 +91,7 @@ export default function TeamsPage() {
         email: form.email || "#",
       }),
     );
+    fd.append("image_alt", form.image_alt);
     if (image) fd.append("image_file", image);
     return fd;
   };
@@ -95,6 +99,10 @@ export default function TeamsPage() {
   const save = async () => {
     if (!form.name.trim() || !form.role.trim()) {
       setError("Name and role are required.");
+      return;
+    }
+    if (form.image_alt.trim().length > ALT_TEXT_MAX) {
+      setError(`Alt text is limited to ${ALT_TEXT_MAX} characters.`);
       return;
     }
     const ok = await run(() =>
@@ -256,6 +264,12 @@ export default function TeamsPage() {
           />
         </Box>
       </Box>
+      <AltTextField
+        label="Photo alt text"
+        value={form.image_alt}
+        onChange={(v) => setForm((f) => ({ ...f, image_alt: v }))}
+        fallback="the person's name"
+      />
 
       <Typography
         sx={{

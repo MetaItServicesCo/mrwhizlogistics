@@ -4,7 +4,7 @@ import { useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "motion/react";
 import { telHref } from "@/lib/contact";
-import type { LogoSettings } from "@/lib/branding";
+import { logoAlt, type LogoSettings } from "@/lib/branding";
 import SiteLogo from "@/components/common/SiteLogo";
 import {
   Box,
@@ -210,6 +210,7 @@ export default function Navbar({
   menu,
   phone,
   logo,
+  companyName,
 }: {
   /** Published services per dropdown, loaded by the public layout. */
   menu?: NavMenu;
@@ -217,6 +218,8 @@ export default function Navbar({
   phone?: string;
   /** Logo image and size from Dashboard -> Settings -> Branding. */
   logo?: LogoSettings;
+  /** Used as the logo's alt text when none is set in Branding. */
+  companyName?: string;
 } = {}) {
   const MEGA = useMemo(() => buildMega(menu), [menu]);
   const tel = telHref(phone);
@@ -250,7 +253,7 @@ export default function Navbar({
         flexShrink: 0,
       }}
     >
-      <SiteLogo url={logo?.url} scale={logo?.scale} priority />
+      <SiteLogo url={logo?.url} scale={logo?.scale} alt={logoAlt(logo?.alt, companyName)} priority />
     </Link>
   );
 

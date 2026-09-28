@@ -17,6 +17,8 @@ class Blog(Base):
     
     card_image = Column(String, nullable=False)
     detail_image = Column(String, nullable=True)
+    card_image_alt = Column(String(300), nullable=True)   # alt text for card_image
+    detail_image_alt = Column(String(300), nullable=True) # alt text for detail_image
     short_description = Column(Text, nullable=False)
     content_paragraphs = Column(JSON, default=[])
     # Rich-text body from the dashboard editor (sanitised HTML). When set it

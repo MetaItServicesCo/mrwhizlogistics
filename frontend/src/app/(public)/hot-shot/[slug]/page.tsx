@@ -46,7 +46,7 @@ export async function generateMetadata({
     fallbackDescription: service.shortDescription,
     path: `/hot-shot/${service.slug}`,
     image: service.image,
-    imageAlt: name,
+    imageAlt: service.imageAlt || name,
   });
 }
 

@@ -17,6 +17,7 @@ class Testimonial(Base):
     initials = Column(String(10))
     accent = Column(String(255))
     image = Column(String(500))
+    image_alt = Column(String(300), nullable=True)
 
     is_active = Column(Boolean, default=True, nullable=False)
     sort_order = Column(Integer, default=0, nullable=False)

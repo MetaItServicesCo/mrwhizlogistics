@@ -8,6 +8,7 @@ class TeamMember(Base):
     name = Column(String, nullable=False)
     role = Column(String, nullable=False)
     image = Column(String, nullable=True)
+    image_alt = Column(String(300), nullable=True)
     
     # Social links store honge structure: {"linkedin": "#", "facebook": "#", "x": "#", "email": "mailto:..."}
     socials = Column(JSON, default={})

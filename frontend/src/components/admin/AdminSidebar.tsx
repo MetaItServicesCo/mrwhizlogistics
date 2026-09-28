@@ -13,6 +13,7 @@ import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownR
 import { ADMIN_MENU, type NavItem } from "@/data/adminMenu";
 import { api, mediaUrl } from "@/lib/api";
 import { useSiteLogo } from "@/lib/useSiteLogo";
+import { logoAlt } from "@/lib/branding";
 import type { DashboardStats } from "@/lib/types";
 
 const LIME = "#c8ff00";
@@ -177,7 +178,7 @@ export default function AdminSidebar({
                 <Box
                   component="img"
                   src={mediaUrl(logo.url)}
-                  alt="Logo"
+                  alt={logoAlt(logo?.alt)}
                   sx={{
                     width: "100%",
                     height: "100%",
@@ -188,7 +189,7 @@ export default function AdminSidebar({
               ) : logo ? (
                 <Image
                   src="/images/logo.png"
-                  alt="Logo"
+                  alt={logoAlt(logo?.alt)}
                   fill
                   sizes="150px"
                   style={{ objectFit: "contain", objectPosition: "left center" }}

@@ -22,6 +22,8 @@ class Hotshot(Base):
     # --- DETAIL PAGE DATA ---
     detail_heading = Column(String(300), nullable=False)      # Main Title on Detail Page
     detail_image = Column(String(500), nullable=True)        # Banner/Detail image path/URL
+    card_image_alt = Column(String(300), nullable=True)   # alt text for card_image
+    detail_image_alt = Column(String(300), nullable=True) # alt text for detail_image
     detail_paragraphs = Column(JSON, default=[])              # Array of paragraphs for detailed description
     # Rich-text body from the dashboard editor (sanitised HTML). When set it
     # replaces the legacy paragraph list on the public detail page.

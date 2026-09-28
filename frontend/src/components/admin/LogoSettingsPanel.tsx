@@ -23,7 +23,10 @@ import {
   LOGO_SCALE_MAX,
   LOGO_SCALE_MIN,
   LOGO_URL_KEY,
+  LOGO_ALT_KEY,
+  FOOTER_LOGO_ALT_KEY,
   footerLogoFromSettings,
+  logoAlt,
   logoFromSettings,
   type FooterLogoSettings,
   type LogoSettings,
@@ -32,6 +35,7 @@ import { publishSiteLogo } from "@/lib/useSiteLogo";
 import type { SiteSetting } from "@/lib/types";
 import SiteLogo from "@/components/common/SiteLogo";
 import { BORDER, LIME, Panel } from "@/components/admin/ui";
+import AltTextField, { ALT_TEXT_MAX } from "@/components/admin/AltTextField";
 
 const ACCEPT = "image/png,image/jpeg,image/webp";
 const MAX_BYTES = 10 * 1024 * 1024;
@@ -383,7 +387,7 @@ function NavPreview({ logo, viewport }: { logo: LogoSettings; viewport: "desktop
         }}
       >
         <Box sx={{ flexShrink: 0 }}>
-          <SiteLogo url={logo.url} scale={logo.scale} viewport={viewport} />
+          <SiteLogo url={logo.url} scale={logo.scale} viewport={viewport} alt={logoAlt(logo.alt)} />
         </Box>
         {desktop ? (
           <Box sx={{ display: "flex", gap: 3, alignItems: "center", flexShrink: 0, whiteSpace: "nowrap" }}>
@@ -409,13 +413,15 @@ function HeaderLogoSection({ settings, onSaved }: Props) {
   const [draft, setDraft] = useDraft<LogoSettings>(saved);
   const ed = useLogoEditor();
 
-  const dirty = draft.url !== saved.url || draft.scale !== saved.scale;
+  const dirty = draft.url !== saved.url || draft.scale !== saved.scale || draft.alt !== saved.alt;
   const isDefault = draft.url === "" && draft.scale === LOGO_SCALE_DEFAULT;
 
   const save = () =>
     ed.save(async () => {
+      if (draft.alt.trim().length > ALT_TEXT_MAX) throw new Error(`Alt text is limited to ${ALT_TEXT_MAX} characters.`);
       await upsertSetting(settings, LOGO_URL_KEY, draft.url, "Site logo image (empty = default logo)");
       await upsertSetting(settings, LOGO_SCALE_KEY, String(draft.scale), "Header logo size, % of default");
+      await upsertSetting(settings, LOGO_ALT_KEY, draft.alt.trim(), "Header logo alt text (empty = company name)");
       publishSiteLogo(draft);
       onSaved("Header logo saved. It is live on the website now.");
     });
@@ -445,6 +451,15 @@ function HeaderLogoSection({ settings, onSaved }: Props) {
           <Typography sx={{ ...hintSx, mt: 1.5 }}>
             On phones the logo grows at most to 130% so the menu button keeps room.
           </Typography>
+          <Box sx={{ mt: 2.5 }}>
+            <AltTextField
+              label="Header logo alt text"
+              value={draft.alt}
+              onChange={(alt) => setDraft((d) => ({ ...d, alt }))}
+              fallback="the company name"
+              disabled={ed.busy}
+            />
+          </Box>
           <SaveBar
             error={ed.error}
             onDismissError={() => ed.setError(null)}
@@ -501,7 +516,7 @@ function FooterPreview({
       }}
     >
       <Box sx={{ display: "flex", alignItems: "center", gap: "14px", maxWidth: "100%", mb: 2.5 }}>
-        <SiteLogo slot="footer" url={url} scale={footer.scale} viewport={viewport} alt={companyName} />
+        <SiteLogo slot="footer" url={url} scale={footer.scale} viewport={viewport} alt={logoAlt(footer.alt, companyName)} />
         {footer.showName && (
           <Typography sx={{ color: "#fff", fontWeight: 700, fontSize: viewport === "mobile" ? 20 : 21, letterSpacing: "-0.5px" }}>
             {companyName}
@@ -522,16 +537,19 @@ function FooterLogoSection({ settings, onSaved }: Props) {
   const [draft, setDraft] = useDraft<FooterLogoSettings>(saved);
   const ed = useLogoEditor();
 
-  const dirty = draft.url !== saved.url || draft.scale !== saved.scale || draft.showName !== saved.showName;
+  const dirty =
+    draft.url !== saved.url || draft.scale !== saved.scale || draft.showName !== saved.showName || draft.alt !== saved.alt;
   const isDefault =
     draft.url === "" && draft.scale === LOGO_SCALE_DEFAULT && draft.showName === DEFAULT_FOOTER_LOGO_SETTINGS.showName;
   const effectiveUrl = draft.url || header.url;
 
   const save = () =>
     ed.save(async () => {
+      if (draft.alt.trim().length > ALT_TEXT_MAX) throw new Error(`Alt text is limited to ${ALT_TEXT_MAX} characters.`);
       await upsertSetting(settings, FOOTER_LOGO_URL_KEY, draft.url, "Footer logo image (empty = same as header logo)");
       await upsertSetting(settings, FOOTER_LOGO_SCALE_KEY, String(draft.scale), "Footer logo size, % of default");
       await upsertSetting(settings, FOOTER_SHOW_NAME_KEY, String(draft.showName), "Show company name next to footer logo");
+      await upsertSetting(settings, FOOTER_LOGO_ALT_KEY, draft.alt.trim(), "Footer logo alt text (empty = company name)");
       onSaved("Footer logo saved. It is live on the website now.");
     });
 
@@ -574,6 +592,15 @@ function FooterLogoSection({ settings, onSaved }: Props) {
                 "& .MuiSwitch-switchBase.Mui-checked": { color: LIME },
                 "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": { bgcolor: LIME },
               }}
+            />
+          </Box>
+          <Box sx={{ mt: 2.5 }}>
+            <AltTextField
+              label="Footer logo alt text"
+              value={draft.alt}
+              onChange={(alt) => setDraft((d) => ({ ...d, alt }))}
+              fallback="the company name"
+              disabled={ed.busy}
             />
           </Box>
           <SaveBar

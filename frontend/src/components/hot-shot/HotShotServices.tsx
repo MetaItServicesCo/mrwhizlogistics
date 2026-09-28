@@ -16,6 +16,7 @@ import StorefrontRoundedIcon from "@mui/icons-material/StorefrontRounded";
 
 import { HOT_SHOT_SERVICES } from "@/data/hotShotServices";
 import type { HotShotService } from "@/types/hotShot";
+import CoverImage from "@/components/common/CoverImage";
 
 const LIME = "#c8ff00";
 const EASE = [0.22, 1, 0.36, 1] as const;
@@ -122,12 +123,11 @@ function ServiceCard({
             sx={{
               position: "absolute",
               inset: 0,
-              backgroundImage: `url(${service.image})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
               transition: "transform .8s cubic-bezier(.2,.8,.2,1)",
             }}
-          />
+          >
+            <CoverImage src={service.image} alt={service.imageAlt || service.title} />
+          </Box>
 
           {/* IMAGE OVERLAY */}
 

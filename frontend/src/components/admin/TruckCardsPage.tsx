@@ -23,6 +23,7 @@ import {
   Toast,
 } from "./ui";
 import { useDeepLinkEdit } from "@/lib/adminNav";
+import AltTextField, { ALT_TEXT_MAX } from "@/components/admin/AltTextField";
 
 type FormState = {
   card_number: string;
@@ -42,6 +43,8 @@ type FormState = {
   meta_description: string;
   meta_keywords: string;
   canonical_url: string;
+  card_image_alt: string;
+  detail_image_alt: string;
 };
 
 const EMPTY: FormState = {
@@ -62,6 +65,8 @@ const EMPTY: FormState = {
   meta_description: "",
   meta_keywords: "",
   canonical_url: "",
+  card_image_alt: "",
+  detail_image_alt: "",
 };
 
 /** The API stores these as JSON arrays; the form edits them one-per-line. */
@@ -251,11 +256,20 @@ export default function TruckCardsPage({
       meta_description: row.meta_description || "",
       meta_keywords: row.meta_keywords || "",
       canonical_url: row.canonical_url || "",
+      card_image_alt: row.card_image_alt || "",
+      detail_image_alt: row.detail_image_alt || "",
     });
     setCardImage(null);
     setDetailImage(null);
     setEditing(row);
   };
+
+
+  /** Alt text longer than the backend keeps would be cut off silently. */
+  const altTooLong = () =>
+    [form.card_image_alt, form.detail_image_alt].some((a) => a.trim().length > ALT_TEXT_MAX)
+      ? `Alt text is limited to ${ALT_TEXT_MAX} characters.`
+      : null;
 
   // "Edit this service" from the site's admin bar lands here with ?edit=<slug>.
   useDeepLinkEdit(items, loading, (c, slug) => c.slug === slug, openEdit);
@@ -279,6 +293,8 @@ export default function TruckCardsPage({
       put("max_payload", form.max_payload);
       put("cargo_type", form.cargo_type);
     }
+    put("card_image_alt", form.card_image_alt);
+    put("detail_image_alt", form.detail_image_alt);
     put("meta_title", form.meta_title);
     put("meta_description", form.meta_description);
     put("meta_keywords", form.meta_keywords);
@@ -297,6 +313,11 @@ export default function TruckCardsPage({
   };
 
   const create = async () => {
+    const altError = altTooLong();
+    if (altError) {
+      setError(altError);
+      return;
+    }
     if (!cardImage) {
       setError("A card image is required.");
       return;
@@ -310,6 +331,11 @@ export default function TruckCardsPage({
   };
 
   const update = async () => {
+    const altError = altTooLong();
+    if (altError) {
+      setError(altError);
+      return;
+    }
     if (!editing) return;
     const ok = await run(() =>
       api.put(`${endpoint}/${editing.id}`, buildFormData(false)),
@@ -517,11 +543,23 @@ export default function TruckCardsPage({
         onPick={setCardImage}
         required={isCreate}
       />
+      <AltTextField
+        label="Card image alt text"
+        value={form.card_image_alt}
+        onChange={(v) => setForm((f) => ({ ...f, card_image_alt: v }))}
+        fallback="the service title"
+      />
       <ImagePicker
         label="Detail image"
         file={detailImage}
         existing={editing?.detail_image}
         onPick={setDetailImage}
+      />
+      <AltTextField
+        label="Detail image alt text"
+        value={form.detail_image_alt}
+        onChange={(v) => setForm((f) => ({ ...f, detail_image_alt: v }))}
+        fallback="the service title"
       />
 
       <Typography

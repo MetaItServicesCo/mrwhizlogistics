@@ -42,6 +42,7 @@ export default async function PublicLayout({
       <Navbar
         phone={settings.phone}
         logo={logo}
+        companyName={settings.company_name}
         menu={{
           "Hot Shot": hotshots,
           "Box Truck": boxTrucks,

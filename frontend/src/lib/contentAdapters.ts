@@ -20,6 +20,7 @@ export type PublicTestimonial = {
   initials: string | null;
   accent: string | null;
   image: string | null;
+  image_alt?: string | null;
 };
 
 export type PublicTeamMember = {
@@ -27,6 +28,7 @@ export type PublicTeamMember = {
   name: string;
   role: string;
   image: string | null;
+  image_alt?: string | null;
   socials: Record<string, string>;
 };
 
@@ -86,6 +88,8 @@ export function truckCardToService(
       card.card_image ||
       fallback?.image ||
       "/images/breadcumb.jpg",
+    // Alt text for whichever image is shown; the service name otherwise.
+    imageAlt: (detail && card.detail_image ? card.detail_image_alt : card.card_image_alt) || card.title,
     shortDescription: card.short_description,
     description:
       card.detail_paragraphs.length > 0
@@ -111,6 +115,7 @@ export function truckCardToGridItem(card: TruckCard) {
     desc: card.short_description,
     points: card.features,
     image: card.card_image,
+    imageAlt: card.card_image_alt || card.title,
   };
 }
 
@@ -124,6 +129,7 @@ export function apiBlogToView(post: ApiBlogPost): BlogPost {
     date: post.publish_date,
     category: post.category_tag,
     image: post.detail_image || post.card_image,
+    imageAlt: (post.detail_image ? post.detail_image_alt : post.card_image_alt) || post.title,
     readTime: post.read_time,
     content: post.content_paragraphs,
     contentHtml: post.content_html || undefined,

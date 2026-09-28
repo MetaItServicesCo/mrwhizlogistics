@@ -10,6 +10,7 @@ import StarRoundedIcon from "@mui/icons-material/StarRounded";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
 import { getPublicTestimonials } from "@/lib/publicApi";
+import CoverImage from "@/components/common/CoverImage";
 
 const LIME = "#c8ff00";
 const DURATION = 3000;
@@ -25,6 +26,7 @@ type T = {
   initials: string;
   accent: string;
   image?: string;
+  imageAlt?: string;
 };
 
 // 👇 Apne ASLI clients ke testimonials daalein. image (optional): "/images/avatar1.jpg"
@@ -137,6 +139,7 @@ export default function TestimonialsSection() {
             accent:
               item.accent || "linear-gradient(135deg, #c8ff00, #7fb800)",
             image: item.image || undefined,
+            imageAlt: item.image_alt || undefined,
           })),
         );
         setActive(0);
@@ -532,16 +535,16 @@ export default function TestimonialsSection() {
                     fontSize: on ? 18 : 14,
                     textShadow: "0 1px 3px rgba(0,0,0,0.4)",
                     transition: "font-size .35s ease",
-                    ...(item.image
-                      ? {
-                          backgroundImage: `url(${item.image})`,
-                          backgroundSize: "cover",
-                          backgroundPosition: "center",
-                        }
-                      : { background: item.accent }),
+                    position: "relative",
+                    overflow: "hidden",
+                    ...(item.image ? {} : { background: item.accent }),
                   }}
                 >
-                  {!item.image && item.initials}
+                  {item.image ? (
+                    <CoverImage src={item.image} alt={item.imageAlt || item.name} />
+                  ) : (
+                    item.initials
+                  )}
                 </Box>
               </Box>
             );

@@ -34,6 +34,8 @@ class BlogResponse(BaseModel):
     category_tag: str
     card_image: str
     detail_image: Optional[str]
+    card_image_alt: Optional[str] = None
+    detail_image_alt: Optional[str] = None
     short_description: str
     content_paragraphs: List[str]
     content_html: Optional[str] = None

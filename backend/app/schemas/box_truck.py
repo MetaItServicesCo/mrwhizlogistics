@@ -33,6 +33,8 @@ class BoxTruckResponse(BoxTruckBase):
     id: int
     card_image: str
     detail_image: Optional[str] = None
+    card_image_alt: Optional[str] = None
+    detail_image_alt: Optional[str] = None
     created_at: datetime
 
     class Config:

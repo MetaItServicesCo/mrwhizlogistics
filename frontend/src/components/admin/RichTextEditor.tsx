@@ -41,10 +41,12 @@ import RedoRoundedIcon from "@mui/icons-material/RedoRounded";
 import FormatColorTextRoundedIcon from "@mui/icons-material/FormatColorTextRounded";
 import BorderColorRoundedIcon from "@mui/icons-material/BorderColorRounded";
 import FormatColorResetRoundedIcon from "@mui/icons-material/FormatColorResetRounded";
-import { api } from "@/lib/api";
+import ClosedCaptionRoundedIcon from "@mui/icons-material/ClosedCaptionRounded";
+import { api, mediaUrl } from "@/lib/api";
 import { errorMessage } from "@/lib/useResource";
 import { richContentSx } from "@/components/common/richContentSx";
 import { BORDER, Field, LIME } from "./ui";
+import AltTextField, { ALT_TEXT_MAX } from "./AltTextField";
 
 type BlockType = "paragraph" | "h2" | "h3" | "h4";
 
@@ -230,6 +232,64 @@ function ColorMenu({
   );
 }
 
+/** "Describe this image": asked after an upload and from the toolbar for an existing image. */
+function ImageAltDialog({
+  open,
+  src,
+  initial,
+  title,
+  confirmLabel,
+  onConfirm,
+  onClose,
+}: {
+  open: boolean;
+  src: string | null;
+  initial: string;
+  title: string;
+  confirmLabel: string;
+  onConfirm: (alt: string) => void;
+  onClose: () => void;
+}) {
+  const [alt, setAlt] = useState(initial);
+  // Reset to the new image's value each time the dialog opens.
+  const [openedFor, setOpenedFor] = useState<string | null>(null);
+  const key = open ? `${src}|${initial}` : null;
+  if (key !== openedFor) {
+    setOpenedFor(key);
+    if (open) setAlt(initial);
+  }
+  const tooLong = alt.trim().length > ALT_TEXT_MAX;
+  return (
+    <Dialog open={open} onClose={onClose} fullWidth maxWidth="xs" slotProps={{ paper: { sx: dialogPaperSx } }}>
+      <DialogTitle sx={{ fontWeight: 800, fontSize: 17 }}>{title}</DialogTitle>
+      <DialogContent sx={{ display: "flex", flexDirection: "column", gap: 2, pt: "8px !important" }}>
+        {src && (
+          <Box
+            component="img"
+            src={mediaUrl(src)}
+            alt=""
+            sx={{ width: "100%", maxHeight: 180, objectFit: "contain", borderRadius: "10px", bgcolor: "rgba(0,0,0,0.3)" }}
+          />
+        )}
+        <AltTextField label="Alt text" value={alt} onChange={setAlt} fallback="no description (not recommended)" />
+      </DialogContent>
+      <DialogActions sx={{ px: 3, pb: 2 }}>
+        <Button onClick={onClose} sx={{ color: "rgba(255,255,255,0.6)", textTransform: "none" }}>
+          Cancel
+        </Button>
+        <Button
+          onClick={() => onConfirm(alt.trim())}
+          disabled={tooLong}
+          disableElevation
+          sx={{ bgcolor: LIME, color: "#0a0a0a", fontWeight: 800, textTransform: "none", borderRadius: "10px", px: 2.5, "&:hover": { bgcolor: "#d4ff33" } }}
+        >
+          {confirmLabel}
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+}
+
 function Toolbar({
   editor,
   onUploadImage,
@@ -259,6 +319,9 @@ function Toolbar({
       ordered: e.isActive("orderedList"),
       quote: e.isActive("blockquote"),
       link: e.isActive("link"),
+      image: e.isActive("image"),
+      imageSrc: e.isActive("image") ? ((e.getAttributes("image").src as string | undefined) ?? null) : null,
+      imageAlt: e.isActive("image") ? ((e.getAttributes("image").alt as string | undefined) ?? "") : "",
       color: (e.getAttributes("textStyle").color as string | undefined) ?? null,
       highlight: e.isActive("highlight")
         ? ((e.getAttributes("highlight").color as string | undefined) ?? HIGHLIGHT_COLORS[0].value)
@@ -276,6 +339,7 @@ function Toolbar({
   const [imageUrl, setImageUrl] = useState("");
   const [imageAlt, setImageAlt] = useState("");
   const [colorMenu, setColorMenu] = useState<null | HTMLElement>(null);
+  const [altOpen, setAltOpen] = useState(false);
   const [highlightMenu, setHighlightMenu] = useState<null | HTMLElement>(null);
 
   const setBlock = (value: BlockType) => {
@@ -427,6 +491,14 @@ function Toolbar({
         >
           {uploading ? <CircularProgress size={16} sx={{ color: LIME }} /> : <ImageRoundedIcon />}
         </ToolButton>
+        <ToolButton
+          title={state.image ? "Image alt text" : "Image alt text (select an image first)"}
+          active={state.image}
+          disabled={!state.image}
+          onClick={() => setAltOpen(true)}
+        >
+          <ClosedCaptionRoundedIcon />
+        </ToolButton>
 
         <Divider orientation="vertical" flexItem sx={{ mx: 0.5, borderColor: "rgba(255,255,255,0.1)" }} />
 
@@ -559,12 +631,7 @@ function Toolbar({
             value={imageUrl}
             onChange={(e) => setImageUrl(e.target.value)}
           />
-          <Field
-            label="Alt text"
-            value={imageAlt}
-            onChange={(e) => setImageAlt(e.target.value)}
-            helperText="Describes the image for screen readers and search engines"
-          />
+          <AltTextField label="Alt text" value={imageAlt} onChange={setImageAlt} fallback="no description (not recommended)" />
         </DialogContent>
         <DialogActions sx={{ px: 3, pb: 2 }}>
           <Button onClick={() => setImageUrlOpen(false)} sx={{ color: "rgba(255,255,255,0.6)", textTransform: "none" }}>
@@ -572,7 +639,7 @@ function Toolbar({
           </Button>
           <Button
             onClick={insertImageFromUrl}
-            disabled={!imageUrl.trim()}
+            disabled={!imageUrl.trim() || imageAlt.trim().length > ALT_TEXT_MAX}
             disableElevation
             sx={{ bgcolor: LIME, color: "#0a0a0a", fontWeight: 800, textTransform: "none", borderRadius: "10px", px: 2.5, "&:hover": { bgcolor: "#d4ff33" } }}
           >
@@ -580,8 +647,27 @@ function Toolbar({
           </Button>
         </DialogActions>
       </Dialog>
+
+      {/* ---- alt text for the selected image ---- */}
+      <ImageAltDialog
+        open={altOpen}
+        src={state.imageSrc}
+        initial={state.imageAlt}
+        title="Image alt text"
+        confirmLabel="Save"
+        onClose={() => setAltOpen(false)}
+        onConfirm={(alt) => {
+          editor.chain().focus().updateAttributes("image", { alt: alt || null }).run();
+          setAltOpen(false);
+        }}
+      />
     </>
   );
+}
+
+/** Images in the HTML with no (or an empty) alt attribute. */
+function imagesMissingAlt(html: string): number {
+  return (html.match(/<img\b[^>]*>/gi) || []).filter((tag) => !/\balt="[^"]*\S[^"]*"/i.test(tag)).length;
 }
 
 export default function RichTextEditor({
@@ -606,6 +692,8 @@ export default function RichTextEditor({
   const lastEmitted = useRef(value);
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
+  // An uploaded image waiting for its description before being inserted.
+  const [pending, setPending] = useState<{ src: string; alt: string } | null>(null);
 
   const editor = useEditor({
     // Render on the client only: server-rendering the editor produces markup
@@ -652,8 +740,9 @@ export default function RichTextEditor({
       const fd = new FormData();
       fd.append("file", file);
       const { url } = await api.post<{ url: string }>("/api/uploads/image", fd);
-      const alt = file.name.replace(/\.[^.]+$/, "").replace(/[-_]+/g, " ");
-      editor?.chain().focus().setImage({ src: url, alt }).run();
+      // Suggest a description from the file name; the admin confirms or edits it.
+      const suggested = file.name.replace(/\.[^.]+$/, "").replace(/[-_]+/g, " ").replace(/\s+/g, " ").trim();
+      setPending({ src: url, alt: /^(img|image|dsc|photo|screenshot)?\s*\d*$/i.test(suggested) ? "" : suggested });
     } catch (e) {
       setUploadError(errorMessage(e));
     } finally {
@@ -701,6 +790,11 @@ export default function RichTextEditor({
               pointerEvents: "none",
               color: "rgba(255,255,255,0.3)",
             },
+            // Images without a description stand out until one is added.
+            "& .ProseMirror img:not([alt]), & .ProseMirror img[alt='']": {
+              outline: "2px dashed #fb923c",
+              outlineOffset: 3,
+            },
             "& .ProseMirror img.ProseMirror-selectednode": {
               outline: `2px solid ${LIME}`,
               outlineOffset: 2,
@@ -710,6 +804,26 @@ export default function RichTextEditor({
           <EditorContent editor={editor} />
         </Box>
       </Box>
+
+      {imagesMissingAlt(value) > 0 && (
+        <Typography role="status" sx={{ fontSize: 12.5, color: "#fb923c", mt: 0.75 }}>
+          {imagesMissingAlt(value) === 1 ? "1 image has" : `${imagesMissingAlt(value)} images have`} no alt text
+          (outlined in orange). Click the image, then use the Image alt text button in the toolbar.
+        </Typography>
+      )}
+
+      <ImageAltDialog
+        open={!!pending}
+        src={pending?.src ?? null}
+        initial={pending?.alt ?? ""}
+        title="Describe this image"
+        confirmLabel="Insert image"
+        onClose={() => setPending(null)}
+        onConfirm={(alt) => {
+          if (pending) editor?.chain().focus().setImage({ src: pending.src, alt: alt || undefined }).run();
+          setPending(null);
+        }}
+      />
 
       {uploadError && (
         <Typography sx={{ fontSize: 12.5, color: "#ff8a8a", mt: 0.75 }}>

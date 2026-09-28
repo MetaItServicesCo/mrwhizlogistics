@@ -7,6 +7,8 @@ export type BlogPost = {
   date: string; // ISO, e.g. "2025-02-05"
   category: string;
   image?: string;
+  /** Alt text for `image`; the title is used when empty. */
+  imageAlt?: string;
   readTime?: string;
   content?: string[]; // article paragraphs (detail page)
   contentHtml?: string; // rich-text body from the dashboard; wins over content

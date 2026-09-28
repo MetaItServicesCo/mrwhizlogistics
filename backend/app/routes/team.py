@@ -7,6 +7,7 @@ from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form, s
 from sqlalchemy.orm import Session
 
 from app.database import get_db
+from app.core.alt_text import clean_alt
 from app.core.security import get_current_admin
 from app.models.team import TeamMember
 from app.schemas.team import TeamMemberResponse
@@ -63,6 +64,7 @@ async def create_team_member(
     name: str = Form(...),
     role: str = Form(...),
     socials: Optional[str] = Form('{"linkedin":"#","facebook":"#","x":"#","email":"mailto:info@company.com"}'),
+    image_alt: Optional[str] = Form(None),
     image_file: Union[UploadFile, str, None] = File(default=None),
     db: Session = Depends(get_db)
 ):
@@ -72,6 +74,7 @@ async def create_team_member(
         name=name,
         role=role,
         image=image_path,
+        image_alt=clean_alt(image_alt),
         socials=parse_socials(socials)
     )
     db.add(new_member)
@@ -87,6 +90,7 @@ async def update_team_member(
     name: Optional[str] = Form(None),
     role: Optional[str] = Form(None),
     socials: Optional[str] = Form(None),
+    image_alt: Optional[str] = Form(None),
     image_file: Union[UploadFile, str, None] = File(default=None),
     db: Session = Depends(get_db)
 ):
@@ -97,6 +101,7 @@ async def update_team_member(
     if name is not None: member.name = name
     if role is not None: member.role = role
     if socials is not None: member.socials = parse_socials(socials)
+    if image_alt is not None: member.image_alt = clean_alt(image_alt)
 
     new_image = save_uploaded_file(image_file)
     if new_image:

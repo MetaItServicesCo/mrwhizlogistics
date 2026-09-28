@@ -18,6 +18,7 @@ import {
   SearchBox,
   Toast,
 } from "@/components/admin/ui";
+import AltTextField, { ALT_TEXT_MAX } from "@/components/admin/AltTextField";
 
 const EMPTY = {
   quote: "",
@@ -27,6 +28,7 @@ const EMPTY = {
   initials: "",
   accent: "",
   image: "",
+  image_alt: "",
   sort_order: "0",
   is_active: true,
 };
@@ -82,6 +84,7 @@ export default function TestimonialsPage() {
       initials: t.initials || "",
       accent: t.accent || "",
       image: t.image || "",
+      image_alt: t.image_alt || "",
       sort_order: String(t.sort_order),
       is_active: t.is_active,
     });
@@ -96,6 +99,7 @@ export default function TestimonialsPage() {
     initials: form.initials.trim() || null,
     accent: form.accent.trim() || null,
     image: form.image.trim() || null,
+    image_alt: form.image_alt.trim() || null,
     sort_order: Number(form.sort_order) || 0,
     is_active: form.is_active,
   });
@@ -103,6 +107,10 @@ export default function TestimonialsPage() {
   const save = async () => {
     if (!form.quote.trim() || !form.name.trim()) {
       setError("Quote and name are required.");
+      return;
+    }
+    if (form.image_alt.trim().length > ALT_TEXT_MAX) {
+      setError(`Alt text is limited to ${ALT_TEXT_MAX} characters.`);
       return;
     }
     const ok = await run(() =>
@@ -297,6 +305,14 @@ export default function TestimonialsPage() {
           onChange={set("image")}
           helperText="Optional — path or full URL"
         />
+        {form.image.trim() && (
+          <AltTextField
+            label="Photo alt text"
+            value={form.image_alt}
+            onChange={(v) => setForm((f) => ({ ...f, image_alt: v }))}
+            fallback="the customer's name"
+          />
+        )}
 
         <Box sx={{ display: "flex", alignItems: "center", gap: 3, flexWrap: "wrap" }}>
           <Box>

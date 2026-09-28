@@ -32,6 +32,17 @@ COLUMN_UPGRADES: list[tuple[str, str, str]] = [
     ("blog_comments", "is_approved", "BOOLEAN DEFAULT FALSE"),
     # Notification bell: per-admin "seen up to" marker
     ("users", "notifications_seen_at", "TIMESTAMP"),
+    # Alternative text for dashboard-uploaded images
+    ("blogs", "card_image_alt", "VARCHAR(300)"),
+    ("blogs", "detail_image_alt", "VARCHAR(300)"),
+    ("hotshot_cards", "card_image_alt", "VARCHAR(300)"),
+    ("hotshot_cards", "detail_image_alt", "VARCHAR(300)"),
+    ("box_trucks", "card_image_alt", "VARCHAR(300)"),
+    ("box_trucks", "detail_image_alt", "VARCHAR(300)"),
+    ("semi_truck_cards", "card_image_alt", "VARCHAR(300)"),
+    ("semi_truck_cards", "detail_image_alt", "VARCHAR(300)"),
+    ("team_members", "image_alt", "VARCHAR(300)"),
+    ("testimonials", "image_alt", "VARCHAR(300)"),
 ]
 
 

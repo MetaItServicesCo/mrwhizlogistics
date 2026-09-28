@@ -439,7 +439,7 @@ export default function HotShotServiceDetail({
                 <Box
                   component="img"
                   src={service.image}
-                  alt={service.title}
+                  alt={service.imageAlt || service.title}
                   sx={{
                     width: "100%",
                     height: "100%",

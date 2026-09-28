@@ -22,6 +22,8 @@ class SemiTruck(Base):
     # --- DETAIL PAGE DATA ---
     detail_heading = Column(String(300), nullable=False)      # e.g., "Transportation built around..."
     detail_image = Column(String(500), nullable=True)         # Banner image
+    card_image_alt = Column(String(300), nullable=True)   # alt text for card_image
+    detail_image_alt = Column(String(300), nullable=True) # alt text for detail_image
     detail_paragraphs = Column(JSON, default=[])              # Description paragraphs
     # Rich-text body from the dashboard editor (sanitised HTML). When set it
     # replaces the legacy paragraph list on the public detail page.

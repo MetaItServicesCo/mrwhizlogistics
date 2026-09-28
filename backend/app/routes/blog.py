@@ -10,6 +10,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session, joinedload
 
 from app.database import get_db
+from app.core.alt_text import clean_alt
 from app.core.security import get_current_admin, get_optional_admin
 from app.core.html import sanitize_html
 from app.models.blog import Blog, BlogComment
@@ -173,6 +174,8 @@ async def create_blog(
     meta_keywords: Optional[str] = Form(None),
     canonical_url: Optional[str] = Form(None),
     schema_markup: Optional[str] = Form(None),
+    card_image_alt: Optional[str] = Form(None),
+    detail_image_alt: Optional[str] = Form(None),
     card_image_file: UploadFile = File(...),
     detail_image_file: Union[UploadFile, str, None] = File(default=None),
     db: Session = Depends(get_db)
@@ -199,6 +202,8 @@ async def create_blog(
         author_name=author_name,
         card_image=card_image_path,
         detail_image=detail_image_path,
+        card_image_alt=clean_alt(card_image_alt),
+        detail_image_alt=clean_alt(detail_image_alt),
         content_paragraphs=parse_to_list(content_paragraphs),
         content_html=sanitize_html(content_html),
         tags=parse_to_list(tags),
@@ -233,6 +238,8 @@ async def update_blog_by_card_id(
     meta_keywords: Optional[str] = Form(None),
     canonical_url: Optional[str] = Form(None),
     schema_markup: Optional[str] = Form(None),
+    card_image_alt: Optional[str] = Form(None),
+    detail_image_alt: Optional[str] = Form(None),
     card_image_file: Union[UploadFile, str, None] = File(default=None),
     detail_image_file: Union[UploadFile, str, None] = File(default=None),
     db: Session = Depends(get_db)
@@ -264,6 +271,9 @@ async def update_blog_by_card_id(
     if meta_keywords is not None: blog.meta_keywords = meta_keywords
     if canonical_url is not None: blog.canonical_url = canonical_url
     if schema_markup is not None: blog.schema_markup = parse_schema_markup(schema_markup)
+
+    if card_image_alt is not None: blog.card_image_alt = clean_alt(card_image_alt)
+    if detail_image_alt is not None: blog.detail_image_alt = clean_alt(detail_image_alt)
 
     new_card_image = save_uploaded_file(card_image_file)
     if new_card_image:

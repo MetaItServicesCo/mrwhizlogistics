@@ -16,6 +16,7 @@ import Typography from "@mui/material/Typography";
 
 import ArrowOutwardRoundedIcon from "@mui/icons-material/ArrowOutwardRounded";
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
+import CoverImage from "@/components/common/CoverImage";
 
 const LIME = "#c8ff00";
 const EASE = [0.22, 1, 0.36, 1] as const;
@@ -27,6 +28,8 @@ export type ServiceItem = {
   desc: string;
   points: string[];
   image?: string;
+  /** Alt text for `image` (from the dashboard); the title otherwise. */
+  imageAlt?: string;
 };
 
 const gradients = [
@@ -234,16 +237,14 @@ function Card({ s, i, href }: { s: ServiceItem; i: number; href: string }) {
                 transition: "transform .6s cubic-bezier(.2,.8,.2,1)",
 
                 ...(s.image
-                  ? {
-                      backgroundImage: `url(${s.image})`,
-                      backgroundSize: "cover",
-                      backgroundPosition: "center",
-                    }
+                  ? {}
                   : {
                       background: gradients[i % gradients.length],
                     }),
               }}
-            />
+            >
+              {s.image && <CoverImage src={s.image} alt={s.imageAlt || s.title} />}
+            </Box>
           </motion.div>
 
           {/* NUMBER CHIP */}

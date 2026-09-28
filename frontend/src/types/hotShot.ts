@@ -48,6 +48,9 @@ export type HotShotService = {
    */
   image: string;
 
+  /** Alt text for `image`; the title is used when empty. */
+  imageAlt?: string;
+
   /**
    * Short service description
    */

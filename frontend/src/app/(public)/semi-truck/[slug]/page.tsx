@@ -63,7 +63,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     fallbackDescription: service.shortDescription,
     path: `/semi-truck/${service.slug}`,
     image: service.image,
-    imageAlt: name,
+    imageAlt: service.imageAlt || name,
   });
 }
 

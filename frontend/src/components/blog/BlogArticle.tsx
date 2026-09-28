@@ -29,7 +29,7 @@ export default function BlogArticle({ post }: { post: BlogPost }) {
           <Box
             component="img"
             src={post.image}
-            alt={post.title}
+            alt={post.imageAlt || post.title}
             sx={{
               width: "100%",
               height: "100%",

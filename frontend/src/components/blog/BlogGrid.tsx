@@ -11,6 +11,7 @@ import ChatBubbleOutlineRoundedIcon from "@mui/icons-material/ChatBubbleOutlineR
 import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import type { BlogPost } from "@/data/blogPosts";
+import CoverImage from "@/components/common/CoverImage";
 
 const LIME = "#c8ff00";
 const EASE = [0.22, 1, 0.36, 1] as const;
@@ -88,15 +89,11 @@ function Card({
             position: "absolute",
             inset: 0,
             transition: "transform .6s cubic-bezier(.2,.8,.2,1)",
-            ...(p.image
-              ? {
-                  backgroundImage: `url(${p.image})`,
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                }
-              : { background: gradients[i % gradients.length] }),
+            ...(p.image ? {} : { background: gradients[i % gradients.length] }),
           }}
-        />
+        >
+          {p.image && <CoverImage src={p.image} alt={p.imageAlt || p.title} />}
+        </Box>
 
         {/* diagonal sheen on hover */}
         <Box

@@ -12,6 +12,7 @@ import YouTubeIcon from "@mui/icons-material/YouTube";
 import { externalUrl, mailtoHref, telHref } from "@/lib/contact";
 import {
   DEFAULT_FOOTER_LOGO_SETTINGS,
+  logoAlt,
   type FooterLogoSettings,
   type LogoSettings,
 } from "@/lib/branding";
@@ -265,7 +266,7 @@ export default function AdvancedFooterCTA({
                 slot="footer"
                 url={footer.url || logo?.url}
                 scale={footer.scale}
-                alt={companyName}
+                alt={logoAlt(footer.alt, companyName)}
               />
               {footer.showName && (
                 <Typography

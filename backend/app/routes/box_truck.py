@@ -7,6 +7,7 @@ from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form, s
 from sqlalchemy.orm import Session
 
 from app.database import get_db
+from app.core.alt_text import clean_alt
 from app.core.security import get_current_admin
 from app.core.html import sanitize_html
 from app.models.box_truck import BoxTruck
@@ -112,6 +113,8 @@ async def create_box_truck(
     meta_keywords: Optional[str] = Form(None),
     canonical_url: Optional[str] = Form(None),
     
+    card_image_alt: Optional[str] = Form(None),
+    detail_image_alt: Optional[str] = Form(None),
     card_image_file: UploadFile = File(...),
     detail_image_file: Union[UploadFile, str, None] = File(default=None),
     
@@ -150,6 +153,8 @@ async def create_box_truck(
         features=parse_to_list(features),
         detail_heading=detail_heading,
         detail_image=detail_image_path,
+        card_image_alt=clean_alt(card_image_alt),
+        detail_image_alt=clean_alt(detail_image_alt),
         detail_paragraphs=parse_to_list(detail_paragraphs),
         content_html=sanitize_html(content_html),
         slug=slug,
@@ -189,6 +194,8 @@ async def update_box_truck(
     meta_keywords: Optional[str] = Form(None),
     canonical_url: Optional[str] = Form(None),
     
+    card_image_alt: Optional[str] = Form(None),
+    detail_image_alt: Optional[str] = Form(None),
     card_image_file: Union[UploadFile, str, None] = File(default=None),
     detail_image_file: Union[UploadFile, str, None] = File(default=None),
     
@@ -221,6 +228,9 @@ async def update_box_truck(
     if meta_description is not None: truck.meta_description = clean_string(meta_description)
     if meta_keywords is not None: truck.meta_keywords = clean_string(meta_keywords)
     if canonical_url is not None: truck.canonical_url = clean_string(canonical_url)
+
+    if card_image_alt is not None: truck.card_image_alt = clean_alt(card_image_alt)
+    if detail_image_alt is not None: truck.detail_image_alt = clean_alt(detail_image_alt)
 
     new_card_img = save_uploaded_file(card_image_file)
     if new_card_img:

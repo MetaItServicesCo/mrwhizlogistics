@@ -7,6 +7,7 @@ import TextField from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import type { BlogPost } from "@/data/blogPosts";
+import CoverImage from "@/components/common/CoverImage";
 
 const LIME = "#c8ff00";
 
@@ -157,15 +158,11 @@ export default function BlogSidebar({
                   flexShrink: 0,
                   overflow: "hidden",
                   bgcolor: "#1a1a1a",
-                  ...(p.image
-                    ? {
-                        backgroundImage: `url(${p.image})`,
-                        backgroundSize: "cover",
-                        backgroundPosition: "center",
-                      }
-                    : {}),
+                  position: "relative",
                 }}
-              />
+              >
+                {p.image && <CoverImage src={p.image} alt={p.imageAlt || p.title} />}
+              </Box>
               <Box>
                 <Typography
                   className="rp-title"

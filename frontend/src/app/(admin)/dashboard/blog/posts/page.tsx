@@ -26,6 +26,7 @@ import {
   SearchBox,
   Toast,
 } from "@/components/admin/ui";
+import AltTextField, { ALT_TEXT_MAX } from "@/components/admin/AltTextField";
 
 const EMPTY = {
   card_id: "",
@@ -43,6 +44,8 @@ const EMPTY = {
   meta_keywords: "",
   canonical_url: "",
   schema_markup: "",
+  card_image_alt: "",
+  detail_image_alt: "",
 };
 
 const csvToJson = (v: string) =>
@@ -121,6 +124,8 @@ export default function BlogPostsPage() {
       meta_description: p.meta_description || "",
       meta_keywords: p.meta_keywords || "",
       canonical_url: p.canonical_url || "",
+      card_image_alt: p.card_image_alt || "",
+      detail_image_alt: p.detail_image_alt || "",
       schema_markup: p.schema_markup || "",
   });
 
@@ -163,6 +168,8 @@ export default function BlogPostsPage() {
       const id = form.card_id.trim() || slug;
       if (items.some((b) => b.card_id === id)) return `A post with the ID "${id}" already exists.`;
     }
+    if ([form.card_image_alt, form.detail_image_alt].some((a) => a.trim().length > ALT_TEXT_MAX))
+      return `Alt text is limited to ${ALT_TEXT_MAX} characters.`;
     if (bioDraft !== null && bioDraft.trim().length > AUTHOR_BIO_MAX)
       return `Author bio is too long (${bioDraft.trim().length}/${AUTHOR_BIO_MAX} characters).`;
     return schemaMarkupError(form.schema_markup);
@@ -207,6 +214,8 @@ export default function BlogPostsPage() {
     put("meta_description", form.meta_description);
     put("meta_keywords", form.meta_keywords);
     put("canonical_url", form.canonical_url);
+    put("card_image_alt", form.card_image_alt);
+    put("detail_image_alt", form.detail_image_alt);
 
     // The editor HTML is now the body. Legacy paragraphs were loaded into it
     // on open, so clearing them loses nothing and stops stale text from
@@ -523,6 +532,12 @@ export default function BlogPostsPage() {
         cardRef,
         isCreate,
       )}
+      <AltTextField
+        label="Card image alt text"
+        value={form.card_image_alt}
+        onChange={(v) => setForm((f) => ({ ...f, card_image_alt: v }))}
+        fallback="the post title"
+      />
       {imagePicker(
         "Detail image",
         detailImage,
@@ -530,6 +545,12 @@ export default function BlogPostsPage() {
         setDetailImage,
         detailRef,
       )}
+      <AltTextField
+        label="Detail image alt text"
+        value={form.detail_image_alt}
+        onChange={(v) => setForm((f) => ({ ...f, detail_image_alt: v }))}
+        fallback="the post title"
+      />
 
       <Typography
         sx={{

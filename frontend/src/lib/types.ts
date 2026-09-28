@@ -81,6 +81,7 @@ export interface Testimonial {
   initials: string | null;
   accent: string | null;
   image: string | null;
+  image_alt?: string | null;
   sort_order: number;
   is_active: boolean;
   created_at: string;
@@ -91,6 +92,7 @@ export interface TeamMember {
   name: string;
   role: string;
   image: string | null;
+  image_alt?: string | null;
   socials: Record<string, string>;
 }
 
@@ -130,6 +132,8 @@ export interface TruckCard {
   features: string[];
   detail_heading: string;
   detail_image: string | null;
+  card_image_alt?: string | null;
+  detail_image_alt?: string | null;
   detail_paragraphs: string[];
   /** Sanitised rich-text body; overrides detail_paragraphs when set. */
   content_html?: string | null;
@@ -168,6 +172,8 @@ export interface BlogPost {
   category_tag: string;
   card_image: string;
   detail_image: string | null;
+  card_image_alt?: string | null;
+  detail_image_alt?: string | null;
   short_description: string;
   content_paragraphs: string[];
   /** Sanitised rich-text body; overrides content_paragraphs when set. */

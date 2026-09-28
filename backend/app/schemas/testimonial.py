@@ -12,6 +12,7 @@ class TestimonialBase(BaseModel):
     initials: Optional[str] = Field(None, max_length=10)
     accent: Optional[str] = Field(None, max_length=255)
     image: Optional[str] = Field(None, max_length=500)
+    image_alt: Optional[str] = Field(None, max_length=300)
     sort_order: int = 0
     is_active: bool = True
 
@@ -36,6 +37,7 @@ class TestimonialUpdate(BaseModel):
     initials: Optional[str] = Field(None, max_length=10)
     accent: Optional[str] = Field(None, max_length=255)
     image: Optional[str] = Field(None, max_length=500)
+    image_alt: Optional[str] = Field(None, max_length=300)
     sort_order: Optional[int] = None
     is_active: Optional[bool] = None
 
@@ -58,6 +60,7 @@ class TestimonialRead(BaseModel):
     initials: Optional[str] = None
     accent: Optional[str] = None
     image: Optional[str] = None
+    image_alt: Optional[str] = None
     sort_order: int
     is_active: bool
     created_at: datetime

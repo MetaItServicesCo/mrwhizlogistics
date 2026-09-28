@@ -21,6 +21,7 @@ export default async function AboutPage() {
     name: member.name,
     role: member.role,
     image: member.image || undefined,
+    imageAlt: member.image_alt || undefined,
     socials: member.socials,
   }));
 

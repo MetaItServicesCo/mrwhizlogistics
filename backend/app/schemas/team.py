@@ -12,6 +12,7 @@ class TeamMemberResponse(BaseModel):
     name: str
     role: str
     image: Optional[str]
+    image_alt: Optional[str] = None
     socials: Dict[str, str]
 
     class Config:

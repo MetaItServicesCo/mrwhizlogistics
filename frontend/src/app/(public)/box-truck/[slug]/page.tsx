@@ -42,7 +42,7 @@ export async function generateMetadata({
     fallbackDescription: service.shortDescription,
     path: `/box-truck/${service.slug}`,
     image: service.image,
-    imageAlt: name,
+    imageAlt: service.imageAlt || name,
   });
 }
 

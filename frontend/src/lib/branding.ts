@@ -8,6 +8,7 @@ export const DEFAULT_LOGO = "/images/logo.png";
 
 export const LOGO_URL_KEY = "logo_url";
 export const LOGO_SCALE_KEY = "logo_scale";
+export const LOGO_ALT_KEY = "logo_alt";
 
 export const LOGO_SCALE_MIN = 60;
 export const LOGO_SCALE_MAX = 160;
@@ -18,11 +19,14 @@ export interface LogoSettings {
   url: string;
   /** Header logo size as a percentage of the original design. */
   scale: number;
+  /** Alt text as entered; "" = the company name (see logoAlt). */
+  alt: string;
 }
 
 export const DEFAULT_LOGO_SETTINGS: LogoSettings = {
   url: "",
   scale: LOGO_SCALE_DEFAULT,
+  alt: "",
 };
 
 export function parseLogoScale(value?: string | number | null): number {
@@ -42,7 +46,13 @@ export function logoFromSettings(map: Record<string, string | null | undefined>)
   return {
     url: parseLogoUrl(map[LOGO_URL_KEY]),
     scale: parseLogoScale(map[LOGO_SCALE_KEY]),
+    alt: (map[LOGO_ALT_KEY] || "").trim(),
   };
+}
+
+/** Alt text for a logo image: what the admin entered, else the company name. */
+export function logoAlt(alt: string | null | undefined, companyName?: string | null): string {
+  return (alt || "").trim() || (companyName || "").trim() || "Mr. Whiz Logistics";
 }
 
 /* ------------------------------------------------------------------ */
@@ -52,6 +62,7 @@ export function logoFromSettings(map: Record<string, string | null | undefined>)
 export const FOOTER_LOGO_URL_KEY = "footer_logo_url";
 export const FOOTER_LOGO_SCALE_KEY = "footer_logo_scale";
 export const FOOTER_SHOW_NAME_KEY = "footer_show_name";
+export const FOOTER_LOGO_ALT_KEY = "footer_logo_alt";
 
 export interface FooterLogoSettings {
   /** Footer-only logo, or "" to reuse the header logo. */
@@ -59,12 +70,15 @@ export interface FooterLogoSettings {
   scale: number;
   /** Show the company name as text beside the logo. */
   showName: boolean;
+  /** Alt text as entered; "" = the company name. */
+  alt: string;
 }
 
 export const DEFAULT_FOOTER_LOGO_SETTINGS: FooterLogoSettings = {
   url: "",
   scale: LOGO_SCALE_DEFAULT,
   showName: false,
+  alt: "",
 };
 
 export function footerLogoFromSettings(
@@ -74,6 +88,7 @@ export function footerLogoFromSettings(
     url: parseLogoUrl(map[FOOTER_LOGO_URL_KEY]),
     scale: parseLogoScale(map[FOOTER_LOGO_SCALE_KEY]),
     showName: (map[FOOTER_SHOW_NAME_KEY] || "").trim().toLowerCase() === "true",
+    alt: (map[FOOTER_LOGO_ALT_KEY] || "").trim(),
   };
 }
 
@@ -84,4 +99,6 @@ export const BRANDING_KEYS = [
   FOOTER_LOGO_URL_KEY,
   FOOTER_LOGO_SCALE_KEY,
   FOOTER_SHOW_NAME_KEY,
+  LOGO_ALT_KEY,
+  FOOTER_LOGO_ALT_KEY,
 ];

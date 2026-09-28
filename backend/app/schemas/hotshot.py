@@ -18,6 +18,8 @@ class HotshotBase(BaseModel):
     # Detail Page Data
     detail_heading: str
     detail_image: Optional[str] = None
+    card_image_alt: Optional[str] = None
+    detail_image_alt: Optional[str] = None
     detail_paragraphs: List[str] = []
     content_html: Optional[str] = None
 

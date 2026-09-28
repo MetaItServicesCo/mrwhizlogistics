@@ -7,6 +7,7 @@ import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import FacebookRoundedIcon from "@mui/icons-material/FacebookRounded";
 import XIcon from "@mui/icons-material/X";
 import EmailRoundedIcon from "@mui/icons-material/EmailRounded";
+import CoverImage from "@/components/common/CoverImage";
 
 const LIME = "#c8ff00";
 const EASE = [0.22, 1, 0.36, 1] as const;
@@ -15,6 +16,7 @@ export type Member = {
   name: string;
   role: string;
   image?: string;
+  imageAlt?: string;
   socials?: {
     linkedin?: string;
     facebook?: string;
@@ -124,15 +126,11 @@ function MemberCard({ m }: { m: Member }) {
             transition:
               "transform .6s cubic-bezier(.2,.8,.2,1), filter .5s ease",
             filter: "grayscale(0.35)",
-            ...(m.image
-              ? {
-                  backgroundImage: `url(${m.image})`,
-                  backgroundSize: "cover",
-                  backgroundPosition: "center top",
-                }
-              : { background: "linear-gradient(150deg, #26301a, #0a0a0a)" }),
+            ...(m.image ? {} : { background: "linear-gradient(150deg, #26301a, #0a0a0a)" }),
           }}
-        />
+        >
+          {m.image && <CoverImage src={m.image} alt={m.imageAlt || m.name} position="center top" />}
+        </Box>
         <Box
           aria-hidden
           sx={{

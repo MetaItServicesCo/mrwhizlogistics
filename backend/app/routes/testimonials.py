@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy import or_
 from sqlalchemy.orm import Session
 
+from app.core.alt_text import clean_alt
 from app.core.deps import get_current_admin, get_db
 from app.models.testimonial import Testimonial
 from app.schemas.testimonial import (
@@ -69,6 +70,7 @@ def create_testimonial(
         initials=payload.initials.strip() if payload.initials else None,
         accent=payload.accent.strip() if payload.accent else None,
         image=payload.image.strip() if payload.image else None,
+        image_alt=clean_alt(payload.image_alt),
         sort_order=payload.sort_order,
         is_active=payload.is_active,
     )
@@ -96,7 +98,9 @@ def update_testimonial(
 ):
     row = _get_or_404(db, testimonial_id)
     for key, value in payload.model_dump(exclude_unset=True).items():
-        if isinstance(value, str):
+        if key == "image_alt":
+            value = clean_alt(value)
+        elif isinstance(value, str):
             value = value.strip()
         setattr(row, key, value)
     db.commit()

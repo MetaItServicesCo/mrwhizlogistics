@@ -83,7 +83,7 @@ export async function generateMetadata({
     fallbackDescription: post.excerpt,
     path: `/blog/${post.slug}`,
     image: post.image,
-    imageAlt: post.title,
+    imageAlt: post.imageAlt || post.title,
     type: "article",
   });
 }
