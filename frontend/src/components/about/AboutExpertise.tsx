@@ -10,28 +10,25 @@ import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
 import PhoneInTalkRoundedIcon from "@mui/icons-material/PhoneInTalkRounded";
 import LocalShippingRoundedIcon from "@mui/icons-material/LocalShippingRounded";
 import { ctaProps, useCta } from "@/components/common/CtaProvider";
+import CoverImage from "@/components/common/CoverImage";
+import { mediaUrl } from "@/lib/api";
+import { DEFAULT_ABOUT, type AboutContent } from "@/lib/aboutPage";
 
 const LIME = "#c8ff00";
 const EASE = [0.22, 1, 0.36, 1] as const;
 
-// 👇 apni images daalein (public/images/ mein)
-const IMG_BACK = "  /images/blog/ab1.jpg";
-const IMG_FRONT = "/images/blog/ab2.jpg";
+/** One icon per feature box (the text is edited in the dashboard). */
+const FEATURE_ICONS = [<PublicRoundedIcon key="p" />, <SupportAgentRoundedIcon key="s" />];
 
-const FEATURES = [
-  {
-    icon: <PublicRoundedIcon />,
-    title: "Nationwide Service",
-    desc: "From hot shot to full truckload, we move freight across all 50 states — reliably, on time.",
-  },
-  {
-    icon: <SupportAgentRoundedIcon />,
-    title: "24/7 Dispatch",
-    desc: "Our team is on call day and night, so your load keeps moving whenever you need it.",
-  },
-];
-
-export default function AboutExpertise() {
+export default function AboutExpertise({
+  content = DEFAULT_ABOUT.intro,
+}: {
+  /** From Dashboard -> Pages -> About Us. */
+  content?: AboutContent["intro"];
+}) {
+  const IMG_BACK = content.backImage.url.trim();
+  const IMG_FRONT = content.frontImage.url.trim();
+  const FEATURES = content.features.map((f, i) => ({ ...f, icon: FEATURE_ICONS[i % FEATURE_ICONS.length] }));
   const moreCta = useCta("about_expertise_more");
   // Used to show and dial +1 (800) 204-8820, which is not the company number.
   const callCta = useCta("about_expertise_call");
@@ -102,7 +99,7 @@ export default function AboutExpertise() {
                 textTransform: "uppercase",
               }}
             >
-              Our Company
+              {content.eyebrow}
             </Typography>
             <LocalShippingRoundedIcon sx={{ fontSize: 18, color: LIME }} />
           </Box>
@@ -119,7 +116,7 @@ export default function AboutExpertise() {
               mb: 2.5,
             }}
           >
-            Our expertise stands in{" "}
+            {content.heading}{" "}
             <Box
               component="span"
               sx={{
@@ -140,7 +137,7 @@ export default function AboutExpertise() {
                 },
               }}
             >
-              logistics solutions
+              {content.highlight}
               <Box
                 component={motion.span}
                 initial={{ scaleX: 0 }}
@@ -173,9 +170,7 @@ export default function AboutExpertise() {
               maxWidth: 520,
             }}
           >
-            As a trucking and logistics company, we play a pivotal role in the
-            supply chain — efficiently managing the movement of freight from
-            origin to final destination with speed, visibility and care.
+            {content.text}
           </Typography>
 
           {/* feature boxes */}
@@ -191,7 +186,7 @@ export default function AboutExpertise() {
           >
             {FEATURES.map((f) => (
               <Box
-                key={f.title}
+                key={`${f.title}-${f.icon.key}`}
                 sx={{
                   position: "relative",
                   p: 2.5,
@@ -377,15 +372,11 @@ export default function AboutExpertise() {
               overflow: "hidden",
               border: "1px solid rgba(255,255,255,0.1)",
               boxShadow: "0 20px 50px rgba(0,0,0,0.4)",
-              ...(IMG_BACK
-                ? {
-                    backgroundImage: `url(${IMG_BACK})`,
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                  }
-                : { background: "linear-gradient(150deg, #26301a, #0a0a0a)" }),
+              ...(IMG_BACK ? {} : { background: "linear-gradient(150deg, #26301a, #0a0a0a)" }),
             }}
-          />
+          >
+            {IMG_BACK && <CoverImage src={mediaUrl(IMG_BACK)} alt={content.backImage.alt} />}
+          </Box>
 
           {/* front image */}
           <Box
@@ -409,15 +400,11 @@ export default function AboutExpertise() {
               border: `2px solid ${LIME}44`,
               boxShadow: "0 24px 60px rgba(0,0,0,0.5)",
               zIndex: 2,
-              ...(IMG_FRONT
-                ? {
-                    backgroundImage: `url(${IMG_FRONT})`,
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                  }
-                : { background: "linear-gradient(150deg, #12202a, #0a0a0a)" }),
+              ...(IMG_FRONT ? {} : { background: "linear-gradient(150deg, #12202a, #0a0a0a)" }),
             }}
-          />
+          >
+            {IMG_FRONT && <CoverImage src={mediaUrl(IMG_FRONT)} alt={content.frontImage.alt} />}
+          </Box>
 
           {/* rotating circular badge */}
           <Box
@@ -456,7 +443,7 @@ export default function AboutExpertise() {
                   letterSpacing="2.5"
                 >
                   <textPath href="#badgeCircle" startOffset="0%">
-                    WELCOME · TO OUR COMPANY · SINCE 2015 ·{" "}
+                    {content.badge}{" "}
                   </textPath>
                 </text>
               </Box>

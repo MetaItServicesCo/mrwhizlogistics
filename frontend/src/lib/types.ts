@@ -240,3 +240,30 @@ export interface Paginated<T> {
   page: number;
   size: number;
 }
+
+/** A site page (About is settings-driven; legal pages live here). */
+export interface SitePage {
+  id: number;
+  title: string;
+  slug: string;
+  page_type: string;
+  content: string | null;
+  is_active: boolean;
+  sort_order: number;
+  created_at: string;
+  updated_at: string | null;
+  seo: { meta_title: string | null; meta_description: string | null } | null;
+}
+
+/** A published page as the public API returns it. */
+export interface PublicPageLink {
+  title: string;
+  slug: string;
+  updated_at: string | null;
+}
+
+export interface PublicPage extends PublicPageLink {
+  content: string | null;
+  meta_title: string | null;
+  meta_description: string | null;
+}

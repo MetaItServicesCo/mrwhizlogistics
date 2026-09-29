@@ -4,10 +4,16 @@ import { Box, Typography, Container, Button } from "@mui/material";
 import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
 import PhoneInTalkRoundedIcon from "@mui/icons-material/PhoneInTalkRounded";
 import { ctaProps, useCta } from "@/components/common/CtaProvider";
+import { DEFAULT_ABOUT, type AboutContent } from "@/lib/aboutPage";
 
 const LIME = "#c8ff00";
 
-export default function AboutCTA() {
+export default function AboutCTA({
+  content = DEFAULT_ABOUT.cta,
+}: {
+  /** From Dashboard -> Pages -> About Us. */
+  content?: AboutContent["cta"];
+}) {
   const quoteCta = useCta("about_cta_quote");
   const callCta = useCta("about_cta_call");
   return (
@@ -43,7 +49,7 @@ export default function AboutCTA() {
               textTransform: "uppercase",
             }}
           >
-            Ready To Move Your Freight?
+            {content.eyebrow}
           </Typography>
           <Typography
             component="h2"
@@ -56,7 +62,7 @@ export default function AboutCTA() {
               mx: "auto",
             }}
           >
-            Experience Stress-Free Logistics With Our Dedicated Fleet
+            {content.heading}
           </Typography>
           <Typography
             sx={{
@@ -67,8 +73,7 @@ export default function AboutCTA() {
               mb: 4,
             }}
           >
-            Get instant quotes or speak directly with our 24/7 dispatch team to
-            handle your hot shot or heavy freight today.
+            {content.text}
           </Typography>
 
           <Box

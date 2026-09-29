@@ -8,10 +8,12 @@ import {
   getBlogs,
   getBoxTruckCards,
   getHotshotCards,
+  getLegalPages,
   getSemiTruckCards,
 } from "@/lib/serverContent";
 import { usableCanonical } from "@/lib/seo";
 import { siteUrlFor } from "@/lib/site";
+import { legalPath } from "@/lib/legalPages";
 
 // Built on every request so a post or service published in the dashboard is
 // listed straight away (and so the Docker build never needs the API).
@@ -46,11 +48,12 @@ function entries(
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Live dashboard content; the bundled copy only if the API is unreachable.
-  const [blogs, hotshots, boxTrucks, semiTrucks] = await Promise.all([
+  const [blogs, hotshots, boxTrucks, semiTrucks, legalPages] = await Promise.all([
     getBlogs(),
     getHotshotCards(),
     getBoxTruckCards(),
     getSemiTruckCards(),
+    getLegalPages(),
   ]);
 
   const cards = (live: typeof hotshots, bundled: { slug: string }[]): Item[] =>
@@ -86,5 +89,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...entries("semi-truck", cards(semiTrucks, SEMI_TRUCK_SERVICES), { changeFrequency: "monthly", priority: 0.8 }),
     ...entries("rentals", HOT_SHOT_RENTALS.map((r) => ({ slug: r.slug })), { changeFrequency: "monthly", priority: 0.7 }),
     ...entries("blog", posts, { changeFrequency: "monthly", priority: 0.7 }),
+    // Published legal pages only (drafts are a 404).
+    ...(legalPages || []).flatMap((p) =>
+      page(legalPath(p.slug), { changeFrequency: "yearly", priority: 0.3, lastModified: toDate(p.updated_at) }),
+    ),
   ];
 }

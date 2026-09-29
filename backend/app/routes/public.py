@@ -3,12 +3,14 @@ from sqlalchemy.orm import Session, selectinload
 
 from app.database import get_db
 from app.models.content_block import ContentBlock
+from app.models.page import Page
 from app.models.faq import FAQ, FAQCategory
 from app.models.service import Service
 from app.models.site_setting import SiteSetting
 from app.models.subscriber import Subscriber
 from app.models.testimonial import Testimonial
 from app.schemas.cms import ContentBlockRead, SiteSettingRead
+from app.schemas.page import PublicPage, PublicPageLink
 from app.schemas.faq import PublicFAQCategory, PublicFAQItem
 from app.schemas.leads import ContactCreate, ContactRead, SubscriberCreate, SubscriberRead
 from app.schemas.service import ServiceRead
@@ -104,3 +106,30 @@ def public_blocks(db: Session = Depends(get_db)):
 @router.get("/settings", response_model=list[SiteSettingRead])
 def public_settings(db: Session = Depends(get_db)):
     return db.query(SiteSetting).all()
+
+
+@router.get("/pages", response_model=list[PublicPageLink])
+def public_pages(page_type: str = Query("legal"), db: Session = Depends(get_db)):
+    """Published pages of one type (footer links, sitemap)."""
+    return (
+        db.query(Page)
+        .filter(Page.page_type == page_type, Page.is_active.is_(True))
+        .order_by(Page.sort_order, Page.id)
+        .all()
+    )
+
+
+@router.get("/pages/{slug}", response_model=PublicPage)
+def public_page(slug: str, db: Session = Depends(get_db)):
+    """One published page; drafts are a 404 to visitors."""
+    page = db.query(Page).filter(Page.slug == slug, Page.is_active.is_(True)).first()
+    if not page:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Page not found")
+    return PublicPage(
+        title=page.title,
+        slug=page.slug,
+        updated_at=page.updated_at,
+        content=page.content,
+        meta_title=page.seo.meta_title if page.seo else None,
+        meta_description=page.seo.meta_description if page.seo else None,
+    )

@@ -6,6 +6,7 @@ from starlette.middleware.sessions import SessionMiddleware
 from app.admin import setup_admin
 from app.core.config import settings
 from app.core.schema_upgrade import apply_schema_upgrades
+from app.core.standard_pages import ensure_standard_pages
 from app.core.security import get_password_hash
 from app.database import Base, SessionLocal, engine
 from app.models import *  # noqa: F401,F403
@@ -80,6 +81,8 @@ def on_startup():
                 )
                 db.commit()
         seed(db)
+        # Legal pages linked from the footer (created as drafts if missing).
+        ensure_standard_pages(db)
     finally:
         db.close()
 

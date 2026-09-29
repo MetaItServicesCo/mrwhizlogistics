@@ -52,7 +52,9 @@ export function editTargetFor(pathname: string): EditTarget | null {
       : { href: "/dashboard/blog/posts", label: "Edit posts" };
   }
   if (section === "contact") return { href: "/dashboard/settings?tab=contact", label: "Edit this page" };
-  if (section === "about") return { href: "/dashboard/teams", label: "Edit team" };
+  if (section === "about") return { href: "/dashboard/pages/about", label: "Edit this page" };
+  if (["privacy-policy", "terms", "disclaimer"].includes(section))
+    return { href: `/dashboard/pages/legal?edit=${section}`, label: "Edit this page" };
   if (section === "rentals") return { href: "/dashboard/rentals", label: "Rental requests" };
   return null;
 }

@@ -8,6 +8,7 @@ import FacebookRoundedIcon from "@mui/icons-material/FacebookRounded";
 import XIcon from "@mui/icons-material/X";
 import EmailRoundedIcon from "@mui/icons-material/EmailRounded";
 import CoverImage from "@/components/common/CoverImage";
+import { DEFAULT_ABOUT, type AboutContent } from "@/lib/aboutPage";
 
 const LIME = "#c8ff00";
 const EASE = [0.22, 1, 0.36, 1] as const;
@@ -235,7 +236,14 @@ function MemberCard({ m }: { m: Member }) {
   );
 }
 
-export default function TeamSection({ members = TEAM }: { members?: Member[] }) {
+export default function TeamSection({
+  members = TEAM,
+  content = DEFAULT_ABOUT.team,
+}: {
+  members?: Member[];
+  /** Section eyebrow + heading from Dashboard -> Pages -> About Us. */
+  content?: AboutContent["team"];
+}) {
   return (
     <Box
       component="section"
@@ -300,7 +308,7 @@ export default function TeamSection({ members = TEAM }: { members?: Member[] }) 
                 textTransform: "uppercase",
               }}
             >
-              Our Team
+              {content.eyebrow}
             </Typography>
             <Box sx={{ width: 28, height: 2, bgcolor: LIME, opacity: 0.7 }} />
           </Box>
@@ -324,7 +332,7 @@ export default function TeamSection({ members = TEAM }: { members?: Member[] }) 
               "@media (prefers-reduced-motion: reduce)": { animation: "none" },
             }}
           >
-            Meet the people behind the wheel
+            {content.heading}
           </Typography>
         </motion.div>
       </Box>

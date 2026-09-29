@@ -3,7 +3,7 @@ import "server-only";
 import { cache } from "react";
 import { unstable_rethrow } from "next/navigation";
 
-import type { BlogPost, TruckCard } from "@/lib/types";
+import type { BlogPost, PublicPage, PublicPageLink, TruckCard } from "@/lib/types";
 import type {
   PublicFaqCategory,
   PublicSiteSetting,
@@ -177,6 +177,11 @@ export const getPublicSettings = cache(() =>
   getList<PublicSiteSetting[]>("/api/public/settings"),
 );
 
+/** Published legal pages (footer links, sitemap). */
+export const getLegalPages = cache(() =>
+  getList<PublicPageLink[]>("/api/public/pages?page_type=legal"),
+);
+
 // ---- single items (use through loadDetail) ---------------------------------
 // cache() shares one call between generateMetadata and the page within a single
 // request. Without it each detail page hit the API twice, and during an outage
@@ -196,4 +201,9 @@ export const getSemiTruckCard = cache((slug: string) =>
 
 export const getBlog = cache((slug: string) =>
   request<BlogPost>(`/api/blogs/${encodeURIComponent(slug)}`),
+);
+
+/** A published page by slug (drafts are a 404). */
+export const getPublicPage = cache((slug: string) =>
+  request<PublicPage>(`/api/public/pages/${encodeURIComponent(slug)}`),
 );

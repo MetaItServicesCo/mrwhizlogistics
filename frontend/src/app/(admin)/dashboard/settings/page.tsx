@@ -19,6 +19,7 @@ import { ADDRESS_KEY, CONTACT_PAGE_KEY, WORKING_HOURS_KEY } from "@/lib/contactP
 import { CTA_SETTING_KEY } from "@/lib/cta";
 import { AUTHOR_BIOS_KEY } from "@/lib/authors";
 import { BRANDING_KEYS as BRANDING_KEY_LIST } from "@/lib/branding";
+import { ABOUT_PAGE_KEY } from "@/lib/aboutPage";
 import {
   ConfirmDialog,
   Field,
@@ -34,7 +35,6 @@ import {
   fmtDate,
 } from "@/components/admin/ui";
 
-/** Managed by the Branding tab, so they're kept out of the generic table. */
 /** Managed by the Branding and Buttons tabs, so kept out of the generic table. */
 const BRANDING_KEYS = new Set([
   ...BRANDING_KEY_LIST,
@@ -47,6 +47,8 @@ const BRANDING_KEYS = new Set([
   ADDRESS_KEY,
   WORKING_HOURS_KEY,
   CONTACT_PAGE_KEY,
+  // Pages -> About Us
+  ABOUT_PAGE_KEY,
 ]);
 
 type SettingsTab = "branding" | "buttons" | "contact" | "settings" | "users";

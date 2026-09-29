@@ -4,31 +4,19 @@ import { Box, Typography, Container, Button } from "@mui/material";
 import { motion } from "motion/react";
 import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
 import { ctaProps, useCta } from "@/components/common/CtaProvider";
+import { DEFAULT_ABOUT, type AboutContent } from "@/lib/aboutPage";
 
 const LIME = "#c8ff00";
 const EASE = [0.22, 1, 0.36, 1] as const;
 
-const fleetCards = [
-  {
-    title: "Hot Shot Trailers",
-    desc: "Ideal for urgent, medium-to-heavy loads, equipment, and time-sensitive commercial freight requiring fast transit.",
-    tag: "01 // EXPEDITED",
-  },
-  {
-    title: "Box Trucks & Semi Vans",
-    desc: "Secure, weather-proof transportation perfect for palletized goods, retail distribution, and heavy long-haul logistics.",
-    tag: "02 // NATIONWIDE",
-  },
-];
-
-const skills = [
-  { name: "GROUND TRANSPORT", progress: 85 },
-  { name: "CARGO & HOT SHOT", progress: 78 },
-  { name: "LOGISTICS SERVICES", progress: 65 },
-  { name: "WAREHOUSING & STORAGE", progress: 40 },
-];
-
-export default function FleetOverview() {
+export default function FleetOverview({
+  content = DEFAULT_ABOUT.fleet,
+}: {
+  /** From Dashboard -> Pages -> About Us. */
+  content?: AboutContent["fleet"];
+}) {
+  const fleetCards = content.cards;
+  const skills = content.skills;
   const moreCta = useCta("about_why_more");
   return (
     <Box
@@ -57,7 +45,7 @@ export default function FleetOverview() {
                   letterSpacing: "-0.02em",
                 }}
               >
-                Our Fleet Overview
+                {content.fleetHeading}
               </Typography>
               <Box
                 sx={{ width: 45, height: 3, bgcolor: LIME, borderRadius: 2 }}
@@ -67,7 +55,7 @@ export default function FleetOverview() {
             <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
               {fleetCards.map((card, index) => (
                 <Box
-                  key={card.title}
+                  key={`${card.title}-${index}`}
                   component={motion.div}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -159,7 +147,7 @@ export default function FleetOverview() {
                   letterSpacing: "-0.02em",
                 }}
               >
-                Our Expertise
+                {content.expertiseHeading}
               </Typography>
               <Box
                 sx={{ width: 45, height: 3, bgcolor: LIME, borderRadius: 2 }}
@@ -185,14 +173,14 @@ export default function FleetOverview() {
                 }}
               >
                 <Box component="span" sx={{ color: LIME }}>
-                  25 years
+                  {content.experienceHighlight}
                 </Box>{" "}
-                of experience in Logistics services
+                {content.experienceText}
               </Typography>
 
               <Box sx={{ display: "flex", flexDirection: "column", gap: 3.5 }}>
                 {skills.map((skill, index) => (
-                  <Box key={skill.name}>
+                  <Box key={`${skill.name}-${index}`}>
                     <Box
                       sx={{
                         display: "flex",

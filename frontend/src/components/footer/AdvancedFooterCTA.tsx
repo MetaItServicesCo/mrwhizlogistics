@@ -31,6 +31,7 @@ export default function AdvancedFooterCTA({
   logo,
   footerLogo,
   address,
+  legalLinks = [],
 }: {
   companyName?: string;
   phone?: string;
@@ -45,6 +46,8 @@ export default function AdvancedFooterCTA({
   footerLogo?: FooterLogoSettings;
   /** Company address (one line per row) from Settings -> Contact page. */
   address?: string;
+  /** Published legal pages (Dashboard -> Pages -> Legal); drafts aren't linked. */
+  legalLinks?: { title: string; href: string }[];
 }) {
   const footer = footerLogo ?? DEFAULT_FOOTER_LOGO_SETTINGS;
   // Every social icon used to link to "#". Only show the ones that have a
@@ -634,6 +637,29 @@ export default function AdvancedFooterCTA({
               {companyName} © {new Date().getFullYear()} All Rights Reserved
             </Typography>
           </Stack>
+          {legalLinks.length > 0 && (
+            <Box
+              component="nav"
+              aria-label="Legal"
+              sx={{ display: "flex", flexWrap: "wrap", justifyContent: "center", columnGap: 2.5, rowGap: 1 }}
+            >
+              {legalLinks.map((l) => (
+                <Box
+                  key={l.href}
+                  component={Link}
+                  href={l.href}
+                  sx={{
+                    color: "rgba(255,255,255,0.6)",
+                    fontSize: { xs: "11px", sm: "12px" },
+                    textDecoration: "none",
+                    "&:hover": { color: LIME },
+                  }}
+                >
+                  {l.title}
+                </Box>
+              ))}
+            </Box>
+          )}
         </Box>
       </Box>
     </Box>

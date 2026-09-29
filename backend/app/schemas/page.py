@@ -112,6 +112,24 @@ class PageRead(PageBase):
 
     id: int
     created_at: datetime
+    updated_at: Optional[datetime] = None
+    # Dashboard editors show and save the page's meta title/description.
+    seo: Optional[SEONested] = None
+
+
+class PublicPageLink(BaseModel):
+    """A published page, for footer links and the sitemap."""
+    model_config = ConfigDict(from_attributes=True)
+
+    title: str
+    slug: str
+    updated_at: Optional[datetime] = None
+
+
+class PublicPage(PublicPageLink):
+    content: Optional[str] = None
+    meta_title: Optional[str] = None
+    meta_description: Optional[str] = None
 
 
 class PageDetail(PageRead):

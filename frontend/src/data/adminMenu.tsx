@@ -4,6 +4,7 @@ import LocalShippingRoundedIcon from "@mui/icons-material/LocalShippingRounded";
 import RvHookupRoundedIcon from "@mui/icons-material/RvHookupRounded";
 import ArticleRoundedIcon from "@mui/icons-material/ArticleRounded";
 import ChatRoundedIcon from "@mui/icons-material/ChatRounded";
+import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
 import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
 
 export type SubItem = { title: string; href: string; badge?: number };
@@ -74,6 +75,15 @@ export const ADMIN_MENU: NavItem[] = [
     children: [
       { title: "Posts", href: "/dashboard/blog/posts" },
       { title: "Comments", href: "/dashboard/blog/comments", },
+    ],
+  },
+  {
+    key: "pages",
+    title: "Pages",
+    icon: <DescriptionRoundedIcon />,
+    children: [
+      { title: "About Us", href: "/dashboard/pages/about" },
+      { title: "Legal pages", href: "/dashboard/pages/legal" },
     ],
   },
   {
