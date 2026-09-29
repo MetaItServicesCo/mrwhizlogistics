@@ -1,17 +1,52 @@
 """
-Standard site pages (legal) that the footer links to and the dashboard edits.
+Content pages: the standard legal pages plus any page an admin creates in
+Dashboard -> Pages -> Site pages. Each is served at /<slug> by the website.
 
-They are created on startup if missing - as unpublished drafts, so nothing
-legal goes live until someone has reviewed it and switched it on in
-Dashboard -> Pages -> Legal. Existing pages are never modified here.
+The legal pages are created on startup if missing - as unpublished drafts, so
+nothing legal goes live until someone has reviewed it and switched it on.
+Existing pages are never modified here (apart from filling in the footer
+switch the first time it exists).
 """
 
+import re
+
 from sqlalchemy.orm import Session
+from sqlalchemy import text
 
 from app.core.html import sanitize_html
 from app.models.page import Page
 
 LEGAL_PAGE_TYPE = "legal"
+# Pages created in the dashboard.
+CUSTOM_PAGE_TYPE = "custom"
+# The only page types the public site serves at /<slug>.
+CONTENT_PAGE_TYPES = (LEGAL_PAGE_TYPE, CUSTOM_PAGE_TYPE)
+
+SLUG_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+SLUG_MAX = 100
+
+# First path segments the website already uses (routes, redirects, static
+# folders, backend proxies). A page with one of these slugs would never be
+# reachable, or would hide a real page.
+RESERVED_SLUGS = frozenset({
+    "about", "blog", "box-truck", "contact", "hot-shot", "rentals", "semi-truck",
+    "dashboard", "login", "register", "logout", "admin", "api", "uploads",
+    "images", "og", "video", "static", "_next", "quote", "home", "index",
+    "sitemap", "robots", "favicon", "search", "404", "500",
+})
+
+
+def slug_problem(slug: str) -> str | None:
+    """Why `slug` can't be used for a content page, or None if it can."""
+    if not slug:
+        return "Enter a page address."
+    if len(slug) > SLUG_MAX:
+        return f"The page address must be {SLUG_MAX} characters or fewer."
+    if not SLUG_RE.match(slug):
+        return "Use lowercase letters, numbers and single hyphens only, e.g. shipping-guide."
+    if slug in RESERVED_SLUGS:
+        return f'"/{slug}" is already used by the website. Choose another address.'
+    return None
 
 _CONTACT = (
     "<p>Mr. Whiz Logistics<br>555 N 5th St 109 B, Garland, TX 75040, United States<br>"
@@ -132,8 +167,18 @@ LEGAL_SLUGS = [p["slug"] for p in STANDARD_PAGES]
 
 def ensure_standard_pages(db: Session) -> None:
     """Create any missing standard page as an unpublished draft. Commits."""
+    # Serialize the check/insert across Uvicorn workers on fresh deployments.
+    if db.bind is not None and db.bind.dialect.name == "postgresql":
+        from app.core.schema_upgrade import ADVISORY_LOCK_KEY
+        db.execute(text("SELECT pg_advisory_xact_lock(:key)"), {"key": ADVISORY_LOCK_KEY})
+    # The footer switch arrived after the legal pages: they were always
+    # linked when published, so keep that. NULL only ever means "not set yet".
+    (
+        db.query(Page)
+        .filter(Page.page_type == LEGAL_PAGE_TYPE, Page.show_in_footer.is_(None))
+        .update({Page.show_in_footer: True, Page.updated_at: Page.updated_at}, synchronize_session=False)
+    )
     existing = {slug for (slug,) in db.query(Page.slug).filter(Page.slug.in_(LEGAL_SLUGS)).all()}
-    added = False
     for spec in STANDARD_PAGES:
         if spec["slug"] in existing:
             continue
@@ -144,9 +189,9 @@ def ensure_standard_pages(db: Session) -> None:
                 page_type=LEGAL_PAGE_TYPE,
                 content=sanitize_html(" ".join(spec["content"].split())),
                 is_active=False,
+                show_in_footer=True,
                 sort_order=spec["sort_order"],
             )
         )
-        added = True
-    if added:
-        db.commit()
+    # Release the transaction-scoped lock even when nothing changed.
+    db.commit()

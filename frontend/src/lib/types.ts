@@ -241,7 +241,7 @@ export interface Paginated<T> {
   size: number;
 }
 
-/** A site page (About is settings-driven; legal pages live here). */
+/** A content page (legal or admin-created); About is settings-driven. */
 export interface SitePage {
   id: number;
   title: string;
@@ -250,6 +250,7 @@ export interface SitePage {
   content: string | null;
   is_active: boolean;
   sort_order: number;
+  show_in_footer: boolean | null;
   created_at: string;
   updated_at: string | null;
   seo: { meta_title: string | null; meta_description: string | null } | null;
@@ -259,6 +260,8 @@ export interface SitePage {
 export interface PublicPageLink {
   title: string;
   slug: string;
+  page_type: string;
+  show_in_footer: boolean | null;
   updated_at: string | null;
 }
 

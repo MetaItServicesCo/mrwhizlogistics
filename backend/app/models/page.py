@@ -18,6 +18,8 @@ class Page(Base):
     parent_id = Column(Integer, ForeignKey("pages.id"), nullable=True)
     redirect_url = Column(String(500), nullable=True)
     sort_order = Column(Integer, default=0, nullable=False)
+    # Linked in the footer's bottom row when published (content pages only).
+    show_in_footer = Column(Boolean, default=False, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 

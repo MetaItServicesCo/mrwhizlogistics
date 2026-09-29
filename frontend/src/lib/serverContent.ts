@@ -177,9 +177,9 @@ export const getPublicSettings = cache(() =>
   getList<PublicSiteSetting[]>("/api/public/settings"),
 );
 
-/** Published legal pages (footer links, sitemap). */
-export const getLegalPages = cache(() =>
-  getList<PublicPageLink[]>("/api/public/pages?page_type=legal"),
+/** Published content pages (the footer filters on show_in_footer; the sitemap uses all). */
+export const getPublicPages = cache(() =>
+  getList<PublicPageLink[]>("/api/public/pages"),
 );
 
 // ---- single items (use through loadDetail) ---------------------------------

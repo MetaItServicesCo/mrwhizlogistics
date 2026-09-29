@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session, selectinload
 
+from app.core.standard_pages import CONTENT_PAGE_TYPES
 from app.database import get_db
 from app.models.content_block import ContentBlock
 from app.models.page import Page
@@ -109,25 +110,29 @@ def public_settings(db: Session = Depends(get_db)):
 
 
 @router.get("/pages", response_model=list[PublicPageLink])
-def public_pages(page_type: str = Query("legal"), db: Session = Depends(get_db)):
-    """Published pages of one type (footer links, sitemap)."""
-    return (
-        db.query(Page)
-        .filter(Page.page_type == page_type, Page.is_active.is_(True))
-        .order_by(Page.sort_order, Page.id)
-        .all()
-    )
+def public_pages(footer: bool = Query(False), db: Session = Depends(get_db)):
+    """Published content pages (sitemap); footer=true only those linked in the footer."""
+    query = db.query(Page).filter(Page.page_type.in_(CONTENT_PAGE_TYPES), Page.is_active.is_(True))
+    if footer:
+        query = query.filter(Page.show_in_footer.is_(True))
+    return query.order_by(Page.sort_order, Page.id).all()
 
 
 @router.get("/pages/{slug}", response_model=PublicPage)
 def public_page(slug: str, db: Session = Depends(get_db)):
-    """One published page; drafts are a 404 to visitors."""
-    page = db.query(Page).filter(Page.slug == slug, Page.is_active.is_(True)).first()
+    """One published content page; drafts are a 404 to visitors."""
+    page = (
+        db.query(Page)
+        .filter(Page.slug == slug, Page.page_type.in_(CONTENT_PAGE_TYPES), Page.is_active.is_(True))
+        .first()
+    )
     if not page:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Page not found")
     return PublicPage(
         title=page.title,
         slug=page.slug,
+        page_type=page.page_type,
+        show_in_footer=bool(page.show_in_footer),
         updated_at=page.updated_at,
         content=page.content,
         meta_title=page.seo.meta_title if page.seo else None,

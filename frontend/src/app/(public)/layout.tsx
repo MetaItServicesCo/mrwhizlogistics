@@ -8,12 +8,12 @@ import AdvancedFooterCTA from "@/components/footer/AdvancedFooterCTA";
 import MailingListCTA from "@/components/footer/MailingListCTA";
 import Navbar from "@/components/header/Navbar";
 import { footerLogoFromSettings, logoFromSettings } from "@/lib/branding";
-import { legalPath } from "@/lib/legalPages";
+import { pagePath } from "@/lib/contentPages";
 import { settingsMap } from "@/lib/contentAdapters";
 import {
   getBoxTruckCards,
   getHotshotCards,
-  getLegalPages,
+  getPublicPages,
   getPublicSettings,
   getSemiTruckCards,
 } from "@/lib/serverContent";
@@ -25,12 +25,12 @@ export default async function PublicLayout({
 }) {
   // One round of parallel calls. The service lists are memoised per request,
   // so a listing page that also needs them doesn't fetch twice.
-  const [settingRows, hotshots, boxTrucks, semiTrucks, legalPages] = await Promise.all([
+  const [settingRows, hotshots, boxTrucks, semiTrucks, contentPages] = await Promise.all([
     getPublicSettings(),
     getHotshotCards(),
     getBoxTruckCards(),
     getSemiTruckCards(),
-    getLegalPages(),
+    getPublicPages(),
   ]);
   const settings = settingsMap(settingRows || []);
   const logo = logoFromSettings(settings);
@@ -67,7 +67,9 @@ export default async function PublicLayout({
         logo={logo}
         footerLogo={footerLogoFromSettings(settings)}
         address={settings.address}
-        legalLinks={(legalPages || []).map((p) => ({ title: p.title, href: legalPath(p.slug) }))}
+        pageLinks={(contentPages || [])
+          .filter((p) => p.show_in_footer)
+          .map((p) => ({ title: p.title, href: pagePath(p.slug) }))}
       />
     </CtaProvider>
   );

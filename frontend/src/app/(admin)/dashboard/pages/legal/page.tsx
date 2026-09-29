@@ -11,7 +11,7 @@ import OpenInNewRoundedIcon from "@mui/icons-material/OpenInNewRounded";
 import { api } from "@/lib/api";
 import { useAction, useResource } from "@/lib/useResource";
 import { useDeepLinkEdit } from "@/lib/adminNav";
-import { LEGAL_PAGES, legalPath } from "@/lib/legalPages";
+import { LEGAL_PAGES, pagePath as legalPath } from "@/lib/contentPages";
 import type { SitePage } from "@/lib/types";
 import { EmptyState, ErrorState, Field, FormDialog, LIME, LoadingState, PageHeader, Panel, Toast, fmtDateTime } from "@/components/admin/ui";
 import RichTextEditor from "@/components/admin/RichTextEditor";

@@ -1,11 +1,11 @@
 from datetime import datetime
 from typing import Any, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
 class SEONested(BaseModel):
-    meta_title: Optional[str] = None
+    meta_title: Optional[str] = Field(default=None, max_length=255)
     meta_description: Optional[str] = None
     seo_slug: Optional[str] = None
     keywords: Optional[str] = None
@@ -81,14 +81,15 @@ class PageSectionRead(PageSectionBase):
 
 
 class PageBase(BaseModel):
-    title: str
-    slug: str
-    page_type: str = "home"
+    title: str = Field(min_length=1, max_length=255)
+    slug: str = Field(min_length=1, max_length=255)
+    page_type: str = Field(default="home", min_length=1, max_length=50)
     content: Optional[str] = None
     is_active: bool = True
     parent_id: Optional[int] = None
     redirect_url: Optional[str] = None
     sort_order: int = 0
+    show_in_footer: Optional[bool] = False
 
 
 class PageCreate(PageBase):
@@ -96,15 +97,23 @@ class PageCreate(PageBase):
 
 
 class PageUpdate(BaseModel):
-    title: Optional[str] = None
-    slug: Optional[str] = None
-    page_type: Optional[str] = None
+    title: Optional[str] = Field(default=None, min_length=1, max_length=255)
+    slug: Optional[str] = Field(default=None, min_length=1, max_length=255)
+    page_type: Optional[str] = Field(default=None, min_length=1, max_length=50)
     content: Optional[str] = None
     is_active: Optional[bool] = None
     parent_id: Optional[int] = None
     redirect_url: Optional[str] = None
     sort_order: Optional[int] = None
+    show_in_footer: Optional[bool] = None
     seo: Optional[SEONested] = None
+
+    @field_validator("title", "slug", "page_type", "is_active", "sort_order", "show_in_footer")
+    @classmethod
+    def reject_explicit_null(cls, value):
+        if value is None:
+            raise ValueError("This field cannot be null; omit it to keep its current value.")
+        return value
 
 
 class PageRead(PageBase):
@@ -123,6 +132,8 @@ class PublicPageLink(BaseModel):
 
     title: str
     slug: str
+    page_type: str
+    show_in_footer: Optional[bool] = False
     updated_at: Optional[datetime] = None
 
 

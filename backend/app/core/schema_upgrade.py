@@ -43,6 +43,8 @@ COLUMN_UPGRADES: list[tuple[str, str, str]] = [
     ("semi_truck_cards", "detail_image_alt", "VARCHAR(300)"),
     ("team_members", "image_alt", "VARCHAR(300)"),
     ("testimonials", "image_alt", "VARCHAR(300)"),
+    # Content pages: footer link switch (NULL until standard_pages sets it)
+    ("pages", "show_in_footer", "BOOLEAN"),
 ]
 
 

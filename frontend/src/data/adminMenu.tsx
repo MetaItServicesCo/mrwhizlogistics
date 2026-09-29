@@ -83,7 +83,7 @@ export const ADMIN_MENU: NavItem[] = [
     icon: <DescriptionRoundedIcon />,
     children: [
       { title: "About Us", href: "/dashboard/pages/about" },
-      { title: "Legal pages", href: "/dashboard/pages/legal" },
+      { title: "Site pages", href: "/dashboard/pages/site" },
     ],
   },
   {
