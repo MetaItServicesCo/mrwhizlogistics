@@ -1,5 +1,7 @@
 "use client";
 
+import { RENTAL_DEFAULTS, type RentalPageContent } from "@/lib/rentalContent";
+
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation"; // Next.js router import kiya
@@ -34,13 +36,16 @@ const AUTO_SLIDE_TIME = 4000;
 
 export default function RentalCard({
   item,
+  content = RENTAL_DEFAULTS.page.sections.RentalCard,
   index,
   onQuote,
 }: {
   item: RentalItem;
+  content?: RentalPageContent["sections"]["RentalCard"];
   index: number;
   onQuote: (item: RentalItem) => void;
 }) {
+  const { copy } = content;
   const router = useRouter(); // Router initialization
   const quoteCta = useCta("rentals_card_quote");
   const callCta = useCta("rentals_card_call");
@@ -320,9 +325,7 @@ export default function RentalCard({
               color: LIME,
               textTransform: "uppercase",
             }}
-          >
-            For Rent
-          </Typography>
+          >{copy.forRent}</Typography>
         </Box>
 
         <Typography

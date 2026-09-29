@@ -45,6 +45,10 @@ COLUMN_UPGRADES: list[tuple[str, str, str]] = [
     ("testimonials", "image_alt", "VARCHAR(300)"),
     # Content pages: footer link switch (NULL until standard_pages sets it)
     ("pages", "show_in_footer", "BOOLEAN"),
+    ("rental_items", "details", "JSON"),
+    ("rental_items", "is_active", "BOOLEAN NOT NULL DEFAULT TRUE"),
+    ("rental_items", "sort_order", "INTEGER NOT NULL DEFAULT 0"),
+    ("rental_items", "updated_at", "TIMESTAMP"),
 ]
 
 

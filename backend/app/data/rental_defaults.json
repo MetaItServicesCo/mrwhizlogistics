@@ -1,0 +1,430 @@
+{
+  "page": {
+    "hero": {
+      "title": "Hot Shot Rentals",
+      "crumb": "Rentals",
+      "badge": "EQUIPMENT RENTALS",
+      "image": "/images/breadcumb.jpg"
+    },
+    "seo": {
+      "metaTitle": "Hot Shot Equipment Rentals",
+      "metaDescription": "Rent hot shot trailers — flatbed, gooseneck and enclosed — on flexible daily, weekly and monthly terms for construction, job-site and specialty hauling."
+    },
+    "sections": {
+      "RentalsIntro": {
+        "enabled": true,
+        "copy": {
+          "logisticsEquipmentRental": "Logistics Equipment Rental ",
+          "browseOurHotShotRental": "Browse our hot shot rental equipment to find the right solution for construction, industrial, job-site and specialty hauling. Flatbed, gooseneck and enclosed trailers — available on flexible daily, weekly and monthly terms. "
+        }
+      },
+      "HotShotRentals": {
+        "enabled": true,
+        "copy": {
+          "availableForRent": "Available for Rent ",
+          "rentalEquipment": "Rental Equipment ",
+          "flexibleDailyWeeklyAndMonthly": "Flexible daily, weekly and monthly rentals — the right trailer for every hot shot haul, ready when you are. "
+        }
+      },
+      "WhyRentWithUs": {
+        "enabled": true,
+        "copy": {
+          "whyRentWithUs": "Why Rent With Us ",
+          "equipmentThatKeeps": "Equipment that keeps ",
+          "yourWorkMoving": "your work moving. ",
+          "fromExpeditedHaulingToJobsite": "From expedited hauling to job-site transportation, our rental equipment gives you the flexibility to choose the right setup for your load without committing to equipment you do not need. "
+        },
+        "items": [
+          {
+            "number": "01",
+            "title": "Flexible Rental Terms",
+            "description": "Choose daily, weekly or monthly rental options based on your hauling schedule and project requirements."
+          },
+          {
+            "number": "02",
+            "title": "Reliable Equipment",
+            "description": "Dependable trucks and trailers ready for commercial hauling, job-site work and time-sensitive transportation."
+          },
+          {
+            "number": "03",
+            "title": "Multiple Equipment Options",
+            "description": "Choose from Truck & Trailer, Sprinter Van, enclosed trailers and flatbeds for different load requirements."
+          },
+          {
+            "number": "04",
+            "title": "Fast Availability",
+            "description": "Get access to the equipment you need without unnecessary delays or complicated rental processes."
+          },
+          {
+            "number": "05",
+            "title": "Clear Rental Pricing",
+            "description": "Straightforward rental options and flexible plans designed around your equipment and rental duration."
+          },
+          {
+            "number": "06",
+            "title": "Professional Support",
+            "description": "Our team helps you choose the right truck or trailer based on your freight, load and hauling requirements."
+          }
+        ],
+        "stats": [
+          {
+            "value": "6",
+            "label": "Rental Options"
+          },
+          {
+            "value": "24/7",
+            "label": "Support"
+          },
+          {
+            "value": "Fast",
+            "label": "Availability"
+          }
+        ]
+      },
+      "RentalHowItWorks": {
+        "enabled": true,
+        "copy": {
+          "simpleRentalProcess": "Simple Rental Process ",
+          "howIt": "How It",
+          "works": "Works ",
+          "rentingTheRightTruckOr": "Renting the right truck or trailer should be simple. Choose your equipment, request a quote and get on the road with confidence. ",
+          "step": "STEP "
+        },
+        "items": [
+          {
+            "number": "01",
+            "title": "Choose Your Rental",
+            "description": "Browse our available trucks and trailers and choose the rental option that best fits your load, distance and hauling requirements."
+          },
+          {
+            "number": "02",
+            "title": "Request a Quote",
+            "description": "Tell us what you need, your rental duration and preferred pickup date. Our team will provide clear pricing and availability."
+          },
+          {
+            "number": "03",
+            "title": "Pickup & Inspect",
+            "description": "Once your rental is confirmed, pick up your truck or trailer. Our team will walk you through the equipment before you leave."
+          },
+          {
+            "number": "04",
+            "title": "Hit the Road",
+            "description": "Load your freight and get moving with dependable equipment designed for safe, efficient and flexible hauling."
+          }
+        ]
+      },
+      "RentalFaq": {
+        "enabled": true,
+        "copy": {
+          "rentalFaq": "RENTAL FAQ ",
+          "questions": "Questions? ",
+          "weveGotAnswers": "We've Got Answers. ",
+          "everythingYouNeedToKnow": "Everything you need to know about our truck and trailer rental options, availability and flexible rental terms. ",
+          "stillHaveQuestionsOurRental": "Still have questions? Our rental team is ready to help. "
+        },
+        "items": [
+          {
+            "question": "What types of trucks and trailers can I rent?",
+            "answer": "We offer a range of rental options including Truck & Trailer combinations, Sprinter Vans with Lift Gates, 16 ft and 24 ft Enclosed Trailers, 20 ft and 40 ft Flatbed Trailers."
+          },
+          {
+            "question": "Can I rent a truck or trailer for a single day?",
+            "answer": "Yes. Depending on availability, daily rental options are available. Weekly and longer-term rental plans may also be available for qualifying equipment."
+          },
+          {
+            "question": "Do you offer weekly or monthly rentals?",
+            "answer": "Yes. We can provide flexible rental periods for businesses, contractors, carriers and other customers who need equipment for extended projects."
+          },
+          {
+            "question": "What do I need to rent a truck or trailer?",
+            "answer": "Rental requirements can vary depending on the equipment. Our team will confirm the required driver's license, insurance, identification and any other applicable documentation before your rental."
+          },
+          {
+            "question": "Can I use the rental for commercial hauling?",
+            "answer": "Yes, our rental options are designed for a variety of commercial hauling needs. Tell us what you're hauling and where it needs to go so we can recommend the right equipment."
+          },
+          {
+            "question": "How do I check availability and pricing?",
+            "answer": "The fastest way is to request a quote. Share your preferred equipment, rental dates and basic requirements, and our team can confirm availability and pricing."
+          },
+          {
+            "question": "Can I request a specific truck or trailer?",
+            "answer": "You can request a specific equipment type and configuration. Final availability depends on the rental fleet at the time of your request."
+          },
+          {
+            "question": "What happens if I need help during my rental?",
+            "answer": "Our team is available to assist with rental-related questions and equipment support. Contact us directly and we'll help you with the next steps."
+          }
+        ]
+      },
+      "RentalFinalCta": {
+        "enabled": true,
+        "copy": {
+          "readyToRent": "READY TO RENT? ",
+          "getTheRight": "Get The Right ",
+          "equipment": "Equipment. ",
+          "tellUsWhatYouNeed": "Tell us what you need, when you need it and how you plan to use it. Our team will help you find the right truck or trailer for your job. ",
+          "rentalFleet": "Rental Fleet ",
+          "checkAvailabilityToday": "Check availability today ",
+          "needHelpChoosingEquipmentContact": "Need help choosing equipment? Contact our rental team for guidance. "
+        },
+        "items": [
+          "Flexible rental periods",
+          "Multiple truck & trailer options",
+          "Fast availability checks",
+          "Simple quote process"
+        ]
+      },
+      "RentalDetailContent": {
+        "enabled": true,
+        "copy": {
+          "readyToRent": "Ready to Rent ",
+          "commercialRentalEquipment": "Commercial Rental Equipment ",
+          "rentalHighlights": "Rental Highlights ",
+          "professionalCommercialgradeRentalEquipment": "Professional commercial-grade rental equipment. ",
+          "equipmentRental": "Equipment Rental ",
+          "startingRentalRate": "Starting Rental Rate ",
+          "rentalRequirements": "Rental Requirements ",
+          "commercialgradeEquipmentFlexibleRental": "Commercial-grade equipment · Flexible rental options ",
+          "moreEquipment": "More Equipment ",
+          "exploreOtherRentals": "Explore Other Rentals ",
+          "chooseTheRightEquipmentConfiguration": "Choose the right equipment configuration for your hauling, construction, commercial, or transportation requirements. ",
+          "rentalRate": "Rental Rate",
+          "rentalTerms": "Rental Terms",
+          "dailyWeeklyMonthly": "Daily · Weekly · Monthly",
+          "serviceArea": "Service Area",
+          "technicalInformation": "Technical Information",
+          "equipmentSpecifications": "Equipment Specifications",
+          "everythingYouNeedToKnow": "Everything you need to know about the equipment before booking your rental.",
+          "sizeDimensions": "Size / Dimensions",
+          "capacity": "Capacity",
+          "hitch": "Hitch",
+          "location": "Location",
+          "equipmentIncluded": "Equipment Included",
+          "deposit": "Deposit",
+          "requirements": "Requirements",
+          "minimumAge": "Minimum Age",
+          "category": "Category",
+          "booking": "Booking",
+          "quoteRequired": "Quote Required",
+          "pickup": "Pickup",
+          "wylieTx": "Wylie, TX",
+          "terms": "Terms",
+          "flexible": "Flexible"
+        }
+      },
+      "RentalCard": {
+        "enabled": true,
+        "copy": {
+          "forRent": "For Rent "
+        }
+      }
+    },
+    "detailHero": {
+      "crumb": "Equipment Details",
+      "badgeFallback": "RENTAL SPECIFICATION"
+    }
+  },
+  "items": [
+    {
+      "slug": "16-feet-dump-trailer",
+      "title": "16 Feet Dump Trailer",
+      "desc": "Heavy-duty 16-feet dump trailers built for hauling and unloading dirt, gravel, debris, mulch and construction materials with ease. Hydraulic dump operation makes site cleanups and material drops fast and effortless.",
+      "images": [
+        "/images/Picss/Truck&Trailer-1.jpeg",
+        "/images/Picss/Truck&Trailer-2.jpeg",
+        "/images/Picss/Truck&Trailer-3.jpeg",
+        "/images/Picss/Truck&Trailer-4.jpeg"
+      ],
+      "specs": [
+        "16 ft dump trailer",
+        "Hydraulic lift",
+        "Debris & material hauling",
+        "Heavy-duty build"
+      ],
+      "priceHint": "From $80/hour",
+      "pricingIncludes": "All-in pricing includes 8.25% Sales Tax & 3.5% Processing Fee",
+      "size": "16' long x 83\" wide",
+      "capacity": "14,000 lb GVWR",
+      "hitch": "2-5/16\" ball",
+      "location": "Wylie, TX & Surrounding Areas",
+      "equipment": "Hydraulic hoist, tarp kit, ramps",
+      "deposit": "Credit card required",
+      "requirements": "Valid driver's license & current insurance",
+      "minAge": "21 years or older",
+      "category": "Dump Trailer",
+      "availability": "Available"
+    },
+    {
+      "slug": "53-feet-dry-van-trailer",
+      "title": "53 Feet Dry Van Trailer Rental",
+      "desc": "Full-size 53-feet dry van trailers offering maximum enclosed capacity for palletized freight, retail goods and full truckload shipments. Fully sealed to protect your cargo from weather and road conditions on long-haul and regional routes.",
+      "images": [
+        "/images/Picss/Sprinter-van-with-lift-gate-1.jpeg",
+        "/images/Picss/Sprinter-van-with-lift-gate-2.jpeg",
+        "/images/Picss/Sprinter-van-with-lift-gate-3.jpeg"
+      ],
+      "specs": [
+        "53 ft enclosed",
+        "Full truckload capacity",
+        "Weather sealed",
+        "Regional & long haul"
+      ],
+      "priceHint": "From $120/hour",
+      "pricingIncludes": "All-in pricing includes 8.25% Sales Tax & 3.5% Processing Fee",
+      "size": "53' long x 102\" wide x 13'6\" high",
+      "capacity": "45,000 lb payload",
+      "hitch": "Standard Fifth Wheel",
+      "location": "Wylie, TX & Surrounding Areas",
+      "equipment": "Swing doors, e-track rails, translucent roof",
+      "deposit": "Corporate or credit card deposit",
+      "requirements": "Valid commercial CDL & commercial auto insurance",
+      "minAge": "23 years or older",
+      "category": "Dry Van",
+      "availability": "Available"
+    },
+    {
+      "slug": "16-feet-enclosed-trailer",
+      "title": "16 Feet Enclosed Trailer Rental",
+      "desc": "Compact enclosed trailers designed to keep tools, equipment and freight protected from weather, road debris and unauthorized access. A great choice for local hauling, trade work and smaller secured loads.",
+      "images": [
+        "/images/Pics/16-Feet-Enclosed- Trailer-1.jpg",
+        "/images/Pics/16-Feet-Enclosed-Trailer-2.jpeg",
+        "/images/Pics/16-Feet-Enclosed-Trailer-3.jpg"
+      ],
+      "specs": [
+        "16 ft trailer",
+        "Fully enclosed",
+        "Weather protected",
+        "Lockable & secure"
+      ],
+      "priceHint": "From $65/hour",
+      "pricingIncludes": "All-in pricing includes 8.25% Sales Tax & 3.5% Processing Fee",
+      "size": "16' long x 84\" wide",
+      "capacity": "7,000 lb GVWR",
+      "hitch": "2-5/16\" ball",
+      "location": "Wylie, TX & Surrounding Areas",
+      "equipment": "Rear ramp door, interior LED lighting, side access door",
+      "deposit": "Credit card required",
+      "requirements": "Valid driver's license & current insurance",
+      "minAge": "21 years or older",
+      "category": "Enclosed Trailer",
+      "availability": "Available"
+    },
+    {
+      "slug": "24-feet-enclosed-trailer",
+      "title": "24 Feet Enclosed Trailer Rental",
+      "desc": "Spacious 24-feet enclosed trailers for transporting larger equipment, commercial materials, tools and general freight while keeping your cargo fully protected throughout the trip. Ideal for moves, trade work and bigger secured loads.",
+      "images": [
+        "/images/Pics/24-feet enclosed Trailer-1.jpeg",
+        "/images/Pics/24-feet-Enclosed Trailer.jpeg",
+        "/images/Pics/24-Feet-Enclosed-Trailer-2.jpeg",
+        "/images/Pics/24-Feet-Enclosed-Trailer-3.jpeg",
+        "/images/Pics/24-Feet-Enclosed-Trailer-4.jpeg"
+      ],
+      "specs": [
+        "24 ft trailer",
+        "Fully enclosed",
+        "Weather protected",
+        "Large cargo capacity"
+      ],
+      "priceHint": "From $95/hour",
+      "pricingIncludes": "All-in pricing includes 8.25% Sales Tax & 3.5% Processing Fee",
+      "size": "24' long x 85\" wide",
+      "capacity": "10,000 lb GVWR",
+      "hitch": "2-5/16\" ball",
+      "location": "Wylie, TX & Surrounding Areas",
+      "equipment": "Heavy-duty ramp door, D-rings, interior lights",
+      "deposit": "Credit card required",
+      "requirements": "Valid driver's license & current insurance",
+      "minAge": "21 years or older",
+      "category": "Enclosed Trailer",
+      "availability": "Available"
+    },
+    {
+      "slug": "40-feet-flatbed",
+      "title": "40 Feet Flatbed Trailer Rental",
+      "desc": "Heavy-duty 40-feet flatbed trailers designed for oversized and commercial freight including steel, lumber, machinery, construction materials and large equipment. Open-deck loading from any side makes handling awkward loads simple.",
+      "images": [
+        "/images/Picss/40-feet-flatbed-1.jpeg",
+        "/images/Picss/40-feet-flatbed-2.jpeg",
+        "/images/Picss/40-feet-flatbed-3.jpeg",
+        "/images/Picss/40-feet-flatbed-4.jpeg"
+      ],
+      "specs": [
+        "40 ft deck",
+        "Heavy-duty design",
+        "Oversized freight",
+        "High payload capacity"
+      ],
+      "priceHint": "From $110/hour",
+      "pricingIncludes": "All-in pricing includes 8.25% Sales Tax & 3.5% Processing Fee",
+      "size": "40' long x 102\" wide",
+      "capacity": "20,000 lb GVWR",
+      "hitch": "Gooseneck / Pintle Hitch",
+      "location": "Wylie, TX & Surrounding Areas",
+      "equipment": "12,000 lb winch, 8 ratchet tie-downs, stake pockets",
+      "deposit": "Credit card required",
+      "requirements": "Valid driver's license & current insurance",
+      "minAge": "21 years or older",
+      "category": "Flatbed",
+      "availability": "Available"
+    },
+    {
+      "slug": "20-feet-flatbed",
+      "title": "20 Feet Flatbed Trailer Rental",
+      "desc": "Versatile 20-feet flatbed trailers for construction materials, equipment, steel, lumber and general freight. A practical option when you need open-deck flexibility without committing to a full-size trailer.",
+      "images": [
+        "/images/Picss/20-feet-flatbed-1.jpeg",
+        "/images/Picss/20-feet-flatbed-2.jpeg",
+        "/images/Picss/20-feet-flatbed-3.jpeg"
+      ],
+      "specs": [
+        "20 ft deck",
+        "Open-deck design",
+        "Easy loading",
+        "Construction ready"
+      ],
+      "priceHint": "From $75/hour",
+      "pricingIncludes": "All-in pricing includes 8.25% Sales Tax & 3.5% Processing Fee",
+      "size": "20' long x 82\" wide",
+      "capacity": "8,000 lb GVWR",
+      "hitch": "2-5/16\" ball",
+      "location": "Wylie, TX & Surrounding Areas",
+      "equipment": "12,000 lb winch, 4 ratchet tie-downs, 4 axle straps",
+      "deposit": "Credit card required",
+      "requirements": "Valid driver's license & current insurance",
+      "minAge": "21 years or older",
+      "category": "Flatbed",
+      "availability": "Available"
+    },
+    {
+      "slug": "16-feet-utility-trailer",
+      "title": "16 Feet Utility Trailer Rental",
+      "desc": "Practical 16-feet utility trailers for hauling equipment, landscaping gear, ATVs, furniture and general cargo. Their open, low-deck design makes loading and unloading quick and easy for everyday jobs.",
+      "images": [
+        "/images/Picss/20-feet-flatbed-1.jpeg",
+        "/images/Picss/20-feet-flatbed-2.jpeg",
+        "/images/Picss/20-feet-flatbed-3.jpeg"
+      ],
+      "specs": [
+        "16 ft utility deck",
+        "Open low-deck",
+        "Easy load & unload",
+        "Everyday hauling"
+      ],
+      "priceHint": "From $55/hour",
+      "pricingIncludes": "All-in pricing includes 8.25% Sales Tax & 3.5% Processing Fee",
+      "size": "16' long x 77\" wide",
+      "capacity": "5,000 lb GVWR",
+      "hitch": "2\" ball",
+      "location": "Wylie, TX & Surrounding Areas",
+      "equipment": "Gate ramp, tie-down loops",
+      "deposit": "Credit card required",
+      "requirements": "Valid driver's license & current insurance",
+      "minAge": "21 years or older",
+      "category": "Utility Trailer",
+      "availability": "Available"
+    }
+  ]
+}

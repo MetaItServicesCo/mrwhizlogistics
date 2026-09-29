@@ -14,6 +14,11 @@ class RentalItem(Base):
     hourly_rate = Column(String, nullable=True)
     main_image = Column(String, nullable=True)
     gallery_images = Column(JSON, default=list)  # ["img1.jpg", "img2.jpg"]
+    # Additional website fields; existing equipment/quote integrations stay intact.
+    details = Column(JSON, default=dict)
+    is_active = Column(Boolean, default=True, nullable=False)
+    sort_order = Column(Integer, default=0, nullable=False)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
 
 class RentalQuote(Base):

@@ -118,7 +118,7 @@ def workflow(api_origin, site_origin):
         print("PASS: unpublish/delete/404 behavior and all three existing legal URLs", flush=True)
 
 
-def main():
+def main(api_factory="tests.site_pages_app:make_app"):
     if not (FRONTEND / ".next" / "BUILD_ID").exists():
         raise RuntimeError("Run npm run build in frontend before this smoke test.")
     node = shutil.which("node")
@@ -134,7 +134,7 @@ def main():
     with tempfile.TemporaryFile() as api_log, tempfile.TemporaryFile() as site_log:
         try:
             api_process = subprocess.Popen(
-                [sys.executable, "-m", "uvicorn", "tests.site_pages_app:make_app", "--factory",
+                [sys.executable, "-m", "uvicorn", api_factory, "--factory",
                  "--host", "127.0.0.1", "--port", str(api_port)],
                 cwd=BACKEND, env=env, stdout=api_log, stderr=subprocess.STDOUT,
                 creationflags=subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0,

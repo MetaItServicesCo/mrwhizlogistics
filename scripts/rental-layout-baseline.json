@@ -1,0 +1,42 @@
+{
+  "RentalsIntro": {
+    "styles": "9ceca5ed52633c026d9f546683e00e04d822429a79f20df30f7e4c9aa841f91a",
+    "buttons": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "ctas": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "HotShotRentals": {
+    "styles": "51acb90b835eb5af0819901114a48582a2167fc6d5f325dff100ac92a45be6bb",
+    "buttons": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "ctas": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "WhyRentWithUs": {
+    "styles": "81aed69bc4ef3cae44e11ee014d046fa1fea23f91115069acb28c9ca5c6012a5",
+    "buttons": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "ctas": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "RentalHowItWorks": {
+    "styles": "f534d094244a6491fe6874a85424c93908a6c39c3afa502e2d813f048babc3d0",
+    "buttons": "a1271128950c42fc1b022e44bb2458eddd466cb235d9da14b857f0884fb1c61d",
+    "ctas": "9d49662ead98e062138d01dda4796117fd9c32a29c4fbbbb51dfa840854eb7c9"
+  },
+  "RentalFaq": {
+    "styles": "fc9ccedfe30f835b56561bd94a515327e8ba6def0c3c9c24887b2425bbfb60af",
+    "buttons": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "ctas": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "RentalFinalCta": {
+    "styles": "13a90d95b7cbce05ab22455a039d70f9f132fc42f01f1e25a87428a7470013ef",
+    "buttons": "de4bae7d6dd2ad36409f736cfef21372df53af52c482d4b5feebc751d5ad11c9",
+    "ctas": "b719d21b164c0959cf815453ae1faab82fb5e7665ac6827506f7253fc974641d"
+  },
+  "RentalDetailContent": {
+    "styles": "5092a1b48d9efebc779d8c70cff2fc0450bbef14c31949ed4179e0b7fb7c5f26",
+    "buttons": "621608e01979426046c9a929a6606e26420650a268a121dce59e41220b1fde43",
+    "ctas": "624da1e2121f64b32e54bb2156b8573ae28c6a663c7715efa09a86f96d5b57c8"
+  },
+  "RentalCard": {
+    "styles": "e3341a7652e9d6fc44ffa1da31aa5fcc066579520a42404d6e8fdc6a09e73756",
+    "buttons": "f57a9375327cbe5a6ca25732f8f2e4ec52a3374f8a614bd5b89752112333ce97",
+    "ctas": "31eb435e5ec3eb70ac1777ce1e1a12e16828a86766f0b38aa3b0d5ea7fab6af6"
+  }
+}

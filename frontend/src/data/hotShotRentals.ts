@@ -5,6 +5,8 @@ export type RentalItem = {
 
   // Multiple images for automatic image slider
   images: string[];
+  imageAlts?: string[];
+  content_html?: string;
   image?: string; // Fallback support
 
   // Small specification/highlight chips

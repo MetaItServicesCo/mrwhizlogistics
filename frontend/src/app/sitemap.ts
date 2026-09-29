@@ -9,6 +9,7 @@ import {
   getBoxTruckCards,
   getHotshotCards,
   getPublicPages,
+  getRentalItems,
   getSemiTruckCards,
 } from "@/lib/serverContent";
 import { usableCanonical } from "@/lib/seo";
@@ -48,12 +49,13 @@ function entries(
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Live dashboard content; the bundled copy only if the API is unreachable.
-  const [blogs, hotshots, boxTrucks, semiTrucks, contentPages] = await Promise.all([
+  const [blogs, hotshots, boxTrucks, semiTrucks, contentPages, rentals] = await Promise.all([
     getBlogs(),
     getHotshotCards(),
     getBoxTruckCards(),
     getSemiTruckCards(),
     getPublicPages(),
+    getRentalItems(),
   ]);
 
   const cards = (live: typeof hotshots, bundled: { slug: string }[]): Item[] =>
@@ -87,7 +89,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...entries("hot-shot", cards(hotshots, HOT_SHOT_SERVICES), { changeFrequency: "monthly", priority: 0.8 }),
     ...entries("box-truck", cards(boxTrucks, BOX_TRUCK_SERVICES), { changeFrequency: "monthly", priority: 0.8 }),
     ...entries("semi-truck", cards(semiTrucks, SEMI_TRUCK_SERVICES), { changeFrequency: "monthly", priority: 0.8 }),
-    ...entries("rentals", HOT_SHOT_RENTALS.map((r) => ({ slug: r.slug })), { changeFrequency: "monthly", priority: 0.7 }),
+    ...entries("rentals", (rentals ?? HOT_SHOT_RENTALS).map((r) => ({ slug: r.slug })), { changeFrequency: "monthly", priority: 0.7 }),
     ...entries("blog", posts, { changeFrequency: "monthly", priority: 0.7 }),
     // Published content pages only (drafts are a 404).
     ...(contentPages || []).flatMap((p) =>

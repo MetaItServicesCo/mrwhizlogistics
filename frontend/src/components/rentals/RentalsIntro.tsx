@@ -1,5 +1,7 @@
 "use client";
 
+import { RENTAL_DEFAULTS, type RentalPageContent } from "@/lib/rentalContent";
+
 import { motion } from "motion/react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -7,7 +9,8 @@ import Typography from "@mui/material/Typography";
 const LIME = "#c8ff00";
 const EASE = [0.22, 1, 0.36, 1] as const;
 
-export default function RentalsIntro() {
+export default function RentalsIntro({ content = RENTAL_DEFAULTS.page.sections.RentalsIntro }: { content?: RentalPageContent["sections"]["RentalsIntro"] }) {
+  const { copy } = content;
   return (
     <Box
       component="section"
@@ -43,9 +46,7 @@ export default function RentalsIntro() {
             mb: 2.5,
             lineHeight: 1.05,
           }}
-        >
-          Logistics Equipment Rental
-        </Typography>
+        >{copy.logisticsEquipmentRental}</Typography>
         <Typography
           sx={{
             color: "rgba(255,255,255,0.6)",
@@ -54,12 +55,7 @@ export default function RentalsIntro() {
             maxWidth: 820,
             mx: "auto",
           }}
-        >
-          Browse our hot shot rental equipment to find the right solution for
-          construction, industrial, job-site and specialty hauling. Flatbed,
-          gooseneck and enclosed trailers — available on flexible daily, weekly
-          and monthly terms.
-        </Typography>
+        >{copy.browseOurHotShotRental}</Typography>
       </Box>
     </Box>
   );

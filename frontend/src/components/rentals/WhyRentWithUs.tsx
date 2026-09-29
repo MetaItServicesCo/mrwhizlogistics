@@ -1,5 +1,7 @@
 "use client";
 
+import { RENTAL_DEFAULTS, type RentalPageContent } from "@/lib/rentalContent";
+
 import { motion, useReducedMotion } from "motion/react";
 
 import Box from "@mui/material/Box";
@@ -60,7 +62,8 @@ const benefits = [
   },
 ];
 
-export default function WhyRentWithUs() {
+export default function WhyRentWithUs({ content = RENTAL_DEFAULTS.page.sections.WhyRentWithUs }: { content?: RentalPageContent["sections"]["WhyRentWithUs"] }) {
+  const { copy } = content;
   const reduce = useReducedMotion() ?? false;
 
   return (
@@ -235,9 +238,7 @@ export default function WhyRentWithUs() {
 
                 textTransform: "uppercase",
               }}
-            >
-              Why Rent With Us
-            </Typography>
+            >{copy.whyRentWithUs}</Typography>
           </Box>
 
           {/* TITLE */}
@@ -261,17 +262,13 @@ export default function WhyRentWithUs() {
                 lg: "4rem",
               },
             }}
-          >
-            Equipment that keeps
-            <Box
+          >{copy.equipmentThatKeeps}<Box
               component="span"
               sx={{
                 display: "block",
                 color: LIME,
               }}
-            >
-              your work moving.
-            </Box>
+            >{copy.yourWorkMoving}</Box>
           </Typography>
 
           {/* DESCRIPTION */}
@@ -291,11 +288,7 @@ export default function WhyRentWithUs() {
 
               lineHeight: 1.8,
             }}
-          >
-            From expedited hauling to job-site transportation, our rental
-            equipment gives you the flexibility to choose the right setup for
-            your load without committing to equipment you do not need.
-          </Typography>
+          >{copy.fromExpeditedHaulingToJobsite}</Typography>
 
           {/* MINI STAT / VISUAL */}
 
@@ -314,13 +307,9 @@ export default function WhyRentWithUs() {
               gap: 1,
             }}
           >
-            {[
-              ["6", "Rental Options"],
-              ["24/7", "Support"],
-              ["Fast", "Availability"],
-            ].map(([value, label]) => (
+            {content.stats.map(({value, label}, index) => (
               <Box
-                key={label}
+                key={index}
                 sx={{
                   px: 2,
                   py: 2,
@@ -406,9 +395,9 @@ export default function WhyRentWithUs() {
             },
           }}
         >
-          {benefits.map((item) => (
+          {content.items.map((item, index) => (
             <Box
-              key={item.number}
+              key={index}
               component={motion.div}
               variants={{
                 hidden: {
@@ -528,7 +517,7 @@ export default function WhyRentWithUs() {
                   },
                 }}
               >
-                {item.icon}
+                {benefits[index % benefits.length].icon}
               </Box>
 
               {/* TITLE */}

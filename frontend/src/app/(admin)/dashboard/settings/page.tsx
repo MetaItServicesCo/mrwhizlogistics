@@ -49,6 +49,8 @@ const BRANDING_KEYS = new Set([
   CONTACT_PAGE_KEY,
   // Pages -> About Us
   ABOUT_PAGE_KEY,
+  // Edited in Pages -> Rental pages, not the raw settings table.
+  "rentals_page_content",
 ]);
 
 type SettingsTab = "branding" | "buttons" | "contact" | "settings" | "users";

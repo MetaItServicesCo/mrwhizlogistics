@@ -58,7 +58,7 @@ def format_quote_response(db_item: RentalQuote) -> dict:
 # 1. GET Equipment Details & Gallery (For Detail Page)
 @rental_router.get("/equipment/{slug}", response_model=RentalItemRead, summary="Fetch Detail Page Data & Gallery")
 def get_equipment_detail(slug: str, db: Session = Depends(get_db)):
-    item = db.query(RentalItem).filter(RentalItem.slug == slug).first()
+    item = db.query(RentalItem).filter(RentalItem.slug == slug, RentalItem.is_active.is_(True)).first()
     if not item:
         raise HTTPException(status_code=404, detail="Rental Equipment not found")
     return item

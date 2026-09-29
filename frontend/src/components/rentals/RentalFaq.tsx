@@ -1,5 +1,7 @@
 "use client";
 
+import { RENTAL_DEFAULTS, type RentalPageContent } from "@/lib/rentalContent";
+
 import { useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 
@@ -13,55 +15,9 @@ import LocalShippingRoundedIcon from "@mui/icons-material/LocalShippingRounded";
 const LIME = "#c8ff00";
 const EASE = [0.22, 1, 0.36, 1] as const;
 
-type FAQ = {
-  question: string;
-  answer: string;
-};
 
-const FAQS: FAQ[] = [
-  {
-    question: "What types of trucks and trailers can I rent?",
-    answer:
-      "We offer a range of rental options including Truck & Trailer combinations, Sprinter Vans with Lift Gates, 16 ft and 24 ft Enclosed Trailers, 20 ft and 40 ft Flatbed Trailers.",
-  },
-  {
-    question: "Can I rent a truck or trailer for a single day?",
-    answer:
-      "Yes. Depending on availability, daily rental options are available. Weekly and longer-term rental plans may also be available for qualifying equipment.",
-  },
-  {
-    question: "Do you offer weekly or monthly rentals?",
-    answer:
-      "Yes. We can provide flexible rental periods for businesses, contractors, carriers and other customers who need equipment for extended projects.",
-  },
-  {
-    question: "What do I need to rent a truck or trailer?",
-    answer:
-      "Rental requirements can vary depending on the equipment. Our team will confirm the required driver's license, insurance, identification and any other applicable documentation before your rental.",
-  },
-  {
-    question: "Can I use the rental for commercial hauling?",
-    answer:
-      "Yes, our rental options are designed for a variety of commercial hauling needs. Tell us what you're hauling and where it needs to go so we can recommend the right equipment.",
-  },
-  {
-    question: "How do I check availability and pricing?",
-    answer:
-      "The fastest way is to request a quote. Share your preferred equipment, rental dates and basic requirements, and our team can confirm availability and pricing.",
-  },
-  {
-    question: "Can I request a specific truck or trailer?",
-    answer:
-      "You can request a specific equipment type and configuration. Final availability depends on the rental fleet at the time of your request.",
-  },
-  {
-    question: "What happens if I need help during my rental?",
-    answer:
-      "Our team is available to assist with rental-related questions and equipment support. Contact us directly and we'll help you with the next steps.",
-  },
-];
-
-export default function RentalFaq() {
+export default function RentalFaq({ content = RENTAL_DEFAULTS.page.sections.RentalFaq }: { content?: RentalPageContent["sections"]["RentalFaq"] }) {
+  const { copy } = content;
   const reduce = useReducedMotion() ?? false;
 
   const [active, setActive] = useState<number | null>(0);
@@ -163,9 +119,7 @@ export default function RentalFaq() {
                 fontWeight: 900,
                 letterSpacing: 1.7,
               }}
-            >
-              RENTAL FAQ
-            </Typography>
+            >{copy.rentalFaq}</Typography>
           </Box>
 
           <Typography
@@ -180,17 +134,13 @@ export default function RentalFaq() {
                 md: "4rem",
               },
             }}
-          >
-            Questions?
-            <Box
+          >{copy.questions}<Box
               component="span"
               sx={{
                 color: LIME,
                 display: "block",
               }}
-            >
-              We&apos;ve Got Answers.
-            </Box>
+            >{copy.weveGotAnswers}</Box>
           </Typography>
 
           <Typography
@@ -200,10 +150,7 @@ export default function RentalFaq() {
               fontSize: { xs: 14, md: 16 },
               lineHeight: 1.7,
             }}
-          >
-            Everything you need to know about our truck and trailer rental
-            options, availability and flexible rental terms.
-          </Typography>
+          >{copy.everythingYouNeedToKnow}</Typography>
         </Box>
 
         {/* FAQ */}
@@ -216,7 +163,7 @@ export default function RentalFaq() {
             gap: 1.2,
           }}
         >
-          {FAQS.map((faq, index) => {
+          {content.items.map((faq, index) => {
             const isOpen = active === index;
 
             return (
@@ -411,9 +358,7 @@ export default function RentalFaq() {
               color: "rgba(255,255,255,0.38)",
               fontSize: 12,
             }}
-          >
-            Still have questions? Our rental team is ready to help.
-          </Typography>
+          >{copy.stillHaveQuestionsOurRental}</Typography>
         </Box>
       </Box>
     </Box>

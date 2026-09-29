@@ -1,5 +1,7 @@
 "use client";
 
+import { RENTAL_DEFAULTS, type RentalPageContent } from "@/lib/rentalContent";
+
 import { useState, type ReactNode } from "react";
 import Link from "next/link";
 
@@ -31,6 +33,7 @@ import CalendarMonthRoundedIcon from "@mui/icons-material/CalendarMonthRounded";
 import OpenInNewRoundedIcon from "@mui/icons-material/OpenInNewRounded";
 
 import type { RentalItem } from "@/data/hotShotRentals";
+import RichContent from "@/components/common/RichContent";
 import { ctaProps, useCta } from "@/components/common/CtaProvider";
 
 const LIME = "#c8ff00";
@@ -41,11 +44,14 @@ const EASE = [0.22, 1, 0.36, 1] as const;
 
 export default function RentalDetailContent({
   item,
+  content = RENTAL_DEFAULTS.page.sections.RentalDetailContent,
   relatedItems,
 }: {
   item: RentalItem;
+  content?: RentalPageContent["sections"]["RentalDetailContent"];
   relatedItems: RentalItem[];
 }) {
+  const { copy } = content;
   const reduceMotion = useReducedMotion() ?? false;
   const quoteCta = useCta("rental_detail_quote", item.slug);
   const callCta = useCta("rental_detail_call");
@@ -214,7 +220,7 @@ export default function RentalDetailContent({
           >
             <InfoRailItem
               icon={<LocalOfferRoundedIcon />}
-              label="Rental Rate"
+              label={copy.rentalRate}
               value={item.priceHint || "Custom Pricing"}
               accent
             />
@@ -223,15 +229,15 @@ export default function RentalDetailContent({
 
             <InfoRailItem
               icon={<CalendarMonthRoundedIcon />}
-              label="Rental Terms"
-              value="Daily · Weekly · Monthly"
+              label={copy.rentalTerms}
+              value={copy.dailyWeeklyMonthly}
             />
 
             <RailDivider />
 
             <InfoRailItem
               icon={<LocationOnRoundedIcon />}
-              label="Service Area"
+              label={copy.serviceArea}
               value={item.location || "Wylie, TX & Surrounding Areas"}
             />
           </Box>
@@ -351,7 +357,7 @@ export default function RentalDetailContent({
                     ease: EASE,
                   }}
                   src={images[activeImage]}
-                  alt={`${item.title} rental image ${activeImage + 1}`}
+                  alt={item.imageAlts?.[activeImage] || `${item.title} rental image ${activeImage + 1}`}
                   sx={{
                     position: "absolute",
                     inset: 0,
@@ -432,9 +438,7 @@ export default function RentalDetailContent({
                       letterSpacing: 1.2,
                       textTransform: "uppercase",
                     }}
-                  >
-                    Ready to Rent
-                  </Typography>
+                  >{copy.readyToRent}</Typography>
                 </Box>
               </Box>
 
@@ -493,9 +497,7 @@ export default function RentalDetailContent({
                     letterSpacing: 2,
                     mb: 0.9,
                   }}
-                >
-                  Commercial Rental Equipment
-                </Typography>
+                >{copy.commercialRentalEquipment}</Typography>
 
                 <Typography
                   component="h1"
@@ -610,7 +612,7 @@ export default function RentalDetailContent({
                       <Box
                         component="img"
                         src={img}
-                        alt={`${item.title} thumbnail ${index + 1}`}
+                        alt={item.imageAlts?.[index] || `${item.title} thumbnail ${index + 1}`}
                         sx={{
                           width: "100%",
                           height: "100%",
@@ -654,9 +656,9 @@ export default function RentalDetailContent({
               }}
             >
               <SectionHeading
-                eyebrow="Technical Information"
-                title="Equipment Specifications"
-                description="Everything you need to know about the equipment before booking your rental."
+                eyebrow={copy.technicalInformation}
+                title={copy.equipmentSpecifications}
+                description={copy.everythingYouNeedToKnow}
               />
 
               <Box
@@ -675,49 +677,49 @@ export default function RentalDetailContent({
               >
                 <SpecTile
                   icon={<StraightenRoundedIcon />}
-                  label="Size / Dimensions"
+                  label={copy.sizeDimensions}
                   value={item.size || "Not specified"}
                 />
 
                 <SpecTile
                   icon={<FitnessCenterRoundedIcon />}
-                  label="Capacity"
+                  label={copy.capacity}
                   value={item.capacity || "Not specified"}
                 />
 
                 <SpecTile
                   icon={<LinkRoundedIcon />}
-                  label="Hitch"
+                  label={copy.hitch}
                   value={item.hitch || "Not specified"}
                 />
 
                 <SpecTile
                   icon={<LocationOnRoundedIcon />}
-                  label="Location"
+                  label={copy.location}
                   value={item.location || "Wylie, TX & Surrounding Areas"}
                 />
 
                 <SpecTile
                   icon={<BuildRoundedIcon />}
-                  label="Equipment Included"
+                  label={copy.equipmentIncluded}
                   value={item.equipment || "Not specified"}
                 />
 
                 <SpecTile
                   icon={<CreditCardRoundedIcon />}
-                  label="Deposit"
+                  label={copy.deposit}
                   value={item.deposit || "Not specified"}
                 />
 
                 <SpecTile
                   icon={<VerifiedUserRoundedIcon />}
-                  label="Requirements"
+                  label={copy.requirements}
                   value={item.requirements || "Not specified"}
                 />
 
                 <SpecTile
                   icon={<BadgeRoundedIcon />}
-                  label="Minimum Age"
+                  label={copy.minimumAge}
                   value={item.minAge || "Not specified"}
                 />
               </Box>
@@ -749,9 +751,7 @@ export default function RentalDetailContent({
                   textTransform: "uppercase",
                   mb: 2,
                 }}
-              >
-                Rental Highlights
-              </Typography>
+              >{copy.rentalHighlights}</Typography>
 
               {item.specs && item.specs.length > 0 ? (
                 <Box
@@ -774,9 +774,7 @@ export default function RentalDetailContent({
                     fontSize: 14,
                     color: "rgba(255,255,255,0.5)",
                   }}
-                >
-                  Professional commercial-grade rental equipment.
-                </Typography>
+                >{copy.professionalCommercialgradeRentalEquipment}</Typography>
               )}
             </Box>
           </Box>
@@ -865,9 +863,7 @@ export default function RentalDetailContent({
                       letterSpacing: 2,
                       textTransform: "uppercase",
                     }}
-                  >
-                    Equipment Rental
-                  </Typography>
+                  >{copy.equipmentRental}</Typography>
 
                   <Box
                     sx={{
@@ -932,6 +928,8 @@ export default function RentalDetailContent({
                   {item.desc}
                 </Typography>
 
+                {item.content_html && <RichContent html={item.content_html} />}
+
                 {/* Pricing */}
 
                 <Box
@@ -951,9 +949,7 @@ export default function RentalDetailContent({
                       letterSpacing: 1.3,
                       textTransform: "uppercase",
                     }}
-                  >
-                    Starting Rental Rate
-                  </Typography>
+                  >{copy.startingRentalRate}</Typography>
 
                   <Box
                     sx={{
@@ -1024,15 +1020,15 @@ export default function RentalDetailContent({
                   }}
                 >
                   <QuickInfo
-                    label="Category"
+                    label={copy.category}
                     value={item.category || "Commercial"}
                   />
 
-                  <QuickInfo label="Booking" value="Quote Required" />
+                  <QuickInfo label={copy.booking} value={copy.quoteRequired} />
 
-                  <QuickInfo label="Pickup" value="Wylie, TX" />
+                  <QuickInfo label={copy.pickup} value={copy.wylieTx} />
 
-                  <QuickInfo label="Terms" value="Flexible" />
+                  <QuickInfo label={copy.terms} value={copy.flexible} />
                 </Box>
 
                 {/* Requirements */}
@@ -1053,9 +1049,7 @@ export default function RentalDetailContent({
                       letterSpacing: 1.3,
                       mb: 1.8,
                     }}
-                  >
-                    Rental Requirements
-                  </Typography>
+                  >{copy.rentalRequirements}</Typography>
 
                   <Requirement
                     text={
@@ -1169,9 +1163,7 @@ export default function RentalDetailContent({
                       color: "rgba(255,255,255,0.34)",
                       textAlign: "center",
                     }}
-                  >
-                    Commercial-grade equipment · Flexible rental options
-                  </Typography>
+                  >{copy.commercialgradeEquipmentFlexibleRental}</Typography>
                 </Box>
               </Box>
             </Box>
@@ -1217,9 +1209,7 @@ export default function RentalDetailContent({
                     textTransform: "uppercase",
                     mb: 0.9,
                   }}
-                >
-                  More Equipment
-                </Typography>
+                >{copy.moreEquipment}</Typography>
 
                 <Typography
                   sx={{
@@ -1231,9 +1221,7 @@ export default function RentalDetailContent({
                     fontWeight: 950,
                     letterSpacing: "-1.4px",
                   }}
-                >
-                  Explore Other Rentals
-                </Typography>
+                >{copy.exploreOtherRentals}</Typography>
               </Box>
 
               <Typography
@@ -1243,10 +1231,7 @@ export default function RentalDetailContent({
                   lineHeight: 1.65,
                   color: "rgba(255,255,255,0.45)",
                 }}
-              >
-                Choose the right equipment configuration for your hauling,
-                construction, commercial, or transportation requirements.
-              </Typography>
+              >{copy.chooseTheRightEquipmentConfiguration}</Typography>
             </Box>
 
             <Box
@@ -1332,7 +1317,7 @@ export default function RentalDetailContent({
                           className="related-img"
                           component="img"
                           src={relatedImage}
-                          alt={rel.title}
+                          alt={rel.imageAlts?.[0] || rel.title}
                           sx={{
                             width: "100%",
                             height: "100%",

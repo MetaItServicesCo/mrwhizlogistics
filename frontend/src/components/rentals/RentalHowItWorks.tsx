@@ -1,5 +1,7 @@
 "use client";
 
+import { RENTAL_DEFAULTS, type RentalPageContent } from "@/lib/rentalContent";
+
 import { motion, useReducedMotion } from "motion/react";
 
 import Box from "@mui/material/Box";
@@ -54,7 +56,8 @@ const STEPS: Step[] = [
   },
 ];
 
-export default function RentalHowItWorks() {
+export default function RentalHowItWorks({ content = RENTAL_DEFAULTS.page.sections.RentalHowItWorks }: { content?: RentalPageContent["sections"]["RentalHowItWorks"] }) {
+  const { copy } = content;
   const quoteCta = useCta("rentals_how_quote");
   const callCta = useCta("rentals_how_call");
   const reduce = useReducedMotion() ?? false;
@@ -227,9 +230,7 @@ export default function RentalHowItWorks() {
                 textTransform: "uppercase",
                 color: LIME,
               }}
-            >
-              Simple Rental Process
-            </Typography>
+            >{copy.simpleRentalProcess}</Typography>
           </Box>
 
           {/* heading */}
@@ -246,16 +247,13 @@ export default function RentalHowItWorks() {
                 md: "4.5rem",
               },
             }}
-          >
-            How It{" "}
+          >{copy.howIt}{" "}
             <Box
               component="span"
               sx={{
                 color: LIME,
               }}
-            >
-              Works
-            </Box>
+            >{copy.works}</Box>
           </Typography>
 
           <Typography
@@ -270,10 +268,7 @@ export default function RentalHowItWorks() {
               maxWidth: 620,
               mx: "auto",
             }}
-          >
-            Renting the right truck or trailer should be simple. Choose your
-            equipment, request a quote and get on the road with confidence.
-          </Typography>
+          >{copy.rentingTheRightTruckOr}</Typography>
         </Box>
 
         {/* =======================================================
@@ -324,9 +319,9 @@ export default function RentalHowItWorks() {
               },
             }}
           >
-            {STEPS.map((step, index) => (
+            {content.items.map((step, index) => (
               <Box
-                key={step.number}
+                key={index}
                 component={motion.div}
                 initial={
                   reduce
@@ -466,7 +461,7 @@ export default function RentalHowItWorks() {
                       },
                     }}
                   >
-                    {step.icon}
+                    {STEPS[index % STEPS.length].icon}
 
                     {/* small status dot */}
 
@@ -535,8 +530,7 @@ export default function RentalHowItWorks() {
                         letterSpacing: 1.4,
                         color: "rgba(255,255,255,0.25)",
                       }}
-                    >
-                      STEP {step.number}
+                    >{copy.step}{step.number}
                     </Typography>
 
                     <ArrowForwardRoundedIcon

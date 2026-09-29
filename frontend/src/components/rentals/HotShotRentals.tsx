@@ -1,5 +1,7 @@
 "use client";
 
+import { RENTAL_DEFAULTS, type RentalPageContent } from "@/lib/rentalContent";
+
 import { useState } from "react";
 import { motion } from "motion/react";
 import Box from "@mui/material/Box";
@@ -11,7 +13,8 @@ import { HOT_SHOT_RENTALS, type RentalItem } from "@/data/hotShotRentals";
 const LIME = "#c8ff00";
 const EASE = [0.22, 1, 0.36, 1] as const;
 
-export default function HotShotRentals() {
+export default function HotShotRentals({ content = RENTAL_DEFAULTS.page.sections.HotShotRentals, items = HOT_SHOT_RENTALS, cardContent }: { content?: RentalPageContent["sections"]["HotShotRentals"]; items?: RentalItem[]; cardContent?: RentalPageContent["sections"]["RentalCard"] }) {
+  const { copy } = content;
   const [open, setOpen] = useState(false);
   const [selectedRental, setSelectedRental] = useState<RentalItem | null>(null);
 
@@ -83,9 +86,7 @@ export default function HotShotRentals() {
                 fontWeight: 700,
                 textTransform: "uppercase",
               }}
-            >
-              Available for Rent
-            </Typography>
+            >{copy.availableForRent}</Typography>
             <Box sx={{ width: 28, height: 2, bgcolor: LIME, opacity: 0.7 }} />
           </Box>
           <Typography
@@ -107,9 +108,7 @@ export default function HotShotRentals() {
               },
               "@media (prefers-reduced-motion: reduce)": { animation: "none" },
             }}
-          >
-            Rental Equipment
-          </Typography>
+          >{copy.rentalEquipment}</Typography>
           <Typography
             sx={{
               mt: 2.5,
@@ -118,10 +117,7 @@ export default function HotShotRentals() {
               maxWidth: 620,
               mx: "auto",
             }}
-          >
-            Flexible daily, weekly and monthly rentals — the right trailer for
-            every hot shot haul, ready when you are.
-          </Typography>
+          >{copy.flexibleDailyWeeklyAndMonthly}</Typography>
         </motion.div>
       </Box>
 
@@ -137,10 +133,11 @@ export default function HotShotRentals() {
           gap: { xs: 3, md: 4 },
         }}
       >
-        {HOT_SHOT_RENTALS.map((item, i) => (
+        {items.map((item, i) => (
           <RentalCard
             key={item.slug}
             item={item}
+            content={cardContent}
             index={i}
             onQuote={openQuote}
           />

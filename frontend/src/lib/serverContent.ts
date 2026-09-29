@@ -1,4 +1,5 @@
 import "server-only";
+import type { RentalPageContent, RentalContentItem } from "@/lib/rentalContent";
 
 import { cache } from "react";
 import { unstable_rethrow } from "next/navigation";
@@ -206,4 +207,10 @@ export const getBlog = cache((slug: string) =>
 /** A published page by slug (drafts are a 404). */
 export const getPublicPage = cache((slug: string) =>
   request<PublicPage>(`/api/public/pages/${encodeURIComponent(slug)}`),
+);
+
+export const getRentalPage = cache(() => getList<RentalPageContent>("/api/rental-content/page"));
+export const getRentalItems = cache(() => getList<RentalContentItem[]>("/api/rental-content/items"));
+export const getRentalItem = cache((slug: string) =>
+  request<RentalContentItem>(`/api/rental-content/items/${encodeURIComponent(slug)}`),
 );

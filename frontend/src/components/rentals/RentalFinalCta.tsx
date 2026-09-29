@@ -1,5 +1,7 @@
 "use client";
 
+import { RENTAL_DEFAULTS, type RentalPageContent } from "@/lib/rentalContent";
+
 import { motion, useReducedMotion } from "motion/react";
 
 import Box from "@mui/material/Box";
@@ -16,14 +18,9 @@ import { ctaProps, useCta } from "@/components/common/CtaProvider";
 const LIME = "#c8ff00";
 const EASE = [0.22, 1, 0.36, 1] as const;
 
-const BENEFITS = [
-  "Flexible rental periods",
-  "Multiple truck & trailer options",
-  "Fast availability checks",
-  "Simple quote process",
-];
 
-export default function RentalFinalCta() {
+export default function RentalFinalCta({ content = RENTAL_DEFAULTS.page.sections.RentalFinalCta }: { content?: RentalPageContent["sections"]["RentalFinalCta"] }) {
+  const { copy } = content;
   const quoteCta = useCta("rentals_final_quote");
   // Used to dial +1 (800) 000-0000, a placeholder number.
   const callCta = useCta("rentals_final_call");
@@ -201,9 +198,7 @@ export default function RentalFinalCta() {
                     fontWeight: 900,
                     letterSpacing: 1.6,
                   }}
-                >
-                  READY TO RENT?
-                </Typography>
+                >{copy.readyToRent}</Typography>
               </Box>
 
               <Typography
@@ -219,17 +214,13 @@ export default function RentalFinalCta() {
                     md: "4.5rem",
                   },
                 }}
-              >
-                Get The Right
-                <Box
+              >{copy.getTheRight}<Box
                   component="span"
                   sx={{
                     display: "block",
                     color: LIME,
                   }}
-                >
-                  Equipment.
-                </Box>
+                >{copy.equipment}</Box>
               </Typography>
 
               <Typography
@@ -243,11 +234,7 @@ export default function RentalFinalCta() {
                   },
                   lineHeight: 1.75,
                 }}
-              >
-                Tell us what you need, when you need it and how you plan to use
-                it. Our team will help you find the right truck or trailer for
-                your job.
-              </Typography>
+              >{copy.tellUsWhatYouNeed}</Typography>
 
               {/* Benefits */}
               <Box
@@ -261,9 +248,9 @@ export default function RentalFinalCta() {
                   gap: 1.4,
                 }}
               >
-                {BENEFITS.map((benefit, index) => (
+                {content.items.map((benefit, index) => (
                   <Box
-                    key={benefit}
+                    key={index}
                     component={motion.div}
                     initial={reduce ? {} : { opacity: 0, x: -10 }}
                     whileInView={reduce ? {} : { opacity: 1, x: 0 }}
@@ -529,9 +516,7 @@ export default function RentalFinalCta() {
                       fontWeight: 800,
                       color: "#fff",
                     }}
-                  >
-                    Rental Fleet
-                  </Typography>
+                  >{copy.rentalFleet}</Typography>
                 </Box>
 
                 <Typography
@@ -540,9 +525,7 @@ export default function RentalFinalCta() {
                     fontSize: 10,
                     color: "rgba(255,255,255,0.4)",
                   }}
-                >
-                  Check availability today
-                </Typography>
+                >{copy.checkAvailabilityToday}</Typography>
               </Box>
             </Box>
           </Box>
@@ -556,9 +539,7 @@ export default function RentalFinalCta() {
             color: "rgba(255,255,255,0.25)",
             fontSize: 10.5,
           }}
-        >
-          Need help choosing equipment? Contact our rental team for guidance.
-        </Typography>
+        >{copy.needHelpChoosingEquipmentContact}</Typography>
       </Box>
     </Box>
   );

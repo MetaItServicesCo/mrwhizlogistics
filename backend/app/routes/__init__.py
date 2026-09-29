@@ -20,6 +20,7 @@ from app.routes.quote import (
     public_router as quotes_public_router,
 )
 from app.routes.rental import rental_router
+from app.routes.rental_content import router as rental_content_router
 from app.routes.seo import router as seo_router
 from app.routes.services import router as services_router
 from app.routes.settings import router as settings_router
@@ -59,4 +60,5 @@ router.include_router(semi_truck_router)
 router.include_router(blog_router)
 router.include_router(team_router)
 router.include_router(rental_router)
+router.include_router(rental_content_router)
 router.include_router(uploads_router)

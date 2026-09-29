@@ -19,8 +19,10 @@ from sqlalchemy.orm import Session
 
 from app.core.schema_upgrade import apply_schema_upgrades
 from app.core.standard_pages import ensure_standard_pages
+from app.core.rental_content import ensure_rental_content
 from app.database import Base
 from app.models.page import Page
+from app.models.rental import RentalItem
 
 
 def docker(*args):
@@ -69,11 +71,23 @@ def main():
             # Simulate the previous schema on THIS disposable database only.
             connection.execute(text('ALTER TABLE pages DROP COLUMN show_in_footer'))
             before = connection.execute(text("SELECT * FROM pages ORDER BY id")).mappings().all()
+            for column in ("details", "is_active", "sort_order", "updated_at"):
+                connection.execute(text(f'ALTER TABLE rental_items DROP COLUMN "{column}"'))
+            connection.execute(text("""
+                INSERT INTO rental_items (slug, title, description, hourly_rate, main_image)
+                VALUES ('16-feet-dump-trailer', 'Existing rental title', 'Keep rental description', '$99', '/uploads/existing.jpg')
+            """))
+            connection.execute(text("""
+                INSERT INTO rental_quotes (full_name, email, phone, rental_slug, rental_name, status)
+                VALUES ('Existing Customer', 'test@example.com', '555-0100', '16-feet-dump-trailer', 'Original quote name', 'booked')
+            """))
+            quotes_before = connection.execute(text("SELECT * FROM rental_quotes ORDER BY id")).mappings().all()
 
         def start_worker(_):
             with Session(engine) as db:
                 apply_schema_upgrades(db)
                 ensure_standard_pages(db)
+                ensure_rental_content(db)
 
         with ThreadPoolExecutor(max_workers=2) as pool:
             list(pool.map(start_worker, range(2)))
@@ -94,8 +108,18 @@ def main():
             ensure_standard_pages(db)
             db.refresh(terms)
             assert terms.show_in_footer is False, "Startup overwrote the saved footer choice"
+            rental = db.query(RentalItem).filter_by(slug="16-feet-dump-trailer").one()
+            assert (rental.title, rental.description, rental.hourly_rate, rental.main_image) == (
+                "Existing rental title", "Keep rental description", "$99", "/uploads/existing.jpg")
+            assert db.query(RentalItem).count() == 7
+            db.delete(rental)
+            db.commit()
+            ensure_rental_content(db)
+            assert db.query(RentalItem).count() == 6, "Deleted rental was resurrected"
+            assert db.execute(text("SELECT * FROM rental_quotes ORDER BY id")).mappings().all() == quotes_before
         print("PASS: PostgreSQL 16 upgrade preserves every existing page field and timestamp")
         print("PASS: concurrent workers + repeated startup are safe; footer choices are preserved")
+        print("PASS: rental schema upgrades preserve equipment, quotes and deletions across concurrent startup")
     finally:
         if engine is not None:
             engine.dispose()

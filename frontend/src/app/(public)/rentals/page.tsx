@@ -1,39 +1,35 @@
-import type { Metadata } from "next";
-import HotShotHero from "@/components/hot-shot/HotShotHero";
+import RentalHero from "@/components/rentals/RentalHero";
 import RentalsIntro from "@/components/rentals/RentalsIntro";
 import HotShotRentals from "@/components/rentals/HotShotRentals";
 import WhyRentWithUs from "@/components/rentals/WhyRentWithUs";
-import RentalBenefits from "@/components/rentals/RentalBenefits";
 import RentalHowItWorks from "@/components/rentals/RentalHowItWorks";
 import RentalFaq from "@/components/rentals/RentalFaq";
 import RentalFinalCta from "@/components/rentals/RentalFinalCta";
-import RentalQuoteModal from "@/components/rentals/RentalQuoteModal";
-// import { useState } from "react";
-import { RentalItem } from "@/data/hotShotRentals";
+import { HOT_SHOT_RENTALS } from "@/data/hotShotRentals";
+import { RENTAL_DEFAULTS } from "@/lib/rentalContent";
+import { getRentalPage, getRentalItems } from "@/lib/serverContent";
 import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = pageMetadata({
-  title: "Hot Shot Equipment Rentals",
-  description:
-    "Rent hot shot trailers — flatbed, gooseneck and enclosed — on flexible daily, weekly and monthly terms for construction, job-site and specialty hauling.",
-  path: "/rentals",
-});
+export async function generateMetadata() {
+  const content = await getRentalPage() ?? RENTAL_DEFAULTS.page;
+  return pageMetadata({title: content.seo.metaTitle, description: content.seo.metaDescription, path: "/rentals"});
+}
 
-export default function HotShotRentalsPage() {
+export default async function HotShotRentalsPage() {
+  const [page, rentals] = await Promise.all([getRentalPage(), getRentalItems()]);
+  const content = page ?? RENTAL_DEFAULTS.page;
+  const sections = content.sections;
   return (
     <main>
-      <HotShotHero
-        title="Hot Shot Rentals"
-        crumb="Rentals"
-        badge="EQUIPMENT RENTALS"
-      />
-      <RentalsIntro />
-      <HotShotRentals />
-      <WhyRentWithUs />
-      {/* <RentalBenefits /> */}
-      <RentalHowItWorks />
-      <RentalFaq />
-      <RentalFinalCta />
+      <RentalHero {...content.hero} />
+      {sections.RentalsIntro.enabled && <RentalsIntro content={sections.RentalsIntro} />}
+      {sections.HotShotRentals.enabled && <HotShotRentals
+        content={sections.HotShotRentals} cardContent={sections.RentalCard}
+        items={sections.RentalCard.enabled ? rentals ?? HOT_SHOT_RENTALS : []} />}
+      {sections.WhyRentWithUs.enabled && <WhyRentWithUs content={sections.WhyRentWithUs} />}
+      {sections.RentalHowItWorks.enabled && <RentalHowItWorks content={sections.RentalHowItWorks} />}
+      {sections.RentalFaq.enabled && <RentalFaq content={sections.RentalFaq} />}
+      {sections.RentalFinalCta.enabled && <RentalFinalCta content={sections.RentalFinalCta} />}
     </main>
   );
 }
