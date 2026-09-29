@@ -76,7 +76,28 @@ export default function RentalPagesEditor() {
       <Button href="/rentals" target="_blank" rel="noopener" sx={{color: LIME}}>View rental page</Button>
     </PageHeader>
     <Alert severity="info">Rental requests remain in Rentals. Button labels, links and visibility remain in <Link href="/dashboard/settings?tab=buttons">Settings → Buttons</Link>.</Alert>
-    <Tabs value={tab} onChange={(_, value) => {setTab(value); setError(null);}}>
+    <Tabs
+      value={tab}
+      onChange={(_, value) => {setTab(value); setError(null);}}
+      aria-label="Rental page editor sections"
+      sx={{
+        minHeight: 52,
+        px: 1,
+        bgcolor: "rgba(255,255,255,0.035)",
+        border: "1px solid rgba(255,255,255,0.1)",
+        borderRadius: "14px",
+        "& .MuiTabs-indicator": { bgcolor: LIME, height: 3, borderRadius: "3px 3px 0 0" },
+        "& .MuiTab-root": {
+          minHeight: 50,
+          color: "rgba(255,255,255,0.72)",
+          fontWeight: 800,
+          textTransform: "none",
+          fontSize: 14,
+          "&:hover": { color: "#fff", bgcolor: "rgba(200,255,0,0.04)" },
+          "&.Mui-selected": { color: LIME },
+        },
+      }}
+    >
       <Tab label="Page content" /><Tab label="Equipment & sub-pages" />
     </Tabs>
     {error && !draft && !deleting && <Alert severity="error">{error}</Alert>}
