@@ -1,78 +1,32 @@
 "use client";
 
-import { useState } from "react";
-import { motion, AnimatePresence, useReducedMotion } from "motion/react";
-import { subscribe } from "@/lib/publicApi";
-import { errorMessage } from "@/lib/useResource";
+import { useRef, useState } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import CircularProgress from "@mui/material/CircularProgress";
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
-import SendRoundedIcon from "@mui/icons-material/SendRounded";
-import LocalShippingRoundedIcon from "@mui/icons-material/LocalShippingRounded";
+import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
+import { subscribe } from "@/lib/publicApi";
+import { errorMessage } from "@/lib/useResource";
 
 const LIME = "#c8ff00";
 
-// 👇 Apni image daalein (public/images/ mein). Na ho to gradient+icon dikhega.
-const FREIGHT_IMAGE: string | undefined = "/images/cta-img.png";
-
-// ===== OVERLAP knobs (half-in/half-out) — dono barabar rakhein =====
-const OVERLAP_MD = 120;
-const OVERLAP_XS = 70;
-
-function Confetti() {
-  const pieces = Array.from({ length: 20 }, (_, i) => ({
-    id: i,
-    x: ((i * 47) % 220) - 110,
-    y: -(60 + ((i * 37) % 130)),
-    rot: ((i * 83) % 560) - 280,
-    color: ["#c8ff00", "#00e5ff", "#ff4dd8", "#fff"][i % 4],
-    delay: (i % 5) * 0.02,
-  }));
-  return (
-    <Box
-      aria-hidden
-      sx={{
-        position: "absolute",
-        left: "18%",
-        top: "50%",
-        zIndex: 6,
-        pointerEvents: "none",
-      }}
-    >
-      {pieces.map((p) => (
-        <motion.div
-          key={p.id}
-          initial={{ opacity: 1, x: 0, y: 0, rotate: 0 }}
-          animate={{ opacity: 0, x: p.x, y: p.y, rotate: p.rot }}
-          transition={{ duration: 1.1, delay: p.delay, ease: "easeOut" }}
-          style={{
-            position: "absolute",
-            width: 8,
-            height: 8,
-            borderRadius: 2,
-            background: p.color,
-          }}
-        />
-      ))}
-    </Box>
-  );
-}
-
 export default function MailingListCTA() {
-  const reduce = useReducedMotion() ?? false;
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "done">("idle");
   const [error, setError] = useState<string | null>(null);
+  const submitting = useRef(false);
 
   const handleSubscribe = async () => {
+    if (submitting.current) return;
     const normalized = email.trim().toLowerCase();
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalized)) {
       setError("Enter a valid email address.");
       return;
     }
+    submitting.current = true;
     setStatus("loading");
     setError(null);
     try {
@@ -81,312 +35,94 @@ export default function MailingListCTA() {
     } catch (e) {
       setError(errorMessage(e));
       setStatus("idle");
+    } finally {
+      submitting.current = false;
     }
   };
 
   return (
-    <Box
-      sx={{
-        position: "relative",
-        zIndex: 20,
-        bgcolor: "#0a0a0a",
-        px: { xs: 3, sm: 4, md: 6, lg: 8 },
-        pt: { xs: 5, md: 7 },
-        mb: { xs: `-${OVERLAP_XS}px`, md: `-${OVERLAP_MD}px` },
-      }}
-    >
-      <Box
-        component={motion.div}
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-60px" }}
-        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] as const }}
-        sx={{ position: "relative", zIndex: 2, maxWidth: 1120, mx: "auto" }}
-      >
-        <Box
-          sx={{
-            position: "relative",
-            borderRadius: "22px",
-            overflow: "hidden",
-            display: "grid",
-            gridTemplateColumns: { xs: "1fr", md: "1.2fr 0.8fr" },
-            boxShadow: "0 24px 60px rgba(0,0,0,0.55)",
-          }}
-        >
-          {/* LEFT — light form panel (compact padding) */}
-          <Box
-            sx={{
-              position: "relative",
-              bgcolor: "#f4f6f4",
-              color: "#0a1f1a",
-              p: { xs: 3, sm: 3.5, md: 4.5 },
-              zIndex: 2,
-              overflow: "hidden",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-            }}
-          >
-            <AnimatePresence mode="wait">
-              {status === "done" ? (
-                <motion.div
-                  key="ok"
-                  initial={{ opacity: 0, scale: 0.96 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.4 }}
-                  style={{ position: "relative" }}
-                >
-                  {!reduce && <Confetti />}
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{
-                      type: "spring",
-                      stiffness: 200,
-                      damping: 12,
-                      delay: 0.1,
-                    }}
-                    style={{ display: "inline-flex" }}
-                  >
-                    <CheckCircleRoundedIcon
-                      sx={{ fontSize: 48, color: "#1c7a3f" }}
-                    />
-                  </motion.div>
-                  <Typography
-                    sx={{
-                      fontSize: { xs: "1.4rem", md: "1.7rem" },
-                      fontWeight: 800,
-                      mt: 1.5,
-                    }}
-                  >
-                    You are on the list!
-                  </Typography>
-                  <Typography
-                    sx={{
-                      color: "rgba(10,31,26,0.6)",
-                      fontSize: 14,
-                      mt: 0.75,
-                      maxWidth: 420,
-                    }}
-                  >
-                    Thanks for subscribing — we will keep you posted.
-                  </Typography>
-                </motion.div>
-              ) : (
-                <motion.div
-                  key="form"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                >
-                  <Typography
-                    component="h2"
-                    sx={{
-                      fontWeight: 800,
-                      lineHeight: 1.1,
-                      fontSize: { xs: "1.6rem", sm: "2rem", md: "2.4rem" },
-                      mb: 1,
-                      letterSpacing: "-0.5px",
-                    }}
-                  >
-                    Join Our Mailing List
-                  </Typography>
-                  <Typography
-                    sx={{
-                      color: "rgba(10,31,26,0.65)",
-                      fontSize: { xs: 13.5, md: 15 },
-                      mb: 2.5,
-                      maxWidth: 440,
-                    }}
-                  >
-                    Logistics insights and yard-optimization tips, straight to
-                    your inbox.
-                  </Typography>
+    <Box component="section" aria-labelledby="newsletter-heading" sx={{
+      bgcolor: "#0a0a0a", color: "#fff",
+      // Same gutters and width as the footer, in normal document flow.
+      px: { xs: 2.5, sm: 4, md: 5, lg: 8, xl: 10 },
+      py: { xs: 5, md: 7 },
+    }}>
+      <Box sx={{
+        maxWidth: 1400, mx: "auto", p: { xs: 3, sm: 4, lg: 5 },
+        bgcolor: "#101310", border: "1px solid rgba(200,255,0,0.18)",
+        borderRadius: { xs: "20px", md: "28px" },
+        display: "grid",
+        gridTemplateColumns: { xs: "minmax(0, 1fr)", md: "minmax(0, 1fr) minmax(0, 1fr)" },
+        alignItems: "center", gap: { xs: 3, md: 5, lg: 8 },
+      }}>
+        <Box sx={{ minWidth: 0 }}>
+          <Typography sx={{ color: LIME, fontSize: 11, fontWeight: 800, letterSpacing: "2px", mb: 1.5 }}>
+            NEWSLETTER
+          </Typography>
+          <Typography id="newsletter-heading" component="h2" sx={{
+            fontSize: { xs: 26, sm: 30, lg: 36 }, fontWeight: 800, lineHeight: 1.2, letterSpacing: "-0.5px",
+          }}>
+            Join Our Mailing List
+          </Typography>
+          <Typography sx={{ color: "rgba(255,255,255,0.65)", fontSize: { xs: 14, md: 15 }, lineHeight: 1.7, mt: 1.5, maxWidth: 460 }}>
+            Logistics insights and yard-optimization tips, straight to your inbox.
+          </Typography>
+        </Box>
 
-                  <Box
-                    component="form"
-                    onSubmit={(e) => {
-                      e.preventDefault();
-                      void handleSubscribe();
-                    }}
-                    sx={{
-                      display: "flex",
-                      flexDirection: { xs: "column", sm: "row" },
-                      gap: { xs: 1.2, sm: 0 },
-                      maxWidth: 500,
-                      borderRadius: { sm: "12px" },
-                      overflow: { sm: "hidden" },
-                      boxShadow: { sm: "0 6px 20px rgba(0,0,0,0.12)" },
-                    }}
-                  >
-                    <TextField
-                      fullWidth
-                      type="email"
-                      required
-                      name="newsletter-email"
-                      autoComplete="email"
-                      aria-label="Email address"
-                      placeholder="Type Your Email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      sx={{
-                        "& .MuiOutlinedInput-root": {
-                          color: "#fff",
-                          bgcolor: "#0e3b34",
-                          borderRadius: { xs: "12px", sm: "12px 0 0 12px" },
-                          "& fieldset": { borderColor: "transparent" },
-                          "&:hover fieldset": { borderColor: "transparent" },
-                          "&.Mui-focused fieldset": { borderColor: LIME },
-                        },
-                        "& .MuiOutlinedInput-input": { py: 1.4 },
-                        "& input::placeholder": {
-                          color: "rgba(255,255,255,0.55)",
-                          opacity: 1,
-                        },
-                      }}
-                    />
-                    <Button
-                      type="submit"
-                      disableElevation
-                      disabled={status === "loading"}
-                      endIcon={
-                        status === "loading" ? undefined : (
-                          <SendRoundedIcon className="ml-arrow" />
-                        )
-                      }
-                      sx={{
-                        position: "relative",
-                        overflow: "hidden",
-                        flexShrink: 0,
-                        bgcolor: LIME,
-                        color: "#0a1f1a",
-                        fontWeight: 800,
-                        px: 3.5,
-                        py: { xs: 1.3, sm: 0 },
-                        borderRadius: { xs: "12px", sm: "0 12px 12px 0" },
-                        textTransform: "none",
-                        fontSize: 14.5,
-                        whiteSpace: "nowrap",
-                        "&:hover": { bgcolor: "#d4ff33" },
-                        "&.Mui-disabled": {
-                          bgcolor: LIME,
-                          opacity: 0.85,
-                          color: "#0a1f1a",
-                        },
-                        "& .ml-arrow": { transition: "transform .3s ease" },
-                        "&:hover .ml-arrow": { transform: "translateX(3px)" },
-                        "&::after": {
-                          content: '""',
-                          position: "absolute",
-                          top: 0,
-                          left: "-70%",
-                          width: "55%",
-                          height: "100%",
-                          background:
-                            "linear-gradient(120deg, transparent, rgba(255,255,255,0.6), transparent)",
-                          transform: "skewX(-20deg)",
-                          transition: "left .6s ease",
-                        },
-                        "&:hover::after": { left: "130%" },
-                      }}
-                    >
-                      {status === "loading" ? (
-                        <CircularProgress size={20} sx={{ color: "#0a1f1a" }} />
-                      ) : (
-                        "Subscribe"
-                      )}
-                    </Button>
-                  </Box>
-
-                  {error && (
-                    <Typography
-                      role="alert"
-                      sx={{
-                        color: "#c62828",
-                        fontSize: 12.5,
-                        mt: 1.5,
-                      }}
-                    >
-                      {error}
-                    </Typography>
-                  )}
-
-                  <Typography
-                    sx={{
-                      color: "rgba(10,31,26,0.45)",
-                      fontSize: 11.5,
-                      mt: 1.5,
-                    }}
-                  >
-                    No spam. Unsubscribe anytime.
-                  </Typography>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </Box>
-
-          {/* RIGHT — custom image (Ken Burns), compact height */}
-          <Box
-            sx={{
-              position: "relative",
-              minHeight: { xs: 140, md: 190 },
-              overflow: "hidden",
-            }}
-          >
-            {/* base gradient (fallback) */}
-            <Box
-              aria-hidden
-              sx={{
-                position: "absolute",
-                inset: 0,
-                background:
-                  "radial-gradient(circle at 60% 30%, rgba(200,255,0,0.2), transparent 55%), linear-gradient(150deg, #24361c, #05070a)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              {!FREIGHT_IMAGE && (
-                <Box
-                  component={motion.div}
-                  animate={reduce ? {} : { x: [-14, 14, -14] }}
-                  transition={{
-                    duration: 5,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  }}
-                  sx={{
-                    color: "rgba(200,255,0,0.55)",
-                    "& svg": { fontSize: { xs: 72, md: 110 } },
-                  }}
-                >
-                  <LocalShippingRoundedIcon />
-                </Box>
-              )}
+        <Box sx={{ minWidth: 0, minHeight: 130, display: "flex", flexDirection: "column", justifyContent: "center" }}>
+          {status === "done" ? (
+            <Box role="status" sx={{ display: "flex", alignItems: "flex-start", gap: 1.5, py: 2 }}>
+              <CheckCircleRoundedIcon sx={{ color: LIME, fontSize: 28, flexShrink: 0 }} />
+              <Box>
+                <Typography sx={{ fontWeight: 800, fontSize: 20 }}>You are on the list!</Typography>
+                <Typography sx={{ color: "rgba(255,255,255,0.65)", fontSize: 14, lineHeight: 1.7, mt: 0.5 }}>
+                  Thanks for subscribing. We will keep you posted.
+                </Typography>
+              </Box>
             </Box>
-
-            {/* image layer */}
-            {FREIGHT_IMAGE && (
-              <Box
-                component={motion.div}
-                initial={reduce ? {} : { scale: 1.08 }}
-                animate={reduce ? {} : { scale: 1.18 }}
-                transition={{
-                  duration: 12,
-                  repeat: Infinity,
-                  repeatType: "reverse",
-                  ease: "easeInOut",
-                }}
-                sx={{
-                  position: "absolute",
-                  inset: 0,
-                  backgroundImage: `url(${FREIGHT_IMAGE})`,
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                }}
-              />
-            )}
-          </Box>
+          ) : (
+            <Box component="form" onSubmit={(e) => { e.preventDefault(); void handleSubscribe(); }} aria-busy={status === "loading"}>
+              <Typography component="label" htmlFor="newsletter-email" sx={{ display: "block", fontSize: 13, fontWeight: 600, mb: 1 }}>
+                Email address
+              </Typography>
+              <Box sx={{ display: "flex", flexDirection: { xs: "column", sm: "row" }, gap: 1.5, alignItems: "stretch" }}>
+                <TextField
+                  id="newsletter-email"
+                  fullWidth type="email" required name="newsletter-email" autoComplete="email"
+                  placeholder="you@example.com" value={email} disabled={status === "loading"} error={!!error}
+                  slotProps={{ htmlInput: { "aria-describedby": error ? "newsletter-error newsletter-hint" : "newsletter-hint" } }}
+                  onChange={(e) => { setEmail(e.target.value); setError(null); }}
+                  sx={{
+                    minWidth: 0,
+                    "& .MuiOutlinedInput-root": {
+                      height: 52, color: "#fff", bgcolor: "#0a0d0b", borderRadius: "12px",
+                      "& fieldset": { borderColor: "rgba(255,255,255,0.2)" },
+                      "&:hover fieldset": { borderColor: "rgba(255,255,255,0.4)" },
+                      "&.Mui-focused fieldset": { borderColor: LIME },
+                    },
+                    "& input::placeholder": { color: "rgba(255,255,255,0.5)", opacity: 1 },
+                    "& input:-webkit-autofill": { WebkitBoxShadow: "0 0 0 1000px #0a0d0b inset", WebkitTextFillColor: "#fff", caretColor: "#fff" },
+                  }}
+                />
+                <Button type="submit" disableElevation disabled={status === "loading"}
+                  endIcon={status === "loading" ? <CircularProgress size={18} color="inherit" /> : <ArrowForwardRoundedIcon />}
+                  sx={{
+                    minHeight: 52, minWidth: 150, flexShrink: 0, bgcolor: LIME, color: "#0a0a0a",
+                    fontWeight: 800, px: 3, borderRadius: "12px", textTransform: "none", fontSize: 14,
+                    "&:hover": { bgcolor: "#d4ff33" },
+                    "&.Mui-focusVisible": { outline: "2px solid #fff", outlineOffset: 3 },
+                    "&.Mui-disabled": { bgcolor: LIME, opacity: 0.7, color: "#0a0a0a" },
+                  }}
+                >
+                  {status === "loading" ? "Subscribing" : "Subscribe"}
+                </Button>
+              </Box>
+              {error && <Typography id="newsletter-error" role="alert" sx={{ color: "#ff9c9c", fontSize: 13, mt: 1.5, overflowWrap: "anywhere" }}>{error}</Typography>}
+              <Typography id="newsletter-hint" sx={{ color: "rgba(255,255,255,0.55)", fontSize: 12, lineHeight: 1.6, mt: 1.5 }}>
+                No spam. Unsubscribe anytime.
+              </Typography>
+            </Box>
+          )}
         </Box>
       </Box>
     </Box>
