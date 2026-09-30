@@ -54,7 +54,7 @@ export default async function PublicLayout({
       />
 
       {children}
-      {/* <MailingListCTA /> */}
+      <MailingListCTA />
       <ChatWidget />
       <AdminBar />
       <AdvancedFooterCTA

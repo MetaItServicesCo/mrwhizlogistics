@@ -275,6 +275,10 @@ const STATUS_COLORS: Record<string, { fg: string; bg: string }> = {
   closed: { fg: "rgba(255,255,255,0.55)", bg: "rgba(255,255,255,0.07)" },
   active: { fg: LIME, bg: "rgba(200,255,0,0.12)" },
   inactive: { fg: "rgba(255,255,255,0.55)", bg: "rgba(255,255,255,0.07)" },
+  draft: { fg: "#66b2ff", bg: "rgba(102,178,255,0.12)" },
+  sending: { fg: "#ffc46b", bg: "rgba(255,196,107,0.12)" },
+  sent: { fg: "#4ade80", bg: "rgba(74,222,128,0.12)" },
+  failed: { fg: "#ff8a8a", bg: "rgba(255,107,107,0.12)" },
 };
 
 export function StatusChip({ status }: { status: string | null | undefined }) {

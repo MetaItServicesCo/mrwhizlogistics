@@ -70,6 +70,22 @@ export interface Subscriber {
   email: string;
   is_active: boolean;
   created_at: string;
+  updated_at: string;
+  unsubscribed_at: string | null;
+}
+
+export interface NewsletterCampaign {
+  id: number;
+  subject: string;
+  preview_text: string | null;
+  content_html: string;
+  status: "draft" | "sending" | "sent" | "failed";
+  recipient_count: number;
+  delivered_count: number;
+  failed_count: number;
+  created_at: string;
+  updated_at: string;
+  sent_at: string | null;
 }
 
 export interface Testimonial {

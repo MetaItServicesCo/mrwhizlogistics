@@ -91,6 +91,14 @@ export function subscribe(email: string) {
   );
 }
 
+export function unsubscribeNewsletter(token: string) {
+  return api.post<{ message: string }>(
+    "/api/public/subscribers/unsubscribe",
+    { token },
+    PUBLIC,
+  );
+}
+
 // ---------------------------------------------------------------------------
 // Rental quote — POST /api/rental-quotes
 // ---------------------------------------------------------------------------

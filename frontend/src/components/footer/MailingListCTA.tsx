@@ -25,11 +25,11 @@ const OVERLAP_XS = 70;
 function Confetti() {
   const pieces = Array.from({ length: 20 }, (_, i) => ({
     id: i,
-    x: (Math.random() - 0.5) * 220,
-    y: -(60 + Math.random() * 130),
-    rot: (Math.random() - 0.5) * 560,
+    x: ((i * 47) % 220) - 110,
+    y: -(60 + ((i * 37) % 130)),
+    rot: ((i * 83) % 560) - 280,
     color: ["#c8ff00", "#00e5ff", "#ff4dd8", "#fff"][i % 4],
-    delay: Math.random() * 0.1,
+    delay: (i % 5) * 0.02,
   }));
   return (
     <Box
@@ -68,11 +68,15 @@ export default function MailingListCTA() {
   const [error, setError] = useState<string | null>(null);
 
   const handleSubscribe = async () => {
-    if (!email.includes("@")) return;
+    const normalized = email.trim().toLowerCase();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalized)) {
+      setError("Enter a valid email address.");
+      return;
+    }
     setStatus("loading");
     setError(null);
     try {
-      await subscribe(email.trim());
+      await subscribe(normalized);
       setStatus("done");
     } catch (e) {
       setError(errorMessage(e));
@@ -200,6 +204,11 @@ export default function MailingListCTA() {
                   </Typography>
 
                   <Box
+                    component="form"
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      void handleSubscribe();
+                    }}
                     sx={{
                       display: "flex",
                       flexDirection: { xs: "column", sm: "row" },
@@ -213,12 +222,13 @@ export default function MailingListCTA() {
                     <TextField
                       fullWidth
                       type="email"
+                      required
+                      name="newsletter-email"
+                      autoComplete="email"
+                      aria-label="Email address"
                       placeholder="Type Your Email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter") void handleSubscribe();
-                      }}
                       sx={{
                         "& .MuiOutlinedInput-root": {
                           color: "#fff",
@@ -236,7 +246,7 @@ export default function MailingListCTA() {
                       }}
                     />
                     <Button
-                      onClick={() => void handleSubscribe()}
+                      type="submit"
                       disableElevation
                       disabled={status === "loading"}
                       endIcon={

@@ -4,11 +4,14 @@ import { useMemo, useState } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Switch from "@mui/material/Switch";
+import Tab from "@mui/material/Tab";
+import Tabs from "@mui/material/Tabs";
 import DownloadRoundedIcon from "@mui/icons-material/DownloadRounded";
 import { api } from "@/lib/api";
 import { useAction, useResource } from "@/lib/useResource";
 import type { Subscriber } from "@/lib/types";
 import DataTable, { type Column } from "@/components/admin/DataTable";
+import NewsletterCampaigns from "@/components/admin/NewsletterCampaigns";
 import {
   ConfirmDialog,
   LIME,
@@ -27,6 +30,7 @@ export default function NewsletterPage() {
   const [search, setSearch] = useState("");
   const [deleting, setDeleting] = useState<Subscriber | null>(null);
   const [toast, setToast] = useState<string | null>(null);
+  const [tab, setTab] = useState(0);
 
   const rows = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -111,6 +115,26 @@ export default function NewsletterPage() {
 
   return (
     <Box>
+      <Tabs
+        value={tab}
+        onChange={(_, value) => setTab(value)}
+        aria-label="Newsletter management sections"
+        sx={{
+          mb: 3,
+          minHeight: 52,
+          px: 1,
+          bgcolor: "rgba(255,255,255,0.035)",
+          border: "1px solid rgba(255,255,255,0.1)",
+          borderRadius: "14px",
+          "& .MuiTabs-indicator": { bgcolor: LIME, height: 3 },
+          "& .MuiTab-root": { minHeight: 50, color: "rgba(255,255,255,0.72)", fontWeight: 800, textTransform: "none", "&.Mui-selected": { color: LIME } },
+        }}
+      >
+        <Tab label="Subscribers" />
+        <Tab label="Campaigns" />
+      </Tabs>
+
+      {tab === 0 ? <>
       <PageHeader
         title="Newsletter"
         subtitle={`${items.length} subscriber${items.length === 1 ? "" : "s"} · ${activeCount} active`}
@@ -177,6 +201,7 @@ export default function NewsletterPage() {
       />
 
       <Toast message={toast} onClose={() => setToast(null)} />
+      </> : <NewsletterCampaigns activeSubscribers={activeCount} />}
     </Box>
   );
 }

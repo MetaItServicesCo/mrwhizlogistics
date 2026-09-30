@@ -21,6 +21,18 @@ class Settings(BaseSettings):
     # by browsers when the server answers Access-Control-Allow-Origin: *.
     cors_origins: str = "*"
 
+    # Newsletter delivery. Credentials stay in the server environment; the
+    # dashboard only stores campaign content and delivery results.
+    smtp_host: str | None = None
+    smtp_port: int = 587
+    smtp_username: str | None = None
+    smtp_password: str | None = None
+    smtp_use_tls: bool = True
+    smtp_use_ssl: bool = False
+    newsletter_from_email: str | None = None
+    newsletter_from_name: str = "Mr. Whiz Logistics"
+    public_site_url: str = "http://localhost:3000"
+
     @property
     def cors_origin_list(self) -> list[str]:
         return [o.strip() for o in self.cors_origins.split(",") if o.strip()]

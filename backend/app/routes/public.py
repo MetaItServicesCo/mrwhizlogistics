@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session, selectinload
 
@@ -14,6 +16,8 @@ from app.schemas.cms import ContentBlockRead, SiteSettingRead
 from app.schemas.page import PublicPage, PublicPageLink
 from app.schemas.faq import PublicFAQCategory, PublicFAQItem
 from app.schemas.leads import ContactCreate, ContactRead, SubscriberCreate, SubscriberRead
+from app.schemas.newsletter import SubscriptionResult, UnsubscribeRequest
+from app.core.newsletter import read_unsubscribe_token
 from app.schemas.service import ServiceRead
 from app.schemas.testimonial import TestimonialRead
 
@@ -26,18 +30,38 @@ router = APIRouter(prefix="/public", tags=["Public (website forms)"])
 
 @router.post("/subscribers", response_model=SubscriberRead, status_code=status.HTTP_201_CREATED)
 def subscribe(payload: SubscriberCreate, db: Session = Depends(get_db)):
-    existing = db.query(Subscriber).filter(Subscriber.email == payload.email).first()
+    email = str(payload.email).strip().lower()
+    existing = db.query(Subscriber).filter(Subscriber.email == email).first()
     if existing:
         if not existing.is_active:
             existing.is_active = True
+            existing.unsubscribed_at = None
+            existing.updated_at = datetime.utcnow()
             db.commit()
             db.refresh(existing)
         return existing
-    row = Subscriber(email=payload.email, is_active=True)
+    row = Subscriber(email=email, is_active=True)
     db.add(row)
     db.commit()
     db.refresh(row)
     return row
+
+
+@router.post("/subscribers/unsubscribe", response_model=SubscriptionResult)
+def unsubscribe(payload: UnsubscribeRequest, db: Session = Depends(get_db)):
+    try:
+        subscriber_id, email = read_unsubscribe_token(payload.token)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    row = db.query(Subscriber).filter(Subscriber.id == subscriber_id, Subscriber.email == email).first()
+    if not row:
+        raise HTTPException(status_code=404, detail="This subscription could not be found.")
+    if row.is_active:
+        row.is_active = False
+        row.unsubscribed_at = datetime.utcnow()
+        row.updated_at = datetime.utcnow()
+        db.commit()
+    return SubscriptionResult(message="You have been unsubscribed from newsletter emails.")
 
 
 @router.get("/services", response_model=list[ServiceRead])

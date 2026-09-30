@@ -49,6 +49,10 @@ COLUMN_UPGRADES: list[tuple[str, str, str]] = [
     ("rental_items", "is_active", "BOOLEAN NOT NULL DEFAULT TRUE"),
     ("rental_items", "sort_order", "INTEGER NOT NULL DEFAULT 0"),
     ("rental_items", "updated_at", "TIMESTAMP"),
+    # Newsletter subscriber lifecycle. Campaign tables are created by
+    # metadata.create_all; these columns upgrade the pre-existing table.
+    ("subscribers", "updated_at", "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP"),
+    ("subscribers", "unsubscribed_at", "TIMESTAMP"),
 ]
 
 

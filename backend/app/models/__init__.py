@@ -18,6 +18,7 @@ from app.models.semi_truck import SemiTruck
 from app.models.blog import Blog, BlogComment
 from app.models.team import TeamMember
 from app.models.seed_run import SeedRun
+from app.models.newsletter import NewsletterCampaign, NewsletterDelivery
 
 __all__ = [
     "User",
@@ -43,4 +44,6 @@ __all__ = [
     "BlogComment",
     "TeamMember",
     "SeedRun",
+    "NewsletterCampaign",
+    "NewsletterDelivery",
 ]

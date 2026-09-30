@@ -93,3 +93,5 @@ class SubscriberRead(BaseModel):
     email: EmailStr
     is_active: bool
     created_at: datetime
+    updated_at: datetime
+    unsubscribed_at: Optional[datetime] = None
