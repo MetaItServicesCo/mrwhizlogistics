@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import HotShotHero from "@/components/hot-shot/HotShotHero";
 import ServiceGrid from "@/components/service/ServiceGrid";
 import ServiceWhy from "@/components/service/ServiceWhy";
@@ -11,14 +10,9 @@ import {
 } from "@/data/boxTruckContent";
 import { truckCardToGridItem } from "@/lib/contentAdapters";
 import { getBoxTruckCards } from "@/lib/serverContent";
-import { pageMetadata } from "@/lib/seo";
+import { managedPageMetadata } from "@/lib/seoPageMetadata";
 
-export const metadata: Metadata = pageMetadata({
-  title: "Box Truck Delivery in Dallas, TX",
-  description:
-    "16 ft and 26 ft box trucks with liftgates for local, regional and last-mile freight in Dallas–Fort Worth. GPS-tracked and insured. Get a fast quote.",
-  path: "/box-truck",
-});
+export const generateMetadata = () => managedPageMetadata("box-truck");
 
 export default async function BoxTruckPage() {
   const cards = await getBoxTruckCards();

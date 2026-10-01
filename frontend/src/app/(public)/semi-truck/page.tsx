@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 
 import HotShotHero from "@/components/hot-shot/HotShotHero";
 import ServiceGrid from "@/components/service/ServiceGrid";
@@ -13,14 +12,9 @@ import {
 } from "@/data/semiTruckContent";
 import { truckCardToGridItem } from "@/lib/contentAdapters";
 import { getSemiTruckCards } from "@/lib/serverContent";
-import { pageMetadata } from "@/lib/seo";
+import { managedPageMetadata } from "@/lib/seoPageMetadata";
 
-export const metadata: Metadata = pageMetadata({
-  title: "Semi Truck Freight Services",
-  description:
-    "Reliable semi truck freight services including reefer, dry van and flatbed transportation for regional and long-distance commercial freight.",
-  path: "/semi-truck",
-});
+export const generateMetadata = () => managedPageMetadata("semi-truck");
 
 export default async function SemiTruckPage() {
   const cards = await getSemiTruckCards();

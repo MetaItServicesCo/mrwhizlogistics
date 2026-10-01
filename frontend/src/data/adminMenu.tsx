@@ -85,6 +85,7 @@ export const ADMIN_MENU: NavItem[] = [
       { title: "About Us", href: "/dashboard/pages/about" },
       { title: "Rental pages", href: "/dashboard/pages/rentals" },
       { title: "Site pages", href: "/dashboard/pages/site" },
+      { title: "SEO metadata", href: "/dashboard/pages/seo" },
     ],
   },
   {

@@ -20,6 +20,7 @@ import { CTA_SETTING_KEY } from "@/lib/cta";
 import { AUTHOR_BIOS_KEY } from "@/lib/authors";
 import { BRANDING_KEYS as BRANDING_KEY_LIST } from "@/lib/branding";
 import { ABOUT_PAGE_KEY } from "@/lib/aboutPage";
+import { SEO_PAGES, seoPageSettingKey } from "@/lib/seoPages";
 import {
   ConfirmDialog,
   Field,
@@ -51,6 +52,8 @@ const BRANDING_KEYS = new Set([
   ABOUT_PAGE_KEY,
   // Edited in Pages -> Rental pages, not the raw settings table.
   "rentals_page_content",
+  // Edited in Pages -> SEO metadata, not the raw settings table.
+  ...SEO_PAGES.map((page) => seoPageSettingKey(page.id)),
 ]);
 
 type SettingsTab = "branding" | "buttons" | "contact" | "settings" | "users";
