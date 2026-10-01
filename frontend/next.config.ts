@@ -25,7 +25,7 @@ const nextConfig: NextConfig = {
     // permanent: true sends a 308, which search engines treat like a 301.
     return [
       // Older browsers may still request the conventional favicon path.
-      { source: "/favicon.ico", destination: "/images/logo.png", permanent: false },
+      { source: "/favicon.ico", destination: "/icon", permanent: false },
       // No /quote page exists; old buttons and any outside links go to Contact.
       { source: "/quote", destination: "/contact", permanent: true },
       // Rentals used to declare these as their canonical URLs (they 404ed).

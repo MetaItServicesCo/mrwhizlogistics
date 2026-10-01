@@ -7,7 +7,6 @@ import theme from "@/theme/theme";
 import { AuthProvider } from "@/lib/auth";
 import { SITE_URL } from "@/lib/site";
 import { DEFAULT_DESCRIPTION, DEFAULT_TITLE, SITE_NAME, sharedOpenGraph } from "@/lib/seo";
-import { DEFAULT_LOGO } from "@/lib/branding";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -20,8 +19,6 @@ export const metadata: Metadata = {
     template: `%s | ${SITE_NAME}`,
   },
   description: DEFAULT_DESCRIPTION,
-  // The browser tab uses the same bundled brand mark as the site's header.
-  icons: { icon: [{ url: DEFAULT_LOGO, type: "image/png" }] },
   // Pages that set their own openGraph spread sharedOpenGraph (Next.js
   // replaces the whole object rather than merging it).
   openGraph: sharedOpenGraph,
