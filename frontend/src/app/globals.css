@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+:root {
+  /* Preserve the MUI font variable without fetching Google Fonts at build time. */
+  --font-roboto: "Roboto Variable", Arial, sans-serif;
+}
 
 /*
  * Rich text from the dashboard editor (published articles and the editor

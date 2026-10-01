@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Roboto } from "next/font/google";
+import "@fontsource-variable/roboto/wght.css";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -9,13 +9,6 @@ import { SITE_URL } from "@/lib/site";
 import { DEFAULT_DESCRIPTION, DEFAULT_TITLE, SITE_NAME, sharedOpenGraph } from "@/lib/seo";
 import { DEFAULT_LOGO } from "@/lib/branding";
 import "./globals.css";
-
-const roboto = Roboto({
-  weight: ["300", "400", "500", "700"],
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-roboto",
-});
 
 export const metadata: Metadata = {
   // Resolves relative canonical / Open Graph URLs to absolute ones.
@@ -44,7 +37,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${roboto.variable} antialiased`}
+      className="antialiased"
       suppressHydrationWarning
     >
       <body>
