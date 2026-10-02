@@ -920,9 +920,9 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
               <Button
                 onClick={() => {
                   openWithInvite(invite);
-                  void send(invite.suggestions[0] || "Yes, call me");
+                  void send(invite.suggestions[0] || "I have a load to move");
                 }}
-                startIcon={<PhoneInTalkRoundedIcon sx={{ fontSize: 17 }} />}
+                startIcon={<LocalShippingRoundedIcon sx={{ fontSize: 17 }} />}
                 sx={{
                   flex: 1,
                   bgcolor: LIME,
@@ -933,7 +933,7 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
                   "&:hover": { bgcolor: "#d4ff33" },
                 }}
               >
-                {invite.suggestions[0] || "Yes, call me"}
+                {invite.suggestions[0] || "I have a load to move"}
               </Button>
               <Button
                 onClick={dismissInvite}

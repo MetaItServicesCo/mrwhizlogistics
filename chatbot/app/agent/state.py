@@ -12,9 +12,12 @@ class ChatState(TypedDict, total=False):
     # ---- Long-lived (survive across turns)
     language: str
     lead: dict
-    lead_stage: str  # none | collecting | confirming | submitted
+    lead_stage: str  # none | discovery | collecting | confirming | submitted
     lead_id: int | None
     handoff: bool
+    # Consultative pacing: shipment questions asked, and contact asks made.
+    discovery_turns: int
+    contact_asks: int
 
     # ---- Per turn (reset by the input guard)
     intent: str

@@ -83,12 +83,12 @@ def _collected_text(lead: dict) -> str:
 
 
 def _lead_hint(state: ChatState) -> str:
-    if state.get("lead_stage") in ("collecting", "confirming"):
-        missing = lead_rules.missing_required(state.get("lead", {}))
-        if missing:
-            need = " and ".join("name" if f == "name" else "phone number" for f in missing)
-            return f"After answering, add one short sentence reminding the visitor you still need their {need} so a dispatcher can call them."
-        return "After answering, ask in one short sentence whether they'd like the dispatcher to call them now."
+    """No reminders for contact details (that reads as pushy); keep the conversation going instead."""
+    if state.get("lead_stage") == "confirming":
+        lead = state.get("lead", {})
+        return f"After answering, ask in one short sentence whether they'd still like a dispatcher to call {lead.get('phone', 'them')}."
+    if state.get("lead_stage") in ("discovery", "collecting"):
+        return "Do not ask for their name or phone number in this reply."
     return ""
 
 
@@ -125,11 +125,17 @@ async def router(state: ChatState, config: RunnableConfig) -> dict:
     if stage == "confirming" and (_QUICK_YES.match(text) or _QUICK_NO.match(text)):
         return {"intent": "lead", "search_query": text}
     # Turning down the call-back offer ends the lead flow (handled by the lead agent).
-    if stage == "collecting" and _DECLINE.search(text) and len(text) < 60:
+    if stage in ("discovery", "collecting") and _DECLINE.search(text) and len(text) < 60:
         return {"intent": "lead", "search_query": text}
 
     lead = state.get("lead", {})
-    if stage in ("collecting", "confirming"):
+    if stage == "discovery":
+        lead_state = (
+            "LEAD FLOW: DISCOVERY. The assistant is learning about the visitor's shipment. Messages describing "
+            "their shipment, answering the assistant's question, giving contact details or declining are 'lead'; "
+            "a clear new question is 'knowledge'; greetings and chit-chat are 'smalltalk'."
+        )
+    elif stage in ("collecting", "confirming"):
         missing = lead_rules.missing_required(lead)
         lead_state = (
             "LEAD FLOW: ACTIVE. The assistant is collecting callback details"
@@ -215,6 +221,24 @@ async def knowledge(state: ChatState, config: RunnableConfig) -> dict:
 
 
 # --------------------------------------------------------------------------- lead agent
+
+
+_CALL_ME = re.compile(
+    r"\b(call me|call back|callback|give me a call|phone me|ring me|reach me|contact me|"
+    r"talk to (someone|somebody|a person|a human|dispatch|an agent)|speak (to|with) (someone|somebody|a person|dispatch|an agent))\b",
+    re.I,
+)
+
+
+def _next_discovery_question(lead: dict) -> tuple[str, str] | None:
+    """(topic for the model, fallback question) for the most useful missing shipment detail."""
+    if not lead.get("freight"):
+        return ("what they're moving (type, and roughly how big or heavy)", "What are you looking to move, and roughly how big or heavy is it?")
+    if not (lead.get("pickup") and lead.get("delivery")):
+        return ("where it's picking up and delivering", "Where would it be picking up and delivering?")
+    if not lead.get("pickup_date"):
+        return ("when it needs to move", "When does it need to move?")
+    return None
 
 
 def _ask_missing(lead: dict, handoff: bool, phone_problem: bool, dispatch_phone: str) -> tuple[str, str]:
@@ -334,7 +358,7 @@ async def lead_agent(state: ChatState, config: RunnableConfig) -> dict:
     # 4) Visitor doesn't want a call now: leave the flow politely, no nagging.
     # A short decline ("just browsing") wins over a name read from the same words.
     declined = extracted.declined or (bool(_DECLINE.search(text)) and len(text) < 60)
-    if stage in ("none", "collecting") and declined and "phone" not in changed:
+    if stage in ("none", "discovery", "collecting") and declined and "phone" not in changed:
         lead = before
         out["lead"] = before
         instruction = (
@@ -345,9 +369,49 @@ async def lead_agent(state: ChatState, config: RunnableConfig) -> dict:
         reply = await _compose(llm, site, state, instruction, fallback, lead)
         return out | {"lead_stage": "none", "handoff": False, "reply": reply, "suggestions": ["What services do you offer?"], "sources": []}
 
-    # 5) Collect what's missing, or ask to confirm.
-    if lead_rules.missing_required(lead) or "phone" in problems:
+    # 5) Consultative pacing: understand the shipment first, ask for contact
+    #    details only when it's earned (or the visitor asks to be called),
+    #    and at most twice.
+    discovery_turns = int(state.get("discovery_turns") or 0)
+    contact_asks = int(state.get("contact_asks") or 0)
+    wants_call = handoff or bool(_CALL_ME.search(text)) or bool(lead.get("phone") or lead.get("name"))
+    # Asking is capped at two; only an explicit request, or the visitor starting
+    # to give their details right now, reopens it.
+    engaged_now = state.get("intent") == "handoff" or bool(_CALL_ME.search(text)) or "phone" in changed or "name" in changed
+    asked_enough = contact_asks >= 2 and not engaged_now
+    if "phone" in problems or (lead_rules.missing_required(lead) and wants_call and not asked_enough):
         instruction, fallback = _ask_missing(lead, handoff, "phone" in problems, site.dispatch_phone)
+        reply = await _compose(llm, site, state, instruction, fallback, lead)
+        return out | {"lead_stage": "collecting", "contact_asks": contact_asks + 1, "reply": reply, "suggestions": [], "sources": []}
+
+    if lead_rules.missing_required(lead):
+        question = _next_discovery_question(lead)
+        if question and discovery_turns < 2 and stage in ("none", "discovery"):
+            topic, fallback_q = question
+            instruction = (
+                "Briefly acknowledge what they shared in a warm, natural way that shows you understand their "
+                "situation (if useful, add one helpful point about our services, without inventing facts). "
+                f"Then ask one easy question about {topic}. Do not ask for their name or phone number yet."
+            )
+            reply = await _compose(llm, site, state, instruction, f"Got it, thanks. {fallback_q}", lead)
+            return out | {"lead_stage": "discovery", "discovery_turns": discovery_turns + 1, "reply": reply, "suggestions": [], "sources": []}
+        if contact_asks < 2:
+            instruction = (
+                "In a few words, reflect what you understand about their shipment (if anything). Explain that a "
+                "dispatcher can confirm exact pricing and truck availability on a quick call, and ask, with no "
+                "pressure, for their name and the best number to reach them. Make clear they can also keep "
+                "asking questions here."
+            )
+            fallback = (
+                "That helps, thanks. The quickest way to get exact pricing and availability is a short call with one "
+                "of our dispatchers. If you'd like that, what's your name and the best number to reach you? Happy to "
+                "keep answering questions here too."
+            )
+            reply = await _compose(llm, site, state, instruction, fallback, lead)
+            return out | {"lead_stage": "collecting", "contact_asks": contact_asks + 1, "reply": reply, "suggestions": [], "sources": []}
+        # Asked twice already: stay helpful, no third ask.
+        instruction = "Respond helpfully and briefly to what they said. Do not ask for their name or phone number."
+        fallback = "Thanks for the details. Anything else you'd like to know about how we'd handle it?"
         reply = await _compose(llm, site, state, instruction, fallback, lead)
         return out | {"lead_stage": "collecting", "reply": reply, "suggestions": [], "sources": []}
 

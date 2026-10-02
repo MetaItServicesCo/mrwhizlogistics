@@ -130,15 +130,17 @@ async def proactive_start(body: InviteRequest, request: Request) -> ProactiveSta
 
     session_id = new_session_id()
     message = cfg.proactive.message_for(body.page_url)
-    # Seed the agent: the invite is the assistant's first turn, and the lead
-    # agent handles the reply (details, "yes", or "just browsing").
+    # Seed the agent: the invite is the assistant's first turn and already
+    # asked what they're moving, so the conversation starts in discovery.
     await runtime.graph.aupdate_state(
         {"configurable": {"thread_id": session_id}},
         {
             "messages": [AIMessage(content=message)],
-            "lead_stage": "collecting",
+            "lead_stage": "discovery",
             "lead": {},
             "handoff": False,
+            "discovery_turns": 1,
+            "contact_asks": 0,
             "intent": "lead",
             "reply": message,
         },
@@ -154,7 +156,7 @@ async def proactive_start(body: InviteRequest, request: Request) -> ProactiveSta
                 title="(proactive invite)",
                 message_count=1,
                 last_route="lead",
-                lead_stage="collecting",
+                lead_stage="discovery",
                 proactive=True,
             )
         )

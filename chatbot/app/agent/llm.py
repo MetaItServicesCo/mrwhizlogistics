@@ -280,7 +280,8 @@ _YES = re.compile(r"^\s*(yes|yeah|yep|yup|correct|right|sure|ok|okay|confirm|tha
 _NO = re.compile(r"^\s*(no|nope|wrong|change|not right|incorrect)\b", re.I)
 _LEAD_WORDS = re.compile(r"\b(quote|price|pricing|rate|cost|book|booking|ship|move|haul|call me|call back|callback|load)\b", re.I)
 _HANDOFF_WORDS = re.compile(r"\b(human|agent|person|representative|dispatcher|someone|manager|complaint|emergency)\b", re.I)
-_SMALLTALK = re.compile(r"^\s*(hi|hello|hey|thanks|thank you|bye|goodbye|good (morning|afternoon|evening))\b[\s!.]*$", re.I)
+_SMALLTALK = re.compile(r"^\s*(hi|hello|hey|thanks|thank you|bye|goodbye|good (morning|afternoon|evening)|how are you( doing)?|how's it going)\b[\s!.?]*$", re.I)
+_FREIGHT = re.compile(r"\b(\d+\s*(pallets?|lbs?|pounds|tons?|crates?|boxes)|equipment|machinery|tiles?|lumber|steel|furniture|vehicle|car|excavator|skid steer)\b", re.I)
 _OFF_TOPIC = re.compile(r"\b(poem|joke|homework|python|javascript|recipe|weather|politic|ignore (all|previous|your) )", re.I)
 _SERVICES = {"hot shot": "Hot Shot", "hotshot": "Hot Shot", "box truck": "Box Truck", "semi": "Semi Truck", "rental": "Rental"}
 
@@ -310,7 +311,7 @@ class FakeLLM:
 
     async def route(self, system: str, history: list[BaseMessage]) -> RouteDecision:
         text = _last_human(history)
-        lead_active = "LEAD FLOW: ACTIVE" in system or "LEAD FLOW: SUBMITTED" in system
+        lead_active = any(f"LEAD FLOW: {s}" in system for s in ("ACTIVE", "SUBMITTED", "DISCOVERY"))
         if _OFF_TOPIC.search(text):
             intent: Intent = "off_topic"
         elif _HANDOFF_WORDS.search(text):
@@ -337,13 +338,17 @@ class FakeLLM:
         elif "name" in _last_ai(history).lower() or out.phone:
             words = _PHONE.sub("", text).replace(",", " ").split()
             alpha = [w for w in words if w.isalpha()]
-            if 1 <= len(alpha) <= 3 and not _YES.match(text) and not _NO.match(text):
+            # A bare name: 1-3 words, capitalized or the whole short message.
+            looks_like_name = all(w[0].isupper() for w in alpha) or len(words) <= 2
+            if 1 <= len(alpha) <= 3 and looks_like_name and not _YES.match(text) and not _NO.match(text):
                 out.name = " ".join(alpha[:2]).title()
         lower = text.lower()
         for key, label in _SERVICES.items():
             if key in lower:
                 out.service = label
                 break
+        if _FREIGHT.search(text):
+            out.freight = text.strip()[:200]
         if m := re.search(r"\bfrom\s+([A-Za-z .]+?)\s+to\s+([A-Za-z .]+?)(?:[,.!?]|$)", text, re.I):
             out.pickup, out.delivery = m.group(1).strip(), m.group(2).strip()
         if _DECLINE.search(text) and not (out.phone or out.name):

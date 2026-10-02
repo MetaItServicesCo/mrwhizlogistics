@@ -29,8 +29,9 @@ export interface ChatbotSettings {
 
 export const PROACTIVE_DEFAULTS: ProactiveSettings = {
   enabled: true,
-  delay_seconds: 30,
-  message: "Need {service}? A dispatcher can call you in minutes with a free quote. What's your name and the best number to reach you?",
+  delay_seconds: 100,
+  message:
+    "Hi there! If you're weighing up {service} for a shipment, I'm happy to help you figure out what fits, no pressure. What are you looking to move?",
   mode: "open",
 };
 

@@ -181,13 +181,14 @@ async def test_proactive_invite_start_and_reply(client, offline_backend):
     resp = await client.post("/chat-api/proactive/invite", json={"page_url": "/hot-shot/20-feet-flat-bed"})
     assert resp.status_code == 200
     invite = resp.json()
-    assert "hot shot truck" in invite["message"] and invite["suggestions"] == ["Yes, call me", "Just browsing"]
+    assert "hot shot truck" in invite["message"] and invite["suggestions"] == ["I have a load to move", "Just browsing"]
+    assert "number" not in invite["message"].lower()  # opens a conversation, doesn't ask for details
 
     start = (await client.post("/chat-api/proactive/start", json={"page_url": "/hot-shot/20-feet-flat-bed"})).json()
     sid = start["session_id"]
     assert start["message"] == invite["message"]
     restored = (await client.get(f"/chat-api/sessions/{sid}")).json()
-    assert restored["lead_stage"] == "collecting" and [m["role"] for m in restored["messages"]] == ["assistant"]
+    assert restored["lead_stage"] == "discovery" and [m["role"] for m in restored["messages"]] == ["assistant"]
 
     _, events = await send(client, "Lena Brooks 469 767 2211", sid)
     assert events[-1][1]["lead_stage"] == "confirming"

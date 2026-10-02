@@ -100,7 +100,7 @@ in production it calls `/chat-api` on its own origin (nginx).
 LLM_PROVIDER=groq GROQ_API_KEY=... python -m evals.run_evals --min-pass 0.9
 ```
 
-`evals/cases.json` has 32 conversations covering knowledge answers, refusing to
+`evals/cases.json` has 36 conversations covering knowledge answers, refusing to
 invent prices or transit times, the full call-back flow (corrections,
 mid-flow questions, Spanish), hand-off, off-topic and prompt injection. Run it
 after any prompt or model change. It writes a per-reply report for review.

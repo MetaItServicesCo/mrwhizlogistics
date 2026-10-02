@@ -60,12 +60,22 @@ async def test_unknown_question_offers_dispatch_instead_of_guessing(site, fake_k
     assert site.dispatch_phone in state["reply"] or "call" in state["reply"].lower()
 
 
-async def test_full_callback_flow_creates_one_lead_and_enriches_it(site, fake_kb, fake_leads):
+async def test_consultative_flow_earns_the_ask_then_creates_one_lead(site, fake_kb, fake_leads):
     chat = Chat(site, fake_kb, fake_leads)
+    # Discovery first: understand the shipment before asking for anything.
     s = await chat.say("I need a quote for a hot shot load")
-    assert s["intent"] == "lead" and s["lead_stage"] == "collecting"
-    assert "name" in s["reply"].lower() and "phone" in s["reply"].lower()
+    assert s["intent"] == "lead" and s["lead_stage"] == "discovery"
+    assert "phone" not in s["reply"].lower() and "name" not in s["reply"].lower()
     assert s["lead"]["service"] == "Hot Shot"
+
+    s = await chat.say("About 4 pallets of tiles")
+    assert s["lead_stage"] == "discovery" and s["lead"]["freight"]
+    assert "phone" not in s["reply"].lower()
+
+    # Enough context: one value-framed, optional ask for contact details.
+    s = await chat.say("It's going from Dallas to Houston.")
+    assert s["lead_stage"] == "collecting" and s["contact_asks"] == 1
+    assert "name" in s["reply"].lower() and "number" in s["reply"].lower()
 
     s = await chat.say("John Carter")
     assert s["lead_stage"] == "collecting" and s["lead"]["name"] == "John Carter"
@@ -87,9 +97,9 @@ async def test_full_callback_flow_creates_one_lead_and_enriches_it(site, fake_kb
     assert any(e["type"] == "lead" and e["status"] == "submitted" for e in chat.events)
     assert PHONE in s["reply"]
 
-    s = await chat.say("It's going from Dallas to Houston, ready tomorrow")
+    s = await chat.say("Actually it's going from Fort Worth to Houston.")
     assert s["lead_stage"] == "submitted"
-    assert fake_leads.updated and fake_leads.updated[0][1]["pickup"] == "Dallas"
+    assert fake_leads.updated and fake_leads.updated[0][1]["pickup"] == "Fort Worth"
     assert len(fake_leads.created) == 1  # never a second lead
 
 
@@ -131,7 +141,8 @@ async def test_question_mid_flow_is_answered_and_flow_resumes(site, fake_kb, fak
     chat = Chat(site, fake_kb, fake_leads)
     await chat.say("I need a quote")
     s = await chat.say("Do you deliver nationwide?")
-    assert s["intent"] == "knowledge" and s["lead_stage"] == "collecting"
+    assert s["intent"] == "knowledge" and s["lead_stage"] == "discovery"
+    assert "phone" not in s["reply"].lower()
     s = await chat.say("Sam Reed 4697672211")
     assert s["lead_stage"] == "confirming"
 
@@ -235,3 +246,47 @@ async def test_proactive_seeded_conversation_goes_into_lead_flow(site, fake_kb, 
     assert s["lead_stage"] == "confirming" and s["lead"]["name"] == "Dana Cole"
     s = await chat.say("Yes, call me")
     assert s["lead_stage"] == "submitted" and len(fake_leads.created) == 1
+
+
+async def test_small_talk_after_invite_does_not_ask_for_details(site, fake_kb, fake_leads):
+    from langchain_core.messages import AIMessage
+
+    chat = Chat(site, fake_kb, fake_leads)
+    await chat.graph.aupdate_state(
+        {"configurable": {"thread_id": chat.thread}},
+        {"messages": [AIMessage("Hi there! ... What are you looking to move?")], "lead_stage": "discovery", "discovery_turns": 1, "lead": {}},
+        as_node="finalize",
+    )
+    s = await chat.say("How are you?")
+    assert s["intent"] == "smalltalk" and s["lead_stage"] == "discovery"
+    assert "phone" not in s["reply"].lower() and "name" not in s["reply"].lower()
+
+
+async def test_contact_is_asked_at_most_twice(site, fake_kb, fake_leads):
+    chat = Chat(site, fake_kb, fake_leads)
+    await chat.say("I have a load to move")
+    await chat.say("3 pallets of lumber")
+    s = await chat.say("from Austin to Waco.")
+    assert s["contact_asks"] == 1
+    s = await chat.say("it's ready next week")
+    assert s["contact_asks"] == 2
+    s = await chat.say("it is about 2000 lbs")
+    assert s["contact_asks"] == 2 and "number" not in s["reply"].lower()
+
+
+async def test_explicit_call_request_skips_discovery(site, fake_kb, fake_leads):
+    chat = Chat(site, fake_kb, fake_leads)
+    s = await chat.say("Can someone call me back?")
+    assert s["lead_stage"] == "collecting" and "name" in s["reply"].lower()
+
+
+async def test_name_without_phone_does_not_trigger_endless_asks(site, fake_kb, fake_leads):
+    chat = Chat(site, fake_kb, fake_leads)
+    s = await chat.say("Can someone call me back? I'm Rita")
+    assert s["contact_asks"] == 1
+    s = await chat.say("Do you have reefer trailers for temperature-controlled loads?")  # a question, not a number
+    assert s["intent"] == "knowledge"
+    s = await chat.say("ok, the load is 2 pallets of produce")
+    assert s["contact_asks"] == 2
+    s = await chat.say("it's 1200 lbs total")
+    assert s["contact_asks"] == 2 and "phone" not in s["reply"].lower()

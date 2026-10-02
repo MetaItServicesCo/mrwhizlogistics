@@ -35,10 +35,10 @@ DEFAULT_QUICK_PROMPTS = [
 # Proactive invite: shown after the visitor has been on the site a while
 # without opening the chat. {service} adapts to the page they are on.
 DEFAULT_PROACTIVE_MESSAGE = (
-    "Need {service}? A dispatcher can call you in minutes with a free quote. "
-    "What's your name and the best number to reach you?"
+    "Hi there! If you're weighing up {service} for a shipment, I'm happy to help you figure out "
+    "what fits, no pressure. What are you looking to move?"
 )
-PROACTIVE_SUGGESTIONS = ["Yes, call me", "Just browsing"]
+PROACTIVE_SUGGESTIONS = ["I have a load to move", "Just browsing"]
 SERVICE_BY_SECTION = {
     "hot-shot": "a hot shot truck",
     "box-truck": "a box truck",
@@ -55,7 +55,7 @@ def service_for_page(page_url: str | None) -> str:
 @dataclass
 class ProactiveConfig:
     enabled: bool = True
-    delay_seconds: int = 30
+    delay_seconds: int = 100
     message: str = DEFAULT_PROACTIVE_MESSAGE
     # "open": open the chat window (desktop; phones always get the bubble);
     # "bubble": a message bubble by the chat button.

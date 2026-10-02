@@ -230,7 +230,8 @@ export default function ChatbotSettingsPanel() {
               Invite visitors to talk
             </Typography>
             <Typography sx={{ fontSize: 13, color: "rgba(255,255,255,0.55)" }}>
-              After a visitor has been active on the site for a while without chatting, the assistant offers a call back.
+              After a visitor has been active on the site for a while without chatting, the assistant starts a friendly
+              conversation about their shipment and only offers a call once it&apos;s useful.
               Once per visit; not again for 24 hours after &quot;Not now&quot;, or for 30 days after they&apos;ve left their number.
             </Typography>
           </Box>
@@ -276,7 +277,7 @@ export default function ChatbotSettingsPanel() {
           multiline
           minRows={2}
           error={draft.proactive.message.length > LIMITS.invite}
-          helperText="{service} becomes “a hot shot truck”, “a box truck”, “a semi truck”, “a trailer rental” or “a truck” depending on the page. End with a question so visitors can simply reply with their name and number."
+          helperText="{service} becomes “a hot shot truck”, “a box truck”, “a semi truck”, “a trailer rental” or “a truck” depending on the page. Open a conversation (e.g. ask what they're moving) rather than asking for contact details."
           slotProps={shrink}
         />
         <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, flexWrap: "wrap" }}>
