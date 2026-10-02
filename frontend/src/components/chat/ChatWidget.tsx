@@ -30,13 +30,17 @@ import LinkRoundedIcon from "@mui/icons-material/LinkRounded";
 
 import {
   ChatHttpError,
+  fetchInvite,
   loadSessionId,
   restoreSession,
   saveSessionId,
+  startProactive,
   streamChat,
   type ChatSource,
+  type Invite,
   type LeadSummaryItem,
 } from "@/lib/chatClient";
+import type { ProactiveSettings } from "@/lib/chatbotSettings";
 
 const LIME = "#c8ff00";
 const DARK = "#0a0a0a";
@@ -66,6 +70,39 @@ export interface ChatWidgetConfig {
   greeting: string;
   quickPrompts: string[];
   phone?: string;
+  /** Proactive invite (Dashboard -> AI Assistant -> Settings). */
+  proactive?: ProactiveSettings;
+}
+
+// ---- Proactive invite bookkeeping (browser storage, never blocks the chat)
+const ACTIVE_MS_KEY = "mrwhiz_chat_active_ms"; // session: active time on site
+const INVITE_SHOWN_KEY = "mrwhiz_chat_invite_shown"; // session: once per visit
+const INVITE_DISMISSED_KEY = "mrwhiz_chat_invite_dismissed"; // local: 24h quiet period
+const LEAD_DONE_KEY = "mrwhiz_chat_lead_done"; // local: never invite after a lead
+const DISMISS_FOR_MS = 24 * 60 * 60 * 1000;
+
+const store = {
+  get(area: "local" | "session", key: string): string | null {
+    try {
+      return (area === "local" ? window.localStorage : window.sessionStorage).getItem(key);
+    } catch {
+      return null;
+    }
+  },
+  set(area: "local" | "session", key: string, value: string) {
+    try {
+      (area === "local" ? window.localStorage : window.sessionStorage).setItem(key, value);
+    } catch {
+      /* private mode: the invite may show again, nothing breaks */
+    }
+  },
+};
+
+function inviteEligible(): boolean {
+  if (window.location.pathname.startsWith("/dashboard")) return false;
+  if (store.get("session", INVITE_SHOWN_KEY) || store.get("local", LEAD_DONE_KEY) || loadSessionId()) return false;
+  const dismissed = Number(store.get("local", INVITE_DISMISSED_KEY) || 0);
+  return !dismissed || Date.now() - dismissed > DISMISS_FOR_MS;
 }
 
 type SpeechRecognitionEventLike = Event & {
@@ -177,6 +214,9 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
   // Follow-up buttons offered with the latest reply ("Yes, call me", ...).
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const restoredRef = useRef(false);
+  // Proactive invite: fetched after the visitor has been active a while.
+  const [invite, setInvite] = useState<Invite | null>(null);
+  const [inviteVisible, setInviteVisible] = useState(false);
   const abortRef = useRef<AbortController | null>(null);
   const [input, setInput] = useState("");
 
@@ -252,6 +292,54 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
   }, [open, config.greeting]);
 
   useEffect(() => () => abortRef.current?.abort(), []);
+
+  // ============================================================
+  // PROACTIVE INVITE: after N seconds of active time on the site
+  // (counted across pages, paused while the tab is hidden), the lead
+  // agent offers a call back. Once per visit; quiet for 24h after
+  // "Not now"; never again after a lead.
+  // ============================================================
+
+  const openWithInvite = useCallback((inv: Invite) => {
+    setMessages([{ id: "invite", from: "bot", text: inv.message, time: now() }]);
+    setSuggestions(inv.suggestions);
+    setShowQuickPrompts(false);
+    setInviteVisible(false);
+    setOpen(true);
+  }, []);
+
+  const dismissInvite = useCallback(() => {
+    store.set("local", INVITE_DISMISSED_KEY, String(Date.now()));
+    setInviteVisible(false);
+    setInvite(null);
+  }, []);
+
+  useEffect(() => {
+    const pro = config.proactive;
+    if (!pro?.enabled || open || invite || !inviteEligible()) return;
+    let active = Number(store.get("session", ACTIVE_MS_KEY) || 0);
+    const tick = window.setInterval(() => {
+      if (document.visibilityState !== "visible") return;
+      active += 1000;
+      // Saved every second so full page loads keep the visitor's time.
+      store.set("session", ACTIVE_MS_KEY, String(active));
+      if (active < pro.delay_seconds * 1000) return;
+      window.clearInterval(tick);
+      if (!inviteEligible()) return;
+      store.set("session", INVITE_SHOWN_KEY, "1");
+      fetchInvite(window.location.pathname)
+        .then((inv) => {
+          setInvite(inv);
+          // Phones always get the bubble (no full-screen interruption).
+          if (pro.mode === "open" && window.matchMedia("(min-width: 900px)").matches) openWithInvite(inv);
+          else setInviteVisible(true);
+        })
+        .catch(() => {
+          /* invites off or service unavailable: stay quiet */
+        });
+    }, 1000);
+    return () => window.clearInterval(tick);
+  }, [config.proactive, open, invite, openWithInvite]);
 
   // ============================================================
   // AUTO SCROLL
@@ -364,7 +452,7 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
   }, []);
 
   const sendToAI = useCallback(
-    async (userMessage: string) => {
+    async (userMessage: string, sessionOverride?: string) => {
       const botId = createId();
       setMessages((current) => [...current, { id: botId, from: "bot", text: "", time: now(), streaming: true }]);
       const controller = new AbortController();
@@ -374,7 +462,7 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
         await streamChat(
           {
             message: userMessage,
-            sessionId,
+            sessionId: sessionOverride ?? sessionId,
             pageUrl: typeof window !== "undefined" ? window.location.pathname : undefined,
             signal: controller.signal,
           },
@@ -398,7 +486,10 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
                 break;
               case "lead":
                 if (event.status === "confirming") updateMessage(botId, { leadSummary: event.summary });
-                else updateMessage(botId, { leadSubmitted: true, leadSummary: undefined });
+                else {
+                  updateMessage(botId, { leadSubmitted: true, leadSummary: undefined });
+                  store.set("local", LEAD_DONE_KEY, "1");
+                }
                 break;
               case "done":
                 updateMessage(botId, { text: event.reply, sources: event.sources, streaming: false });
@@ -476,10 +567,24 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
       setSuggestions([]);
       setShowQuickPrompts(false);
 
+      // Replying to the invite: open the conversation the lead agent seeded.
+      let sessionForTurn: string | undefined;
+      if (invite && !sessionId) {
+        try {
+          const started = await startProactive(window.location.pathname);
+          sessionForTurn = started.session_id;
+          setSessionId(started.session_id);
+          saveSessionId(started.session_id);
+        } catch {
+          /* fall back to a normal conversation */
+        }
+        setInvite(null);
+      }
+
       // Replies are text only: voice playback stays manual (speaker icon).
-      await sendToAI(text);
+      await sendToAI(text, sessionForTurn);
     },
-    [input, typing, stopListening, stopSpeaking, addMessage, sendToAI],
+    [input, typing, stopListening, stopSpeaking, addMessage, sendToAI, invite, sessionId],
   );
 
   // ============================================================
@@ -633,6 +738,7 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
 
     saveSessionId(null);
     setSessionId(null);
+    setInvite(null);
     setMessages([welcomeMessage(config.greeting)]);
     setSuggestions([]);
     setShowQuickPrompts(true);
@@ -710,6 +816,111 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
   return (
     <>
       {/* ========================================================
+          PROACTIVE INVITE BUBBLE
+      ======================================================== */}
+
+      <AnimatePresence>
+        {inviteVisible && invite && !open && (
+          <Box
+            key="invite"
+            component={motion.div}
+            role="dialog"
+            aria-label="Message from the Mr. Whiz assistant"
+            aria-live="polite"
+            initial={reduce ? false : { opacity: 0, y: 16, scale: 0.96 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={reduce ? { opacity: 0 } : { opacity: 0, y: 12, scale: 0.96 }}
+            transition={{ duration: 0.35, ease: EASE }}
+            sx={{
+              position: "fixed",
+              right: { xs: 16, md: 28 },
+              bottom: { xs: 92, md: 106 },
+              zIndex: 1500,
+              width: { xs: "calc(100vw - 32px)", sm: 330 },
+              maxWidth: 330,
+              p: 2,
+              pt: 1.6,
+              borderRadius: "18px 18px 6px 18px",
+              bgcolor: PANEL,
+              border: `1px solid ${LIME}55`,
+              boxShadow: "0 18px 40px rgba(0,0,0,0.55)",
+              color: "#fff",
+            }}
+          >
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}>
+              <Box
+                sx={{
+                  width: 30,
+                  height: 30,
+                  borderRadius: "9px",
+                  bgcolor: LIME,
+                  color: DARK,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexShrink: 0,
+                }}
+              >
+                <LocalShippingRoundedIcon sx={{ fontSize: 18 }} />
+              </Box>
+              <Typography sx={{ flex: 1, fontSize: 12.5, fontWeight: 800, color: LIME }}>Mr. Whiz dispatch</Typography>
+              <IconButton
+                size="small"
+                aria-label="Dismiss message"
+                onClick={dismissInvite}
+                sx={{ color: "rgba(255,255,255,0.5)", "&:hover": { color: "#fff" } }}
+              >
+                <CloseRoundedIcon sx={{ fontSize: 18 }} />
+              </IconButton>
+            </Box>
+            <Box
+              component="button"
+              type="button"
+              onClick={() => openWithInvite(invite)}
+              sx={{
+                all: "unset",
+                cursor: "pointer",
+                display: "block",
+                fontSize: 14,
+                lineHeight: 1.55,
+                color: "rgba(255,255,255,0.92)",
+                mb: 1.5,
+                "&:focus-visible": { outline: `2px solid ${LIME}`, outlineOffset: 2, borderRadius: "6px" },
+              }}
+            >
+              {invite.message}
+            </Box>
+            <Box sx={{ display: "flex", gap: 1 }}>
+              <Button
+                onClick={() => {
+                  openWithInvite(invite);
+                  void send(invite.suggestions[0] || "Yes, call me");
+                }}
+                startIcon={<PhoneInTalkRoundedIcon sx={{ fontSize: 17 }} />}
+                sx={{
+                  flex: 1,
+                  bgcolor: LIME,
+                  color: DARK,
+                  fontWeight: 800,
+                  textTransform: "none",
+                  borderRadius: "10px",
+                  "&:hover": { bgcolor: "#d4ff33" },
+                }}
+              >
+                {invite.suggestions[0] || "Yes, call me"}
+              </Button>
+              <Button
+                onClick={dismissInvite}
+                sx={{ color: "rgba(255,255,255,0.65)", textTransform: "none", fontWeight: 700, borderRadius: "10px" }}
+              >
+                Not now
+              </Button>
+            </Box>
+          </Box>
+        )}
+      </AnimatePresence>
+
+      {/* ========================================================
           FLOATING AI BUTTON
       ======================================================== */}
 
@@ -747,7 +958,7 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
         {/* Button */}
         <Box
           component={motion.button}
-          onClick={() => setOpen((value) => !value)}
+          onClick={() => (!open && invite && !sessionId ? openWithInvite(invite) : setOpen((value) => !value))}
           aria-label={open ? "Close AI assistant" : "Open AI assistant"}
           whileHover={reduce ? undefined : { scale: 1.08 }}
           whileTap={reduce ? undefined : { scale: 0.92 }}

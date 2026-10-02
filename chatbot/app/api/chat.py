@@ -19,23 +19,28 @@ from collections.abc import AsyncIterator
 
 from fastapi import APIRouter, HTTPException, Request, status
 from fastapi.responses import StreamingResponse
-from langchain_core.messages import HumanMessage
+from langchain_core.messages import AIMessage, HumanMessage
 from pydantic import BaseModel, Field
-from sqlalchemy import select, text
+from datetime import timedelta
+
+from sqlalchemy import func, select, text
+from sqlalchemy.dialects.postgresql import insert as pg_insert
 
 from app.backend_client import backend
 from app.config import get_settings
-from app.db import Conversation, Message, SessionLocal, engine, utcnow
+from app.db import Conversation, Message, ProactiveStat, SessionLocal, engine, utcnow
 from app.knowledge.base import kb
 from app.runtime import runtime
 from app.security import client_ip, enforce_rate_limits, ip_hash, new_session_id, session_lock_key, valid_session_id
-from app.site import site_config
+from app.site import PROACTIVE_SUGGESTIONS, site_config
 
 log = logging.getLogger(__name__)
 settings = get_settings()
 router = APIRouter(prefix="/chat-api", tags=["Chat"])
 
 TURN_TIMEOUT_SECONDS = 90
+# Strong references keep in-flight turns alive after a client disconnects.
+_running_turns: set[asyncio.Task] = set()
 
 
 class ChatRequest(BaseModel):
@@ -44,11 +49,31 @@ class ChatRequest(BaseModel):
     page_url: str | None = Field(None, max_length=500)
 
 
+class ProactiveSettings(BaseModel):
+    enabled: bool
+    delay_seconds: int
+    mode: str
+
+
 class ConfigResponse(BaseModel):
     enabled: bool
     greeting: str
     quick_prompts: list[str]
     phone: str
+    proactive: ProactiveSettings
+
+
+class InviteRequest(BaseModel):
+    page_url: str | None = Field(None, max_length=500)
+
+
+class InviteResponse(BaseModel):
+    message: str
+    suggestions: list[str]
+
+
+class ProactiveStartResponse(InviteResponse):
+    session_id: str
 
 
 def sse(event: str, data: dict) -> str:
@@ -58,7 +83,85 @@ def sse(event: str, data: dict) -> str:
 @router.get("/config", response_model=ConfigResponse)
 async def chat_config() -> ConfigResponse:
     cfg = await site_config.get()
-    return ConfigResponse(enabled=cfg.enabled, greeting=cfg.greeting, quick_prompts=cfg.quick_prompts, phone=cfg.dispatch_phone)
+    return ConfigResponse(
+        enabled=cfg.enabled,
+        greeting=cfg.greeting,
+        quick_prompts=cfg.quick_prompts,
+        phone=cfg.dispatch_phone,
+        proactive=ProactiveSettings(enabled=cfg.proactive.enabled, delay_seconds=cfg.proactive.delay_seconds, mode=cfg.proactive.mode),
+    )
+
+
+async def _proactive_config():
+    cfg = await site_config.get()
+    if not (cfg.enabled and cfg.proactive.enabled):
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "Proactive invites are off.")
+    return cfg
+
+
+@router.post("/proactive/invite", response_model=InviteResponse)
+async def proactive_invite(body: InviteRequest) -> InviteResponse:
+    """The invite text for the visitor's page; counts one impression."""
+    cfg = await _proactive_config()
+    today = utcnow().date()
+    async with SessionLocal() as db:
+        stmt = pg_insert(ProactiveStat).values(day=today, shown=1)
+        await db.execute(stmt.on_conflict_do_update(index_elements=[ProactiveStat.day], set_={"shown": ProactiveStat.shown + 1}))
+        await db.commit()
+    return InviteResponse(message=cfg.proactive.message_for(body.page_url), suggestions=PROACTIVE_SUGGESTIONS)
+
+
+@router.post("/proactive/start", response_model=ProactiveStartResponse)
+async def proactive_start(body: InviteRequest, request: Request) -> ProactiveStartResponse:
+    """The visitor engaged with the invite: open a conversation already in the lead flow."""
+    cfg = await _proactive_config()
+    ip_digest = ip_hash(client_ip(request))
+    async with SessionLocal() as db:
+        recent = await db.scalar(
+            select(func.count(Conversation.id)).where(
+                Conversation.ip_hash == ip_digest,
+                Conversation.proactive.is_(True),
+                Conversation.created_at > utcnow() - timedelta(minutes=10),
+            )
+        )
+    # Generous: offices and mobile carriers share one IP across many visitors.
+    if (recent or 0) >= 30:
+        raise HTTPException(status.HTTP_429_TOO_MANY_REQUESTS, "Too many chats started. Please wait a moment.")
+
+    session_id = new_session_id()
+    message = cfg.proactive.message_for(body.page_url)
+    # Seed the agent: the invite is the assistant's first turn, and the lead
+    # agent handles the reply (details, "yes", or "just browsing").
+    await runtime.graph.aupdate_state(
+        {"configurable": {"thread_id": session_id}},
+        {
+            "messages": [AIMessage(content=message)],
+            "lead_stage": "collecting",
+            "lead": {},
+            "handoff": False,
+            "intent": "lead",
+            "reply": message,
+        },
+        as_node="finalize",
+    )
+    async with SessionLocal() as db:
+        db.add(
+            Conversation(
+                id=session_id,
+                ip_hash=ip_digest,
+                user_agent=(request.headers.get("user-agent") or "")[:300],
+                page_url=(body.page_url or "")[:500] or None,
+                title="(proactive invite)",
+                message_count=1,
+                last_route="lead",
+                lead_stage="collecting",
+                proactive=True,
+            )
+        )
+        await db.flush()
+        db.add(Message(conversation_id=session_id, role="assistant", content=message, route="lead", suggestions=PROACTIVE_SUGGESTIONS))
+        await db.commit()
+    return ProactiveStartResponse(session_id=session_id, message=message, suggestions=PROACTIVE_SUGGESTIONS)
 
 
 @router.get("/sessions/{session_id}")
@@ -86,6 +189,9 @@ async def get_session(session_id: str) -> dict:
 async def _ensure_conversation(session_id: str, ip_digest: str, request: Request, page_url: str | None, first_message: str) -> None:
     async with SessionLocal() as db:
         convo = await db.get(Conversation, session_id)
+        if convo is not None and convo.proactive and convo.title == "(proactive invite)":
+            convo.title = first_message[:200]
+            await db.commit()
         if convo is None:
             db.add(
                 Conversation(
@@ -151,61 +257,79 @@ async def chat(body: ChatRequest, request: Request) -> StreamingResponse:
     await enforce_rate_limits(session_id, ip_digest)
     await _ensure_conversation(session_id, ip_digest, request, body.page_url, message)
 
+    config = {
+        "configurable": {
+            "thread_id": session_id,
+            "session_id": session_id,
+            "site": cfg,
+            "llm": request.app.state.llm,
+            "kb": kb,
+            "leads": backend,
+        },
+        "recursion_limit": 12,
+    }
+    # The turn runs as its own task and the response only relays its events:
+    # if the visitor closes the tab mid-reply, the turn still finishes and is
+    # saved (e.g. right after a lead was sent to dispatch).
+    events: asyncio.Queue[str | None] = asyncio.Queue()
+
+    async def run_turn() -> None:
+        started = time.monotonic()
+        try:
+            # One turn at a time per conversation, across workers.
+            async with engine.connect() as raw_conn:
+                # Autocommit: a session-level lock without an idle open transaction.
+                lock_conn = await raw_conn.execution_options(isolation_level="AUTOCOMMIT")
+                locked = await lock_conn.scalar(text("SELECT pg_try_advisory_lock(:k)"), {"k": session_lock_key(session_id)})
+                if not locked:
+                    await events.put(sse("error", {"message": "Still working on your previous message. One moment please."}))
+                    return
+                try:
+                    await _save_user_message(session_id, message, ip_digest)
+                    final: dict = {}
+                    async with asyncio.timeout(TURN_TIMEOUT_SECONDS):
+                        async for mode, chunk in runtime.graph.astream(
+                            {"messages": [HumanMessage(content=message)]},
+                            config=config,
+                            stream_mode=["custom", "values"],
+                        ):
+                            if mode == "custom" and isinstance(chunk, dict):
+                                kind = chunk.get("type", "token")
+                                await events.put(sse(kind, {k: v for k, v in chunk.items() if k != "type"}))
+                            elif mode == "values":
+                                final = chunk
+                    latency = int((time.monotonic() - started) * 1000)
+                    await _save_turn(session_id, final, latency)
+                    await events.put(
+                        sse(
+                            "done",
+                            {
+                                "reply": final.get("reply", ""),
+                                "suggestions": final.get("suggestions") or [],
+                                "sources": final.get("sources") or [],
+                                "lead_stage": final.get("lead_stage") or "none",
+                            },
+                        )
+                    )
+                except TimeoutError:
+                    log.error("Turn timed out for %s", session_id)
+                    await events.put(sse("error", {"message": f"Sorry, that took too long. Please try again or call dispatch at {cfg.dispatch_phone}."}))
+                except Exception:  # noqa: BLE001 - the visitor gets a clean message, we get the trace
+                    log.exception("Chat turn failed for %s", session_id)
+                    await events.put(sse("error", {"message": f"Sorry, something went wrong. Please try again or call dispatch at {cfg.dispatch_phone}."}))
+                finally:
+                    await lock_conn.execute(text("SELECT pg_advisory_unlock(:k)"), {"k": session_lock_key(session_id)})
+        finally:
+            await events.put(None)
+
+    task = asyncio.create_task(run_turn())
+    _running_turns.add(task)
+    task.add_done_callback(_running_turns.discard)
+
     async def stream() -> AsyncIterator[str]:
         yield sse("session", {"session_id": session_id})
-        started = time.monotonic()
-        # One turn at a time per conversation, across workers.
-        async with engine.connect() as raw_conn:
-            # Autocommit: a session-level lock without an idle open transaction.
-            lock_conn = await raw_conn.execution_options(isolation_level="AUTOCOMMIT")
-            locked = await lock_conn.scalar(text("SELECT pg_try_advisory_lock(:k)"), {"k": session_lock_key(session_id)})
-            if not locked:
-                yield sse("error", {"message": "Still working on your previous message. One moment please."})
-                return
-            try:
-                await _save_user_message(session_id, message, ip_digest)
-                config = {
-                    "configurable": {
-                        "thread_id": session_id,
-                        "session_id": session_id,
-                        "site": cfg,
-                        "llm": request.app.state.llm,
-                        "kb": kb,
-                        "leads": backend,
-                    },
-                    "recursion_limit": 12,
-                }
-                final: dict = {}
-                async with asyncio.timeout(TURN_TIMEOUT_SECONDS):
-                    async for mode, chunk in runtime.graph.astream(
-                        {"messages": [HumanMessage(content=message)]},
-                        config=config,
-                        stream_mode=["custom", "values"],
-                    ):
-                        if mode == "custom" and isinstance(chunk, dict):
-                            kind = chunk.get("type", "token")
-                            yield sse(kind, {k: v for k, v in chunk.items() if k != "type"})
-                        elif mode == "values":
-                            final = chunk
-                latency = int((time.monotonic() - started) * 1000)
-                await _save_turn(session_id, final, latency)
-                yield sse(
-                    "done",
-                    {
-                        "reply": final.get("reply", ""),
-                        "suggestions": final.get("suggestions") or [],
-                        "sources": final.get("sources") or [],
-                        "lead_stage": final.get("lead_stage") or "none",
-                    },
-                )
-            except TimeoutError:
-                log.error("Turn timed out for %s", session_id)
-                yield sse("error", {"message": f"Sorry, that took too long. Please try again or call dispatch at {cfg.dispatch_phone}."})
-            except Exception:  # noqa: BLE001 - the visitor gets a clean message, we get the trace
-                log.exception("Chat turn failed for %s", session_id)
-                yield sse("error", {"message": f"Sorry, something went wrong. Please try again or call dispatch at {cfg.dispatch_phone}."})
-            finally:
-                await lock_conn.execute(text("SELECT pg_advisory_unlock(:k)"), {"k": session_lock_key(session_id)})
+        while (item := await events.get()) is not None:
+            yield item
 
     return StreamingResponse(
         stream(),

@@ -12,6 +12,7 @@ from sqlalchemy import (
     BigInteger,
     Boolean,
     Column,
+    Date,
     DateTime,
     Float,
     ForeignKey,
@@ -56,6 +57,8 @@ class Conversation(Base):
     handoff = Column(Boolean, default=False, nullable=False)
     # Guard rewrote or blocked something in this conversation.
     flagged = Column(Boolean, default=False, nullable=False)
+    # Started from the proactive invite (not by the visitor opening the chat).
+    proactive = Column(Boolean, default=False, nullable=False, server_default=text("false"))
 
 
 class Message(Base):
@@ -72,6 +75,15 @@ class Message(Base):
     flagged = Column(Boolean, default=False, nullable=False)
     ip_hash = Column(String(64), index=True)
     created_at = Column(DateTime(timezone=True), default=utcnow, nullable=False, index=True)
+
+
+class ProactiveStat(Base):
+    """Daily count of proactive invites shown (opened = proactive conversations)."""
+
+    __tablename__ = "proactive_stats"
+
+    day = Column(Date, primary_key=True)
+    shown = Column(Integer, default=0, nullable=False)
 
 
 class KbPage(Base):
@@ -145,7 +157,15 @@ async def startup_lock():
             await conn.execute(text("SELECT pg_advisory_unlock(:k)"), {"k": STARTUP_LOCK_KEY})
 
 
+# Columns added after the first release (create_all never alters tables).
+COLUMN_UPGRADES = [
+    ("conversations", "proactive", "BOOLEAN NOT NULL DEFAULT FALSE"),
+]
+
+
 async def init_db() -> None:
     async with engine.begin() as conn:
         await conn.execute(text(f'CREATE SCHEMA IF NOT EXISTS "{settings.db_schema}"'))
         await conn.run_sync(metadata.create_all)
+        for table, column, ddl in COLUMN_UPGRADES:
+            await conn.execute(text(f'ALTER TABLE "{settings.db_schema}"."{table}" ADD COLUMN IF NOT EXISTS "{column}" {ddl}'))

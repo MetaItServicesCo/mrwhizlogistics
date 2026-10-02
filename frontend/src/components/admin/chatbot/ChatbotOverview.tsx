@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Box from "@mui/material/Box";
+import Alert from "@mui/material/Alert";
 import Button from "@mui/material/Button";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
@@ -21,6 +22,46 @@ interface Stats {
   routes: Record<string, number>;
   daily: { date: string; conversations: number; leads: number }[];
   unanswered: { conversation_id: string; question: string; created_at: string }[];
+  proactive: { shown: number; opened: number; leads: number };
+}
+
+interface SystemStatus {
+  ok: boolean;
+  problems: { area: "model" | "knowledge"; message: string }[];
+  model: { provider: string; chat_model: string; reachable: boolean };
+  knowledge: { chunks: number; last_success: string | null };
+}
+
+/** Live health: shown only when something needs attention. */
+function StatusBanner() {
+  const { data, error, reload } = useChatAdmin<SystemStatus>("/status");
+  if (error) return <Alert severity="error" sx={{ borderRadius: "12px" }}>{error}</Alert>;
+  if (!data) return null;
+  if (data.ok)
+    return (
+      <Typography sx={{ fontSize: 12.5, color: "rgba(255,255,255,0.5)" }}>
+        ● Model {data.model.chat_model} reachable · {data.knowledge.chunks} website passages indexed
+      </Typography>
+    );
+  return (
+    <Alert
+      severity={data.problems.some((p) => p.area === "model") ? "error" : "warning"}
+      action={
+        <Button color="inherit" size="small" onClick={reload} sx={{ textTransform: "none", fontWeight: 700 }}>
+          Re-check
+        </Button>
+      }
+      sx={{ borderRadius: "12px" }}
+    >
+      <Typography sx={{ fontWeight: 800, fontSize: 14, mb: 0.5 }}>The assistant needs attention. Visitors currently get basic replies.</Typography>
+      {data.problems.map((p) => (
+        <Typography key={p.area} sx={{ fontSize: 13 }}>
+          {p.area === "model" ? "AI model: " : "Website knowledge: "}
+          {p.message}
+        </Typography>
+      ))}
+    </Alert>
+  );
 }
 
 // Deeper step of the brand lime: passes the dark-surface lightness band
@@ -141,8 +182,10 @@ export default function ChatbotOverview({ onOpenConversation }: { onOpenConversa
   const routes = Object.entries(data.routes).sort((a, b) => b[1] - a[1]);
   const routeTotal = routes.reduce((sum, [, n]) => sum + n, 0) || 1;
 
+  const pro = data.proactive;
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
+      <StatusBanner />
       <Box sx={{ display: "flex", alignItems: "center", gap: 2, flexWrap: "wrap" }}>
         <Typography sx={{ flex: 1, fontSize: 14, color: "rgba(255,255,255,0.6)" }}>
           How visitors use the assistant, and how many become call-back leads.
@@ -171,6 +214,20 @@ export default function ChatbotOverview({ onOpenConversation }: { onOpenConversa
           hint={data.flagged ? `${data.flagged} conversation${data.flagged === 1 ? "" : "s"} flagged by guards` : "No guard flags"}
         />
       </Box>
+
+      <Panel sx={{ p: { xs: 2, md: 3 } }}>
+        <Typography component="h2" sx={{ fontSize: 15, fontWeight: 800, color: "#fff", mb: 0.5 }}>
+          Proactive invites
+        </Typography>
+        <Typography sx={{ fontSize: 12.5, color: "rgba(255,255,255,0.5)", mb: 2 }}>
+          The call-back offer shown to visitors who stay on the site without opening the chat.
+        </Typography>
+        <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", sm: "repeat(3, 1fr)" }, gap: 2 }}>
+          <StatTile label="Shown" value={pro.shown.toLocaleString()} />
+          <StatTile label="Opened" value={pro.opened.toLocaleString()} hint={pro.shown ? `${pct(pro.opened / pro.shown)} of invites shown` : undefined} />
+          <StatTile label="Leads from invites" value={pro.leads.toLocaleString()} hint={pro.opened ? `${pct(pro.leads / pro.opened)} of opened invites` : undefined} />
+        </Box>
+      </Panel>
 
       <Panel sx={{ p: { xs: 2, md: 3 } }}>
         <Typography component="h2" sx={{ fontSize: 15, fontWeight: 800, color: "#fff", mb: 3 }}>

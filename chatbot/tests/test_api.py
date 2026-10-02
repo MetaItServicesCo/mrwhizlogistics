@@ -175,3 +175,48 @@ async def test_admin_api(client):
 
     assert (await client.delete(f"/chat-api/admin/conversations/{sid}", headers=auth)).status_code == 204
     assert (await client.get(f"/chat-api/admin/conversations/{sid}", headers=auth)).status_code == 404
+
+
+async def test_proactive_invite_start_and_reply(client, offline_backend):
+    resp = await client.post("/chat-api/proactive/invite", json={"page_url": "/hot-shot/20-feet-flat-bed"})
+    assert resp.status_code == 200
+    invite = resp.json()
+    assert "hot shot truck" in invite["message"] and invite["suggestions"] == ["Yes, call me", "Just browsing"]
+
+    start = (await client.post("/chat-api/proactive/start", json={"page_url": "/hot-shot/20-feet-flat-bed"})).json()
+    sid = start["session_id"]
+    assert start["message"] == invite["message"]
+    restored = (await client.get(f"/chat-api/sessions/{sid}")).json()
+    assert restored["lead_stage"] == "collecting" and [m["role"] for m in restored["messages"]] == ["assistant"]
+
+    _, events = await send(client, "Lena Brooks 469 767 2211", sid)
+    assert events[-1][1]["lead_stage"] == "confirming"
+    _, events = await send(client, "yes", sid)
+    assert events[-1][1]["lead_stage"] == "submitted" and len(offline_backend.created) == 1
+
+
+async def test_proactive_decline(client):
+    sid = (await client.post("/chat-api/proactive/start", json={"page_url": "/"})).json()["session_id"]
+    _, events = await send(client, "Just browsing", sid)
+    assert events[-1][1]["lead_stage"] == "none"
+
+
+async def test_proactive_disabled(client, site):
+    site.proactive.enabled = False
+    assert (await client.post("/chat-api/proactive/invite", json={})).status_code == 404
+    assert (await client.post("/chat-api/proactive/start", json={})).status_code == 404
+    config = (await client.get("/chat-api/config")).json()
+    assert config["proactive"]["enabled"] is False
+
+
+async def test_status_and_proactive_stats(client):
+    token = await _admin_token()
+    if not token:
+        pytest.skip("No active user in public.users to sign a dashboard token for")
+    auth = {"Authorization": f"Bearer {token}"}
+    status_body = (await client.get("/chat-api/admin/status", headers=auth)).json()
+    assert status_body["model"]["reachable"] is True and status_body["model"]["provider"] == "fake"
+    stats = (await client.get("/chat-api/admin/stats?days=7", headers=auth)).json()
+    assert stats["proactive"]["shown"] >= 1 and stats["proactive"]["opened"] >= 2 and stats["proactive"]["leads"] >= 1
+    proactive_only = (await client.get("/chat-api/admin/conversations?filter=proactive", headers=auth)).json()
+    assert proactive_only["items"] and all(c["proactive"] for c in proactive_only["items"])

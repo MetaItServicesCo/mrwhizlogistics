@@ -17,7 +17,7 @@ from langgraph.config import get_stream_writer
 from app.agent import lead as lead_rules
 from app.agent import prompts
 from app.agent.guards import check_input, check_output
-from app.agent.llm import FakeLLM, LeadExtraction, LLMUnavailable, RouteDecision
+from app.agent.llm import _DECLINE, FakeLLM, LeadExtraction, LLMUnavailable, RouteDecision
 from app.agent.state import ChatState
 from app.config import get_settings
 from app.knowledge.base import public_link
@@ -124,6 +124,9 @@ async def router(state: ChatState, config: RunnableConfig) -> dict:
     # Answering the confirmation question needs no model call.
     if stage == "confirming" and (_QUICK_YES.match(text) or _QUICK_NO.match(text)):
         return {"intent": "lead", "search_query": text}
+    # Turning down the call-back offer ends the lead flow (handled by the lead agent).
+    if stage == "collecting" and _DECLINE.search(text) and len(text) < 60:
+        return {"intent": "lead", "search_query": text}
 
     lead = state.get("lead", {})
     if stage in ("collecting", "confirming"):
@@ -131,7 +134,7 @@ async def router(state: ChatState, config: RunnableConfig) -> dict:
         lead_state = (
             "LEAD FLOW: ACTIVE. The assistant is collecting callback details"
             + (f" (still missing: {', '.join(missing)})." if missing else " and asked the visitor to confirm them.")
-            + " Messages that provide details or answer the assistant are 'lead'; a clear new question is 'knowledge'."
+            + " Messages that provide details, answer the assistant or decline the call are 'lead'; a clear new question is 'knowledge'."
         )
     elif stage == "submitted":
         lead_state = "LEAD FLOW: SUBMITTED. A dispatcher will call the visitor; extra shipment details they share are 'lead'."
@@ -328,7 +331,21 @@ async def lead_agent(state: ChatState, config: RunnableConfig) -> dict:
             reply = await _compose(llm, site, state, instruction, fallback, lead)
             return out | {"lead_stage": "collecting", "reply": reply, "suggestions": [], "sources": []}
 
-    # 4) Collect what's missing, or ask to confirm.
+    # 4) Visitor doesn't want a call now: leave the flow politely, no nagging.
+    # A short decline ("just browsing") wins over a name read from the same words.
+    declined = extracted.declined or (bool(_DECLINE.search(text)) and len(text) < 60)
+    if stage in ("none", "collecting") and declined and "phone" not in changed:
+        lead = before
+        out["lead"] = before
+        instruction = (
+            "They don't want a call right now. Acknowledge warmly in one sentence, say they can ask any question "
+            f"here or call {site.dispatch_phone} whenever they're ready. Do not ask for their details."
+        )
+        fallback = f"No problem! Ask me anything about our services, or call {site.dispatch_phone} whenever you're ready."
+        reply = await _compose(llm, site, state, instruction, fallback, lead)
+        return out | {"lead_stage": "none", "handoff": False, "reply": reply, "suggestions": ["What services do you offer?"], "sources": []}
+
+    # 5) Collect what's missing, or ask to confirm.
     if lead_rules.missing_required(lead) or "phone" in problems:
         instruction, fallback = _ask_missing(lead, handoff, "phone" in problems, site.dispatch_phone)
         reply = await _compose(llm, site, state, instruction, fallback, lead)

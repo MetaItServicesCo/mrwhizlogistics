@@ -2,10 +2,12 @@
 
 from datetime import timedelta
 
-from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Query, status
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Query, Request, status
 from sqlalchemy import Integer, cast, delete, func, or_, select
 
-from app.db import Conversation, KbChunk, KbPage, KbRun, Message, SessionLocal, utcnow
+from app.agent.llm import health as llm_health
+from app.config import get_settings
+from app.db import Conversation, KbChunk, KbPage, KbRun, Message, ProactiveStat, SessionLocal, utcnow
 from app.knowledge.base import kb, public_link
 from app.runtime import runtime
 from app.security import require_admin, valid_session_id
@@ -28,12 +30,13 @@ def _conversation_row(c: Conversation) -> dict:
         "lead_id": c.lead_id,
         "handoff": c.handoff,
         "flagged": c.flagged,
+        "proactive": c.proactive,
     }
 
 
 @router.get("/conversations")
 async def list_conversations(
-    filter: str = Query("all", pattern="^(all|leads|handoff|flagged)$"),
+    filter: str = Query("all", pattern="^(all|leads|handoff|flagged|proactive)$"),
     q: str | None = Query(None, max_length=100),
     page: int = Query(1, ge=1),
     size: int = Query(25, ge=1, le=100),
@@ -45,6 +48,8 @@ async def list_conversations(
         query = query.where(Conversation.handoff.is_(True))
     elif filter == "flagged":
         query = query.where(Conversation.flagged.is_(True))
+    elif filter == "proactive":
+        query = query.where(Conversation.proactive.is_(True))
     if q:
         like = f"%{q.strip()}%"
         matching = select(Message.conversation_id).where(Message.content.ilike(like))
@@ -154,6 +159,14 @@ async def stats(days: int = Query(30, ge=1, le=365)) -> dict:
             )
             if question:
                 questions.append({"conversation_id": convo_id, "question": question, "created_at": created.isoformat()})
+        shown = await db.scalar(select(func.coalesce(func.sum(ProactiveStat.shown), 0)).where(ProactiveStat.day >= since.date()))
+        opened, proactive_leads = (
+            await db.execute(
+                select(func.count(), func.coalesce(func.sum(cast(Conversation.lead_id.is_not(None), Integer)), 0)).where(
+                    Conversation.proactive.is_(True), Conversation.created_at >= since
+                )
+            )
+        ).one()
     conversations, leads, handoffs, flagged, messages = (int(v or 0) for v in totals)
     return {
         "days": days,
@@ -167,6 +180,7 @@ async def stats(days: int = Query(30, ge=1, le=365)) -> dict:
         "routes": {r or "unknown": int(n) for r, n in routes},
         "daily": [{"date": d.date().isoformat(), "conversations": int(c), "leads": int(l)} for d, c, l in daily],
         "unanswered": questions,
+        "proactive": {"shown": int(shown or 0), "opened": int(opened or 0), "leads": int(proactive_leads or 0)},
     }
 
 
@@ -228,4 +242,42 @@ async def search_preview(q: str = Query(..., min_length=2, max_length=200)) -> d
             {"url": public_link(h.chunk.url) or h.chunk.url, "title": h.chunk.title, "heading": h.chunk.heading, "content": h.chunk.content[:600], "similarity": round(h.dense, 3)}
             for h in hits
         ],
+    }
+
+
+@router.get("/status")
+async def system_status(request: Request) -> dict:
+    """Live health for the dashboard: can we reach the model, is the knowledge base populated."""
+    settings = get_settings()
+    llm_error = await request.app.state.llm.ping()
+    async with SessionLocal() as db:
+        last_run = (await db.execute(select(KbRun).order_by(KbRun.id.desc()).limit(1))).scalars().first()
+        last_ok = (await db.execute(select(KbRun).where(KbRun.status == "ok").order_by(KbRun.id.desc()).limit(1))).scalars().first()
+        chunks = await db.scalar(select(func.count(KbChunk.id)))
+    problems = []
+    if llm_error:
+        problems.append({"area": "model", "message": llm_error})
+    if not chunks:
+        if last_run and last_run.status == "running":
+            problems.append({"area": "knowledge", "message": "Reading the website for the first time. This takes about a minute."})
+        elif last_run and last_run.status == "error":
+            problems.append({"area": "knowledge", "message": f"Reading the website failed: {last_run.error}"})
+        else:
+            problems.append({"area": "knowledge", "message": "The knowledge base is empty. Use Knowledge -> Re-read website now."})
+    elif last_run and last_run.status == "error":
+        problems.append({"area": "knowledge", "message": f"The last website refresh failed (older content still in use): {last_run.error}"})
+    return {
+        "ok": not problems,
+        "problems": problems,
+        "model": {
+            "provider": settings.llm_provider,
+            "chat_model": settings.chat_model,
+            "router_model": settings.router_model,
+            "reachable": llm_error is None,
+            "last_error": llm_health.last_error,
+        },
+        "knowledge": {
+            "chunks": chunks or 0,
+            "last_success": last_ok.finished_at.isoformat() if last_ok and last_ok.finished_at else None,
+        },
     }

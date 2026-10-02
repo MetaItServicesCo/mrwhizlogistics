@@ -64,6 +64,7 @@ export default async function PublicLayout({
           greeting: chatbot.greeting,
           quickPrompts: chatbot.quick_prompts,
           phone: settings.phone,
+          proactive: chatbot.proactive,
         }}
       />
       <AdminBar />

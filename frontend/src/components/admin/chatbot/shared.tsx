@@ -19,6 +19,7 @@ export interface ConversationRow {
   lead_id: number | null;
   handoff: boolean;
   flagged: boolean;
+  proactive: boolean;
 }
 
 export interface TranscriptMessage {

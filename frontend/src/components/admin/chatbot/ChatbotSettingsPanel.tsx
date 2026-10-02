@@ -7,12 +7,22 @@ import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
 import IconButton from "@mui/material/IconButton";
 import Switch from "@mui/material/Switch";
+import ToggleButton from "@mui/material/ToggleButton";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import Typography from "@mui/material/Typography";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import DeleteOutlineRoundedIcon from "@mui/icons-material/DeleteOutlineRounded";
 import { api } from "@/lib/api";
 import { chatAdmin } from "@/lib/chatClient";
-import { CHATBOT_DEFAULTS, CHATBOT_SETTINGS_KEY, LIMITS, parseChatbotSettings, type ChatbotSettings } from "@/lib/chatbotSettings";
+import {
+  CHATBOT_DEFAULTS,
+  CHATBOT_SETTINGS_KEY,
+  LIMITS,
+  PROACTIVE_DEFAULTS,
+  parseChatbotSettings,
+  type ChatbotSettings,
+  type ProactiveSettings,
+} from "@/lib/chatbotSettings";
 import { errorMessage, useResource } from "@/lib/useResource";
 import type { SiteSetting } from "@/lib/types";
 import { ErrorState, Field, LIME, LoadingState, Panel, Toast } from "@/components/admin/ui";
@@ -94,7 +104,14 @@ export default function ChatbotSettingsPanel() {
           ? `Each fact must be ${LIMITS.fact} characters or fewer.`
           : !Number.isInteger(draft.retention_days) || draft.retention_days < LIMITS.minDays || draft.retention_days > LIMITS.maxDays
             ? `Keep transcripts between ${LIMITS.minDays} and ${LIMITS.maxDays} days.`
-            : null;
+            : !Number.isInteger(draft.proactive.delay_seconds) ||
+                draft.proactive.delay_seconds < LIMITS.minDelay ||
+                draft.proactive.delay_seconds > LIMITS.maxDelay
+              ? `The invite delay must be between ${LIMITS.minDelay} and ${LIMITS.maxDelay} seconds.`
+              : draft.proactive.message.length > LIMITS.invite
+                ? `The invite message must be ${LIMITS.invite} characters or fewer.`
+                : null;
+  const setPro = (patch: Partial<ProactiveSettings>) => setDraft((d) => ({ ...d, proactive: { ...d.proactive, ...patch } }));
 
   const save = async () => {
     setSaving(true);
@@ -105,6 +122,10 @@ export default function ChatbotSettingsPanel() {
       quick_prompts: draft.quick_prompts.map((p) => p.trim()).filter(Boolean),
       facts: draft.facts.map((f) => f.trim()).filter(Boolean),
       retention_days: draft.retention_days,
+      proactive: {
+        ...draft.proactive,
+        message: draft.proactive.message.trim() || PROACTIVE_DEFAULTS.message,
+      },
     };
     const factsChanged = JSON.stringify(clean.facts) !== JSON.stringify(saved.facts);
     try {
@@ -198,6 +219,64 @@ export default function ChatbotSettingsPanel() {
           placeholder="One fact per line"
           multiline
           onChange={(facts) => set({ facts })}
+        />
+      </Panel>
+
+      <Panel sx={{ p: { xs: 2, md: 3 }, display: "flex", flexDirection: "column", gap: 2.5 }}>
+        <Box component="label" sx={{ display: "flex", alignItems: "center", gap: 2, cursor: "pointer" }}>
+          <Box sx={{ flex: 1 }}>
+            <Typography component="h2" sx={{ fontSize: 16, fontWeight: 800, color: "#fff", mb: 0.5 }}>
+              Invite visitors to talk
+            </Typography>
+            <Typography sx={{ fontSize: 13, color: "rgba(255,255,255,0.55)" }}>
+              After a visitor has been active on the site for a while without opening the chat, the assistant offers a call
+              back. Once per visit; not again for 24 hours after &quot;Not now&quot;; never after they&apos;ve left their number.
+            </Typography>
+          </Box>
+          <Switch
+            checked={draft.proactive.enabled}
+            onChange={(e) => setPro({ enabled: e.target.checked })}
+            slotProps={{ input: { "aria-label": "Invite visitors to talk" } }}
+            sx={{ "& .MuiSwitch-switchBase.Mui-checked": { color: LIME }, "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": { bgcolor: LIME } }}
+          />
+        </Box>
+        <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", md: "200px 1fr" }, gap: 2, opacity: draft.proactive.enabled ? 1 : 0.55 }}>
+          <Field
+            type="number"
+            label="Show after (seconds)"
+            value={draft.proactive.delay_seconds}
+            onChange={(e) => setPro({ delay_seconds: Number(e.target.value) })}
+            helperText="Active time on the site, across pages."
+            slotProps={{ ...shrink, htmlInput: { min: LIMITS.minDelay, max: LIMITS.maxDelay } }}
+          />
+          <Box>
+            <Typography sx={{ fontSize: 12.5, color: "rgba(255,255,255,0.6)", mb: 0.8 }}>How it appears</Typography>
+            <ToggleButtonGroup
+              exclusive
+              size="small"
+              value={draft.proactive.mode}
+              onChange={(_, v) => v && setPro({ mode: v })}
+              aria-label="How the invite appears"
+              sx={{ "& .MuiToggleButton-root": { color: "rgba(255,255,255,0.65)", borderColor: "rgba(255,255,255,0.14)", textTransform: "none", px: 2 }, "& .Mui-selected": { color: "#0a0a0a !important", bgcolor: `${LIME} !important` } }}
+            >
+              <ToggleButton value="bubble">Message bubble (recommended)</ToggleButton>
+              <ToggleButton value="open">Open the chat window</ToggleButton>
+            </ToggleButtonGroup>
+            <Typography sx={{ fontSize: 12, color: "rgba(255,255,255,0.45)", mt: 0.8 }}>
+              Phones always get the bubble: full-screen pop-ups annoy visitors and Google penalises them.
+            </Typography>
+          </Box>
+        </Box>
+        <Field
+          label="Invite message"
+          value={draft.proactive.message}
+          placeholder={PROACTIVE_DEFAULTS.message}
+          onChange={(e) => setPro({ message: e.target.value })}
+          multiline
+          minRows={2}
+          error={draft.proactive.message.length > LIMITS.invite}
+          helperText="{service} becomes “a hot shot truck”, “a box truck”, “a semi truck”, “a trailer rental” or “a truck” depending on the page. End with a question so visitors can simply reply with their name and number."
+          slotProps={shrink}
         />
       </Panel>
 

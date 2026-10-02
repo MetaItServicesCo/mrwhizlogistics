@@ -32,6 +32,38 @@ DEFAULT_QUICK_PROMPTS = [
     "Call me back",
 ]
 
+# Proactive invite: shown after the visitor has been on the site a while
+# without opening the chat. {service} adapts to the page they are on.
+DEFAULT_PROACTIVE_MESSAGE = (
+    "Need {service}? A dispatcher can call you in minutes with a free quote. "
+    "What's your name and the best number to reach you?"
+)
+PROACTIVE_SUGGESTIONS = ["Yes, call me", "Just browsing"]
+SERVICE_BY_SECTION = {
+    "hot-shot": "a hot shot truck",
+    "box-truck": "a box truck",
+    "semi-truck": "a semi truck",
+    "rentals": "a trailer rental",
+}
+
+
+def service_for_page(page_url: str | None) -> str:
+    section = (page_url or "/").split("?")[0].strip("/").split("/")[0]
+    return SERVICE_BY_SECTION.get(section, "a truck")
+
+
+@dataclass
+class ProactiveConfig:
+    enabled: bool = True
+    delay_seconds: int = 30
+    message: str = DEFAULT_PROACTIVE_MESSAGE
+    # "bubble": a message bubble by the chat button; "open": open the chat
+    # window (desktop only; phones always get the bubble).
+    mode: str = "bubble"
+
+    def message_for(self, page_url: str | None) -> str:
+        return self.message.replace("{service}", service_for_page(page_url))
+
 
 @dataclass
 class ChatbotConfig:
@@ -41,6 +73,7 @@ class ChatbotConfig:
     # Short facts the assistant must always know (also indexed as knowledge).
     facts: list[str] = field(default_factory=list)
     retention_days: int = 90
+    proactive: ProactiveConfig = field(default_factory=ProactiveConfig)
     company_name: str = "Mr. Whiz Logistics"
     phone: str = ""
     email: str = ""
@@ -88,6 +121,17 @@ def parse_config(rows: list[dict]) -> ChatbotConfig:
         days = stored.get("retention_days")
         if isinstance(days, int) and 7 <= days <= 3650:
             cfg.retention_days = days
+        pro = stored.get("proactive")
+        if isinstance(pro, dict):
+            if isinstance(pro.get("enabled"), bool):
+                cfg.proactive.enabled = pro["enabled"]
+            delay = pro.get("delay_seconds")
+            if isinstance(delay, int) and 5 <= delay <= 600:
+                cfg.proactive.delay_seconds = delay
+            if isinstance(pro.get("message"), str) and pro["message"].strip():
+                cfg.proactive.message = pro["message"].strip()[:400]
+            if pro.get("mode") in ("bubble", "open"):
+                cfg.proactive.mode = pro["mode"]
     cfg.company_name = (values.get("company_name") or cfg.company_name).strip() or cfg.company_name
     cfg.phone = (values.get("phone") or "").strip()
     cfg.email = (values.get("email") or "").strip()

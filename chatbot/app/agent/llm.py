@@ -12,6 +12,7 @@ never on a provider SDK:
 import asyncio
 import logging
 import re
+import time
 from collections.abc import AsyncIterator
 from typing import Literal, Optional, Protocol
 
@@ -53,10 +54,48 @@ class LeadExtraction(BaseModel):
         "none",
         description="Only if the assistant's last message asked the visitor to confirm their callback details: yes if they confirmed, no if they want to change something, otherwise none.",
     )
+    declined: bool = Field(
+        False,
+        description="True only if the visitor clearly says they don't want a call or quote right now (e.g. 'no thanks', 'just browsing', 'not now').",
+    )
 
 
 class LLMUnavailable(RuntimeError):
     """Every model attempt failed (rate limits, outage, timeout)."""
+
+
+class LLMHealth:
+    """Last outcome of model calls in this worker (Dashboard -> AI Assistant status)."""
+
+    def __init__(self) -> None:
+        self.last_ok: float | None = None
+        self.last_error: str | None = None
+        self.last_error_at: float | None = None
+
+    def ok(self) -> None:
+        self.last_ok = time.time()
+
+    def failed(self, exc: Exception) -> None:
+        self.last_error = describe_error(exc)
+        self.last_error_at = time.time()
+
+
+def describe_error(exc: Exception) -> str:
+    """A short, key-free explanation of a provider error for admins."""
+    text = str(exc)
+    lowered = text.lower()
+    if "invalid_api_key" in lowered or "invalid api key" in lowered or "401" in lowered:
+        return "Groq rejected the API key (401). Check GROQ_API_KEY in .env, without quotes or spaces, then recreate the chatbot container."
+    if "model_not_found" in lowered or "does not exist" in lowered or "decommissioned" in lowered:
+        return f"The configured model is not available on Groq: {text[:200]}"
+    if "rate_limit" in lowered or "429" in lowered:
+        return "Groq rate limit reached (429). Replies fall back to basic answers until the limit resets; consider a higher Groq tier."
+    if "connect" in lowered or "timed out" in lowered or "timeout" in lowered or "name resolution" in lowered:
+        return f"Could not reach Groq from the server (network/firewall): {text[:200]}"
+    return text[:300]
+
+
+health = LLMHealth()
 
 
 class ChatLLM(Protocol):
@@ -65,6 +104,8 @@ class ChatLLM(Protocol):
     async def extract_lead(self, system: str, history: list[BaseMessage]) -> LeadExtraction: ...
 
     def stream(self, system: str, history: list[BaseMessage], fallback: str | None = None) -> AsyncIterator[str]: ...
+
+    async def ping(self) -> str | None: ...
 
 
 # =========================================================================== Groq
@@ -100,13 +141,18 @@ class GroqLLM:
             [fallback_fast.with_structured_output(LeadExtraction)]
         )
         self._sem = asyncio.Semaphore(settings.llm_max_concurrency)
+        # Health checks call the model once, without retries or fallbacks.
+        self._ping_model = ChatGroq(model=settings.router_model, api_key=settings.groq_api_key, max_retries=0, timeout=10, max_tokens=5)
 
     async def route(self, system: str, history: list[BaseMessage]) -> RouteDecision:
         async with self._sem:
             try:
                 result = await self._router.ainvoke([SystemMessage(system), *history])
             except Exception as exc:  # noqa: BLE001
+                health.failed(exc)
+                log.warning("Router model failed: %s", describe_error(exc))
                 raise LLMUnavailable(str(exc)) from exc
+        health.ok()
         return result if isinstance(result, RouteDecision) else RouteDecision.model_validate(result)
 
     async def extract_lead(self, system: str, history: list[BaseMessage]) -> LeadExtraction:
@@ -114,7 +160,10 @@ class GroqLLM:
             try:
                 result = await self._extractor.ainvoke([SystemMessage(system), *history])
             except Exception as exc:  # noqa: BLE001
+                health.failed(exc)
+                log.warning("Extraction model failed: %s", describe_error(exc))
                 raise LLMUnavailable(str(exc)) from exc
+        health.ok()
         return result if isinstance(result, LeadExtraction) else LeadExtraction.model_validate(result)
 
     async def stream(self, system: str, history: list[BaseMessage], fallback: str | None = None) -> AsyncIterator[str]:
@@ -126,8 +175,10 @@ class GroqLLM:
                     if piece:
                         emitted = True
                         yield piece
+                health.ok()
             except Exception as exc:  # noqa: BLE001
-                log.warning("LLM stream failed: %s", exc)
+                health.failed(exc)
+                log.warning("Chat model failed: %s", describe_error(exc))
                 if emitted:
                     # Mid-answer failure: close the sentence gracefully.
                     yield "…"
@@ -137,12 +188,24 @@ class GroqLLM:
                     return
                 raise LLMUnavailable(str(exc)) from exc
 
+    async def ping(self) -> str | None:
+        """Live check of the router model: None when healthy, else the reason."""
+        try:
+            async with asyncio.timeout(15):
+                await self._ping_model.ainvoke("Reply with OK.")
+            health.ok()
+            return None
+        except Exception as exc:  # noqa: BLE001
+            health.failed(exc)
+            return describe_error(exc)
+
 
 # =========================================================================== Fake
 
 _PHONE = re.compile(r"(\+?1[\s.-]?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}")
 _EMAIL = re.compile(r"[\w.+-]+@[\w-]+\.[\w.]+")
 _NAME = re.compile(r"\b(?:my name is|i am|i'm|this is|name's)\s+([A-Za-z][A-Za-z'-]+(?:\s+[A-Za-z][A-Za-z'-]+)?)", re.I)
+_DECLINE = re.compile(r"\b(no thanks|no thank you|not now|not right now|just browsing|just looking|maybe later|not interested|no need|i'?m good)\b|^\s*no\s*[.!]*\s*$", re.I)
 _YES = re.compile(r"^\s*(yes|yeah|yep|yup|correct|right|sure|ok|okay|confirm|that's right|call me|please do)\b", re.I)
 _NO = re.compile(r"^\s*(no|nope|wrong|change|not right|incorrect)\b", re.I)
 _LEAD_WORDS = re.compile(r"\b(quote|price|pricing|rate|cost|book|booking|ship|move|haul|call me|call back|callback|load)\b", re.I)
@@ -168,6 +231,9 @@ def _last_ai(history: list[BaseMessage]) -> str:
 
 class FakeLLM:
     """Keyword/regex stand-in with the same contract as GroqLLM."""
+
+    async def ping(self) -> str | None:
+        return None
 
     async def route(self, system: str, history: list[BaseMessage]) -> RouteDecision:
         text = _last_human(history)
@@ -207,6 +273,8 @@ class FakeLLM:
                 break
         if m := re.search(r"\bfrom\s+([A-Za-z .]+?)\s+to\s+([A-Za-z .]+?)(?:[,.!?]|$)", text, re.I):
             out.pickup, out.delivery = m.group(1).strip(), m.group(2).strip()
+        if _DECLINE.search(text) and not (out.phone or out.name):
+            out.declined = True
         if "CONFIRMATION PENDING" in system:
             if _YES.match(text):
                 out.confirmation = "yes"

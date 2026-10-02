@@ -208,3 +208,30 @@ async def test_per_turn_fields_reset(site, fake_kb, fake_leads):
     await chat.say("Do you have reefer trailers?")
     s = await chat.say("hello")
     assert s["intent"] == "smalltalk" and s["sources"] == []
+
+
+async def test_declining_the_callback_ends_the_flow_without_nagging(site, fake_kb, fake_leads):
+    chat = Chat(site, fake_kb, fake_leads)
+    await chat.say("I need a quote")
+    s = await chat.say("no thanks, just browsing")
+    assert s["intent"] == "lead" and s["lead_stage"] == "none"
+    assert "name" not in s["reply"].lower()
+    s = await chat.say("Do you have reefer trailers for temperature-controlled loads?")
+    assert s["intent"] == "knowledge" and s["lead_stage"] == "none"
+    assert "phone" not in s["reply"].lower()  # no call-back reminder once declined
+    assert fake_leads.created == [] and s["lead"] == {}
+
+
+async def test_proactive_seeded_conversation_goes_into_lead_flow(site, fake_kb, fake_leads):
+    from langchain_core.messages import AIMessage
+
+    chat = Chat(site, fake_kb, fake_leads)
+    await chat.graph.aupdate_state(
+        {"configurable": {"thread_id": chat.thread}},
+        {"messages": [AIMessage("Need a hot shot truck? What's your name and the best number to reach you?")], "lead_stage": "collecting", "lead": {}},
+        as_node="finalize",
+    )
+    s = await chat.say("Dana Cole 469 767 2211")
+    assert s["lead_stage"] == "confirming" and s["lead"]["name"] == "Dana Cole"
+    s = await chat.say("Yes, call me")
+    assert s["lead_stage"] == "submitted" and len(fake_leads.created) == 1

@@ -6,6 +6,16 @@
 
 export const CHATBOT_SETTINGS_KEY = "chatbot_settings";
 
+export interface ProactiveSettings {
+  enabled: boolean;
+  /** Seconds of active time on the site before the invite appears. */
+  delay_seconds: number;
+  /** {service} becomes "a hot shot truck", "a box truck"... from the page. */
+  message: string;
+  /** "bubble" by the chat button, or "open" the chat window (desktop only). */
+  mode: "bubble" | "open";
+}
+
 export interface ChatbotSettings {
   enabled: boolean;
   greeting: string;
@@ -14,7 +24,15 @@ export interface ChatbotSettings {
   facts: string[];
   /** Transcripts older than this are deleted automatically. */
   retention_days: number;
+  proactive: ProactiveSettings;
 }
+
+export const PROACTIVE_DEFAULTS: ProactiveSettings = {
+  enabled: true,
+  delay_seconds: 30,
+  message: "Need {service}? A dispatcher can call you in minutes with a free quote. What's your name and the best number to reach you?",
+  mode: "bubble",
+};
 
 export const CHATBOT_DEFAULTS: ChatbotSettings = {
   enabled: true,
@@ -23,9 +41,10 @@ export const CHATBOT_DEFAULTS: ChatbotSettings = {
   quick_prompts: ["I need a shipping quote", "What services do you offer?", "Do you deliver nationwide?", "Call me back"],
   facts: [],
   retention_days: 90,
+  proactive: PROACTIVE_DEFAULTS,
 };
 
-export const LIMITS = { greeting: 500, prompt: 80, prompts: 6, fact: 600, facts: 50, minDays: 7, maxDays: 3650 };
+export const LIMITS = { greeting: 500, prompt: 80, prompts: 6, fact: 600, facts: 50, minDays: 7, maxDays: 3650, minDelay: 5, maxDelay: 600, invite: 400 };
 
 const strings = (v: unknown, max: number, count: number): string[] | null =>
   Array.isArray(v) ? v.filter((x): x is string => typeof x === "string" && !!x.trim()).map((x) => x.trim().slice(0, max)).slice(0, count) : null;
@@ -41,6 +60,8 @@ export function parseChatbotSettings(raw: string | null | undefined): ChatbotSet
   const prompts = strings(stored.quick_prompts, LIMITS.prompt, LIMITS.prompts);
   const facts = strings(stored.facts, LIMITS.fact, LIMITS.facts);
   const days = stored.retention_days;
+  const pro = (stored.proactive && typeof stored.proactive === "object" ? stored.proactive : {}) as Record<string, unknown>;
+  const delay = pro.delay_seconds;
   return {
     enabled: typeof stored.enabled === "boolean" ? stored.enabled : CHATBOT_DEFAULTS.enabled,
     greeting:
@@ -53,5 +74,15 @@ export function parseChatbotSettings(raw: string | null | undefined): ChatbotSet
       typeof days === "number" && Number.isInteger(days) && days >= LIMITS.minDays && days <= LIMITS.maxDays
         ? days
         : CHATBOT_DEFAULTS.retention_days,
+    proactive: {
+      enabled: typeof pro.enabled === "boolean" ? pro.enabled : PROACTIVE_DEFAULTS.enabled,
+      delay_seconds:
+        typeof delay === "number" && Number.isInteger(delay) && delay >= LIMITS.minDelay && delay <= LIMITS.maxDelay
+          ? delay
+          : PROACTIVE_DEFAULTS.delay_seconds,
+      message:
+        typeof pro.message === "string" && pro.message.trim() ? pro.message.trim().slice(0, LIMITS.invite) : PROACTIVE_DEFAULTS.message,
+      mode: pro.mode === "open" ? "open" : "bubble",
+    },
   };
 }

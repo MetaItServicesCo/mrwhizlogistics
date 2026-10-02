@@ -27,6 +27,7 @@ const FILTERS = [
   { value: "all", label: "All" },
   { value: "leads", label: "Leads" },
   { value: "handoff", label: "Asked for a person" },
+  { value: "proactive", label: "From invites" },
   { value: "flagged", label: "Flagged" },
 ];
 
@@ -35,6 +36,7 @@ function badges(c: ConversationRow) {
     <>
       {c.lead_id && <Pill tone="lime" label="LEAD" />}
       {!c.lead_id && c.lead_stage !== "none" && <Pill label="LEAD STARTED" />}
+      {c.proactive && <Pill label="INVITED" />}
       {c.handoff && <Pill label="PERSON" />}
       {c.flagged && <Pill tone="warn" label="FLAGGED" />}
     </>

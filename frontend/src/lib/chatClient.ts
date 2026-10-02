@@ -128,6 +128,28 @@ export async function restoreSession(sessionId: string): Promise<{ messages: Sto
   return resp.json();
 }
 
+export interface Invite {
+  message: string;
+  suggestions: string[];
+}
+
+async function postJson<T>(path: string, body: unknown): Promise<T> {
+  const resp = await fetch(`${CHAT_API_URL}/chat-api${path}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  if (!resp.ok) throw new ChatHttpError(await errorText(resp), resp.status);
+  return resp.json();
+}
+
+/** The proactive invite for this page (counts one impression). */
+export const fetchInvite = (pageUrl: string) => postJson<Invite>("/proactive/invite", { page_url: pageUrl });
+
+/** The visitor engaged with the invite: a conversation already in the lead flow. */
+export const startProactive = (pageUrl: string) =>
+  postJson<Invite & { session_id: string }>("/proactive/start", { page_url: pageUrl });
+
 /** Authenticated dashboard calls to the chatbot service's admin API. */
 export async function chatAdmin<T>(path: string, init: RequestInit = {}): Promise<T> {
   const token = getToken();
