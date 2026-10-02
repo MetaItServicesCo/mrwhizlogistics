@@ -31,7 +31,8 @@ from app.config import get_settings
 from app.db import Conversation, Message, ProactiveStat, SessionLocal, engine, utcnow
 from app.knowledge.base import kb
 from app.runtime import runtime
-from app.security import client_ip, enforce_rate_limits, ip_hash, new_session_id, session_lock_key, valid_session_id
+from app.agent.llm import FakeLLM
+from app.security import client_ip, enforce_rate_limits, ip_hash, is_load_test, new_session_id, session_lock_key, valid_session_id
 from app.site import PROACTIVE_SUGGESTIONS, site_config
 
 log = logging.getLogger(__name__)
@@ -39,6 +40,20 @@ settings = get_settings()
 router = APIRouter(prefix="/chat-api", tags=["Chat"])
 
 TURN_TIMEOUT_SECONDS = 90
+_LOAD_TEST_LLM = FakeLLM()
+
+
+class _NoLeads:
+    """Load-test traffic never reaches Quote Requests or dispatch email."""
+
+    async def create_lead(self, lead: dict, session_id: str) -> int:
+        return 0
+
+    async def update_lead(self, lead_id: int, lead: dict) -> None:
+        return None
+
+
+_NO_LEADS = _NoLeads()
 # Strong references keep in-flight turns alive after a client disconnects.
 _running_turns: set[asyncio.Task] = set()
 
@@ -100,9 +115,11 @@ async def _proactive_config():
 
 
 @router.post("/proactive/invite", response_model=InviteResponse)
-async def proactive_invite(body: InviteRequest) -> InviteResponse:
+async def proactive_invite(body: InviteRequest, request: Request) -> InviteResponse:
     """The invite text for the visitor's page; counts one impression."""
     cfg = await _proactive_config()
+    if is_load_test(request):
+        return InviteResponse(message=cfg.proactive.message_for(body.page_url), suggestions=PROACTIVE_SUGGESTIONS)
     today = utcnow().date()
     async with SessionLocal() as db:
         stmt = pg_insert(ProactiveStat).values(day=today, shown=1)
@@ -115,9 +132,10 @@ async def proactive_invite(body: InviteRequest) -> InviteResponse:
 async def proactive_start(body: InviteRequest, request: Request) -> ProactiveStartResponse:
     """The visitor engaged with the invite: open a conversation already in the lead flow."""
     cfg = await _proactive_config()
+    load_test = is_load_test(request)
     ip_digest = ip_hash(client_ip(request))
     async with SessionLocal() as db:
-        recent = await db.scalar(
+        recent = 0 if load_test else await db.scalar(
             select(func.count(Conversation.id)).where(
                 Conversation.ip_hash == ip_digest,
                 Conversation.proactive.is_(True),
@@ -158,6 +176,7 @@ async def proactive_start(body: InviteRequest, request: Request) -> ProactiveSta
                 last_route="lead",
                 lead_stage="discovery",
                 proactive=True,
+                load_test=load_test,
             )
         )
         await db.flush()
@@ -188,7 +207,7 @@ async def get_session(session_id: str) -> dict:
     }
 
 
-async def _ensure_conversation(session_id: str, ip_digest: str, request: Request, page_url: str | None, first_message: str) -> None:
+async def _ensure_conversation(session_id: str, ip_digest: str, request: Request, page_url: str | None, first_message: str, load_test: bool = False) -> None:
     async with SessionLocal() as db:
         convo = await db.get(Conversation, session_id)
         if convo is not None and convo.proactive and convo.title == "(proactive invite)":
@@ -202,6 +221,7 @@ async def _ensure_conversation(session_id: str, ip_digest: str, request: Request
                     user_agent=(request.headers.get("user-agent") or "")[:300],
                     page_url=(page_url or "")[:500] or None,
                     title=first_message[:200],
+                    load_test=load_test,
                 )
             )
             await db.commit()
@@ -256,17 +276,20 @@ async def chat(body: ChatRequest, request: Request) -> StreamingResponse:
 
     session_id = body.session_id if valid_session_id(body.session_id) else new_session_id()
     ip_digest = ip_hash(client_ip(request))
-    await enforce_rate_limits(session_id, ip_digest)
-    await _ensure_conversation(session_id, ip_digest, request, body.page_url, message)
+    load_test = is_load_test(request)
+    if not load_test:
+        await enforce_rate_limits(session_id, ip_digest)
+    await _ensure_conversation(session_id, ip_digest, request, body.page_url, message, load_test)
 
     config = {
         "configurable": {
             "thread_id": session_id,
             "session_id": session_id,
             "site": cfg,
-            "llm": request.app.state.llm,
+            # Load tests exercise the full stack except Groq and lead delivery.
+            "llm": _LOAD_TEST_LLM if load_test else request.app.state.llm,
             "kb": kb,
-            "leads": backend,
+            "leads": _NO_LEADS if load_test else backend,
         },
         "recursion_limit": 12,
     }
@@ -348,3 +371,19 @@ async def chat(body: ChatRequest, request: Request) -> StreamingResponse:
 @router.get("/health")
 async def health() -> dict:
     return {"status": "ok", "knowledge_chunks": len(kb.index)}
+
+
+@router.post("/loadtest/purge")
+async def purge_load_test(request: Request) -> dict:
+    """Delete all load-test conversations and their agent state."""
+    if not is_load_test(request):
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "Not found")
+    async with SessionLocal() as db:
+        ids = (await db.execute(select(Conversation.id).where(Conversation.load_test.is_(True)))).scalars().all()
+        for start in range(0, len(ids), 1000):
+            batch = ids[start : start + 1000]
+            await db.execute(Conversation.__table__.delete().where(Conversation.id.in_(batch)))
+        await db.commit()
+    for thread_id in ids:
+        await runtime.delete_thread(thread_id)
+    return {"deleted": len(ids)}

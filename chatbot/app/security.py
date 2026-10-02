@@ -1,6 +1,7 @@
 """Request identity, abuse limits and dashboard authentication."""
 
 import hashlib
+import hmac
 import re
 import uuid
 from datetime import timedelta
@@ -15,6 +16,13 @@ from app.db import Message, SessionLocal, utcnow
 
 settings = get_settings()
 _SESSION_RE = re.compile(r"^[a-f0-9]{32}$")
+
+
+def is_load_test(request: Request) -> bool:
+    """Synthetic load-test traffic (see Settings.loadtest_token)."""
+    token = settings.loadtest_token
+    supplied = request.headers.get("x-load-test")
+    return bool(token and supplied and hmac.compare_digest(supplied, token))
 
 
 def new_session_id() -> str:

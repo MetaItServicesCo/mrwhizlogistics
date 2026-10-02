@@ -59,6 +59,8 @@ class Conversation(Base):
     flagged = Column(Boolean, default=False, nullable=False)
     # Started from the proactive invite (not by the visitor opening the chat).
     proactive = Column(Boolean, default=False, nullable=False, server_default=text("false"))
+    # Synthetic load-test traffic: excluded from the dashboard, purgeable.
+    load_test = Column(Boolean, default=False, nullable=False, server_default=text("false"), index=True)
 
 
 class Message(Base):
@@ -160,6 +162,7 @@ async def startup_lock():
 # Columns added after the first release (create_all never alters tables).
 COLUMN_UPGRADES = [
     ("conversations", "proactive", "BOOLEAN NOT NULL DEFAULT FALSE"),
+    ("conversations", "load_test", "BOOLEAN NOT NULL DEFAULT FALSE"),
 ]
 
 

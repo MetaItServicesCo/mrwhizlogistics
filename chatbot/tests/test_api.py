@@ -11,7 +11,7 @@ import uuid
 import httpx
 import pytest
 from jose import jwt
-from sqlalchemy import text
+from sqlalchemy import select, text
 
 from app import site as site_module
 from app.api import chat as chat_api
@@ -221,3 +221,45 @@ async def test_status_and_proactive_stats(client):
     assert stats["proactive"]["shown"] >= 1 and stats["proactive"]["opened"] >= 2 and stats["proactive"]["leads"] >= 1
     proactive_only = (await client.get("/chat-api/admin/conversations?filter=proactive", headers=auth)).json()
     assert proactive_only["items"] and all(c["proactive"] for c in proactive_only["items"])
+
+
+async def test_load_test_mode_is_isolated(client, offline_backend, monkeypatch):
+    from app.api import chat as chat_mod
+
+    monkeypatch.setattr(settings, "loadtest_token", "lt-secret")
+    lt = {"X-Load-Test": "lt-secret"}
+
+    # Full lead flow under load-test headers: no lead reaches the backend.
+    resp = await client.post("/chat-api/chat", json={"message": "Call me, I'm Lo Ad, 469 767 2211"}, headers=lt)
+    sid = parse_sse(resp.text)[0][1]["session_id"]
+    resp = await client.post("/chat-api/chat", json={"message": "yes", "session_id": sid}, headers=lt)
+    assert parse_sse(resp.text)[-1][1]["lead_stage"] == "submitted"
+    assert offline_backend.created == []
+
+    # No per-IP/session rate limits for synthetic traffic.
+    monkeypatch.setattr(settings, "session_messages_per_minute", 1)
+    for _ in range(3):
+        assert (await client.post("/chat-api/chat", json={"message": "hello", "session_id": sid}, headers=lt)).status_code == 200
+
+    # Wrong token: treated as a normal visitor (rate limited here).
+    assert (await client.post("/chat-api/chat", json={"message": "hello", "session_id": sid}, headers={"X-Load-Test": "nope"})).status_code == 429
+
+    # Invites under load test are not counted as impressions.
+    from app.db import ProactiveStat, SessionLocal
+
+    async with SessionLocal() as db:
+        before = sum(r.shown for r in (await db.execute(select(ProactiveStat))).scalars().all())
+    await client.post("/chat-api/proactive/invite", json={"page_url": "/"}, headers=lt)
+    async with SessionLocal() as db:
+        after = sum(r.shown for r in (await db.execute(select(ProactiveStat))).scalars().all())
+    assert after == before
+
+    # Hidden from the dashboard, then purged.
+    token = await _admin_token()
+    if token:
+        listing = (await client.get("/chat-api/admin/conversations?q=Lo%20Ad", headers={"Authorization": f"Bearer {token}"})).json()
+        assert listing["items"] == []
+    assert (await client.post("/chat-api/loadtest/purge", headers={"X-Load-Test": "nope"})).status_code == 404
+    purged = (await client.post("/chat-api/loadtest/purge", headers=lt)).json()
+    assert purged["deleted"] >= 1
+    assert (await client.get(f"/chat-api/sessions/{sid}")).status_code == 404

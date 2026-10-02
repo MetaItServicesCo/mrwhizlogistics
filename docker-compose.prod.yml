@@ -102,6 +102,8 @@ services:
       ROUTER_MODEL: ${CHATBOT_ROUTER_MODEL:-openai/gpt-oss-20b}
       FALLBACK_MODEL: ${CHATBOT_FALLBACK_MODEL:-openai/gpt-oss-20b}
       DISPATCH_PHONE: ${CHATBOT_DISPATCH_PHONE:-(469) 767 8853}
+      # Load testing (loadtest/README.md). Empty = load-test mode off.
+      LOADTEST_TOKEN: ${CHATBOT_LOADTEST_TOKEN:-}
       # Optional LangSmith tracing of every conversation.
       LANGSMITH_TRACING: ${LANGSMITH_TRACING:-false}
       LANGSMITH_API_KEY: ${LANGSMITH_API_KEY:-}

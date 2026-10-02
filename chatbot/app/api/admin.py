@@ -41,7 +41,7 @@ async def list_conversations(
     page: int = Query(1, ge=1),
     size: int = Query(25, ge=1, le=100),
 ) -> dict:
-    query = select(Conversation)
+    query = select(Conversation).where(Conversation.load_test.is_(False))
     if filter == "leads":
         query = query.where(Conversation.lead_id.is_not(None))
     elif filter == "handoff":
@@ -102,7 +102,8 @@ async def delete_conversation(session_id: str) -> None:
 async def stats(days: int = Query(30, ge=1, le=365)) -> dict:
     since = utcnow() - timedelta(days=days)
     async with SessionLocal() as db:
-        convos = select(Conversation).where(Conversation.created_at >= since).subquery()
+        convos = select(Conversation).where(Conversation.created_at >= since, Conversation.load_test.is_(False)).subquery()
+        synthetic = select(Conversation.id).where(Conversation.load_test.is_(True))
         totals = (
             await db.execute(
                 select(
@@ -116,13 +117,16 @@ async def stats(days: int = Query(30, ge=1, le=365)) -> dict:
         ).one()
         latency = await db.scalar(
             select(func.percentile_cont(0.5).within_group(Message.latency_ms)).where(
-                Message.role == "assistant", Message.created_at >= since, Message.latency_ms.is_not(None)
+                Message.role == "assistant",
+                Message.created_at >= since,
+                Message.latency_ms.is_not(None),
+                Message.conversation_id.not_in(synthetic),
             )
         )
         routes = (
             await db.execute(
                 select(Message.route, func.count())
-                .where(Message.role == "assistant", Message.created_at >= since)
+                .where(Message.role == "assistant", Message.created_at >= since, Message.conversation_id.not_in(synthetic))
                 .group_by(Message.route)
             )
         ).all()
@@ -130,7 +134,7 @@ async def stats(days: int = Query(30, ge=1, le=365)) -> dict:
         daily = (
             await db.execute(
                 select(day, func.count(), func.coalesce(func.sum(cast(Conversation.lead_id.is_not(None), Integer)), 0))
-                .where(Conversation.created_at >= since)
+                .where(Conversation.created_at >= since, Conversation.load_test.is_(False))
                 .group_by(day)
                 .order_by(day)
             )
@@ -144,6 +148,7 @@ async def stats(days: int = Query(30, ge=1, le=365)) -> dict:
                     Message.route == "knowledge",
                     Message.created_at >= since,
                     Message.sources == [],
+                    Message.conversation_id.not_in(synthetic),
                 )
                 .order_by(Message.created_at.desc())
                 .limit(15)
@@ -163,7 +168,7 @@ async def stats(days: int = Query(30, ge=1, le=365)) -> dict:
         opened, proactive_leads = (
             await db.execute(
                 select(func.count(), func.coalesce(func.sum(cast(Conversation.lead_id.is_not(None), Integer)), 0)).where(
-                    Conversation.proactive.is_(True), Conversation.created_at >= since
+                    Conversation.proactive.is_(True), Conversation.created_at >= since, Conversation.load_test.is_(False)
                 )
             )
         ).one()

@@ -75,6 +75,11 @@ class Settings(BaseSettings):
     log_level: str = "INFO"
     # Disable background crawling/cleanup (tests).
     background_jobs: bool = True
+    # Load testing against production: requests with the header
+    # "X-Load-Test: <token>" use the offline model, never create leads or
+    # emails, skip per-IP limits, are excluded from dashboard stats and can
+    # be purged. Empty disables load-test mode entirely.
+    loadtest_token: str = ""
 
     @property
     def cors_origin_list(self) -> list[str]:
