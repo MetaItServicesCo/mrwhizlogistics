@@ -78,8 +78,17 @@ export interface ChatWidgetConfig {
 const ACTIVE_MS_KEY = "mrwhiz_chat_active_ms"; // session: active time on site
 const INVITE_SHOWN_KEY = "mrwhiz_chat_invite_shown"; // session: once per visit
 const INVITE_DISMISSED_KEY = "mrwhiz_chat_invite_dismissed"; // local: 24h quiet period
-const LEAD_DONE_KEY = "mrwhiz_chat_lead_done"; // local: never invite after a lead
+const LEAD_DONE_KEY = "mrwhiz_chat_lead_done"; // local: when they last left a lead
+const CHAT_USED_KEY = "mrwhiz_chat_used"; // session: they chatted during this visit
 const DISMISS_FOR_MS = 24 * 60 * 60 * 1000;
+const AFTER_LEAD_MS = 30 * 24 * 60 * 60 * 1000;
+// ?assistant_invite=1 shows the invite after 2s, ignoring the caps (for checking it).
+const FORCE_PARAM = "assistant_invite";
+
+const within = (stamp: string | null, ms: number) => {
+  const t = Number(stamp || 0);
+  return t > 1 && Date.now() - t < ms;
+};
 
 const store = {
   get(area: "local" | "session", key: string): string | null {
@@ -98,11 +107,20 @@ const store = {
   },
 };
 
+const forcedInvite = () => new URLSearchParams(window.location.search).get(FORCE_PARAM) === "1";
+
+/**
+ * Invite unless the visitor already chatted during this visit, saw the
+ * invite this visit, said "Not now" in the last 24h, or left a lead in the
+ * last 30 days. A chat from an earlier visit doesn't block it.
+ */
 function inviteEligible(): boolean {
   if (window.location.pathname.startsWith("/dashboard")) return false;
-  if (store.get("session", INVITE_SHOWN_KEY) || store.get("local", LEAD_DONE_KEY) || loadSessionId()) return false;
-  const dismissed = Number(store.get("local", INVITE_DISMISSED_KEY) || 0);
-  return !dismissed || Date.now() - dismissed > DISMISS_FOR_MS;
+  if (store.get("session", INVITE_SHOWN_KEY) || store.get("session", CHAT_USED_KEY)) return false;
+  // "1" was the pre-timestamp marker: treat it as a lead within the window.
+  const lead = store.get("local", LEAD_DONE_KEY);
+  if (lead === "1" || within(lead, AFTER_LEAD_MS)) return false;
+  return !within(store.get("local", INVITE_DISMISSED_KEY), DISMISS_FOR_MS);
 }
 
 type SpeechRecognitionEventLike = Event & {
@@ -301,6 +319,8 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
   // ============================================================
 
   const openWithInvite = useCallback((inv: Invite) => {
+    // The invite is a fresh conversation: don't restore an older chat over it.
+    restoredRef.current = true;
     setMessages([{ id: "invite", from: "bot", text: inv.message, time: now() }]);
     setSuggestions(inv.suggestions);
     setShowQuickPrompts(false);
@@ -316,19 +336,21 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
 
   useEffect(() => {
     const pro = config.proactive;
-    if (!pro?.enabled || open || invite || !inviteEligible()) return;
-    let active = Number(store.get("session", ACTIVE_MS_KEY) || 0);
+    const force = forcedInvite();
+    if (!pro?.enabled || open || invite || !(force || inviteEligible())) return;
+    let active = force ? 0 : Number(store.get("session", ACTIVE_MS_KEY) || 0);
+    const delayMs = force ? 2000 : pro.delay_seconds * 1000;
     const tick = window.setInterval(() => {
       if (document.visibilityState !== "visible") return;
       active += 1000;
       // Saved every second so full page loads keep the visitor's time.
-      store.set("session", ACTIVE_MS_KEY, String(active));
-      if (active < pro.delay_seconds * 1000) return;
+      if (!force) store.set("session", ACTIVE_MS_KEY, String(active));
+      if (active < delayMs) return;
       window.clearInterval(tick);
-      if (!inviteEligible()) return;
-      store.set("session", INVITE_SHOWN_KEY, "1");
+      if (!force && !inviteEligible()) return;
       fetchInvite(window.location.pathname)
         .then((inv) => {
+          store.set("session", INVITE_SHOWN_KEY, "1");
           setInvite(inv);
           // Phones always get the bubble (no full-screen interruption).
           if (pro.mode === "open" && window.matchMedia("(min-width: 900px)").matches) openWithInvite(inv);
@@ -488,7 +510,7 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
                 if (event.status === "confirming") updateMessage(botId, { leadSummary: event.summary });
                 else {
                   updateMessage(botId, { leadSubmitted: true, leadSummary: undefined });
-                  store.set("local", LEAD_DONE_KEY, "1");
+                  store.set("local", LEAD_DONE_KEY, String(Date.now()));
                 }
                 break;
               case "done":
@@ -562,6 +584,9 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
       setInput("");
       setInterimText("");
 
+      // Chatting this visit: no proactive invite on later pages.
+      store.set("session", CHAT_USED_KEY, "1");
+
       // AI thinking (until the first token arrives)
       setTyping(true);
       setSuggestions([]);
@@ -569,7 +594,8 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
 
       // Replying to the invite: open the conversation the lead agent seeded.
       let sessionForTurn: string | undefined;
-      if (invite && !sessionId) {
+      // Any pending invite starts its own conversation, even if an older chat exists.
+      if (invite) {
         try {
           const started = await startProactive(window.location.pathname);
           sessionForTurn = started.session_id;
@@ -584,7 +610,7 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
       // Replies are text only: voice playback stays manual (speaker icon).
       await sendToAI(text, sessionForTurn);
     },
-    [input, typing, stopListening, stopSpeaking, addMessage, sendToAI, invite, sessionId],
+    [input, typing, stopListening, stopSpeaking, addMessage, sendToAI, invite],
   );
 
   // ============================================================
@@ -958,7 +984,7 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
         {/* Button */}
         <Box
           component={motion.button}
-          onClick={() => (!open && invite && !sessionId ? openWithInvite(invite) : setOpen((value) => !value))}
+          onClick={() => (!open && invite ? openWithInvite(invite) : setOpen((value) => !value))}
           aria-label={open ? "Close AI assistant" : "Open AI assistant"}
           whileHover={reduce ? undefined : { scale: 1.08 }}
           whileTap={reduce ? undefined : { scale: 0.92 }}

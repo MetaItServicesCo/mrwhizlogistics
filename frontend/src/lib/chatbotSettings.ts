@@ -12,7 +12,7 @@ export interface ProactiveSettings {
   delay_seconds: number;
   /** {service} becomes "a hot shot truck", "a box truck"... from the page. */
   message: string;
-  /** "bubble" by the chat button, or "open" the chat window (desktop only). */
+  /** "open" the chat window (desktop; phones get the bubble) or a "bubble" by the chat button. */
   mode: "bubble" | "open";
 }
 
@@ -31,7 +31,7 @@ export const PROACTIVE_DEFAULTS: ProactiveSettings = {
   enabled: true,
   delay_seconds: 30,
   message: "Need {service}? A dispatcher can call you in minutes with a free quote. What's your name and the best number to reach you?",
-  mode: "bubble",
+  mode: "open",
 };
 
 export const CHATBOT_DEFAULTS: ChatbotSettings = {
@@ -82,7 +82,7 @@ export function parseChatbotSettings(raw: string | null | undefined): ChatbotSet
           : PROACTIVE_DEFAULTS.delay_seconds,
       message:
         typeof pro.message === "string" && pro.message.trim() ? pro.message.trim().slice(0, LIMITS.invite) : PROACTIVE_DEFAULTS.message,
-      mode: pro.mode === "open" ? "open" : "bubble",
+      mode: pro.mode === "bubble" ? "bubble" : "open",
     },
   };
 }

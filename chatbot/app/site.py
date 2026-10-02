@@ -57,9 +57,9 @@ class ProactiveConfig:
     enabled: bool = True
     delay_seconds: int = 30
     message: str = DEFAULT_PROACTIVE_MESSAGE
-    # "bubble": a message bubble by the chat button; "open": open the chat
-    # window (desktop only; phones always get the bubble).
-    mode: str = "bubble"
+    # "open": open the chat window (desktop; phones always get the bubble);
+    # "bubble": a message bubble by the chat button.
+    mode: str = "open"
 
     def message_for(self, page_url: str | None) -> str:
         return self.message.replace("{service}", service_for_page(page_url))

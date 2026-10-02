@@ -12,6 +12,7 @@ import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import Typography from "@mui/material/Typography";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import DeleteOutlineRoundedIcon from "@mui/icons-material/DeleteOutlineRounded";
+import OpenInNewRoundedIcon from "@mui/icons-material/OpenInNewRounded";
 import { api } from "@/lib/api";
 import { chatAdmin } from "@/lib/chatClient";
 import {
@@ -229,8 +230,8 @@ export default function ChatbotSettingsPanel() {
               Invite visitors to talk
             </Typography>
             <Typography sx={{ fontSize: 13, color: "rgba(255,255,255,0.55)" }}>
-              After a visitor has been active on the site for a while without opening the chat, the assistant offers a call
-              back. Once per visit; not again for 24 hours after &quot;Not now&quot;; never after they&apos;ve left their number.
+              After a visitor has been active on the site for a while without chatting, the assistant offers a call back.
+              Once per visit; not again for 24 hours after &quot;Not now&quot;, or for 30 days after they&apos;ve left their number.
             </Typography>
           </Box>
           <Switch
@@ -259,8 +260,8 @@ export default function ChatbotSettingsPanel() {
               aria-label="How the invite appears"
               sx={{ "& .MuiToggleButton-root": { color: "rgba(255,255,255,0.65)", borderColor: "rgba(255,255,255,0.14)", textTransform: "none", px: 2 }, "& .Mui-selected": { color: "#0a0a0a !important", bgcolor: `${LIME} !important` } }}
             >
-              <ToggleButton value="bubble">Message bubble (recommended)</ToggleButton>
               <ToggleButton value="open">Open the chat window</ToggleButton>
+              <ToggleButton value="bubble">Message bubble</ToggleButton>
             </ToggleButtonGroup>
             <Typography sx={{ fontSize: 12, color: "rgba(255,255,255,0.45)", mt: 0.8 }}>
               Phones always get the bubble: full-screen pop-ups annoy visitors and Google penalises them.
@@ -278,6 +279,20 @@ export default function ChatbotSettingsPanel() {
           helperText="{service} becomes “a hot shot truck”, “a box truck”, “a semi truck”, “a trailer rental” or “a truck” depending on the page. End with a question so visitors can simply reply with their name and number."
           slotProps={shrink}
         />
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, flexWrap: "wrap" }}>
+          <Button
+            href="/?assistant_invite=1"
+            target="_blank"
+            rel="noopener"
+            endIcon={<OpenInNewRoundedIcon sx={{ fontSize: 16 }} />}
+            sx={{ color: LIME, border: `1px solid ${LIME}55`, borderRadius: "999px", textTransform: "none", fontWeight: 700, px: 2 }}
+          >
+            Preview the invite
+          </Button>
+          <Typography sx={{ fontSize: 12, color: "rgba(255,255,255,0.45)" }}>
+            Opens the site and shows the invite after 2 seconds, ignoring the once-per-visit rules. Uses the saved settings.
+          </Typography>
+        </Box>
       </Panel>
 
       <Panel sx={{ p: { xs: 2, md: 3 }, display: "flex", flexDirection: "column", gap: 2 }}>
