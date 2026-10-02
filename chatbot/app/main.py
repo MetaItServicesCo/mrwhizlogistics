@@ -12,7 +12,7 @@ from app import jobs
 from app.agent.llm import get_llm
 from app.api import admin, chat
 from app.config import get_settings
-from app.db import init_db
+from app.db import init_db, startup_lock
 from app.knowledge.base import kb
 from app.knowledge.embeddings import get_embedder
 from app.runtime import runtime
@@ -26,8 +26,10 @@ log = logging.getLogger("chatbot")
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    await init_db()
-    await runtime.start(use_postgres=True)
+    # One worker at a time creates tables and runs checkpointer migrations.
+    async with startup_lock():
+        await init_db()
+        await runtime.start(use_postgres=True)
     app.state.llm = get_llm()
     # Load the embedding model and the current index before taking traffic.
     await get_embedder()

@@ -4,6 +4,8 @@ Postgres (conversations for the dashboard, the knowledge index, crawl runs).
 LangGraph's checkpointer keeps agent state in the same schema.
 """
 
+import asyncio
+from contextlib import asynccontextmanager
 from datetime import datetime, timezone
 
 from sqlalchemy import (
@@ -121,6 +123,26 @@ engine: AsyncEngine = create_async_engine(
     connect_args={"options": f"-c search_path={settings.db_schema},public"},
 )
 SessionLocal = async_sessionmaker(engine, expire_on_commit=False, class_=AsyncSession)
+
+
+STARTUP_LOCK_KEY = 7731000
+
+
+@asynccontextmanager
+async def startup_lock():
+    """Serializes schema setup across workers: CREATE SCHEMA IF NOT EXISTS
+    and create_all race when several workers boot on a fresh database."""
+    async with engine.connect() as raw_conn:
+        conn = await raw_conn.execution_options(isolation_level="AUTOCOMMIT")
+        # Poll instead of a blocking pg_advisory_lock(): the checkpointer's
+        # CREATE INDEX CONCURRENTLY waits for every running statement, so a
+        # worker blocked inside pg_advisory_lock() would deadlock the setup.
+        while not await conn.scalar(text("SELECT pg_try_advisory_lock(:k)"), {"k": STARTUP_LOCK_KEY}):
+            await asyncio.sleep(0.5)
+        try:
+            yield
+        finally:
+            await conn.execute(text("SELECT pg_advisory_unlock(:k)"), {"k": STARTUP_LOCK_KEY})
 
 
 async def init_db() -> None:
