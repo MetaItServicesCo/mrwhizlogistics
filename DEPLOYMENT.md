@@ -159,7 +159,8 @@ You should see `Seed data loaded from frontend content.` in its logs.
 
 If ports 80 and 443 are already owned by nginx on the host, do not start the
 bundled nginx container. Use the host override, which publishes the backend on
-`127.0.0.1:8020` and the frontend on `127.0.0.1:3020`:
+`127.0.0.1:8020`, the frontend on `127.0.0.1:3020` and the AI chat assistant on
+`127.0.0.1:8030`:
 
 ```bash
 docker compose -f docker-compose.prod.yml -f docker-compose.host.yml \
@@ -180,6 +181,38 @@ certbot --nginx -d YOURDOMAIN.com -d www.YOURDOMAIN.com
 For later deployments on this type of server, always include both Compose
 files so the bundled proxy remains disabled.
 
+### AI chat assistant (chatbot service)
+
+The website chat is a separate container (`chatbot/`, LangGraph + Groq). It
+needs three values in `.env`: `GROQ_API_KEY`, `CHATBOT_SERVICE_TOKEN`
+(`openssl rand -hex 32`) and, for instant "call this visitor" emails,
+`DISPATCH_ALERT_EMAIL` plus the SMTP settings.
+
+nginx must route `/chat-api/` to it with buffering off (replies stream
+token by token). Both `nginx/default.conf` and `nginx/host.conf.example`
+contain this block. **On an existing host nginx, add it to your live site
+config once**, then `nginx -t && systemctl reload nginx`:
+
+```nginx
+location /chat-api/ {
+    proxy_pass http://127.0.0.1:8030;
+    proxy_http_version 1.1;
+    proxy_set_header Host              $host;
+    proxy_set_header X-Real-IP         $remote_addr;
+    proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_set_header Connection        "";
+    proxy_buffering off;
+    proxy_cache off;
+    proxy_read_timeout 120s;
+}
+```
+
+On first start the assistant reads every page in `sitemap.xml` (about a
+minute) and then re-reads changed pages every 30 minutes. Manage it in
+**Dashboard -> AI Assistant**. See `chatbot/README.md` for architecture,
+testing and evaluation.
+
 ---
 
 ## 7. Verify the deployment
@@ -190,6 +223,7 @@ curl -s  https://example.com/api/            # API health JSON
 curl -s  https://example.com/api/public/faqs # seeded content
 curl -s -o /dev/null -w '%{http_code}\n' \
      https://example.com/api/contact-us      # 401 = auth is enforced
+curl -s  https://example.com/chat-api/health # {"status":"ok","knowledge_chunks":N}
 ```
 
 Then in a browser:
@@ -357,6 +391,12 @@ real migration tool; if those become common, Alembic is worth adding.
 | nginx exits at start | Certificate path or `server_name` does not match the issued domain | Check `nginx/certbot/conf/live/<domain>/` and `nginx/default.conf` |
 | Uploaded images 404 after a redeploy | `uploads` volume not mounted | Confirm the `uploads:` volume in `docker-compose.prod.yml` |
 | `502 Bad Gateway` | Backend or frontend container is unhealthy | `docker compose -f docker-compose.prod.yml ps` and read that container's logs |
+| Chat replies "couldn't reach the assistant" | `/chat-api/` not routed to the chatbot, or the container is down | Add the nginx block above; `docker compose logs chatbot` |
+| Chat reply appears all at once after a delay | nginx is buffering `/chat-api/` | `proxy_buffering off;` in that location |
+| Chat answers "call dispatch" for everything | Groq key missing/invalid or rate limited (the assistant falls back gracefully) | `docker compose logs chatbot \| grep -i groq`; check `GROQ_API_KEY` |
+| Dashboard -> AI Assistant says the service isn't reachable | Same as above, or `SECRET_KEY` differs between backend and chatbot | Both read `SECRET_KEY` from `.env`; recreate both containers |
+| Chat says it couldn't send the request to dispatch | `CHATBOT_SERVICE_TOKEN` missing or different between backend and chatbot | Set it in `.env`; `up -d backend chatbot` |
+| No "call now" email arrives | SMTP not configured, or `DISPATCH_ALERT_EMAIL`/`ADMIN_EMAIL` empty | Leads still appear in Quote Requests; fix SMTP in `.env` |
 
 ---
 
@@ -370,3 +410,5 @@ real migration tool; if those become common, Alembic is worth adding.
 - [ ] `.env` is `chmod 600` and not committed
 - [ ] Database backups are running and you have restored one at least once
 - [ ] Consider restricting `/docs` and `/admin` by IP in `nginx/default.conf`
+- [ ] `CHATBOT_SERVICE_TOKEN` is a fresh random value; `GROQ_API_KEY` is not shared
+- [ ] The Privacy Policy mentions the AI chat assistant (what it stores, for how long)

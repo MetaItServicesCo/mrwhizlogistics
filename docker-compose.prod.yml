@@ -1,4 +1,4 @@
-# Production stack: Postgres + FastAPI + Next.js behind nginx.
+# Production stack: Postgres + FastAPI + Next.js + AI chat assistant behind nginx.
 # Copy .env.prod.example to .env and fill it in before running.
 
 services:
@@ -46,6 +46,10 @@ services:
       NEWSLETTER_FROM_EMAIL: ${NEWSLETTER_FROM_EMAIL:-}
       NEWSLETTER_FROM_NAME: ${NEWSLETTER_FROM_NAME:-Mr. Whiz Logistics}
       PUBLIC_SITE_URL: ${PUBLIC_SITE_URL:-http://localhost:3000}
+      # AI chat assistant: shared secret for /api/internal/* and the inbox
+      # for "call this visitor now" alerts (falls back to ADMIN_EMAIL).
+      CHATBOT_SERVICE_TOKEN: ${CHATBOT_SERVICE_TOKEN}
+      DISPATCH_ALERT_EMAIL: ${DISPATCH_ALERT_EMAIL:-}
     volumes:
       # Uploaded images must outlive the container.
       - uploads:/app/uploads
@@ -71,6 +75,41 @@ services:
     expose:
       - "3000"
 
+  # AI chat assistant (LangGraph + Groq). Talks to the backend and website
+  # over the Docker network; uses its own "chatbot" schema in Postgres.
+  chatbot:
+    build:
+      context: ./chatbot
+    container_name: mrwhiz-chatbot
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+      backend:
+        condition: service_started
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+      SECRET_KEY: ${SECRET_KEY}
+      SERVICE_TOKEN: ${CHATBOT_SERVICE_TOKEN}
+      BACKEND_URL: http://backend:8000
+      SITE_INTERNAL_URL: http://frontend:3000
+      SITE_PUBLIC_URL: ${PUBLIC_SITE_URL:-http://localhost:3000}
+      CORS_ORIGINS: ${CORS_ORIGINS}
+      LLM_PROVIDER: ${CHATBOT_LLM_PROVIDER:-groq}
+      GROQ_API_KEY: ${GROQ_API_KEY}
+      CHAT_MODEL: ${CHATBOT_CHAT_MODEL:-llama-3.3-70b-versatile}
+      ROUTER_MODEL: ${CHATBOT_ROUTER_MODEL:-llama-3.1-8b-instant}
+      FALLBACK_MODEL: ${CHATBOT_FALLBACK_MODEL:-llama-3.1-8b-instant}
+      DISPATCH_PHONE: ${CHATBOT_DISPATCH_PHONE:-(469) 767 8853}
+      # Optional LangSmith tracing of every conversation.
+      LANGSMITH_TRACING: ${LANGSMITH_TRACING:-false}
+      LANGSMITH_API_KEY: ${LANGSMITH_API_KEY:-}
+      LANGSMITH_PROJECT: ${LANGSMITH_PROJECT:-mrwhiz-assistant}
+    expose:
+      - "8000"
+    # Two workers each hold the embedding model (~150 MB) and the index.
+    mem_limit: 1536m
+
   nginx:
     image: nginx:alpine
     container_name: mrwhiz-proxy
@@ -78,6 +117,7 @@ services:
     depends_on:
       - frontend
       - backend
+      - chatbot
     ports:
       - "80:80"
       - "443:443"

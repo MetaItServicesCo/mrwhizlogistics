@@ -19,6 +19,9 @@ frontend/.env.local
 
 # Python
 backend/venv/
+chatbot/venv/
+chatbot/.models/
+chatbot/.pytest_cache/
 backend/.venv/
 __pycache__/
 *.py[cod]

@@ -10,6 +10,10 @@ services:
     ports:
       - "127.0.0.1:${FRONTEND_HOST_PORT:-3020}:3000"
 
+  chatbot:
+    ports:
+      - "127.0.0.1:${CHATBOT_HOST_PORT:-8030}:8000"
+
   # Keep the bundled proxy disabled when this override is active. The host's
   # nginx proxies to the loopback ports above instead.
   nginx:
