@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 
 import Box from "@mui/material/Box";
@@ -22,10 +22,21 @@ import VolumeUpRoundedIcon from "@mui/icons-material/VolumeUpRounded";
 import VolumeOffRoundedIcon from "@mui/icons-material/VolumeOffRounded";
 import GraphicEqRoundedIcon from "@mui/icons-material/GraphicEqRounded";
 import ContentCopyRoundedIcon from "@mui/icons-material/ContentCopyRounded";
-import DeleteSweepRoundedIcon from "@mui/icons-material/DeleteSweepRounded";
 import RestartAltRoundedIcon from "@mui/icons-material/RestartAltRounded";
-import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import AutoAwesomeRoundedIcon from "@mui/icons-material/AutoAwesomeRounded";
+import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
+import PhoneInTalkRoundedIcon from "@mui/icons-material/PhoneInTalkRounded";
+import LinkRoundedIcon from "@mui/icons-material/LinkRounded";
+
+import {
+  ChatHttpError,
+  loadSessionId,
+  restoreSession,
+  saveSessionId,
+  streamChat,
+  type ChatSource,
+  type LeadSummaryItem,
+} from "@/lib/chatClient";
 
 const LIME = "#c8ff00";
 const DARK = "#0a0a0a";
@@ -39,13 +50,23 @@ type Msg = {
   from: "bot" | "user";
   text: string;
   time: string;
+  /** Pages the answer is based on. */
+  sources?: ChatSource[];
+  /** Callback details awaiting the visitor's confirmation. */
+  leadSummary?: LeadSummaryItem[];
+  /** Dispatch has the callback request. */
+  leadSubmitted?: boolean;
+  /** Still receiving tokens. */
+  streaming?: boolean;
+  error?: boolean;
 };
 
-type Lead = {
-  name: string;
-  email: string;
-  phone: string;
-};
+export interface ChatWidgetConfig {
+  enabled: boolean;
+  greeting: string;
+  quickPrompts: string[];
+  phone?: string;
+}
 
 type SpeechRecognitionEventLike = Event & {
   results: {
@@ -99,17 +120,50 @@ const now = () =>
 const createId = () =>
   `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
 
-const WELCOME_TEXT = (name: string) =>
-  `Hi ${name.split(" ")[0]}! 👋 I'm your Truckload AI Assistant. How can I help with your shipment today?`;
+const DEFAULT_CONFIG: ChatWidgetConfig = {
+  enabled: true,
+  greeting:
+    "Hi! I'm the Mr. Whiz Logistics assistant. Ask me about hot shot, box truck or semi truck freight, or tell me what you need moved and I'll get a dispatcher to call you.",
+  quickPrompts: ["I need a shipping quote", "What services do you offer?", "Do you deliver nationwide?", "Call me back"],
+};
 
-const QUICK_PROMPTS = [
-  "I need a shipping quote",
-  "I need a Hot Shot truck",
-  "I need a Box Truck",
-  "I need a Semi Truck",
-];
+const noopSubscribe = () => () => {};
 
-export default function ChatWidget() {
+const welcomeMessage = (greeting: string): Msg => ({ id: "welcome", from: "bot", text: greeting, time: now() });
+
+const fmtTime = (iso: string) => {
+  const d = new Date(iso);
+  return Number.isNaN(d.getTime()) ? now() : d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+};
+
+/** Phone numbers and links in replies become tappable. */
+const LINKIFY = /(https?:\/\/[^\s)]+|(?:\+?1[\s.-]?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}\b)/g;
+
+function RichText({ text, dark }: { text: string; dark?: boolean }) {
+  const parts = text.split(LINKIFY);
+  const linkSx = { color: dark ? DARK : LIME, fontWeight: 700, textDecoration: "underline", textUnderlineOffset: "2px" };
+  return (
+    <>
+      {parts.map((part, i) => {
+        if (i % 2 === 0) return part;
+        if (part.startsWith("http"))
+          return (
+            <Box key={i} component="a" href={part} target="_blank" rel="noopener" sx={linkSx}>
+              {part}
+            </Box>
+          );
+        const digits = part.replace(/[^\d+]/g, "");
+        return (
+          <Box key={i} component="a" href={`tel:${digits.length === 10 ? `+1${digits}` : digits}`} sx={linkSx}>
+            {part}
+          </Box>
+        );
+      })}
+    </>
+  );
+}
+
+export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatWidgetConfig }) {
   const reduce = useReducedMotion() ?? false;
 
   // ============================================================
@@ -117,15 +171,13 @@ export default function ChatWidget() {
   // ============================================================
 
   const [open, setOpen] = useState(false);
-  const [started, setStarted] = useState(false);
 
-  const [lead, setLead] = useState<Lead>({
-    name: "",
-    email: "",
-    phone: "",
-  });
-
-  const [messages, setMessages] = useState<Msg[]>([]);
+  const [messages, setMessages] = useState<Msg[]>(() => [welcomeMessage(config.greeting)]);
+  const [sessionId, setSessionId] = useState<string | null>(null);
+  // Follow-up buttons offered with the latest reply ("Yes, call me", ...).
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const restoredRef = useRef(false);
+  const abortRef = useRef<AbortController | null>(null);
   const [input, setInput] = useState("");
 
   const [typing, setTyping] = useState(false);
@@ -136,7 +188,12 @@ export default function ChatWidget() {
 
   const [listening, setListening] = useState(false);
   const [speaking, setSpeaking] = useState(false);
-  const [voiceSupported, setVoiceSupported] = useState(false);
+  // Browser speech recognition (false during server render).
+  const voiceSupported = useSyncExternalStore(
+    noopSubscribe,
+    () => Boolean(window.SpeechRecognition || window.webkitSpeechRecognition),
+    () => false,
+  );
 
   // IMPORTANT:
   // This is ONLY for manual AI voice playback.
@@ -160,17 +217,41 @@ export default function ChatWidget() {
   const recognitionRef = useRef<SpeechRecognitionInstance | null>(null);
 
   // ============================================================
-  // CHECK BROWSER VOICE SUPPORT
+  // RESTORE THE PREVIOUS CONVERSATION (first open)
   // ============================================================
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    if (!open || restoredRef.current) return;
+    restoredRef.current = true;
+    const saved = loadSessionId();
+    if (!saved) return;
+    restoreSession(saved)
+      .then((data) => {
+        if (!data || !data.messages.length) {
+          saveSessionId(null);
+          return;
+        }
+        setSessionId(saved);
+        setMessages([
+          welcomeMessage(config.greeting),
+          ...data.messages.map((m, i) => ({
+            id: `restored-${i}`,
+            from: m.role === "user" ? ("user" as const) : ("bot" as const),
+            text: m.content,
+            time: fmtTime(m.created_at),
+            sources: m.sources,
+            leadSubmitted: m.role === "assistant" && data.lead_stage === "submitted" && i === data.messages.length - 1,
+          })),
+        ]);
+        const last = data.messages[data.messages.length - 1];
+        setSuggestions(last?.role === "assistant" ? last.suggestions || [] : []);
+      })
+      .catch(() => {
+        /* offline or unavailable: start fresh, keep the id for a later retry */
+      });
+  }, [open, config.greeting]);
 
-    const SpeechRecognition =
-      window.SpeechRecognition || window.webkitSpeechRecognition;
-
-    setVoiceSupported(Boolean(SpeechRecognition));
-  }, []);
+  useEffect(() => () => abortRef.current?.abort(), []);
 
   // ============================================================
   // AUTO SCROLL
@@ -273,69 +354,77 @@ export default function ChatWidget() {
   }, []);
 
   // ============================================================
-  // SEND TO AI
-  //
-  // FRONTEND PLACEHOLDER
-  //
-  // LATER:
-  // /api/chat -> OpenAI
+  // SEND TO AI (streams the reply from the chatbot service)
   // ============================================================
 
-  const sendToAI = async (userMessage: string): Promise<string> => {
-    /*
-    ============================================================
-    FUTURE OPENAI BACKEND
-    ============================================================
+  const updateMessage = useCallback((id: string, patch: Partial<Msg> | ((m: Msg) => Partial<Msg>)) => {
+    setMessages((current) =>
+      current.map((m) => (m.id === id ? { ...m, ...(typeof patch === "function" ? patch(m) : patch) } : m)),
+    );
+  }, []);
 
-    const response = await fetch("/api/chat", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        message: userMessage,
-        lead,
-        conversation: messages,
-      }),
-    });
-
-    if (!response.ok) {
-      throw new Error("AI request failed");
-    }
-
-    const data = await response.json();
-
-    return data.reply;
-
-    ============================================================
-    */
-
-    await new Promise((resolve) => setTimeout(resolve, 1200));
-
-    const lower = userMessage.toLowerCase();
-
-    if (
-      lower.includes("quote") ||
-      lower.includes("price") ||
-      lower.includes("rate")
-    ) {
-      return "Absolutely. I can help you with a shipping quote. Please share your pickup location, delivery location, freight type, approximate weight, and preferred pickup date.";
-    }
-
-    if (lower.includes("hot shot") || lower.includes("hotshot")) {
-      return "Great. Our Hot Shot service is designed for time-sensitive and expedited freight. Please share your pickup location, delivery location, load size, and pickup date.";
-    }
-
-    if (lower.includes("box truck")) {
-      return "We can help with Box Truck transportation. Please share the pickup and delivery locations, freight dimensions, approximate weight, and required pickup date.";
-    }
-
-    if (lower.includes("semi") || lower.includes("dry van")) {
-      return "We can help with Semi Truck transportation, including Dry Van, Reefer, and Flatbed options. Please provide your pickup location, delivery location, freight type, weight, and pickup date.";
-    }
-
-    return "Thanks for the details. Our dispatch team can help arrange the right truck for your shipment. Could you share your pickup location, delivery location, freight type, approximate weight, and pickup date?";
-  };
+  const sendToAI = useCallback(
+    async (userMessage: string) => {
+      const botId = createId();
+      setMessages((current) => [...current, { id: botId, from: "bot", text: "", time: now(), streaming: true }]);
+      const controller = new AbortController();
+      abortRef.current = controller;
+      let received = false;
+      try {
+        await streamChat(
+          {
+            message: userMessage,
+            sessionId,
+            pageUrl: typeof window !== "undefined" ? window.location.pathname : undefined,
+            signal: controller.signal,
+          },
+          (event) => {
+            switch (event.type) {
+              case "session":
+                setSessionId(event.session_id);
+                saveSessionId(event.session_id);
+                break;
+              case "token":
+                received = true;
+                setTyping(false);
+                updateMessage(botId, (m) => ({ text: m.text + event.text }));
+                break;
+              case "replace":
+                received = true;
+                updateMessage(botId, { text: event.text });
+                break;
+              case "sources":
+                updateMessage(botId, { sources: event.sources });
+                break;
+              case "lead":
+                if (event.status === "confirming") updateMessage(botId, { leadSummary: event.summary });
+                else updateMessage(botId, { leadSubmitted: true, leadSummary: undefined });
+                break;
+              case "done":
+                updateMessage(botId, { text: event.reply, sources: event.sources, streaming: false });
+                setSuggestions(event.suggestions || []);
+                break;
+              case "error":
+                updateMessage(botId, (m) => ({ text: m.text ? `${m.text}\n\n${event.message}` : event.message, error: true, streaming: false }));
+                break;
+            }
+          },
+        );
+      } catch (error) {
+        if (controller.signal.aborted) return;
+        const phone = config.phone || "(469) 767 8853";
+        const text =
+          error instanceof ChatHttpError
+            ? error.message
+            : `Sorry, I couldn't reach the assistant. Please try again or call dispatch at ${phone}.`;
+        updateMessage(botId, { text: received ? undefined : text, error: true, streaming: false });
+      } finally {
+        updateMessage(botId, { streaming: false });
+        setTyping(false);
+      }
+    },
+    [sessionId, updateMessage, config.phone],
+  );
 
   // ============================================================
   // ADD MESSAGE
@@ -382,38 +471,15 @@ export default function ChatWidget() {
       setInput("");
       setInterimText("");
 
-      // AI thinking
+      // AI thinking (until the first token arrives)
       setTyping(true);
+      setSuggestions([]);
+      setShowQuickPrompts(false);
 
-      try {
-        const reply = await sendToAI(text);
-
-        setTyping(false);
-
-        // AI reply is TEXT ONLY
-        addMessage("bot", reply);
-
-        /*
-        IMPORTANT:
-
-        DO NOT CALL speak(reply) HERE.
-
-        AI response will NOT automatically become voice.
-
-        User must click speaker icon.
-        */
-      } catch (error) {
-        console.error("AI error:", error);
-
-        setTyping(false);
-
-        addMessage(
-          "bot",
-          "Sorry, something went wrong. Please try again or contact our dispatch team.",
-        );
-      }
+      // Replies are text only: voice playback stays manual (speaker icon).
+      await sendToAI(text);
     },
-    [input, typing, stopListening, stopSpeaking, addMessage],
+    [input, typing, stopListening, stopSpeaking, addMessage, sendToAI],
   );
 
   // ============================================================
@@ -557,83 +623,22 @@ export default function ChatWidget() {
   };
 
   // ============================================================
-  // START CHAT
-  // ============================================================
-
-  const startChat = () => {
-    if (!lead.name.trim()) return;
-
-    if (!lead.email.includes("@")) return;
-
-    setStarted(true);
-
-    const welcome = WELCOME_TEXT(lead.name);
-
-    setMessages([
-      {
-        id: createId(),
-        from: "bot",
-        text: welcome,
-        time: now(),
-      },
-    ]);
-
-    /*
-    FUTURE:
-
-    Save lead to backend
-
-    fetch("/api/leads", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(lead),
-    });
-    */
-
-    // NO speak() HERE.
-    // Welcome message stays text.
-  };
-
-  // ============================================================
-  // NEW CHAT
+  // NEW CHAT (forgets the session; the old one stays in the dashboard)
   // ============================================================
 
   const newChat = () => {
+    abortRef.current?.abort();
     stopListening();
     stopSpeaking();
 
-    setStarted(false);
-    setMessages([]);
+    saveSessionId(null);
+    setSessionId(null);
+    setMessages([welcomeMessage(config.greeting)]);
+    setSuggestions([]);
+    setShowQuickPrompts(true);
     setInput("");
     setInterimText("");
     setTyping(false);
-  };
-
-  // ============================================================
-  // CLEAR CURRENT CHAT
-  // ============================================================
-
-  const clearChat = () => {
-    stopSpeaking();
-
-    setMessages([]);
-    setInput("");
-    setInterimText("");
-
-    if (started) {
-      const welcome = WELCOME_TEXT(lead.name);
-
-      setMessages([
-        {
-          id: createId(),
-          from: "bot",
-          text: welcome,
-          time: now(),
-        },
-      ]);
-    }
   };
 
   // ============================================================
@@ -699,6 +704,8 @@ export default function ChatWidget() {
   // ============================================================
   // RENDER
   // ============================================================
+
+  if (!config.enabled) return null;
 
   return (
     <>
@@ -1019,7 +1026,7 @@ export default function ChatWidget() {
                       lineHeight: 1.1,
                     }}
                   >
-                    Mr.Whiz Logisttics AI Assistant
+                    Mr. Whiz Logistics AI Assistant
                   </Typography>
 
                   <Box
@@ -1049,7 +1056,7 @@ export default function ChatWidget() {
                 </Box>
 
                 {/* Voice playback toggle */}
-                {started && voiceSupported && (
+                {voiceSupported && (
                   <Tooltip
                     title={
                       voiceEnabled ? "Voice playback ON" : "Voice playback OFF"
@@ -1109,186 +1116,7 @@ export default function ChatWidget() {
               </Box>
             </Box>
 
-            {/* ==================================================
-                LEAD CAPTURE
-            ================================================== */}
-
-            {!started ? (
-              <Box
-                sx={{
-                  flex: 1,
-                  display: "flex",
-                  flexDirection: "column",
-                  p: 3,
-                  gap: 2,
-                  overflowY: "auto",
-                }}
-              >
-                {/* Intro */}
-                <Box
-                  sx={{
-                    display: "flex",
-                    gap: 1.4,
-                    alignItems: "flex-start",
-                  }}
-                >
-                  <Box
-                    sx={{
-                      width: 36,
-                      height: 36,
-                      borderRadius: "10px",
-                      bgcolor: "rgba(200,255,0,0.12)",
-                      color: LIME,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      flexShrink: 0,
-                    }}
-                  >
-                    <LocalShippingRoundedIcon
-                      sx={{
-                        fontSize: 19,
-                      }}
-                    />
-                  </Box>
-
-                  <Box
-                    sx={{
-                      bgcolor: MESSAGE,
-                      borderRadius: "4px 16px 16px 16px",
-                      p: 2,
-                    }}
-                  >
-                    <Typography
-                      sx={{
-                        color: "rgba(255,255,255,0.92)",
-                        fontSize: 14,
-                        lineHeight: 1.6,
-                      }}
-                    >
-                      Hi! 👋 I&apos;m your Truckload AI Assistant. Share your
-                      details and I&apos;ll help you find the right
-                      transportation solution.
-                    </Typography>
-                  </Box>
-                </Box>
-
-                {/* Form */}
-                <Box
-                  sx={{
-                    mt: "auto",
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: 1.4,
-                  }}
-                >
-                  <TextField
-                    fullWidth
-                    size="small"
-                    placeholder="Your name"
-                    value={lead.name}
-                    onChange={(e) =>
-                      setLead({
-                        ...lead,
-                        name: e.target.value,
-                      })
-                    }
-                    sx={fieldSx}
-                  />
-
-                  <TextField
-                    fullWidth
-                    size="small"
-                    type="email"
-                    placeholder="Email address"
-                    value={lead.email}
-                    onChange={(e) =>
-                      setLead({
-                        ...lead,
-                        email: e.target.value,
-                      })
-                    }
-                    sx={fieldSx}
-                  />
-
-                  <TextField
-                    fullWidth
-                    size="small"
-                    placeholder="Phone (optional)"
-                    value={lead.phone}
-                    onChange={(e) =>
-                      setLead({
-                        ...lead,
-                        phone: e.target.value,
-                      })
-                    }
-                    sx={fieldSx}
-                  />
-
-                  <Button
-                    onClick={startChat}
-                    disabled={!lead.name.trim() || !lead.email.includes("@")}
-                    disableElevation
-                    sx={{
-                      mt: 0.5,
-                      bgcolor: LIME,
-                      color: DARK,
-                      fontWeight: 900,
-                      borderRadius: "12px",
-                      py: 1.3,
-                      textTransform: "none",
-                      fontSize: 15,
-                      "&:hover": {
-                        bgcolor: "#d4ff33",
-                      },
-                      "&.Mui-disabled": {
-                        bgcolor: "rgba(200,255,0,0.18)",
-                        color: "rgba(255,255,255,0.3)",
-                      },
-                    }}
-                  >
-                    Start AI Assistant
-                  </Button>
-
-                  {voiceSupported && (
-                    <Box
-                      sx={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        gap: 0.6,
-                      }}
-                    >
-                      <MicRoundedIcon
-                        sx={{
-                          color: LIME,
-                          fontSize: 15,
-                        }}
-                      />
-
-                      <Typography
-                        sx={{
-                          fontSize: 10.5,
-                          color: "rgba(255,255,255,0.4)",
-                        }}
-                      >
-                        Voice input available
-                      </Typography>
-                    </Box>
-                  )}
-
-                  <Typography
-                    sx={{
-                      textAlign: "center",
-                      fontSize: 10.5,
-                      color: "rgba(255,255,255,0.28)",
-                    }}
-                  >
-                    Your information helps us assist you better.
-                  </Typography>
-                </Box>
-              </Box>
-            ) : (
+            {
               <>
                 {/* ==================================================
                     CHAT TOOLBAR
@@ -1311,7 +1139,7 @@ export default function ChatWidget() {
                       color: "rgba(255,255,255,0.4)",
                     }}
                   >
-                    AI shipment assistant
+                    AI assistant · answers from our website
                   </Typography>
 
                   <Box
@@ -1321,28 +1149,10 @@ export default function ChatWidget() {
                       gap: 0.3,
                     }}
                   >
-                    <Tooltip title="Clear conversation">
-                      <IconButton
-                        onClick={clearChat}
-                        size="small"
-                        sx={{
-                          color: "rgba(255,255,255,0.45)",
-                          "&:hover": {
-                            color: LIME,
-                          },
-                        }}
-                      >
-                        <DeleteSweepRoundedIcon
-                          sx={{
-                            fontSize: 18,
-                          }}
-                        />
-                      </IconButton>
-                    </Tooltip>
-
-                    <Tooltip title="New chat">
+                    <Tooltip title="Start a new chat">
                       <IconButton
                         onClick={newChat}
+                        aria-label="Start a new chat"
                         size="small"
                         sx={{
                           color: "rgba(255,255,255,0.45)",
@@ -1419,12 +1229,15 @@ export default function ChatWidget() {
                       }}
                     >
                       {/* Message bubble */}
+                      {!(message.streaming && !message.text) && (
                       <Box
                         sx={{
                           px: 2,
                           py: 1.35,
                           fontSize: 14,
                           lineHeight: 1.6,
+                          whiteSpace: "pre-wrap",
+                          overflowWrap: "anywhere",
 
                           ...(message.from === "user"
                             ? {
@@ -1441,10 +1254,107 @@ export default function ChatWidget() {
                               }),
                         }}
                       >
-                        {message.text}
+                        <RichText text={message.text} dark={message.from === "user"} />
+                        {message.streaming && (
+                          <Box
+                            component="span"
+                            aria-hidden
+                            sx={{ display: "inline-block", width: 7, height: 14, ml: 0.4, mb: "-2px", bgcolor: LIME, opacity: 0.7, borderRadius: "2px" }}
+                          />
+                        )}
                       </Box>
+                      )}
+
+                      {/* Sources the answer is based on */}
+                      {message.from === "bot" && !message.streaming && message.sources && message.sources.length > 0 && (
+                        <Box sx={{ mt: 0.8, display: "flex", flexDirection: "column", gap: 0.4 }}>
+                          <Typography sx={{ fontSize: 9.5, fontWeight: 800, letterSpacing: 0.8, color: "rgba(255,255,255,0.35)", px: 0.5 }}>
+                            SOURCES
+                          </Typography>
+                          {message.sources.map((src) => (
+                            <Box
+                              key={src.url}
+                              component="a"
+                              href={src.url}
+                              sx={{
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: 0.6,
+                                px: 1,
+                                py: 0.5,
+                                borderRadius: "8px",
+                                bgcolor: "rgba(200,255,0,0.06)",
+                                border: "1px solid rgba(200,255,0,0.14)",
+                                color: "rgba(255,255,255,0.75)",
+                                fontSize: 11.5,
+                                textDecoration: "none",
+                                "&:hover": { color: "#fff", borderColor: `${LIME}66` },
+                              }}
+                            >
+                              <LinkRoundedIcon sx={{ fontSize: 14, color: LIME }} />
+                              <Box component="span" sx={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                                {src.title}
+                              </Box>
+                            </Box>
+                          ))}
+                        </Box>
+                      )}
+
+                      {/* Callback details to confirm */}
+                      {message.leadSummary && message.leadSummary.length > 0 && (
+                        <Box
+                          sx={{
+                            mt: 0.8,
+                            p: 1.4,
+                            borderRadius: "12px",
+                            bgcolor: "rgba(200,255,0,0.06)",
+                            border: `1px solid ${LIME}44`,
+                          }}
+                        >
+                          <Box sx={{ display: "flex", alignItems: "center", gap: 0.8, mb: 0.8 }}>
+                            <PhoneInTalkRoundedIcon sx={{ fontSize: 16, color: LIME }} />
+                            <Typography sx={{ fontSize: 11, fontWeight: 900, letterSpacing: 0.8, color: LIME }}>
+                              CALL BACK DETAILS
+                            </Typography>
+                          </Box>
+                          {message.leadSummary.map((row) => (
+                            <Box key={row.label} sx={{ display: "flex", gap: 1, fontSize: 12.5, lineHeight: 1.7 }}>
+                              <Box component="span" sx={{ color: "rgba(255,255,255,0.5)", minWidth: 78 }}>
+                                {row.label}
+                              </Box>
+                              <Box component="span" sx={{ color: "#fff", fontWeight: 600 }}>
+                                {row.value}
+                              </Box>
+                            </Box>
+                          ))}
+                        </Box>
+                      )}
+
+                      {/* Dispatch has it */}
+                      {message.leadSubmitted && (
+                        <Box
+                          role="status"
+                          sx={{
+                            mt: 0.8,
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: 0.7,
+                            px: 1.2,
+                            py: 0.6,
+                            borderRadius: "999px",
+                            bgcolor: `${LIME}1f`,
+                            color: LIME,
+                            fontSize: 11.5,
+                            fontWeight: 800,
+                          }}
+                        >
+                          <CheckCircleRoundedIcon sx={{ fontSize: 16 }} />
+                          Dispatch notified: expect a call shortly
+                        </Box>
+                      )}
 
                       {/* Time + actions */}
+                      {!message.streaming && (
                       <Box
                         sx={{
                           display: "flex",
@@ -1528,12 +1438,35 @@ export default function ChatWidget() {
                             </Tooltip>
                           )}
                       </Box>
+                      )}
                     </Box>
                   ))}
 
                   {/* ==================================================
                       QUICK PROMPTS
                   ================================================== */}
+
+                  {/* Follow-up options offered with the latest reply */}
+                  {suggestions.length > 0 && !typing && (
+                    <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.8, alignSelf: "flex-start" }}>
+                      {suggestions.map((option) => (
+                        <Chip
+                          key={option}
+                          label={option}
+                          onClick={() => sendQuickPrompt(option)}
+                          sx={{
+                            height: 32,
+                            color: DARK,
+                            bgcolor: LIME,
+                            fontWeight: 800,
+                            borderRadius: "10px",
+                            fontSize: 12,
+                            "&:hover": { bgcolor: "#d4ff33" },
+                          }}
+                        />
+                      ))}
+                    </Box>
+                  )}
 
                   {showQuickPrompts && messages.length <= 1 && !typing && (
                     <Box
@@ -1569,7 +1502,7 @@ export default function ChatWidget() {
                           gap: 0.8,
                         }}
                       >
-                        {QUICK_PROMPTS.map((prompt) => (
+                        {config.quickPrompts.map((prompt) => (
                           <Chip
                             key={prompt}
                             label={prompt}
@@ -2008,7 +1941,7 @@ export default function ChatWidget() {
                   )}
                 </Box>
               </>
-            )}
+            }
           </Box>
         )}
       </AnimatePresence>

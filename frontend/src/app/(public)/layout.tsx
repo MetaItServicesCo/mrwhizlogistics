@@ -10,6 +10,7 @@ import Navbar from "@/components/header/Navbar";
 import { footerLogoFromSettings, logoFromSettings } from "@/lib/branding";
 import { pagePath } from "@/lib/contentPages";
 import { settingsMap } from "@/lib/contentAdapters";
+import { CHATBOT_SETTINGS_KEY, parseChatbotSettings } from "@/lib/chatbotSettings";
 import {
   getBoxTruckCards,
   getHotshotCards,
@@ -33,6 +34,8 @@ export default async function PublicLayout({
     getPublicPages(),
   ]);
   const settings = settingsMap(settingRows || []);
+  // Dashboard -> Chatbot -> Settings (greeting, quick prompts, on/off).
+  const chatbot = parseChatbotSettings(settings[CHATBOT_SETTINGS_KEY]);
   const logo = logoFromSettings(settings);
   const ctaOverrides = parseCtaOverrides(settings[CTA_SETTING_KEY]);
 
@@ -55,7 +58,14 @@ export default async function PublicLayout({
 
       {children}
       <MailingListCTA />
-      <ChatWidget />
+      <ChatWidget
+        config={{
+          enabled: chatbot.enabled,
+          greeting: chatbot.greeting,
+          quickPrompts: chatbot.quick_prompts,
+          phone: settings.phone,
+        }}
+      />
       <AdminBar />
       <AdvancedFooterCTA
         companyName={settings.company_name}

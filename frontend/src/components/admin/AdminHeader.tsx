@@ -23,9 +23,12 @@ import LanguageRoundedIcon from "@mui/icons-material/LanguageRounded";
 
 const LIME = "#c8ff00";
 
+/** Sections whose name isn't just their URL segment title-cased. */
+const SECTION_TITLES: Record<string, string> = { chatbot: "AI Assistant" };
+
 function titleFromPath(pathname: string) {
   const seg = pathname.split("/").filter(Boolean).pop() || "dashboard";
-  return seg.replace(/-/g, " ").replace(/\b\w/g, (m) => m.toUpperCase());
+  return SECTION_TITLES[seg] ?? seg.replace(/-/g, " ").replace(/\b\w/g, (m) => m.toUpperCase());
 }
 
 export default function AdminHeader({

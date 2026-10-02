@@ -1,3 +1,4 @@
+import SmartToyRoundedIcon from "@mui/icons-material/SmartToyRounded";
 import SpaceDashboardRoundedIcon from "@mui/icons-material/SpaceDashboardRounded";
 import MoveToInboxRoundedIcon from "@mui/icons-material/MoveToInboxRounded";
 import LocalShippingRoundedIcon from "@mui/icons-material/LocalShippingRounded";
@@ -87,6 +88,12 @@ export const ADMIN_MENU: NavItem[] = [
       { title: "Site pages", href: "/dashboard/pages/site" },
       { title: "SEO metadata", href: "/dashboard/pages/seo" },
     ],
+  },
+  {
+    key: "chatbot",
+    title: "AI Assistant",
+    href: "/dashboard/chatbot",
+    icon: <SmartToyRoundedIcon />,
   },
   {
     key: "messages",
