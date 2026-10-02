@@ -142,3 +142,13 @@ async def test_hybrid_search_finds_the_right_page(fake_kb):
 async def test_confidence_rejects_unrelated_questions(fake_kb):
     assert confident(await fake_kb.search("reefer trailers temperature controlled"), 0.3)
     assert not confident(await fake_kb.search("best pizza recipe in italy"), 0.3)
+
+
+def test_voice_helpers():
+    from app.voice import SlidingLimiter, audio_extension, clean_for_speech
+
+    assert audio_extension("audio/webm;codecs=opus") == "webm" and audio_extension("audio/mp4") == "mp4"
+    assert audio_extension("video/webm") is None and audio_extension(None) is None
+    assert clean_for_speech("Call **now**: https://x.com/a  ok") == "Call now: ok"
+    limiter = SlidingLimiter(budget=3, window_s=60)
+    assert limiter.allow("ip", 2) and not limiter.allow("ip", 2) and limiter.allow("other", 3)

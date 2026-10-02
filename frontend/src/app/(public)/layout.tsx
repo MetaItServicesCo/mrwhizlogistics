@@ -65,6 +65,7 @@ export default async function PublicLayout({
           quickPrompts: chatbot.quick_prompts,
           phone: settings.phone,
           proactive: chatbot.proactive,
+          voiceEnabled: chatbot.voice.enabled,
         }}
       />
       <AdminBar />

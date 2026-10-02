@@ -54,6 +54,23 @@ Questions mid-flow are answered and the flow resumes.
   A visitor can still leave their number during a model outage.
 - Backend lead creation is retried and idempotent per session.
 
+## Voice (on visitor request only)
+
+- **Voice messages:** the visitor taps the mic; the widget records (60 s
+  max) and `POST /chat-api/voice/transcribe` turns it into text with Groq
+  Whisper (`whisper-large-v3-turbo`). Works in every modern browser,
+  including iPhone Safari.
+- **Read aloud:** tapping *Listen* on a reply, or switching on *Voice
+  replies* in the chat header (off by default), plays it with Groq Orpheus
+  (`canopylabs/orpheus-v1-english`, voice chosen in the dashboard). The API
+  reads at most 200 characters per request, so the widget sends a reply
+  sentence by sentence and prefetches the next one while the current one
+  plays. Falls back to the browser's voice if Groq voice is unavailable.
+- **Limits:** 20 voice messages and ~6,000 read-aloud characters per
+  visitor per 10 minutes; recordings up to 5 MB. Nothing is stored.
+- If your Groq project restricts models, allow the two voice models in the
+  Groq console (Orpheus may ask you to accept its terms once).
+
 ## Endpoints (all under `/chat-api`)
 
 | Method | Path | Who |

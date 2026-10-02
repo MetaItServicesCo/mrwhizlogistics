@@ -20,13 +20,14 @@ import {
   CHATBOT_SETTINGS_KEY,
   LIMITS,
   PROACTIVE_DEFAULTS,
+  VOICES,
   parseChatbotSettings,
   type ChatbotSettings,
   type ProactiveSettings,
 } from "@/lib/chatbotSettings";
 import { errorMessage, useResource } from "@/lib/useResource";
 import type { SiteSetting } from "@/lib/types";
-import { ErrorState, Field, LIME, LoadingState, Panel, Toast } from "@/components/admin/ui";
+import { ErrorState, Field, LIME, LoadingState, Panel, SelectField, Toast } from "@/components/admin/ui";
 
 const shrink = { inputLabel: { shrink: true } };
 
@@ -123,6 +124,7 @@ export default function ChatbotSettingsPanel() {
       quick_prompts: draft.quick_prompts.map((p) => p.trim()).filter(Boolean),
       facts: draft.facts.map((f) => f.trim()).filter(Boolean),
       retention_days: draft.retention_days,
+      voice: draft.voice,
       proactive: {
         ...draft.proactive,
         message: draft.proactive.message.trim() || PROACTIVE_DEFAULTS.message,
@@ -293,6 +295,34 @@ export default function ChatbotSettingsPanel() {
           <Typography sx={{ fontSize: 12, color: "rgba(255,255,255,0.45)" }}>
             Opens the site and shows the invite after 2 seconds, ignoring the once-per-visit rules. Uses the saved settings.
           </Typography>
+        </Box>
+      </Panel>
+
+      <Panel sx={{ p: { xs: 2, md: 3 }, display: "flex", flexDirection: "column", gap: 2 }}>
+        <Box component="label" sx={{ display: "flex", alignItems: "center", gap: 2, cursor: "pointer" }}>
+          <Box sx={{ flex: 1 }}>
+            <Typography component="h2" sx={{ fontSize: 16, fontWeight: 800, color: "#fff", mb: 0.5 }}>
+              Voice
+            </Typography>
+            <Typography sx={{ fontSize: 13, color: "rgba(255,255,255,0.55)" }}>
+              Visitors can tap the mic to send a voice message, and tap Listen to hear a reply in a natural voice. Nothing
+              records or plays unless they tap. Costs about 1 cent per reply read aloud.
+            </Typography>
+          </Box>
+          <Switch
+            checked={draft.voice.enabled}
+            onChange={(e) => set({ voice: { ...draft.voice, enabled: e.target.checked } })}
+            slotProps={{ input: { "aria-label": "Voice in the chat" } }}
+            sx={{ "& .MuiSwitch-switchBase.Mui-checked": { color: LIME }, "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": { bgcolor: LIME } }}
+          />
+        </Box>
+        <Box sx={{ maxWidth: 300, opacity: draft.voice.enabled ? 1 : 0.55 }}>
+          <SelectField
+            label="Assistant voice"
+            value={draft.voice.voice}
+            onChange={(e) => set({ voice: { ...draft.voice, voice: e.target.value } })}
+            options={VOICES.map((v) => ({ value: v.value, label: v.label }))}
+          />
         </Box>
       </Panel>
 

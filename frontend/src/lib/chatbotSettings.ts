@@ -16,6 +16,21 @@ export interface ProactiveSettings {
   mode: "bubble" | "open";
 }
 
+export const VOICES = [
+  { value: "hannah", label: "Hannah (female)" },
+  { value: "autumn", label: "Autumn (female)" },
+  { value: "diana", label: "Diana (female)" },
+  { value: "austin", label: "Austin (male)" },
+  { value: "daniel", label: "Daniel (male)" },
+  { value: "troy", label: "Troy (male)" },
+] as const;
+
+export interface VoiceSettings {
+  /** Voice messages and read-aloud in the chat (only when the visitor taps them). */
+  enabled: boolean;
+  voice: string;
+}
+
 export interface ChatbotSettings {
   enabled: boolean;
   greeting: string;
@@ -25,6 +40,7 @@ export interface ChatbotSettings {
   /** Transcripts older than this are deleted automatically. */
   retention_days: number;
   proactive: ProactiveSettings;
+  voice: VoiceSettings;
 }
 
 export const PROACTIVE_DEFAULTS: ProactiveSettings = {
@@ -43,6 +59,7 @@ export const CHATBOT_DEFAULTS: ChatbotSettings = {
   facts: [],
   retention_days: 90,
   proactive: PROACTIVE_DEFAULTS,
+  voice: { enabled: true, voice: "hannah" },
 };
 
 export const LIMITS = { greeting: 500, prompt: 80, prompts: 6, fact: 600, facts: 50, minDays: 7, maxDays: 3650, minDelay: 5, maxDelay: 600, invite: 400 };
@@ -63,6 +80,7 @@ export function parseChatbotSettings(raw: string | null | undefined): ChatbotSet
   const days = stored.retention_days;
   const pro = (stored.proactive && typeof stored.proactive === "object" ? stored.proactive : {}) as Record<string, unknown>;
   const delay = pro.delay_seconds;
+  const voice = (stored.voice && typeof stored.voice === "object" ? stored.voice : {}) as Record<string, unknown>;
   return {
     enabled: typeof stored.enabled === "boolean" ? stored.enabled : CHATBOT_DEFAULTS.enabled,
     greeting:
@@ -84,6 +102,10 @@ export function parseChatbotSettings(raw: string | null | undefined): ChatbotSet
       message:
         typeof pro.message === "string" && pro.message.trim() ? pro.message.trim().slice(0, LIMITS.invite) : PROACTIVE_DEFAULTS.message,
       mode: pro.mode === "bubble" ? "bubble" : "open",
+    },
+    voice: {
+      enabled: typeof voice.enabled === "boolean" ? voice.enabled : true,
+      voice: VOICES.some((v) => v.value === voice.voice) ? (voice.voice as string) : "hannah",
     },
   };
 }

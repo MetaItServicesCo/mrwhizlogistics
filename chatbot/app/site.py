@@ -65,6 +65,16 @@ class ProactiveConfig:
         return self.message.replace("{service}", service_for_page(page_url))
 
 
+VOICE_CHOICES = ("hannah", "autumn", "diana", "austin", "daniel", "troy")
+
+
+@dataclass
+class VoiceConfig:
+    # Voice input (Whisper) and read-aloud (Orpheus), on visitor request only.
+    enabled: bool = True
+    voice: str = "hannah"
+
+
 @dataclass
 class ChatbotConfig:
     enabled: bool = True
@@ -74,6 +84,7 @@ class ChatbotConfig:
     facts: list[str] = field(default_factory=list)
     retention_days: int = 90
     proactive: ProactiveConfig = field(default_factory=ProactiveConfig)
+    voice: VoiceConfig = field(default_factory=VoiceConfig)
     company_name: str = "Mr. Whiz Logistics"
     phone: str = ""
     email: str = ""
@@ -121,6 +132,12 @@ def parse_config(rows: list[dict]) -> ChatbotConfig:
         days = stored.get("retention_days")
         if isinstance(days, int) and 7 <= days <= 3650:
             cfg.retention_days = days
+        voice = stored.get("voice")
+        if isinstance(voice, dict):
+            if isinstance(voice.get("enabled"), bool):
+                cfg.voice.enabled = voice["enabled"]
+            if isinstance(voice.get("voice"), str) and voice["voice"].lower() in VOICE_CHOICES:
+                cfg.voice.voice = voice["voice"].lower()
         pro = stored.get("proactive")
         if isinstance(pro, dict):
             if isinstance(pro.get("enabled"), bool):

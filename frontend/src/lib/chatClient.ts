@@ -150,6 +150,27 @@ export const fetchInvite = (pageUrl: string) => postJson<Invite>("/proactive/inv
 export const startProactive = (pageUrl: string) =>
   postJson<Invite & { session_id: string }>("/proactive/start", { page_url: pageUrl });
 
+/** Speech-to-text for a recorded voice message (Groq Whisper on the server). */
+export async function transcribeAudio(audio: Blob): Promise<string> {
+  const ext = audio.type.includes("mp4") ? "mp4" : audio.type.includes("ogg") ? "ogg" : "webm";
+  const form = new FormData();
+  form.append("audio", audio, `voice.${ext}`);
+  const resp = await fetch(`${CHAT_API_URL}/chat-api/voice/transcribe`, { method: "POST", body: form });
+  if (!resp.ok) throw new ChatHttpError(await errorText(resp), resp.status);
+  return (await resp.json()).text || "";
+}
+
+/** Read-aloud audio (WAV) for up to 200 characters of a reply (Groq Orpheus). */
+export async function fetchSpeech(text: string): Promise<Blob> {
+  const resp = await fetch(`${CHAT_API_URL}/chat-api/voice/speak`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ text }),
+  });
+  if (!resp.ok) throw new ChatHttpError(await errorText(resp), resp.status);
+  return resp.blob();
+}
+
 /** Authenticated dashboard calls to the chatbot service's admin API. */
 export async function chatAdmin<T>(path: string, init: RequestInit = {}): Promise<T> {
   const token = getToken();

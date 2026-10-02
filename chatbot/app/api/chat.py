@@ -76,6 +76,7 @@ class ConfigResponse(BaseModel):
     quick_prompts: list[str]
     phone: str
     proactive: ProactiveSettings
+    voice_enabled: bool
 
 
 class InviteRequest(BaseModel):
@@ -104,6 +105,7 @@ async def chat_config() -> ConfigResponse:
         quick_prompts=cfg.quick_prompts,
         phone=cfg.dispatch_phone,
         proactive=ProactiveSettings(enabled=cfg.proactive.enabled, delay_seconds=cfg.proactive.delay_seconds, mode=cfg.proactive.mode),
+        voice_enabled=cfg.voice.enabled,
     )
 
 

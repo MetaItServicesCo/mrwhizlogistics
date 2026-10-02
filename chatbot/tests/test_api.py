@@ -263,3 +263,36 @@ async def test_load_test_mode_is_isolated(client, offline_backend, monkeypatch):
     purged = (await client.post("/chat-api/loadtest/purge", headers=lt)).json()
     assert purged["deleted"] >= 1
     assert (await client.get(f"/chat-api/sessions/{sid}")).status_code == 404
+
+
+async def test_voice_transcribe_and_speak(client):
+    files = {"audio": ("speech.webm", b"\x1a\x45\xdf\xa3fake-opus", "audio/webm;codecs=opus")}
+    resp = await client.post("/chat-api/voice/transcribe", files=files)
+    assert resp.status_code == 200 and resp.json()["text"] == "I have a load to move"
+
+    bad = await client.post("/chat-api/voice/transcribe", files={"audio": ("x.txt", b"hello", "text/plain")})
+    assert bad.status_code == 415
+    empty = await client.post("/chat-api/voice/transcribe", files={"audio": ("e.webm", b"", "audio/webm")})
+    assert empty.status_code == 422
+
+    speech = await client.post("/chat-api/voice/speak", json={"text": "Hi! Check https://example.com for **details**."})
+    assert speech.status_code == 200 and speech.headers["content-type"] == "audio/wav"
+    assert speech.content[:4] == b"RIFF"
+    too_long = await client.post("/chat-api/voice/speak", json={"text": "word " * 60})
+    assert too_long.status_code == 422
+
+
+async def test_voice_limits_and_switch(client, site, monkeypatch):
+    from app import voice as voice_mod
+
+    monkeypatch.setattr(voice_mod.speak_limiter, "budget", 30)
+    voice_mod.speak_limiter._hits.clear()
+    assert (await client.post("/chat-api/voice/speak", json={"text": "a" * 25})).status_code == 200
+    assert (await client.post("/chat-api/voice/speak", json={"text": "b" * 25})).status_code == 429
+    voice_mod.speak_limiter._hits.clear()
+
+    site.voice.enabled = False
+    assert (await client.post("/chat-api/voice/speak", json={"text": "hello"})).status_code == 404
+    files = {"audio": ("s.webm", b"data", "audio/webm")}
+    assert (await client.post("/chat-api/voice/transcribe", files=files)).status_code == 404
+    assert (await client.get("/chat-api/config")).json()["voice_enabled"] is False

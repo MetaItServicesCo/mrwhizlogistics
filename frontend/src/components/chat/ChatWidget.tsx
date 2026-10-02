@@ -34,8 +34,10 @@ import {
   loadSessionId,
   restoreSession,
   saveSessionId,
+  fetchSpeech,
   startProactive,
   streamChat,
+  transcribeAudio,
   type ChatSource,
   type Invite,
   type LeadSummaryItem,
@@ -72,6 +74,8 @@ export interface ChatWidgetConfig {
   phone?: string;
   /** Proactive invite (Dashboard -> AI Assistant -> Settings). */
   proactive?: ProactiveSettings;
+  /** Voice input and read-aloud, used only when the visitor taps them. */
+  voiceEnabled?: boolean;
 }
 
 // ---- Proactive invite bookkeeping (browser storage, never blocks the chat)
@@ -123,48 +127,41 @@ function inviteEligible(): boolean {
   return !within(store.get("local", INVITE_DISMISSED_KEY), DISMISS_FOR_MS);
 }
 
-type SpeechRecognitionEventLike = Event & {
-  results: {
-    [index: number]: {
-      isFinal: boolean;
-      [index: number]: {
-        transcript: string;
-      };
-    };
-    length: number;
-  };
-};
+// ---- Voice helpers
+const RECORD_LIMIT_S = 60;
+const SPEECH_CHUNK = 190; // the speech API reads at most 200 characters per request
 
-type SpeechRecognitionErrorEventLike = Event & {
-  error: string;
-  message?: string;
-};
-
-interface SpeechRecognitionInstance {
-  continuous: boolean;
-  interimResults: boolean;
-  lang: string;
-
-  start: () => void;
-  stop: () => void;
-  abort: () => void;
-
-  onstart: (() => void) | null;
-  onend: (() => void) | null;
-  onresult: ((event: SpeechRecognitionEventLike) => void) | null;
-  onerror: ((event: SpeechRecognitionErrorEventLike) => void) | null;
-}
-
-interface SpeechRecognitionConstructor {
-  new (): SpeechRecognitionInstance;
-}
-
-declare global {
-  interface Window {
-    SpeechRecognition?: SpeechRecognitionConstructor;
-    webkitSpeechRecognition?: SpeechRecognitionConstructor;
+function speechChunks(text: string): string[] {
+  const clean = text.replace(/https?:\/\/\S+/g, "").replace(/[*#`]/g, "").replace(/\s+/g, " ").trim();
+  const sentences = clean.match(/[^.!?]+[.!?]*/g) || [];
+  const chunks: string[] = [];
+  let current = "";
+  for (const raw of sentences) {
+    let sentence = raw.trim();
+    while (sentence.length > SPEECH_CHUNK) {
+      const cutAt = Math.max(sentence.lastIndexOf(", ", SPEECH_CHUNK), sentence.lastIndexOf(" ", SPEECH_CHUNK));
+      const at = cutAt > 40 ? cutAt + 1 : SPEECH_CHUNK;
+      if (current) chunks.push(current);
+      current = "";
+      chunks.push(sentence.slice(0, at).trim());
+      sentence = sentence.slice(at).trim();
+    }
+    if (!sentence) continue;
+    if (current && current.length + sentence.length + 1 > SPEECH_CHUNK) {
+      chunks.push(current);
+      current = sentence;
+    } else current = current ? `${current} ${sentence}` : sentence;
   }
+  if (current) chunks.push(current);
+  return chunks;
 }
+
+const recordingMime = () =>
+  ["audio/webm;codecs=opus", "audio/webm", "audio/mp4", "audio/ogg;codecs=opus"].find(
+    (t) => typeof MediaRecorder !== "undefined" && MediaRecorder.isTypeSupported?.(t),
+  ) || "";
+
+const fmtSeconds = (s: number) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
 
 const now = () =>
   new Date().toLocaleTimeString([], {
@@ -244,19 +241,24 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
   // VOICE STATES
   // ============================================================
 
+  // Voice is used only when the visitor taps the mic, Listen, or turns on
+  // voice replies. Nothing records or plays by itself.
+  const voiceOn = config.voiceEnabled !== false;
   const [listening, setListening] = useState(false);
+  const [transcribing, setTranscribing] = useState(false);
   const [speaking, setSpeaking] = useState(false);
-  // Browser speech recognition (false during server render).
+  const [speakingId, setSpeakingId] = useState<string | null>(null);
+  // Recording works in every modern browser, including iPhone Safari.
   const voiceSupported = useSyncExternalStore(
     noopSubscribe,
-    () => Boolean(window.SpeechRecognition || window.webkitSpeechRecognition),
+    () => typeof navigator.mediaDevices?.getUserMedia === "function" && typeof window.MediaRecorder !== "undefined",
     () => false,
   );
 
-  // IMPORTANT:
-  // This is ONLY for manual AI voice playback.
-  // It does NOT automatically speak AI responses.
+  // "Voice replies" (off by default): read new replies aloud after the
+  // visitor switched it on themselves.
   const [voiceEnabled, setVoiceEnabled] = useState(false);
+  const voiceRepliesRef = useRef(false);
 
   const [interimText, setInterimText] = useState("");
 
@@ -272,7 +274,12 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
   // ============================================================
 
   const scrollRef = useRef<HTMLDivElement>(null);
-  const recognitionRef = useRef<SpeechRecognitionInstance | null>(null);
+  const recorderRef = useRef<MediaRecorder | null>(null);
+  const recordCancelRef = useRef(false);
+  const recordTimersRef = useRef<number[]>([]);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const speakRunRef = useRef(0);
+  const sendRef = useRef<(text?: string) => Promise<void>>(async () => {});
 
   // ============================================================
   // RESTORE THE PREVIOUS CONVERSATION (first open)
@@ -383,87 +390,103 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
   // ============================================================
 
   useEffect(() => {
+    const timers = recordTimersRef.current;
     return () => {
-      recognitionRef.current?.abort();
-
-      if (typeof window !== "undefined") {
-        window.speechSynthesis?.cancel();
-      }
+      recordCancelRef.current = true;
+      if (recorderRef.current?.state === "recording") recorderRef.current.stop();
+      timers.forEach((t) => window.clearTimeout(t));
+      audioRef.current?.pause();
+      if (typeof window !== "undefined") window.speechSynthesis?.cancel();
     };
   }, []);
 
   // ============================================================
-  // STOP SPEAKING
+  // VOICE OUTPUT (Groq Orpheus; browser voice as a fallback).
+  // Only runs when the visitor taps Listen or switched on voice replies.
   // ============================================================
 
   const stopSpeaking = useCallback(() => {
-    if (typeof window === "undefined") return;
-
-    window.speechSynthesis?.cancel();
-
+    speakRunRef.current += 1;
+    audioRef.current?.pause();
+    audioRef.current = null;
+    if (typeof window !== "undefined") window.speechSynthesis?.cancel();
     setSpeaking(false);
+    setSpeakingId(null);
   }, []);
 
-  // ============================================================
-  // MANUAL TEXT TO SPEECH
-  //
-  // IMPORTANT:
-  // AI NEVER CALLS THIS AUTOMATICALLY.
-  // User has to click speaker icon.
-  // ============================================================
-
   const speak = useCallback(
-    (text: string) => {
-      if (!voiceEnabled) return;
-
-      if (typeof window === "undefined") return;
-
-      if (!("speechSynthesis" in window)) return;
-
+    async (id: string, text: string) => {
       stopSpeaking();
-
-      const utterance = new SpeechSynthesisUtterance(text);
-
-      utterance.rate = 0.95;
-      utterance.pitch = 1;
-      utterance.volume = 1;
-
-      // English voice for trucking assistant
-      utterance.lang = "en-US";
-
-      utterance.onstart = () => {
-        setSpeaking(true);
-      };
-
-      utterance.onend = () => {
-        setSpeaking(false);
-      };
-
-      utterance.onerror = () => {
-        setSpeaking(false);
-      };
-
-      window.speechSynthesis.speak(utterance);
+      const run = speakRunRef.current;
+      const chunks = speechChunks(text);
+      if (!chunks.length) return;
+      setSpeaking(true);
+      setSpeakingId(id);
+      const live = () => run === speakRunRef.current;
+      const play = (blob: Blob) =>
+        new Promise<void>((resolve) => {
+          const url = URL.createObjectURL(blob);
+          const audio = new Audio(url);
+          audioRef.current = audio;
+          const done = () => {
+            URL.revokeObjectURL(url);
+            resolve();
+          };
+          audio.onended = done;
+          audio.onerror = done;
+          audio.onpause = done; // stopped by the visitor
+          audio.play().catch(done);
+        });
+      try {
+        let next: Promise<Blob> | null = fetchSpeech(chunks[0]);
+        for (let i = 0; i < chunks.length; i++) {
+          const blob: Blob = await next!;
+          // Fetch the next sentence while this one plays: no gaps.
+          next = i + 1 < chunks.length ? fetchSpeech(chunks[i + 1]) : null;
+          next?.catch(() => {});
+          if (!live()) return;
+          await play(blob);
+          if (!live()) return;
+        }
+      } catch {
+        // Groq voice unavailable: read it with the browser's own voice.
+        if (live() && "speechSynthesis" in window) {
+          await new Promise<void>((resolve) => {
+            const utterance = new SpeechSynthesisUtterance(chunks.join(" "));
+            utterance.lang = "en-US";
+            utterance.rate = 0.97;
+            utterance.onend = () => resolve();
+            utterance.onerror = () => resolve();
+            window.speechSynthesis.speak(utterance);
+          });
+        }
+      } finally {
+        if (live()) {
+          setSpeaking(false);
+          setSpeakingId(null);
+        }
+      }
     },
-    [voiceEnabled, stopSpeaking],
+    [stopSpeaking],
   );
 
   // ============================================================
-  // STOP LISTENING
+  // VOICE INPUT (record, then Groq Whisper). Only after the visitor
+  // taps the mic; tap again (or 60 s) to send.
   // ============================================================
 
-  const stopListening = useCallback(() => {
-    try {
-      recognitionRef.current?.stop();
-    } catch {
-      // ignore
-    }
+  const clearRecordTimers = () => {
+    recordTimersRef.current.forEach((t) => window.clearTimeout(t));
+    recordTimersRef.current = [];
+  };
 
-    setListening(false);
-    setInterimText("");
+  const stopListening = useCallback((cancel = false) => {
+    recordCancelRef.current = cancel;
+    if (recorderRef.current?.state === "recording") recorderRef.current.stop();
   }, []);
 
   // ============================================================
+  // SEND TO AI (streams the reply from the chatbot service)  // ============================================================
   // SEND TO AI (streams the reply from the chatbot service)
   // ============================================================
 
@@ -516,6 +539,7 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
               case "done":
                 updateMessage(botId, { text: event.reply, sources: event.sources, streaming: false });
                 setSuggestions(event.suggestions || []);
+                if (voiceRepliesRef.current && event.reply) void speak(botId, event.reply);
                 break;
               case "error":
                 updateMessage(botId, (m) => ({ text: m.text ? `${m.text}\n\n${event.message}` : event.message, error: true, streaming: false }));
@@ -536,7 +560,7 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
         setTyping(false);
       }
     },
-    [sessionId, updateMessage, config.phone],
+    [sessionId, updateMessage, config.phone, speak],
   );
 
   // ============================================================
@@ -625,132 +649,83 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
   // AUTOMATICALLY SENDS TO AI
   // ============================================================
 
-  const startListening = () => {
-    if (typeof window === "undefined") return;
-
-    if (typing) return;
-
-    const SpeechRecognition =
-      window.SpeechRecognition || window.webkitSpeechRecognition;
-
-    if (!SpeechRecognition) {
-      alert(
-        "Voice input is not supported in this browser. Please use Google Chrome or Microsoft Edge.",
-      );
-
+  const startListening = async () => {
+    if (typing || transcribing || listening) return;
+    stopSpeaking();
+    let stream: MediaStream;
+    try {
+      stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true } });
+    } catch {
+      addMessage("bot", "I couldn't use your microphone. Please allow microphone access in your browser, or just type your message.");
       return;
     }
-
-    // Stop old recognition
-    try {
-      recognitionRef.current?.abort();
-    } catch {
-      // ignore
-    }
-
-    // Stop AI speech if playing
-    stopSpeaking();
-
-    const recognition = new SpeechRecognition();
-
-    recognition.continuous = false;
-    recognition.interimResults = true;
-    recognition.lang = "en-US";
-
-    recognition.onstart = () => {
-      setListening(true);
-      setInterimText("");
+    const mime = recordingMime();
+    const recorder = new MediaRecorder(stream, mime ? { mimeType: mime } : undefined);
+    const chunks: Blob[] = [];
+    recordCancelRef.current = false;
+    recorder.ondataavailable = (e) => {
+      if (e.data.size) chunks.push(e.data);
     };
-
-    recognition.onresult = (event) => {
-      let finalTranscript = "";
-      let temporaryTranscript = "";
-
-      for (let i = 0; i < event.results.length; i++) {
-        const result = event.results[i];
-
-        const transcript = result[0].transcript;
-
-        if (result.isFinal) {
-          finalTranscript += transcript;
-        } else {
-          temporaryTranscript += transcript;
-        }
+    recorder.onstop = async () => {
+      stream.getTracks().forEach((t) => t.stop());
+      clearRecordTimers();
+      recorderRef.current = null;
+      if (recordCancelRef.current) {
+        setListening(false);
+        setInterimText("");
+        return;
       }
-
-      // Show live speech
-      if (temporaryTranscript) {
-        setInterimText(temporaryTranscript);
+      const blob = new Blob(chunks, { type: recorder.mimeType || mime || "audio/webm" });
+      if (blob.size < 1200) {
+        setListening(false);
+        setInterimText("");
+        addMessage("bot", "I didn't catch that. Tap the microphone, speak, then tap again to send.");
+        return;
       }
-
-      // FINAL SPEECH
-      if (finalTranscript.trim()) {
-        const finalText = finalTranscript.trim();
-
-        setInterimText(finalText);
-
-        /*
-        IMPORTANT:
-
-        Voice is NOT inserted into chat as a fake message.
-
-        It becomes a normal user message through send().
-        */
-
-        setTimeout(() => {
-          setInterimText("");
-          setListening(false);
-
-          send(finalText);
-        }, 150);
+      setTranscribing(true);
+      setInterimText("Turning your voice into text...");
+      let text = "";
+      try {
+        text = (await transcribeAudio(blob)).trim();
+      } catch (error) {
+        addMessage("bot", error instanceof ChatHttpError ? error.message : "Sorry, I couldn't process that recording. Please type your message.");
+      } finally {
+        setTranscribing(false);
+        setListening(false);
+        setInterimText("");
       }
+      if (text) await sendRef.current(text);
+      else if (!text && blob.size >= 1200) addMessage("bot", "I couldn't make out any words. Could you try again, or type your message?");
     };
-
-    recognition.onerror = (event) => {
-      console.error("Speech recognition error:", event.error);
-
-      setListening(false);
-      setInterimText("");
-
-      if (event.error === "not-allowed") {
-        alert(
-          "Microphone permission was denied. Please allow microphone access in your browser settings.",
-        );
-      }
-
-      if (event.error === "no-speech") {
-        console.log("No speech detected.");
-      }
+    recorderRef.current = recorder;
+    recorder.start();
+    setListening(true);
+    let seconds = 0;
+    setInterimText(`Recording 0:00. Tap stop to send.`);
+    const tick = () => {
+      seconds += 1;
+      setInterimText(`Recording ${fmtSeconds(seconds)}. Tap stop to send.`);
+      if (seconds >= RECORD_LIMIT_S) stopListening();
+      else recordTimersRef.current.push(window.setTimeout(tick, 1000));
     };
-
-    recognition.onend = () => {
-      setListening(false);
-      setInterimText("");
-    };
-
-    recognitionRef.current = recognition;
-
-    try {
-      recognition.start();
-    } catch (error) {
-      console.error("Could not start microphone:", error);
-
-      setListening(false);
-      setInterimText("");
-    }
+    recordTimersRef.current.push(window.setTimeout(tick, 1000));
   };
+
+  useEffect(() => {
+    sendRef.current = (text?: string) => send(text);
+  });
 
   // ============================================================
   // TOGGLE MICROPHONE
   // ============================================================
 
   const toggleListening = () => {
+    if (transcribing) return;
     if (listening) {
       stopListening();
       return;
     }
-
-    startListening();
+    void startListening();
   };
 
   // ============================================================
@@ -759,7 +734,7 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
 
   const newChat = () => {
     abortRef.current?.abort();
-    stopListening();
+    stopListening(true);
     stopSpeaking();
 
     saveSessionId(null);
@@ -822,15 +797,15 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
   // ============================================================
 
   const toggleVoiceEnabled = () => {
-    setVoiceEnabled((current) => {
-      const next = !current;
-
-      if (!next) {
-        stopSpeaking();
-      }
-
-      return next;
-    });
+    const next = !voiceEnabled;
+    voiceRepliesRef.current = next;
+    setVoiceEnabled(next);
+    if (!next) stopSpeaking();
+    else {
+      // Played within the tap so mobile browsers allow later replies to play.
+      const unlock = new Audio("data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAIA+AAACABAAZGF0YQAAAAA=");
+      unlock.play().catch(() => {});
+    }
   };
 
   // ============================================================
@@ -1292,19 +1267,19 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
                   </Box>
                 </Box>
 
-                {/* Voice playback toggle */}
-                {voiceSupported && (
+                {/* Voice replies toggle (off by default) */}
+                {voiceOn && (
                   <Tooltip
                     title={
-                      voiceEnabled ? "Voice playback ON" : "Voice playback OFF"
+                      voiceEnabled ? "Voice replies on: new replies are read aloud" : "Voice replies off: tap to hear replies"
                     }
                   >
                     <IconButton
                       onClick={toggleVoiceEnabled}
                       aria-label={
                         voiceEnabled
-                          ? "Disable voice playback"
-                          : "Enable voice playback"
+                          ? "Turn off voice replies"
+                          : "Turn on voice replies"
                       }
                       size="small"
                       sx={{
@@ -1638,27 +1613,29 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
 
                         {/* Manual bot voice */}
                         {message.from === "bot" &&
-                          voiceSupported &&
-                          voiceEnabled && (
-                            <Tooltip title={speaking ? "Stop voice" : "Listen"}>
+                          voiceOn &&
+                          !message.error &&
+                          message.text && (
+                            <Tooltip title={speakingId === message.id ? "Stop" : "Listen"}>
                               <IconButton
                                 size="small"
+                                aria-label={speakingId === message.id ? "Stop reading aloud" : "Listen to this reply"}
                                 onClick={() => {
-                                  if (speaking) {
+                                  if (speakingId === message.id) {
                                     stopSpeaking();
                                   } else {
-                                    speak(message.text);
+                                    void speak(message.id, message.text);
                                   }
                                 }}
                                 sx={{
                                   width: 26,
                                   height: 26,
-                                  color: speaking
+                                  color: speakingId === message.id
                                     ? LIME
                                     : "rgba(255,255,255,0.35)",
                                 }}
                               >
-                                {speaking ? (
+                                {speakingId === message.id ? (
                                   <VolumeOffRoundedIcon
                                     sx={{
                                       fontSize: 15,
@@ -1831,7 +1808,7 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
                               letterSpacing: 1,
                             }}
                           >
-                            LISTENING
+                            {transcribing ? "PROCESSING" : "RECORDING"}
                           </Typography>
 
                           <GraphicEqRoundedIcon
@@ -1850,7 +1827,7 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
                             lineHeight: 1.5,
                           }}
                         >
-                          {interimText || "Speak your message..."}
+                          {interimText || "Recording..."}
                         </Typography>
                       </Box>
                     </Box>
@@ -1997,7 +1974,7 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
                   }}
                 >
                   {/* MICROPHONE */}
-                  {voiceSupported && (
+                  {voiceOn && voiceSupported && (
                     <Box
                       sx={{
                         position: "relative",
@@ -2027,14 +2004,14 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
 
                       <Tooltip
                         title={
-                          listening ? "Stop listening" : "Speak your message"
+                          listening ? "Stop and send" : "Record a voice message"
                         }
                       >
                         <IconButton
                           onClick={toggleListening}
-                          disabled={typing}
+                          disabled={typing || transcribing}
                           aria-label={
-                            listening ? "Stop voice input" : "Start voice input"
+                            listening ? "Stop recording and send" : "Record a voice message"
                           }
                           sx={{
                             position: "relative",
@@ -2146,7 +2123,7 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
                     gap: 0.5,
                   }}
                 >
-                  {voiceSupported ? (
+                  {!voiceOn ? null : voiceSupported ? (
                     <>
                       <MicRoundedIcon
                         sx={{
@@ -2162,7 +2139,7 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
                           textAlign: "center",
                         }}
                       >
-                        Tap the microphone to speak
+                        Tap the mic to send a voice message
                       </Typography>
                     </>
                   ) : (

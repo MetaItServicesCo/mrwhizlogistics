@@ -10,7 +10,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app import jobs
 from app.agent.llm import create_llm
-from app.api import admin, chat
+from app.api import admin, chat, voice
 from app.config import get_settings
 from app.db import init_db, startup_lock
 from app.knowledge.base import kb
@@ -64,3 +64,4 @@ app.add_middleware(
 )
 app.include_router(chat.router)
 app.include_router(admin.router)
+app.include_router(voice.router)

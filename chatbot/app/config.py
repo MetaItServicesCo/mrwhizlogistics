@@ -41,6 +41,9 @@ class Settings(BaseSettings):
     # Used when the primary model is rate limited or failing.
     fallback_model: str = "openai/gpt-oss-20b"
     llm_timeout_seconds: float = 30.0
+    # Voice (only when the visitor taps a voice control in the widget).
+    stt_model: str = "whisper-large-v3-turbo"
+    tts_model: str = "canopylabs/orpheus-v1-english"
     llm_max_retries: int = 2
     # Concurrent LLM calls per worker, to stay inside Groq rate limits.
     llm_max_concurrency: int = 16
