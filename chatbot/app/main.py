@@ -9,7 +9,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app import jobs
-from app.agent.llm import get_llm
+from app.agent.llm import create_llm
 from app.api import admin, chat
 from app.config import get_settings
 from app.db import init_db, startup_lock
@@ -30,7 +30,8 @@ async def lifespan(app: FastAPI):
     async with startup_lock():
         await init_db()
         await runtime.start(use_postgres=True)
-    app.state.llm = get_llm()
+    # Groq: list the models this key can use and pick one per role.
+    app.state.llm = await create_llm()
     # Load the embedding model and the current index before taking traffic.
     await get_embedder()
     await kb.reload_if_changed()
@@ -41,7 +42,7 @@ async def lifespan(app: FastAPI):
             asyncio.create_task(jobs.index_reloader()),
             asyncio.create_task(jobs.retention_cleaner()),
         ]
-    log.info("Chatbot ready: provider=%s model=%s chunks=%d", settings.llm_provider, settings.chat_model, len(kb.index))
+    log.info("Chatbot ready: provider=%s models=%s chunks=%d", settings.llm_provider, app.state.llm.models(), len(kb.index))
     try:
         yield
     finally:

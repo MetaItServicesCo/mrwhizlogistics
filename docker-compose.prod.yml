@@ -97,9 +97,10 @@ services:
       CORS_ORIGINS: ${CORS_ORIGINS}
       LLM_PROVIDER: ${CHATBOT_LLM_PROVIDER:-groq}
       GROQ_API_KEY: ${GROQ_API_KEY}
-      CHAT_MODEL: ${CHATBOT_CHAT_MODEL:-llama-3.3-70b-versatile}
-      ROUTER_MODEL: ${CHATBOT_ROUTER_MODEL:-llama-3.1-8b-instant}
-      FALLBACK_MODEL: ${CHATBOT_FALLBACK_MODEL:-llama-3.1-8b-instant}
+      # Preferred models; the service falls back to what the key can use.
+      CHAT_MODEL: ${CHATBOT_CHAT_MODEL:-openai/gpt-oss-120b}
+      ROUTER_MODEL: ${CHATBOT_ROUTER_MODEL:-openai/gpt-oss-20b}
+      FALLBACK_MODEL: ${CHATBOT_FALLBACK_MODEL:-openai/gpt-oss-20b}
       DISPATCH_PHONE: ${CHATBOT_DISPATCH_PHONE:-(469) 767 8853}
       # Optional LangSmith tracing of every conversation.
       LANGSMITH_TRACING: ${LANGSMITH_TRACING:-false}

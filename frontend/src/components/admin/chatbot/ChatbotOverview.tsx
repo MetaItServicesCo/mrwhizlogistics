@@ -28,7 +28,7 @@ interface Stats {
 interface SystemStatus {
   ok: boolean;
   problems: { area: "model" | "knowledge"; message: string }[];
-  model: { provider: string; chat_model: string; reachable: boolean };
+  model: { provider: string; chat_model: string; fast_model: string; reachable: boolean; notes: string[] };
   knowledge: { chunks: number; last_success: string | null };
 }
 
@@ -39,9 +39,17 @@ function StatusBanner() {
   if (!data) return null;
   if (data.ok)
     return (
-      <Typography sx={{ fontSize: 12.5, color: "rgba(255,255,255,0.5)" }}>
-        ● Model {data.model.chat_model} reachable · {data.knowledge.chunks} website passages indexed
-      </Typography>
+      <Box>
+        <Typography sx={{ fontSize: 12.5, color: "rgba(255,255,255,0.5)" }}>
+          ● AI models reachable: {data.model.chat_model} (answers), {data.model.fast_model} (routing) ·{" "}
+          {data.knowledge.chunks} website passages indexed
+        </Typography>
+        {data.model.notes?.map((n) => (
+          <Typography key={n} sx={{ fontSize: 12, color: "rgba(255,255,255,0.4)" }}>
+            {n}
+          </Typography>
+        ))}
+      </Box>
     );
   return (
     <Alert

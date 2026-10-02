@@ -31,12 +31,15 @@ class Settings(BaseSettings):
     # and local development without an API key.
     llm_provider: str = "groq"
     groq_api_key: str = ""
+    # Preferred models. If the key can't use one, the service picks the next
+    # available model (app/agent/models.py). The gpt-oss models are open to
+    # every Groq tier; the Llama models are Enterprise-only.
     # Writes answers and runs the lead conversation.
-    chat_model: str = "llama-3.3-70b-versatile"
+    chat_model: str = "openai/gpt-oss-120b"
     # Routing and structured extraction (fast, cheap).
-    router_model: str = "llama-3.1-8b-instant"
+    router_model: str = "openai/gpt-oss-20b"
     # Used when the primary model is rate limited or failing.
-    fallback_model: str = "llama-3.1-8b-instant"
+    fallback_model: str = "openai/gpt-oss-20b"
     llm_timeout_seconds: float = 30.0
     llm_max_retries: int = 2
     # Concurrent LLM calls per worker, to stay inside Groq rate limits.

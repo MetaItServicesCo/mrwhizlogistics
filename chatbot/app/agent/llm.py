@@ -14,12 +14,15 @@ import logging
 import re
 import time
 from collections.abc import AsyncIterator
-from typing import Literal, Optional, Protocol
+from typing import TYPE_CHECKING, Literal, Optional, Protocol
 
 from langchain_core.messages import AIMessage, BaseMessage, HumanMessage, SystemMessage
 from pydantic import BaseModel, Field
 
 from app.config import get_settings
+
+if TYPE_CHECKING:
+    from app.agent.models import ModelChoice
 
 log = logging.getLogger(__name__)
 settings = get_settings()
@@ -107,32 +110,60 @@ class ChatLLM(Protocol):
 
     async def ping(self) -> str | None: ...
 
+    def models(self) -> dict: ...
+
 
 # =========================================================================== Groq
 
 
 class GroqLLM:
-    def __init__(self) -> None:
-        from langchain_groq import ChatGroq
+    """Groq via LangChain, on models resolved against what the key can use."""
 
+    REDISCOVER_AFTER_S = 60
+
+    def __init__(self, choice: "ModelChoice | None" = None) -> None:
         if not settings.groq_api_key:
             raise RuntimeError("GROQ_API_KEY is not set (or set LLM_PROVIDER=fake for offline use).")
+        from app.agent.models import ModelChoice
 
-        def model(name: str, temperature: float) -> "ChatGroq":
-            return ChatGroq(
-                model=name,
-                api_key=settings.groq_api_key,
-                temperature=temperature,
-                max_retries=settings.llm_max_retries,
-                timeout=settings.llm_timeout_seconds,
-            )
+        self._sem = asyncio.Semaphore(settings.llm_max_concurrency)
+        self._resolve_lock = asyncio.Lock()
+        self._needs_resolve = choice is None
+        self._last_resolve = 0.0
+        self.resolve_error: str | None = None
+        self._build(choice or ModelChoice(chat=settings.chat_model, fast=settings.router_model, fallback=settings.fallback_model))
 
-        chat = model(settings.chat_model, settings.temperature)
-        fast = model(settings.router_model, 0)
-        fallback = model(settings.fallback_model, settings.temperature)
-        fallback_fast = model(settings.fallback_model, 0)
+    @classmethod
+    async def create(cls) -> "GroqLLM":
+        llm = cls()
+        await llm._ensure_models(force=True)
+        return llm
 
-        self._chat = chat.with_fallbacks([fallback]) if settings.fallback_model != settings.chat_model else chat
+    def _model(self, name: str, temperature: float, **overrides):
+        from langchain_groq import ChatGroq
+
+        from app.agent.models import is_reasoning_model
+
+        kwargs = dict(
+            model=name,
+            api_key=settings.groq_api_key,
+            temperature=temperature,
+            max_retries=settings.llm_max_retries,
+            timeout=settings.llm_timeout_seconds,
+        )
+        if is_reasoning_model(name):
+            # Short, fast answers: minimal hidden reasoning.
+            kwargs["reasoning_effort"] = "low"
+        kwargs.update(overrides)
+        return ChatGroq(**kwargs)
+
+    def _build(self, choice: "ModelChoice") -> None:
+        self.choice = choice
+        chat = self._model(choice.chat, settings.temperature)
+        fast = self._model(choice.fast, 0)
+        fallback = self._model(choice.fallback, settings.temperature)
+        fallback_fast = self._model(choice.fallback, 0)
+        self._chat = chat.with_fallbacks([fallback]) if choice.fallback != choice.chat else chat
         self._router = fast.with_structured_output(RouteDecision).with_fallbacks(
             [fallback_fast.with_structured_output(RouteDecision), chat.with_structured_output(RouteDecision)]
         )
@@ -140,33 +171,66 @@ class GroqLLM:
         self._extractor = chat.with_structured_output(LeadExtraction).with_fallbacks(
             [fallback_fast.with_structured_output(LeadExtraction)]
         )
-        self._sem = asyncio.Semaphore(settings.llm_max_concurrency)
         # Health checks call the model once, without retries or fallbacks.
-        self._ping_model = ChatGroq(model=settings.router_model, api_key=settings.groq_api_key, max_retries=0, timeout=10, max_tokens=5)
+        self._ping_model = self._model(choice.fast, 0, max_retries=0, timeout=15, max_tokens=256)
+
+    async def _ensure_models(self, force: bool = False) -> None:
+        """(Re)discover available models: at startup and after "model not found"."""
+        if not (force or self._needs_resolve):
+            return
+        if not force and time.time() - self._last_resolve < self.REDISCOVER_AFTER_S:
+            return
+        from app.agent.models import NoUsableModel, discover
+
+        async with self._resolve_lock:
+            if not (force or self._needs_resolve):
+                return
+            self._last_resolve = time.time()
+            try:
+                choice = await discover()
+            except NoUsableModel as exc:
+                self.resolve_error = str(exc)
+                log.error("Model discovery: %s", exc)
+                return
+            except Exception as exc:  # noqa: BLE001 - keep the configured models, retry later
+                self.resolve_error = f"Could not list Groq models ({describe_error(exc)}); using the configured models."
+                log.warning(self.resolve_error)
+                return
+            self.resolve_error = None
+            self._needs_resolve = False
+            self._build(choice)
+
+    def _note_failure(self, exc: Exception, what: str) -> None:
+        health.failed(exc)
+        log.warning("%s model failed: %s", what, describe_error(exc))
+        text = str(exc).lower()
+        if "model_not_found" in text or "does not exist" in text or "decommissioned" in text:
+            self._needs_resolve = True
 
     async def route(self, system: str, history: list[BaseMessage]) -> RouteDecision:
+        await self._ensure_models()
         async with self._sem:
             try:
                 result = await self._router.ainvoke([SystemMessage(system), *history])
             except Exception as exc:  # noqa: BLE001
-                health.failed(exc)
-                log.warning("Router model failed: %s", describe_error(exc))
+                self._note_failure(exc, "Router")
                 raise LLMUnavailable(str(exc)) from exc
         health.ok()
         return result if isinstance(result, RouteDecision) else RouteDecision.model_validate(result)
 
     async def extract_lead(self, system: str, history: list[BaseMessage]) -> LeadExtraction:
+        await self._ensure_models()
         async with self._sem:
             try:
                 result = await self._extractor.ainvoke([SystemMessage(system), *history])
             except Exception as exc:  # noqa: BLE001
-                health.failed(exc)
-                log.warning("Extraction model failed: %s", describe_error(exc))
+                self._note_failure(exc, "Extraction")
                 raise LLMUnavailable(str(exc)) from exc
         health.ok()
         return result if isinstance(result, LeadExtraction) else LeadExtraction.model_validate(result)
 
     async def stream(self, system: str, history: list[BaseMessage], fallback: str | None = None) -> AsyncIterator[str]:
+        await self._ensure_models()
         async with self._sem:
             emitted = False
             try:
@@ -177,11 +241,10 @@ class GroqLLM:
                         yield piece
                 health.ok()
             except Exception as exc:  # noqa: BLE001
-                health.failed(exc)
-                log.warning("Chat model failed: %s", describe_error(exc))
+                self._note_failure(exc, "Chat")
                 if emitted:
                     # Mid-answer failure: close the sentence gracefully.
-                    yield "…"
+                    yield "\u2026"
                     return
                 if fallback:
                     yield fallback
@@ -189,15 +252,22 @@ class GroqLLM:
                 raise LLMUnavailable(str(exc)) from exc
 
     async def ping(self) -> str | None:
-        """Live check of the router model: None when healthy, else the reason."""
+        """Live check of the fast model: None when healthy, else the reason."""
+        await self._ensure_models(force=self._needs_resolve)
+        if self.resolve_error and self._needs_resolve:
+            return self.resolve_error
         try:
-            async with asyncio.timeout(15):
+            async with asyncio.timeout(20):
                 await self._ping_model.ainvoke("Reply with OK.")
             health.ok()
             return None
         except Exception as exc:  # noqa: BLE001
-            health.failed(exc)
+            self._note_failure(exc, "Health check")
             return describe_error(exc)
+
+    def models(self) -> dict:
+        c = self.choice
+        return {"chat": c.chat, "fast": c.fast, "fallback": c.fallback, "available": c.available, "notes": c.notes, "error": self.resolve_error}
 
 
 # =========================================================================== Fake
@@ -234,6 +304,9 @@ class FakeLLM:
 
     async def ping(self) -> str | None:
         return None
+
+    def models(self) -> dict:
+        return {"chat": "fake", "fast": "fake", "fallback": "fake", "available": [], "notes": [], "error": None}
 
     async def route(self, system: str, history: list[BaseMessage]) -> RouteDecision:
         text = _last_human(history)
@@ -298,6 +371,13 @@ class FakeLLM:
 
 
 _llm: ChatLLM | None = None
+
+
+async def create_llm() -> ChatLLM:
+    """Build the configured provider (Groq first discovers which models the key can use)."""
+    global _llm
+    _llm = FakeLLM() if settings.llm_provider == "fake" else await GroqLLM.create()
+    return _llm
 
 
 def get_llm() -> ChatLLM:

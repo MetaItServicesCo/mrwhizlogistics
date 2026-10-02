@@ -271,8 +271,8 @@ async def system_status(request: Request) -> dict:
         "problems": problems,
         "model": {
             "provider": settings.llm_provider,
-            "chat_model": settings.chat_model,
-            "router_model": settings.router_model,
+            # Models actually in use (resolved against what the key can access).
+            **{f"{k}_model" if k in ("chat", "fast", "fallback") else k: v for k, v in request.app.state.llm.models().items()},
             "reachable": llm_error is None,
             "last_error": llm_health.last_error,
         },

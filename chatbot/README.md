@@ -70,9 +70,16 @@ Questions mid-flow are answered and the flow resumes.
 
 See `.env.example`. In production every value comes from the root `.env` via
 `docker-compose.prod.yml` (`GROQ_API_KEY`, `CHATBOT_SERVICE_TOKEN`, shared
-`SECRET_KEY`, …). Models are configurable (`CHATBOT_CHAT_MODEL`, …) so moving
-off Groq later only needs another `ChatLLM` implementation in
-`app/agent/llm.py`.
+`SECRET_KEY`, …). Moving off Groq later only needs another `ChatLLM`
+implementation in `app/agent/llm.py`.
+
+**Model selection.** Defaults: `openai/gpt-oss-120b` for answers,
+`openai/gpt-oss-20b` for routing/extraction (both on every Groq tier; the
+Llama models are Enterprise-only). At startup the service lists the models
+the key can use and takes, per role, the configured model or the next
+available one from the preference list in `app/agent/models.py`. If Groq
+retires a model later ("model not found"), it re-resolves automatically.
+Dashboard → AI Assistant → Overview shows the models in use and why.
 
 ## Develop and test
 
