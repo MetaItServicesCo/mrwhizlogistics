@@ -1,0 +1,9 @@
+{
+  "name": "mrwhiz-synthetic-visits",
+  "private": true,
+  "type": "module",
+  "description": "Labelled synthetic visitors for internal analytics testing (see ../README.md)",
+  "dependencies": {
+    "playwright-core": "^1.55.0"
+  }
+}

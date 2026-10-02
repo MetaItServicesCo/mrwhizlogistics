@@ -53,3 +53,22 @@ One generator drives roughly 5–10k virtual users. For more, run the same
 script from several machines at once (each with `MAX_VUS` set to its share),
 or use k6 Cloud. A single application server will saturate long before
 100k simultaneous users; the breakpoint run shows where and why.
+
+## Labelled synthetic visitors for analytics testing
+
+`analytics/synthetic_visits.mjs` drives real headless Chrome sessions so
+GA4/Clarity record them. Every session carries
+`utm_source=loadtest&utm_medium=synthetic&utm_campaign=<campaign>`, so it
+is identifiable (GA4: Traffic acquisition / Realtime, source "loadtest")
+and can be excluded later. Each session is a new GA4 user.
+
+```bash
+cd loadtest/analytics && npm install
+node synthetic_visits.mjs --visits 10000 --concurrency 30 --quick
+```
+
+`--quick` leaves right after GA4 records the page view (fewer browsers per
+visit/second). GA4 Realtime counts users from the last 30 minutes.
+
+The production server blocks an IP that sends a burst of traffic
+(firewall/fail2ban); whitelist the generator's IP before a run.
