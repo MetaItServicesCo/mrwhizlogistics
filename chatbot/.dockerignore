@@ -1,0 +1,10 @@
+venv/
+.venv/
+.models/
+.env
+__pycache__/
+*.pyc
+tests/
+evals/
+.pytest_cache/
+run_local.py
