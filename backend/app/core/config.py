@@ -33,6 +33,12 @@ class Settings(BaseSettings):
     newsletter_from_name: str = "Mr. Whiz Logistics"
     public_site_url: str = "http://localhost:3000"
 
+    # AI chat assistant (chatbot service). The service authenticates to
+    # /api/internal/* with this shared secret; empty disables those routes.
+    chatbot_service_token: str | None = None
+    # Where "call this visitor now" alerts go; falls back to ADMIN_EMAIL.
+    dispatch_alert_email: str | None = None
+
     @property
     def cors_origin_list(self) -> list[str]:
         return [o.strip() for o in self.cors_origins.split(",") if o.strip()]

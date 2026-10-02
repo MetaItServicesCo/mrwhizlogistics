@@ -81,6 +81,12 @@ communications providers), when required by law, or to protect our rights.</p>
 <h2>Cookies and analytics</h2>
 <p>We use cookies and analytics tools to understand how the site is used. You can block or
 delete cookies in your browser settings; some parts of the site may then not work as intended.</p>
+<h2>AI chat assistant</h2>
+<p>Our website chat is an automated assistant. It answers from the information on this website and
+can pass your name, phone number and shipment details to our dispatch team so they can call you.
+Chat conversations are stored to provide the service and improve it, and are deleted automatically
+after a limited period. Messages are processed by our AI service provider to generate replies. Please
+don't share payment details or other sensitive information in the chat.</p>
 <h2>Data retention and security</h2>
 <p>We keep personal information only as long as needed for the purposes above or as required
 by law, and we use reasonable technical and organisational measures to protect it.</p>

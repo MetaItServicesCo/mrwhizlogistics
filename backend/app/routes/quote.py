@@ -170,7 +170,7 @@ def delete_service_option(
 
 @public_router.post("/quotes", response_model=QuoteRead, status_code=status.HTTP_201_CREATED)
 def submit_quote(payload: QuoteCreate, db: Session = Depends(get_db)):
-    row = QuoteRequest(**payload.model_dump(), status="new")
+    row = QuoteRequest(**payload.model_dump(), status="new", source="website")
     db.add(row)
     db.commit()
     db.refresh(row)

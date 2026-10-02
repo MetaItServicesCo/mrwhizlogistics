@@ -44,12 +44,17 @@ export interface Quote {
   id: number;
   name: string;
   phone: string | null;
-  email: string;
+  /** Chat leads may leave only a phone number. */
+  email: string | null;
   pickup: string | null;
   drop: string | null;
   selected_service: string;
   details: string | null;
   status: string;
+  /** "website" (quote form) or "chatbot" (AI assistant). */
+  source: string | null;
+  callback_requested: boolean | null;
+  chat_session_id: string | null;
   created_at: string;
 }
 

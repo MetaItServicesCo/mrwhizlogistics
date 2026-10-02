@@ -53,6 +53,16 @@ COLUMN_UPGRADES: list[tuple[str, str, str]] = [
     # metadata.create_all; these columns upgrade the pre-existing table.
     ("subscribers", "updated_at", "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP"),
     ("subscribers", "unsubscribed_at", "TIMESTAMP"),
+    # AI chat assistant leads
+    ("quote_requests", "source", "VARCHAR(30)"),
+    ("quote_requests", "callback_requested", "BOOLEAN"),
+    ("quote_requests", "chat_session_id", "VARCHAR(64)"),
+]
+
+# Other idempotent changes (each is safe to run on every boot).
+STATEMENT_UPGRADES: list[str] = [
+    # Chat leads can arrive with a phone number and no email.
+    'ALTER TABLE "quote_requests" ALTER COLUMN "email" DROP NOT NULL',
 ]
 
 
@@ -63,6 +73,8 @@ def upgrade_schema(db: Session) -> None:
     for table, column, ddl_type in COLUMN_UPGRADES:
         # Identifiers come from the constant list above, never from input.
         db.execute(text(f'ALTER TABLE "{table}" ADD COLUMN IF NOT EXISTS "{column}" {ddl_type}'))
+    for statement in STATEMENT_UPGRADES:
+        db.execute(text(statement))
 
 
 # Same key the seed uses, so a startup's upgrade and another worker's seed

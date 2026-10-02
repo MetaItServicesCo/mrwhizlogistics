@@ -45,12 +45,16 @@ class QuoteRead(BaseModel):
     id: int
     name: str
     phone: Optional[str] = None
-    email: EmailStr
+    # Chat leads may leave only a phone number.
+    email: Optional[str] = None
     pickup: Optional[str] = None
     drop: Optional[str] = None
     selected_service: str
     details: Optional[str] = None
     status: str
+    source: Optional[str] = "website"
+    callback_requested: Optional[bool] = False
+    chat_session_id: Optional[str] = None
     created_at: datetime
 
 
