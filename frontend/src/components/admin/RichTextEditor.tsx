@@ -7,6 +7,7 @@ import Image from "@tiptap/extension-image";
 import Placeholder from "@tiptap/extension-placeholder";
 import { Color, TextStyle } from "@tiptap/extension-text-style";
 import Highlight from "@tiptap/extension-highlight";
+import { TableKit } from "@tiptap/extension-table";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
@@ -717,6 +718,9 @@ export default function RichTextEditor({
       TextStyle,
       Color,
       Highlight.configure({ multicolor: true }),
+      // Tables pasted from Word, Excel, Google Docs/Sheets or web pages keep
+      // their rows and columns (without this they collapse into plain text).
+      TableKit.configure({ table: { resizable: false } }),
       Placeholder.configure({ placeholder }),
     ],
     content: value || "",

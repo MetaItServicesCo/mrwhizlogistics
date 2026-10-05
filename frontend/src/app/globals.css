@@ -38,3 +38,37 @@
 .rich-content mark a:hover {
   color: inherit;
 }
+/* Tables (pasted into the editor from Word, Excel, Google Docs/Sheets, web
+   pages). Wide tables scroll sideways instead of breaking the layout. */
+.rich-content table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+  margin: 1.25em 0;
+  font-size: 0.95em;
+}
+.rich-content th,
+.rich-content td {
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  padding: 0.55em 0.8em;
+  text-align: left;
+  vertical-align: top;
+  min-width: 80px;
+}
+.rich-content th {
+  background: rgba(200, 255, 0, 0.1);
+  color: #fff;
+  font-weight: 700;
+}
+.rich-content tr:nth-child(even) td {
+  background: rgba(255, 255, 255, 0.03);
+}
+.rich-content th p,
+.rich-content td p {
+  margin: 0;
+}
+/* Editor: show the selected cells while editing a table. */
+.rich-content .selectedCell {
+  background: rgba(200, 255, 0, 0.15);
+}

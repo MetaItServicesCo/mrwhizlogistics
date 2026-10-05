@@ -22,6 +22,8 @@ ALLOWED_TAGS = {
     "a", "img",
     # Text colour (<span style="color: …">) and highlight (<mark …>).
     "span", "mark",
+    # Tables (pasted from Word, Excel, Google Docs/Sheets or web pages).
+    "table", "thead", "tbody", "tfoot", "tr", "th", "td", "caption", "colgroup", "col",
 }
 
 ALLOWED_ATTRIBUTES = {
@@ -29,6 +31,9 @@ ALLOWED_ATTRIBUTES = {
     "img": {"src", "alt", "title"},
     "span": {"style"},
     "mark": {"style", "data-color"},
+    "th": {"colspan", "rowspan", "scope"},
+    "td": {"colspan", "rowspan"},
+    "col": {"span"},
 }
 
 # Relative paths (/uploads/..., /images/...) are resolved against the site's
