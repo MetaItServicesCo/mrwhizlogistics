@@ -589,7 +589,7 @@ function SettingsPage() {
         message={
           deletingU?.id === me?.id
             ? "This is the account you are signed in with. Deleting it will sign you out immediately."
-            : `This permanently removes ${deletingU?.username ?? ""} and revokes their access.`
+            : `This removes ${deletingU?.username ?? ""} and revokes their access. You can restore it from Recently deleted for 7 days.`
         }
         busy={busy}
         onConfirm={() => void removeU()}

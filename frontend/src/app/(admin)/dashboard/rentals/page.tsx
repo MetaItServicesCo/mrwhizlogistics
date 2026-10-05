@@ -326,7 +326,7 @@ export default function RentalsPage() {
       <ConfirmDialog
         open={!!deleting}
         title="Delete rental quote?"
-        message={`This permanently removes the quote from ${deleting?.customer?.fullName ?? ""}. This cannot be undone.`}
+        message={`This removes the quote from ${deleting?.customer?.fullName ?? ""}. You can restore it from Recently deleted for 7 days.`}
         busy={busy}
         onConfirm={() => void remove()}
         onClose={() => setDeleting(null)}

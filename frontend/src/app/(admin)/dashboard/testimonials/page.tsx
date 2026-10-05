@@ -359,7 +359,7 @@ export default function TestimonialsPage() {
       <ConfirmDialog
         open={!!deleting}
         title="Delete testimonial?"
-        message={`This permanently removes the testimonial from ${deleting?.name ?? ""}.`}
+        message={`This removes the testimonial from ${deleting?.name ?? ""}. You can restore it from Recently deleted for 7 days.`}
         busy={busy}
         onConfirm={() => void remove()}
         onClose={() => setDeleting(null)}

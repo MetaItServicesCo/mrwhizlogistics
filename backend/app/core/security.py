@@ -64,6 +64,10 @@ def get_current_user(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="User not found or inactive",
         )
+    # The request's session (shared with the route): "Recently deleted"
+    # records who deleted each item.
+    db.info["user_id"] = user.id
+    db.info["user_name"] = user.username or user.email
     return user
 
 

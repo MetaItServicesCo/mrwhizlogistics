@@ -535,7 +535,7 @@ export default function FaqsPage() {
       <ConfirmDialog
         open={!!deletingFaq}
         title="Delete FAQ?"
-        message="This permanently removes the question from the website."
+        message="This removes the question from the website. You can restore it from Recently deleted for 7 days."
         busy={busy}
         onConfirm={() => void removeFaq()}
         onClose={() => setDeletingFaq(null)}

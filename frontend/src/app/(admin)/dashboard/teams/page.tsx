@@ -353,7 +353,7 @@ export default function TeamsPage() {
       <ConfirmDialog
         open={!!deleting}
         title="Remove team member?"
-        message={`This permanently removes ${deleting?.name ?? ""} from the About page.`}
+        message={`This removes ${deleting?.name ?? ""} from the About page. You can restore it from Recently deleted for 7 days.`}
         confirmLabel="Remove"
         busy={busy}
         onConfirm={() => void remove()}

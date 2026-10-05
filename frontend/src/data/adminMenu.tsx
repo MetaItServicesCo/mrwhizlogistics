@@ -1,4 +1,5 @@
 import SmartToyRoundedIcon from "@mui/icons-material/SmartToyRounded";
+import RestoreFromTrashRoundedIcon from "@mui/icons-material/RestoreFromTrashRounded";
 import SpaceDashboardRoundedIcon from "@mui/icons-material/SpaceDashboardRounded";
 import MoveToInboxRoundedIcon from "@mui/icons-material/MoveToInboxRounded";
 import LocalShippingRoundedIcon from "@mui/icons-material/LocalShippingRounded";
@@ -100,6 +101,12 @@ export const ADMIN_MENU: NavItem[] = [
     title: "Messages",
     href: "/dashboard/messages",
     icon: <ChatRoundedIcon />,
+  },
+  {
+    key: "recently-deleted",
+    title: "Recently deleted",
+    href: "/dashboard/recently-deleted",
+    icon: <RestoreFromTrashRoundedIcon />,
   },
   {
     key: "settings",

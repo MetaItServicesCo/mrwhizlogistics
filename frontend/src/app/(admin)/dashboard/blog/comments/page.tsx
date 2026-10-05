@@ -303,7 +303,7 @@ export default function BlogCommentsPage() {
       <ConfirmDialog
         open={!!deleting}
         title="Delete comment?"
-        message={`This permanently removes the comment from ${deleting?.name ?? ""} and any replies to it.`}
+        message={`This removes the comment from ${deleting?.name ?? ""} and any replies to it. You can restore it from Recently deleted for 7 days.`}
         busy={busy}
         onConfirm={() => void remove()}
         onClose={() => setDeleting(null)}

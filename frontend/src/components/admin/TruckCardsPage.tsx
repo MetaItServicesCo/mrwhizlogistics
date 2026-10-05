@@ -671,7 +671,7 @@ export default function TruckCardsPage({
       <ConfirmDialog
         open={!!deleting}
         title="Delete card?"
-        message={`This permanently removes “${deleting?.title ?? ""}” from the website. This cannot be undone.`}
+        message={`This removes “${deleting?.title ?? ""}” from the website. You can restore it from Recently deleted for 7 days.`}
         busy={busy}
         onConfirm={() => void remove()}
         onClose={() => setDeleting(null)}

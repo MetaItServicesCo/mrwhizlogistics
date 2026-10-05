@@ -47,3 +47,6 @@ __all__ = [
     "NewsletterCampaign",
     "NewsletterDelivery",
 ]
+
+# Recently deleted (also registers the delete-capturing session hook).
+from app.core.recycle_bin import DeletedItem  # noqa: E402,F401

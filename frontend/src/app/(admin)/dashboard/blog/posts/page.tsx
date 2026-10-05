@@ -681,7 +681,7 @@ export default function BlogPostsPage() {
       <ConfirmDialog
         open={!!deleting}
         title="Delete post?"
-        message={`This permanently removes “${deleting?.title ?? ""}” and its comments.`}
+        message={`This removes “${deleting?.title ?? ""}” and its comments. You can restore it from Recently deleted for 7 days.`}
         busy={busy}
         onConfirm={() => void remove()}
         onClose={() => setDeleting(null)}

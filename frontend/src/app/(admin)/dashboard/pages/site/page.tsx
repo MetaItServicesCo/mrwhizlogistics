@@ -408,7 +408,7 @@ export default function SitePagesAdmin() {
         title="Delete page?"
         message={
           deleting
-            ? `“${deleting.title}” will be removed and ${pagePath(deleting.slug)} will show “page not found”. This can't be undone.${error ? ` (${error})` : ""}`
+            ? `“${deleting.title}” will be removed and ${pagePath(deleting.slug)} will show “page not found”. You can restore it from Recently deleted for 7 days.${error ? ` (${error})` : ""}`
             : ""
         }
         busy={busy}

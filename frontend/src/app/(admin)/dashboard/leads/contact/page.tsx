@@ -256,7 +256,7 @@ export default function ContactMessagesPage() {
       <ConfirmDialog
         open={!!deleting}
         title="Delete message?"
-        message={`This permanently removes the message from ${deleting?.full_name ?? ""}. This cannot be undone.`}
+        message={`This removes the message from ${deleting?.full_name ?? ""}. You can restore it from Recently deleted for 7 days.`}
         busy={busy}
         onConfirm={() => void remove()}
         onClose={() => setDeleting(null)}

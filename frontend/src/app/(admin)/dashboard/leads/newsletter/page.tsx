@@ -193,7 +193,7 @@ export default function NewsletterPage() {
       <ConfirmDialog
         open={!!deleting}
         title="Remove subscriber?"
-        message={`This permanently removes ${deleting?.email ?? ""} from the mailing list.`}
+        message={`This removes ${deleting?.email ?? ""} from the mailing list. You can restore it from Recently deleted for 7 days.`}
         confirmLabel="Remove"
         busy={busy}
         onConfirm={() => void remove()}

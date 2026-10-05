@@ -327,7 +327,7 @@ export default function QuotesPage() {
       <ConfirmDialog
         open={!!deleting}
         title="Delete quote request?"
-        message={`This permanently removes the request from ${deleting?.name ?? ""}. This cannot be undone.`}
+        message={`This removes the request from ${deleting?.name ?? ""}. You can restore it from Recently deleted for 7 days.`}
         busy={busy}
         onConfirm={() => void remove()}
         onClose={() => setDeleting(null)}
