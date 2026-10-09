@@ -307,7 +307,7 @@ export default function HotShotServiceDetail({
     >
       {/* HERO */}
 
-      <HotShotDetailHero service={service} />
+      <HotShotDetailHero service={service} basePath={basePath} />
 
       {/* MAIN CONTENT */}
 

@@ -15,12 +15,24 @@ import type { HotShotService } from "@/types/hotShot";
 const LIME = "#c8ff00";
 const EASE = [0.22, 1, 0.36, 1] as const;
 
+/** Listing page and label per service category (the detail hero is shared). */
+const CATEGORIES: Record<string, string> = {
+  "/hot-shot": "Hot Shot",
+  "/box-truck": "Box Truck",
+  "/semi-truck": "Semi Truck",
+};
+
 export default function HotShotDetailHero({
   service,
+  basePath = "/hot-shot",
 }: {
   service: HotShotService;
+  /** The category's listing page, e.g. "/box-truck"; drives the back link and breadcrumb. */
+  basePath?: string;
 }) {
   const reduce = useReducedMotion() ?? false;
+  const categoryPath = basePath in CATEGORIES ? basePath : "/hot-shot";
+  const categoryLabel = CATEGORIES[categoryPath];
 
   return (
     <Box
@@ -266,7 +278,7 @@ export default function HotShotDetailHero({
         >
           <Box
             component={Link}
-            href="/hot-shot"
+            href={categoryPath}
             sx={{
               display: "inline-flex",
               alignItems: "center",
@@ -299,7 +311,7 @@ export default function HotShotDetailHero({
                 },
               }}
             />
-            All Hot Shot Services
+            All {categoryLabel} Services
           </Box>
         </motion.div>
 
@@ -603,7 +615,7 @@ export default function HotShotDetailHero({
 
                 <Box
                   component={Link}
-                  href="/hot-shot"
+                  href={categoryPath}
                   sx={{
                     color: "rgba(255,255,255,0.72)",
                     textDecoration: "none",
@@ -619,7 +631,7 @@ export default function HotShotDetailHero({
                     },
                   }}
                 >
-                  Hot Shot
+                  {categoryLabel}
                 </Box>
 
                 <Box

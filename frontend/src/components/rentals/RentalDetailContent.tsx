@@ -499,8 +499,9 @@ export default function RentalDetailContent({
                   }}
                 >{copy.commercialRentalEquipment}</Typography>
 
+                {/* Visual title over the photo; the page's only H1 is in the hero above. */}
                 <Typography
-                  component="h1"
+                  component="p"
                   sx={{
                     fontSize: {
                       xs: "1.8rem",
