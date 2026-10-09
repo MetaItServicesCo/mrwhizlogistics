@@ -104,6 +104,7 @@ async def create_hotshot(
     custom_id: Optional[int] = Form(None, description="Optional custom ID for the card"),
     page_heading: Optional[str] = Form("Hotshot"),
     page_subheading: Optional[str] = Form("Choose the right hotshot service"),
+    overview_heading: Optional[str] = Form(None),
     
     features: Optional[str] = Form("[]"),
     detail_paragraphs: Optional[str] = Form("[]"),
@@ -146,6 +147,7 @@ async def create_hotshot(
     new_hotshot = Hotshot(
         page_heading=clean_string(page_heading),
         page_subheading=clean_string(page_subheading),
+        overview_heading=clean_string(overview_heading),
         card_number=card_number,
         category_tag=category_tag,
         title=title,
@@ -180,6 +182,7 @@ async def update_hotshot(
     id: int,
     page_heading: Optional[str] = Form(None),
     page_subheading: Optional[str] = Form(None),
+    overview_heading: Optional[str] = Form(None),
     card_number: Optional[str] = Form(None),
     category_tag: Optional[str] = Form(None),
     title: Optional[str] = Form(None),
@@ -219,6 +222,7 @@ async def update_hotshot(
 
     if page_heading is not None: hotshot.page_heading = clean_string(page_heading)
     if page_subheading is not None: hotshot.page_subheading = clean_string(page_subheading)
+    if overview_heading is not None: hotshot.overview_heading = clean_string(overview_heading)
     if card_number is not None: hotshot.card_number = card_number
     if category_tag is not None: hotshot.category_tag = category_tag
     if title is not None: hotshot.title = title

@@ -6,6 +6,7 @@ class SemiTruckBase(BaseModel):
     # Landing Page Titles
     page_heading: Optional[str] = "Semi Truck"
     page_subheading: Optional[str] = "Choose the right semi truck"
+    overview_heading: Optional[str] = None
 
     # Card Data
     card_number: str

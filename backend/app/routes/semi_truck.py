@@ -93,6 +93,7 @@ async def create_semi_truck(
     
     page_heading: Optional[str] = Form("Semi Truck"),
     page_subheading: Optional[str] = Form("Choose the right semi truck"),
+    overview_heading: Optional[str] = Form(None),
     
     trailer_length: Optional[str] = Form(None),
     max_payload: Optional[str] = Form(None),
@@ -132,6 +133,7 @@ async def create_semi_truck(
     new_semi_truck = SemiTruck(
         page_heading=clean_string(page_heading),
         page_subheading=clean_string(page_subheading),
+        overview_heading=clean_string(overview_heading),
         card_number=card_number,
         category_tag=category_tag,
         title=title,
@@ -166,6 +168,7 @@ async def update_semi_truck(
     id: int,
     page_heading: Optional[str] = Form(None),
     page_subheading: Optional[str] = Form(None),
+    overview_heading: Optional[str] = Form(None),
     card_number: Optional[str] = Form(None),
     category_tag: Optional[str] = Form(None),
     title: Optional[str] = Form(None),
@@ -210,6 +213,7 @@ async def update_semi_truck(
 
     if page_heading is not None: record.page_heading = clean_string(page_heading)
     if page_subheading is not None: record.page_subheading = clean_string(page_subheading)
+    if overview_heading is not None: record.overview_heading = clean_string(overview_heading)
     if card_number is not None: record.card_number = card_number
     if category_tag is not None: record.category_tag = category_tag
     if title is not None: record.title = title

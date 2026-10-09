@@ -10,6 +10,8 @@ class SemiTruck(Base):
     # --- LANDING PAGE DATA ---
     page_heading = Column(String(300), nullable=True, default="Semi Truck")
     page_subheading = Column(String(500), nullable=True, default="Choose the right semi truck")
+    # Heading of the detail page's overview section (empty = the service title).
+    overview_heading = Column(String(300), nullable=True)
     
     # --- CARD DATA ---
     card_number = Column(String(20), nullable=False)          # e.g., "01"

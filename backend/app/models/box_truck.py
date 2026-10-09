@@ -10,6 +10,8 @@ class BoxTruck(Base):
     # --- PAGE HEADINGS (listing page) ---
     page_heading = Column(String(200), nullable=True, default="Box Truck")
     page_subheading = Column(String(300), nullable=True)
+    # Heading of the detail page's overview section (empty = the service title).
+    overview_heading = Column(String(300), nullable=True)
     
     # Landing Page Card Fields
     card_number = Column(String, nullable=False)

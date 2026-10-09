@@ -296,6 +296,14 @@ export default function HotShotServiceDetail({
   basePath,
   sectionTitle,
 }: HotShotServiceDetailProps) {
+  // Overview heading from the dashboard; the service title when it's empty.
+  // The last two words keep the lime accent of the original design.
+  const overviewWords = (service.overviewHeading?.trim() || service.name || service.title).split(/\s+/);
+  const accentCount = overviewWords.length >= 3 ? 2 : 0;
+  const overviewLead =
+    overviewWords.slice(0, overviewWords.length - accentCount).join(" ") + (accentCount ? " " : "");
+  const overviewAccent = overviewWords.slice(overviewWords.length - accentCount).join(" ");
+
   return (
     <Box
       component="main"
@@ -391,15 +399,17 @@ export default function HotShotServiceDetail({
                   mb: 4,
                 }}
               >
-                Transportation built around your{" "}
-                <Box
-                  component="span"
-                  sx={{
-                    color: LIME,
-                  }}
-                >
-                  delivery requirements.
-                </Box>
+                {overviewLead}
+                {overviewAccent && (
+                  <Box
+                    component="span"
+                    sx={{
+                      color: LIME,
+                    }}
+                  >
+                    {overviewAccent}
+                  </Box>
+                )}
               </Typography>
             </motion.div>
 

@@ -145,6 +145,8 @@ export interface TruckCard {
   id: number;
   page_heading: string | null;
   page_subheading: string | null;
+  /** Detail page overview heading (empty = the service title). */
+  overview_heading?: string | null;
   card_number: string;
   category_tag: string;
   title: string;

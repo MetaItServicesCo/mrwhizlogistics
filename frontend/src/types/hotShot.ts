@@ -38,6 +38,9 @@ export type HotShotService = {
    */
   title: string;
 
+  /** Heading of the detail page's overview section (falls back to the name). */
+  overviewHeading?: string;
+
   /**
    * Hero badge
    */

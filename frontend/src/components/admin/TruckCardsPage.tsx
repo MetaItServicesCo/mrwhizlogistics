@@ -31,6 +31,7 @@ type FormState = {
   title: string;
   short_description: string;
   detail_heading: string;
+  overview_heading: string;
   slug: string;
   page_heading: string;
   page_subheading: string;
@@ -53,6 +54,7 @@ const EMPTY: FormState = {
   title: "",
   short_description: "",
   detail_heading: "",
+  overview_heading: "",
   slug: "",
   page_heading: "",
   page_subheading: "",
@@ -244,6 +246,7 @@ export default function TruckCardsPage({
       title: row.title || "",
       short_description: row.short_description || "",
       detail_heading: row.detail_heading || "",
+      overview_heading: row.overview_heading || "",
       slug: row.slug || "",
       page_heading: row.page_heading || "",
       page_subheading: row.page_subheading || "",
@@ -285,6 +288,7 @@ export default function TruckCardsPage({
     put("title", form.title);
     put("short_description", form.short_description);
     put("detail_heading", form.detail_heading);
+    put("overview_heading", form.overview_heading);
     put("slug", form.slug);
     put("page_heading", form.page_heading);
     put("page_subheading", form.page_subheading);
@@ -519,6 +523,14 @@ export default function TruckCardsPage({
         onChange={set("detail_heading")}
         required={isCreate}
         helperText="The big heading on the service page. It does not change the SEO title."
+      />
+      <Field
+        label="Overview heading"
+        value={form.overview_heading}
+        onChange={set("overview_heading")}
+        placeholder={form.title || "e.g. 26 Feet Box Truck in Dallas–Fort Worth"}
+        slotProps={{ htmlInput: { maxLength: 300 } }}
+        helperText="Heading of the “Service overview” section on the service page. Leave empty to use the service title."
       />
       <Field
         label="Features"

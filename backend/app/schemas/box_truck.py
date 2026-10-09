@@ -8,6 +8,7 @@ from datetime import datetime
 class BoxTruckBase(BaseModel):
     page_heading: Optional[str] = None
     page_subheading: Optional[str] = None
+    overview_heading: Optional[str] = None
 
     card_number: str
     category_tag: Optional[str] = None

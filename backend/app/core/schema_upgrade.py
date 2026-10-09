@@ -57,6 +57,10 @@ COLUMN_UPGRADES: list[tuple[str, str, str]] = [
     ("quote_requests", "source", "VARCHAR(30)"),
     ("quote_requests", "callback_requested", "BOOLEAN"),
     ("quote_requests", "chat_session_id", "VARCHAR(64)"),
+    # Service detail pages: per-service overview heading
+    ("hotshot_cards", "overview_heading", "VARCHAR(300)"),
+    ("box_trucks", "overview_heading", "VARCHAR(300)"),
+    ("semi_truck_cards", "overview_heading", "VARCHAR(300)"),
 ]
 
 # Other idempotent changes (each is safe to run on every boot).

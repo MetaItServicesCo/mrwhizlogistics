@@ -82,6 +82,7 @@ export function truckCardToService(
     // The detail page shows its own heading; SEO fallbacks use the name.
     name: card.title,
     title: detail ? card.detail_heading || card.title : card.title,
+    overviewHeading: card.overview_heading || undefined,
     badge: card.category_tag || fallback?.badge || "TRANSPORTATION SERVICE",
     image:
       (detail ? card.detail_image : null) ||

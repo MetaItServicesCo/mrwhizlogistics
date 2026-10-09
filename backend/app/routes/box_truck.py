@@ -104,6 +104,7 @@ async def create_box_truck(
     custom_id: Optional[int] = Form(None, description="Optional custom ID for the card"),
     page_heading: Optional[str] = Form("Box Truck"),
     page_subheading: Optional[str] = Form("Choose the right box truck service"),
+    overview_heading: Optional[str] = Form(None),
     
     features: Optional[str] = Form("[]"),
     detail_paragraphs: Optional[str] = Form("[]"),
@@ -145,6 +146,7 @@ async def create_box_truck(
     new_truck = BoxTruck(
         page_heading=clean_string(page_heading),
         page_subheading=clean_string(page_subheading),
+        overview_heading=clean_string(overview_heading),
         card_number=card_number,
         category_tag=category_tag,
         title=title,
@@ -179,6 +181,7 @@ async def update_box_truck(
     id: int,
     page_heading: Optional[str] = Form(None),
     page_subheading: Optional[str] = Form(None),
+    overview_heading: Optional[str] = Form(None),
     card_number: Optional[str] = Form(None),
     category_tag: Optional[str] = Form(None),
     title: Optional[str] = Form(None),
@@ -218,6 +221,7 @@ async def update_box_truck(
 
     if page_heading is not None: truck.page_heading = clean_string(page_heading)
     if page_subheading is not None: truck.page_subheading = clean_string(page_subheading)
+    if overview_heading is not None: truck.overview_heading = clean_string(overview_heading)
     if card_number is not None: truck.card_number = card_number
     if category_tag is not None: truck.category_tag = category_tag
     if title is not None: truck.title = title
