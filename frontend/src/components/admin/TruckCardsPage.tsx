@@ -538,7 +538,9 @@ export default function TruckCardsPage({
         onChange={set("features")}
         multiline
         minRows={3}
-        helperText="One feature per line"
+        placeholder="Liftgate Delivery | Hydraulic liftgate for safe unloading where there is no dock."
+        slotProps={{ inputLabel: { shrink: true } }}
+        helperText="One feature per line, as Title | Description. The description is optional; without it the card shows just the title."
       />
       <RichTextEditor
         label="Detail page content"

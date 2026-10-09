@@ -156,19 +156,21 @@ function FeatureCard({ feature, index }: { feature: Feature; index: number }) {
         {/* text */}
         <Box sx={{ position: "relative" }}>
           <Typography
-            sx={{ color: "#fff", fontSize: 14, fontWeight: 900, mb: 0.7 }}
+            sx={{ color: "#fff", fontSize: 14, fontWeight: 900, mb: feature.description ? 0.7 : 0 }}
           >
             {feature.title}
           </Typography>
-          <Typography
-            sx={{
-              color: "rgba(255,255,255,.48)",
-              fontSize: 12,
-              lineHeight: 1.7,
-            }}
-          >
-            {feature.description}
-          </Typography>
+          {feature.description && (
+            <Typography
+              sx={{
+                color: "rgba(255,255,255,.48)",
+                fontSize: 12,
+                lineHeight: 1.7,
+              }}
+            >
+              {feature.description}
+            </Typography>
+          )}
         </Box>
 
         {/* bottom accent bar */}

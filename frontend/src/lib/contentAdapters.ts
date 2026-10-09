@@ -48,19 +48,32 @@ const DEFAULT_FEATURE_ICONS = [
   "construction",
 ];
 
+/**
+ * A feature line from the dashboard: "Title | Description", or just "Title".
+ * Only the first "|" separates, so a description may contain "|" itself.
+ */
+export function parseFeatureLine(line: string): { title: string; description: string } {
+  const at = line.indexOf("|");
+  if (at === -1) return { title: line.trim(), description: "" };
+  return { title: line.slice(0, at).trim(), description: line.slice(at + 1).trim() };
+}
+
 export function truckCardToService(
   card: TruckCard,
   fallback?: HotShotService,
   detail = false,
 ): HotShotService {
-  const features = card.features.map((title, index) => {
+  const features = card.features.map((line, index) => {
+    const { title, description: written } = parseFeatureLine(line);
     const matching = fallback?.features.find((item) => item.title === title);
     const positional = fallback?.features[index];
+    // The written description, else the bundled copy's for the same feature;
+    // never the title again (that showed the title twice on the card).
+    const known = matching?.description || (positional?.title === title ? positional.description : "");
+    const description = written || (known && known !== title ? known : "");
     return {
       title,
-      description:
-        matching?.description ||
-        (positional?.title === title ? positional.description : title),
+      description,
       icon:
         matching?.icon ||
         positional?.icon ||
@@ -114,7 +127,7 @@ export function truckCardToGridItem(card: TruckCard) {
     slug: card.slug,
     title: card.title,
     desc: card.short_description,
-    points: card.features,
+    points: card.features.map((line) => parseFeatureLine(line).title).filter(Boolean),
     image: card.card_image,
     imageAlt: card.card_image_alt || card.title,
   };
