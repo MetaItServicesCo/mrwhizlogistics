@@ -12,6 +12,7 @@ import {
   loadDetailForMetadata,
 } from "@/lib/serverContent";
 import { buildBlogSchema, serializeJsonLd } from "@/lib/blogSchema";
+import { brandLogoUrl } from "@/lib/branding";
 import { detailMetadata, usableCanonical } from "@/lib/seo";
 import { AUTHOR_BIOS_KEY, authorBio, parseAuthorBios } from "@/lib/authors";
 import type { BlogPost } from "@/data/blogPosts";
@@ -34,7 +35,7 @@ async function requestOrigin(): Promise<string> {
 }
 
 /** Stored markup when the post has its own, otherwise a generated BlogPosting. */
-function jsonLdFor(post: BlogPost, origin: string): unknown {
+function jsonLdFor(post: BlogPost, origin: string, publisherLogo: string): unknown {
   if (post.schemaMarkup) {
     try {
       return JSON.parse(post.schemaMarkup);
@@ -52,6 +53,8 @@ function jsonLdFor(post: BlogPost, origin: string): unknown {
       author: post.author,
       datePublished: post.date,
       keywords: post.keywords,
+      // The logo uploaded in Dashboard -> Settings -> Branding.
+      publisherLogo,
     },
     origin,
   );
@@ -105,7 +108,7 @@ export default async function BlogDetailPage({
   if (!post) notFound();
 
   const allPosts = apiPosts ? apiPosts.map(apiBlogToView) : BLOG_POSTS;
-  const jsonLd = jsonLdFor(post, await requestOrigin());
+  const jsonLd = jsonLdFor(post, await requestOrigin(), brandLogoUrl(settingsMap(settingRows || [])));
 
   return (
     <main>

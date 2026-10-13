@@ -1,3 +1,4 @@
+import mimetypes
 import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -38,6 +39,21 @@ app.state.secret_key = settings.secret_key
 # --- Uploads Directory Setup (For Hotshot & Dynamic Images) ---
 UPLOAD_DIR = "uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
+# StaticFiles picks Content-Type from Python's mimetypes table, which lacks
+# newer formats (no .webp before Python 3.13) and falls back to text/plain.
+# Register every image type the site serves so browsers and search engines
+# get the right type.
+for _type, _ext in (
+    ("image/webp", ".webp"),
+    ("image/png", ".png"),
+    ("image/jpeg", ".jpg"),
+    ("image/jpeg", ".jpeg"),
+    ("image/gif", ".gif"),
+    ("image/svg+xml", ".svg"),
+    ("image/avif", ".avif"),
+    ("image/x-icon", ".ico"),
+):
+    mimetypes.add_type(_type, _ext)
 app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
 
 app.add_middleware(SessionMiddleware, secret_key=settings.secret_key)

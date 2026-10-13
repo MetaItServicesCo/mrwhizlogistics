@@ -50,6 +50,14 @@ export function logoFromSettings(map: Record<string, string | null | undefined>)
   };
 }
 
+/**
+ * The brand logo for structured data (e.g. the blog's publisher logo): the
+ * footer logo (full brand mark), else the header logo, else the bundled one.
+ */
+export function brandLogoUrl(map: Record<string, string | null | undefined>): string {
+  return parseLogoUrl(map[FOOTER_LOGO_URL_KEY]) || parseLogoUrl(map[LOGO_URL_KEY]) || DEFAULT_LOGO;
+}
+
 /** Alt text for a logo image: what the admin entered, else the company name. */
 export function logoAlt(alt: string | null | undefined, companyName?: string | null): string {
   return (alt || "").trim() || (companyName || "").trim() || "Mr. Whiz Logistics";

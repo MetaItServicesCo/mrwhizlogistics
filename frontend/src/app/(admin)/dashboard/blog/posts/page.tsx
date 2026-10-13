@@ -16,6 +16,7 @@ import { paragraphsToHtml } from "@/lib/richText";
 import { isIsoDate, isValidCanonical, slugify, toIsoDate } from "@/lib/blogFields";
 import { useDeepLinkEdit } from "@/lib/adminNav";
 import { AUTHOR_BIOS_KEY, AUTHOR_BIO_MAX, authorBio, authorKey, parseAuthorBios } from "@/lib/authors";
+import { brandLogoUrl } from "@/lib/branding";
 import {
   BORDER,
   ConfirmDialog,
@@ -606,6 +607,7 @@ export default function BlogPostsPage() {
           author: form.author_name,
           datePublished: form.publish_date,
           keywords: form.meta_keywords,
+          publisherLogo: brandLogoUrl(Object.fromEntries(settings.items.map((s) => [s.key, s.value]))),
         }}
       />
     </>

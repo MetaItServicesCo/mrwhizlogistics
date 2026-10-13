@@ -33,6 +33,8 @@ export type BlogSchemaInput = {
   author?: string | null;
   datePublished?: string | null;
   keywords?: string | null;
+  /** Publisher logo (path or URL); the bundled logo when omitted. */
+  publisherLogo?: string | null;
 };
 
 export function buildBlogSchema(post: BlogSchemaInput, origin = siteUrl()) {
@@ -56,7 +58,7 @@ export function buildBlogSchema(post: BlogSchemaInput, origin = siteUrl()) {
       name: DEFAULT_PUBLISHER,
       logo: {
         "@type": "ImageObject",
-        url: absoluteUrl("/images/logo.png", origin),
+        url: absoluteUrl(post.publisherLogo || "/images/logo.png", origin),
       },
     },
     mainEntityOfPage: { "@type": "WebPage", "@id": url },
