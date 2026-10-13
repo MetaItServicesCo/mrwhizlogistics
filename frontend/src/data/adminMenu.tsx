@@ -1,4 +1,5 @@
 import SmartToyRoundedIcon from "@mui/icons-material/SmartToyRounded";
+import TrendingUpRoundedIcon from "@mui/icons-material/TrendingUpRounded";
 import RestoreFromTrashRoundedIcon from "@mui/icons-material/RestoreFromTrashRounded";
 import SpaceDashboardRoundedIcon from "@mui/icons-material/SpaceDashboardRounded";
 import MoveToInboxRoundedIcon from "@mui/icons-material/MoveToInboxRounded";
@@ -89,6 +90,12 @@ export const ADMIN_MENU: NavItem[] = [
       { title: "Site pages", href: "/dashboard/pages/site" },
       { title: "SEO metadata", href: "/dashboard/pages/seo" },
     ],
+  },
+  {
+    key: "seo-tracking",
+    title: "SEO & Tracking",
+    href: "/dashboard/seo-tracking",
+    icon: <TrendingUpRoundedIcon />,
   },
   {
     key: "chatbot",

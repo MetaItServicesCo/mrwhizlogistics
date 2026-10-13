@@ -10,6 +10,9 @@ import Navbar from "@/components/header/Navbar";
 import { footerLogoFromSettings, logoFromSettings } from "@/lib/branding";
 import { pagePath } from "@/lib/contentPages";
 import { settingsMap } from "@/lib/contentAdapters";
+import { serializeJsonLd } from "@/lib/blogSchema";
+import { SITE_URL } from "@/lib/site";
+import { SEO_TRACKING_KEY, businessSchema, companyInfo, parseSchemaJson, parseSeoTracking } from "@/lib/seoTracking";
 import { CHATBOT_SETTINGS_KEY, parseChatbotSettings } from "@/lib/chatbotSettings";
 import {
   getBoxTruckCards,
@@ -38,13 +41,22 @@ export default async function PublicLayout({
   const chatbot = parseChatbotSettings(settings[CHATBOT_SETTINGS_KEY]);
   const logo = logoFromSettings(settings);
   const ctaOverrides = parseCtaOverrides(settings[CTA_SETTING_KEY]);
+  const seo = parseSeoTracking(settings[SEO_TRACKING_KEY]);
+  const siteSchema = [
+    ...(seo.schema.business ? [businessSchema(SITE_URL, companyInfo(settings))] : []),
+    ...seo.schema.blocks.map((b) => parseSchemaJson(b.json).value).filter((v): v is object => Boolean(v)),
+  ];
 
   return (
     <CtaProvider overrides={ctaOverrides} phone={settings.phone}>
       {/* Analytics on the public site only, so dashboard use isn't counted as
           visitors and customer details shown there are never recorded. */}
-      <GoogleAnalytics />
-      <MicrosoftClarity />
+      <GoogleAnalytics id={seo.analytics.ga4} />
+      <MicrosoftClarity id={seo.analytics.clarity} />
+      {/* Site-wide structured data (Dashboard -> SEO & Tracking). */}
+      {siteSchema.map((block, i) => (
+        <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(block) }} />
+      ))}
       <Navbar
         phone={settings.phone}
         logo={logo}

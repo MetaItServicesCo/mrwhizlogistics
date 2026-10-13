@@ -7,9 +7,12 @@ import theme from "@/theme/theme";
 import { AuthProvider } from "@/lib/auth";
 import { SITE_URL } from "@/lib/site";
 import { DEFAULT_DESCRIPTION, DEFAULT_TITLE, SITE_NAME, sharedOpenGraph } from "@/lib/seo";
+import { getPublicSettings } from "@/lib/serverContent";
+import { settingsMap } from "@/lib/contentAdapters";
+import { SEO_TRACKING_KEY, parseSeoTracking } from "@/lib/seoTracking";
 import "./globals.css";
 
-export const metadata: Metadata = {
+const baseMetadata: Metadata = {
   // Resolves relative canonical / Open Graph URLs to absolute ones.
   metadataBase: new URL(SITE_URL),
   // Pages set a short title; the template adds the brand. The default is
@@ -23,12 +26,24 @@ export const metadata: Metadata = {
   // replaces the whole object rather than merging it).
   openGraph: sharedOpenGraph,
   twitter: { card: "summary_large_image" },
-  // Google Search Console ownership check; renders as a single
-  // <meta name="google-site-verification" content="..."> tag in <head>.
-  verification: {
-    google: "MKqnyAIhuNgEmxJmP3G3PXH7fLMFfL4FvUhIQTOVvwI",
-  },
 };
+
+/**
+ * Search engine ownership checks (Dashboard -> SEO & Tracking): Google
+ * Search Console's google-site-verification and Bing's msvalidate.01 tags.
+ */
+export async function generateMetadata(): Promise<Metadata> {
+  const rows = await getPublicSettings();
+  const seo = parseSeoTracking(settingsMap(rows || [])[SEO_TRACKING_KEY]);
+  const { google, bing } = seo.verification;
+  return {
+    ...baseMetadata,
+    verification: {
+      ...(google ? { google } : {}),
+      ...(bing ? { other: { "msvalidate.01": bing } } : {}),
+    },
+  };
+}
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (

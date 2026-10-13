@@ -1,15 +1,15 @@
 import Script from "next/script";
 
-/** Microsoft Clarity project ID for mrwhizlogistics.com. */
-const CLARITY_PROJECT_ID = "ynwqxtrfx4";
-
 /**
  * Microsoft Clarity (heatmaps and session recordings) - the standard snippet,
  * loaded after the page is interactive so it never delays the first render.
  * Public site only: the dashboard shows customers' contact details, which
  * must not end up in session recordings.
  */
-export default function MicrosoftClarity() {
+export default function MicrosoftClarity({ id }: { id: string }) {
+  // Dashboard -> SEO & Tracking; validated before it gets here.
+  if (!/^[a-z0-9]{5,20}$/.test(id)) return null;
+  const CLARITY_PROJECT_ID = id;
   return (
     <Script id="microsoft-clarity" strategy="afterInteractive">
       {`

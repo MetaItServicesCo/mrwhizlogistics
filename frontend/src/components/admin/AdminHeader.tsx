@@ -24,7 +24,7 @@ import LanguageRoundedIcon from "@mui/icons-material/LanguageRounded";
 const LIME = "#c8ff00";
 
 /** Sections whose name isn't just their URL segment title-cased. */
-const SECTION_TITLES: Record<string, string> = { chatbot: "AI Assistant" };
+const SECTION_TITLES: Record<string, string> = { chatbot: "AI Assistant", "seo-tracking": "SEO & Tracking" };
 
 function titleFromPath(pathname: string) {
   const seg = pathname.split("/").filter(Boolean).pop() || "dashboard";

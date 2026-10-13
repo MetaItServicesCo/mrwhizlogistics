@@ -9,10 +9,13 @@ import {
   getBoxTruckCards,
   getHotshotCards,
   getPublicPages,
+  getPublicSettings,
   getRentalItems,
   getSemiTruckCards,
 } from "@/lib/serverContent";
 import { usableCanonical } from "@/lib/seo";
+import { settingsMap } from "@/lib/contentAdapters";
+import { SEO_TRACKING_KEY, normalizePath, parseSeoTracking } from "@/lib/seoTracking";
 import { siteUrlFor } from "@/lib/site";
 import { LEGAL_PAGE_TYPE, pagePath } from "@/lib/contentPages";
 
@@ -77,7 +80,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     return url ? [{ url, ...options }] : [];
   };
 
-  return [
+  const all: Entry[] = [
     ...page("/", { changeFrequency: "weekly", priority: 1 }),
     ...page("/hot-shot", { changeFrequency: "weekly", priority: 0.9 }),
     ...page("/box-truck", { changeFrequency: "weekly", priority: 0.9 }),
@@ -101,4 +104,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       ),
     ),
   ];
+
+  // Addresses left out in Dashboard -> SEO & Tracking -> Sitemap.
+  const excluded = new Set(parseSeoTracking(settingsMap((await getPublicSettings()) || [])[SEO_TRACKING_KEY]).sitemap.exclude);
+  if (!excluded.size) return all;
+  return all.filter((entry) => !excluded.has(normalizePath(entry.url)));
 }

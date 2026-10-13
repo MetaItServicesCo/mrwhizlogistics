@@ -1,15 +1,15 @@
 import Script from "next/script";
 
-/** GA4 measurement ID for mrwhizlogistics.com. */
-const GA_MEASUREMENT_ID = "G-MCRJ9LNSGB";
-
 /**
  * Google tag (gtag.js) for GA4 - the standard snippet, loaded after the page
  * is interactive so it never delays the first render. Page views on
  * client-side navigation are picked up by GA4's enhanced measurement
  * (browser history events), which is on by default.
  */
-export default function GoogleAnalytics() {
+export default function GoogleAnalytics({ id }: { id: string }) {
+  // Dashboard -> SEO & Tracking; validated (G-XXXX) before it gets here.
+  if (!/^G-[A-Z0-9]{4,20}$/.test(id)) return null;
+  const GA_MEASUREMENT_ID = id;
   return (
     <>
       <Script
