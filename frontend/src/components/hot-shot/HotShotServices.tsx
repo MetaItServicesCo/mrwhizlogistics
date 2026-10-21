@@ -116,9 +116,12 @@ function ServiceCard({
               xs: 220,
               md: 250,
             },
-            overflow: "hidden",
           }}
         >
+          {/* Photo layer: clips the image, zoom and overlays (not the badge,
+              which overlaps the card body below the photo). */}
+          <Box sx={{ position: "absolute", inset: 0, overflow: "hidden" }}>
+
           <Box
             className="service-image"
             sx={{
@@ -165,6 +168,8 @@ function ServiceCard({
             >
               {service.number}
             </Typography>
+          </Box>
+
           </Box>
 
           {/* ICON */}

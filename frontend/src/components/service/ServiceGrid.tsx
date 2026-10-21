@@ -218,9 +218,12 @@ function Card({ s, i, href }: { s: ServiceItem; i: number; href: string }) {
               xs: 195,
               md: 215,
             },
-            overflow: "hidden",
           }}
         >
+          {/* Photo layer: clips the image, zoom and overlays (not the badge,
+              which overlaps the card body below the photo). */}
+          <Box sx={{ position: "absolute", inset: 0, overflow: "hidden" }}>
+
           <motion.div
             style={{
               x: imgX,
@@ -306,6 +309,8 @@ function Card({ s, i, href }: { s: ServiceItem; i: number; href: string }) {
                 "linear-gradient(180deg, transparent 48%, rgba(var(--bg-rgb), 0.96) 100%)",
             }}
           />
+
+          </Box>
 
           {/* =================================================
               IMAGE ARROW CHIP
