@@ -24,11 +24,11 @@ export default function UnsubscribePage({ params }: { params: Promise<{ token: s
   }, [token]);
 
   return (
-    <Box component="main" sx={{ minHeight: "62vh", bgcolor: "#081420", color: "#fff", display: "grid", placeItems: "center", px: 3, py: 14 }}>
-      <Box sx={{ maxWidth: 560, width: "100%", bgcolor: "#0c1f31", border: "1px solid rgba(255,255,255,.1)", borderRadius: "20px", p: { xs: 3, md: 5 }, textAlign: "center" }}>
+    <Box component="main" sx={{ minHeight: "62vh", bgcolor: "var(--bg)", color: "var(--fg)", display: "grid", placeItems: "center", px: 3, py: 14 }}>
+      <Box sx={{ maxWidth: 560, width: "100%", bgcolor: "var(--surface)", border: "1px solid rgba(var(--fg-rgb), .1)", borderRadius: "20px", p: { xs: 3, md: 5 }, textAlign: "center" }}>
         {state.loading ? <CircularProgress size={44} sx={{ color: ACCENT }} /> : state.error ? <ErrorOutlineRoundedIcon sx={{ fontSize: 52, color: "#ff8a8a" }} /> : <CheckCircleRoundedIcon sx={{ fontSize: 52, color: ACCENT }} />}
         <Typography component="h1" sx={{ fontSize: { xs: 26, md: 34 }, fontWeight: 900, mt: 2 }}>Newsletter preferences</Typography>
-        <Typography role="status" sx={{ color: "rgba(255,255,255,.65)", lineHeight: 1.7, mt: 1 }}>{state.message}</Typography>
+        <Typography role="status" sx={{ color: "rgba(var(--fg-rgb), .65)", lineHeight: 1.7, mt: 1 }}>{state.message}</Typography>
         {!state.loading && <Box component={Link} href="/" sx={{ display: "inline-block", mt: 3, px: 3, py: 1.25, bgcolor: ACCENT, color: "#081521", borderRadius: "10px", fontWeight: 800, textDecoration: "none" }}>Return home</Box>}
       </Box>
     </Box>

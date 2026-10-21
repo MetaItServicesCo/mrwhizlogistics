@@ -80,16 +80,16 @@ const countAll = (list: Comment[]): number =>
 
 const fieldSx = {
   "& .MuiOutlinedInput-root": {
-    color: "#fff",
+    color: "var(--fg)",
     borderRadius: "12px",
-    bgcolor: "rgba(255,255,255,0.04)",
+    bgcolor: "rgba(var(--fg-rgb), 0.04)",
     fontSize: 14,
-    "& fieldset": { borderColor: "rgba(255,255,255,0.14)" },
-    "&:hover fieldset": { borderColor: "rgba(255,255,255,0.3)" },
+    "& fieldset": { borderColor: "rgba(var(--fg-rgb), 0.14)" },
+    "&:hover fieldset": { borderColor: "rgba(var(--fg-rgb), 0.3)" },
     "&.Mui-focused fieldset": { borderColor: ACCENT },
   },
   "& input::placeholder, & textarea::placeholder": {
-    color: "rgba(255,255,255,0.4)",
+    color: "rgba(var(--fg-rgb), 0.4)",
     opacity: 1,
   },
 } as const;
@@ -174,13 +174,13 @@ function CommentForm({
             onClick={onCancel}
             startIcon={<CloseRoundedIcon />}
             sx={{
-              color: "rgba(255,255,255,0.6)",
+              color: "rgba(var(--fg-rgb), 0.6)",
               fontWeight: 700,
               borderRadius: "12px",
               px: 2,
               textTransform: "none",
               fontSize: 14,
-              "&:hover": { color: "#fff", bgcolor: "rgba(255,255,255,0.06)" },
+              "&:hover": { color: "var(--fg)", bgcolor: "rgba(var(--fg-rgb), 0.06)" },
             }}
           >
             Cancel
@@ -228,8 +228,8 @@ function CommentItem({
         sx={{
           p: { xs: 2.5, md: 3 },
           borderRadius: "16px",
-          bgcolor: depth > 0 ? "#0a1a29" : "#0b1d2e",
-          border: "1px solid rgba(255,255,255,0.08)",
+          bgcolor: depth > 0 ? "var(--bg)" : "var(--surface)",
+          border: "1px solid rgba(var(--fg-rgb), 0.08)",
           display: "flex",
           gap: 2,
         }}
@@ -264,17 +264,17 @@ function CommentItem({
               flexWrap: "wrap",
             }}
           >
-            <Typography sx={{ fontSize: 15, fontWeight: 800, color: "#fff" }}>
+            <Typography sx={{ fontSize: 15, fontWeight: 800, color: "var(--fg)" }}>
               {comment.name}
             </Typography>
-            <Typography sx={{ fontSize: 12, color: "rgba(255,255,255,0.4)" }}>
+            <Typography sx={{ fontSize: 12, color: "rgba(var(--fg-rgb), 0.4)" }}>
               {comment.date}
             </Typography>
           </Box>
           <Typography
             sx={{
               fontSize: 14,
-              color: "rgba(255,255,255,0.65)",
+              color: "rgba(var(--fg-rgb), 0.65)",
               lineHeight: 1.7,
               mb: 1,
             }}
@@ -288,7 +288,7 @@ function CommentItem({
               onClick={() => setReplyingTo(isReplying ? null : comment.id)}
               startIcon={<ReplyRoundedIcon sx={{ fontSize: 16 }} />}
               sx={{
-                color: isReplying ? ACCENT : "rgba(255,255,255,0.55)",
+                color: isReplying ? ACCENT : "rgba(var(--fg-rgb), 0.55)",
                 fontWeight: 700,
                 fontSize: 12.5,
                 textTransform: "none",
@@ -318,12 +318,12 @@ function CommentItem({
               sx={{
                 p: { xs: 2, md: 2.5 },
                 borderRadius: "14px",
-                bgcolor: "#0a1a29",
+                bgcolor: "var(--bg)",
                 border: `1px solid ${ACCENT}22`,
               }}
             >
               <Typography
-                sx={{ fontSize: 12.5, color: "rgba(255,255,255,0.5)", mb: 1.5 }}
+                sx={{ fontSize: 12.5, color: "rgba(var(--fg-rgb), 0.5)", mb: 1.5 }}
               >
                 Replying to{" "}
                 <Box component="span" sx={{ color: ACCENT, fontWeight: 700 }}>
@@ -455,7 +455,7 @@ export default function BlogComments({ postSlug }: { postSlug: string }) {
             sx={{
               fontSize: { xs: "1.4rem", md: "1.7rem" },
               fontWeight: 800,
-              color: "#fff",
+              color: "var(--fg)",
             }}
           >
             {total} Comment{total !== 1 ? "s" : ""}
@@ -467,8 +467,8 @@ export default function BlogComments({ postSlug }: { postSlug: string }) {
             gap: 0.5,
             p: 0.5,
             borderRadius: "999px",
-            bgcolor: "#0b1d2e",
-            border: "1px solid rgba(255,255,255,0.08)",
+            bgcolor: "var(--surface)",
+            border: "1px solid rgba(var(--fg-rgb), 0.08)",
           }}
         >
           {(["newest", "oldest"] as const).map((s) => (
@@ -488,7 +488,7 @@ export default function BlogComments({ postSlug }: { postSlug: string }) {
                 textTransform: "capitalize",
                 transition: "all .2s",
                 bgcolor: sort === s ? ACCENT : "transparent",
-                color: sort === s ? "#081c31" : "rgba(255,255,255,0.6)",
+                color: sort === s ? "#081c31" : "rgba(var(--fg-rgb), 0.6)",
               }}
             >
               {s}
@@ -500,7 +500,7 @@ export default function BlogComments({ postSlug }: { postSlug: string }) {
       {/* list */}
       <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mb: 6 }}>
         {ordered.length === 0 && (
-          <Typography sx={{ fontSize: 14, color: "rgba(255,255,255,0.45)" }}>
+          <Typography sx={{ fontSize: 14, color: "rgba(var(--fg-rgb), 0.45)" }}>
             No comments yet — start the conversation below.
           </Typography>
         )}
@@ -524,13 +524,13 @@ export default function BlogComments({ postSlug }: { postSlug: string }) {
         sx={{
           fontSize: { xs: "1.4rem", md: "1.7rem" },
           fontWeight: 800,
-          color: "#fff",
+          color: "var(--fg)",
           mb: 1,
         }}
       >
         Leave a Reply
       </Typography>
-      <Typography sx={{ fontSize: 13, color: "rgba(255,255,255,0.5)", mb: 3 }}>
+      <Typography sx={{ fontSize: 13, color: "rgba(var(--fg-rgb), 0.5)", mb: 3 }}>
         Your email address will not be published. Required fields are marked *
       </Typography>
 
@@ -553,7 +553,7 @@ export default function BlogComments({ postSlug }: { postSlug: string }) {
             }}
           >
             <CheckCircleRoundedIcon sx={{ color: ACCENT, fontSize: 20 }} />
-            <Typography sx={{ fontSize: 14, color: "rgba(255,255,255,0.85)" }}>
+            <Typography sx={{ fontSize: 14, color: "rgba(var(--fg-rgb), 0.85)" }}>
               Thanks! Your comment has been posted.
             </Typography>
           </Box>

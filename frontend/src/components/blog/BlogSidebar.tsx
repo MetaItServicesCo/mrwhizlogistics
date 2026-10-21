@@ -42,13 +42,13 @@ function Widget({
         mb: 3,
         p: 3,
         borderRadius: "16px",
-        bgcolor: "#0b1d2e",
-        border: "1px solid rgba(255,255,255,0.08)",
+        bgcolor: "var(--surface)",
+        border: "1px solid rgba(var(--fg-rgb), 0.08)",
       }}
     >
       <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 2.5 }}>
         <Box sx={{ width: 20, height: 3, bgcolor: ACCENT, borderRadius: 2 }} />
-        <Typography sx={{ fontSize: 16, fontWeight: 800, color: "#fff" }}>
+        <Typography sx={{ fontSize: 16, fontWeight: 800, color: "var(--fg)" }}>
           {title}
         </Typography>
       </Box>
@@ -76,14 +76,14 @@ export default function BlogSidebar({
           placeholder="Search…"
           sx={{
             "& .MuiOutlinedInput-root": {
-              color: "#fff",
+              color: "var(--fg)",
               borderRadius: "12px",
-              bgcolor: "#0b1d2e",
-              "& fieldset": { borderColor: "rgba(255,255,255,0.12)" },
+              bgcolor: "var(--surface)",
+              "& fieldset": { borderColor: "rgba(var(--fg-rgb), 0.12)" },
               "&.Mui-focused fieldset": { borderColor: ACCENT },
             },
             "& input::placeholder": {
-              color: "rgba(255,255,255,0.4)",
+              color: "rgba(var(--fg-rgb), 0.4)",
               opacity: 1,
             },
           }}
@@ -116,8 +116,8 @@ export default function BlogSidebar({
                 py: 1,
                 borderRadius: "10px",
                 textDecoration: "none",
-                color: "rgba(255,255,255,0.6)",
-                border: "1px solid rgba(255,255,255,0.06)",
+                color: "rgba(var(--fg-rgb), 0.6)",
+                border: "1px solid rgba(var(--fg-rgb), 0.06)",
                 transition: "all .25s",
                 "&:hover": {
                   color: "#081c31",
@@ -157,7 +157,7 @@ export default function BlogSidebar({
                   borderRadius: "10px",
                   flexShrink: 0,
                   overflow: "hidden",
-                  bgcolor: "#0f2941",
+                  bgcolor: "var(--surface-2)",
                   position: "relative",
                 }}
               >
@@ -169,7 +169,7 @@ export default function BlogSidebar({
                   sx={{
                     fontSize: 13,
                     fontWeight: 700,
-                    color: "#fff",
+                    color: "var(--fg)",
                     lineHeight: 1.4,
                     transition: "color .25s",
                     display: "-webkit-box",
@@ -181,7 +181,7 @@ export default function BlogSidebar({
                   {p.title}
                 </Typography>
                 <Typography
-                  sx={{ fontSize: 11, color: "rgba(255,255,255,0.4)", mt: 0.4 }}
+                  sx={{ fontSize: 11, color: "rgba(var(--fg-rgb), 0.4)", mt: 0.4 }}
                 >
                   {new Date(p.date).toLocaleDateString("en-US", {
                     month: "short",
@@ -208,8 +208,8 @@ export default function BlogSidebar({
                 borderRadius: "8px",
                 textDecoration: "none",
                 fontSize: 12,
-                color: "rgba(255,255,255,0.6)",
-                border: "1px solid rgba(255,255,255,0.12)",
+                color: "rgba(var(--fg-rgb), 0.6)",
+                border: "1px solid rgba(var(--fg-rgb), 0.12)",
                 transition: "all .2s",
                 "&:hover": {
                   color: "#081c31",

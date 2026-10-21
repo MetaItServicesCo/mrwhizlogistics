@@ -42,14 +42,14 @@ export default function MailingListCTA() {
 
   return (
     <Box component="section" aria-labelledby="newsletter-heading" sx={{
-      bgcolor: "#081c31", color: "#fff",
+      bgcolor: "var(--surface)", color: "var(--fg)",
       // Same gutters and width as the footer, in normal document flow.
       px: { xs: 2.5, sm: 4, md: 5, lg: 8, xl: 10 },
       py: { xs: 5, md: 7 },
     }}>
       <Box sx={{
         maxWidth: 1400, mx: "auto", p: { xs: 3, sm: 4, lg: 5 },
-        bgcolor: "#0c1f31", border: "1px solid rgba(var(--accent-rgb), 0.18)",
+        bgcolor: "var(--surface)", border: "1px solid rgba(var(--accent-rgb), 0.18)",
         borderRadius: { xs: "20px", md: "28px" },
         display: "grid",
         gridTemplateColumns: { xs: "minmax(0, 1fr)", md: "minmax(0, 1fr) minmax(0, 1fr)" },
@@ -64,7 +64,7 @@ export default function MailingListCTA() {
           }}>
             Join Our Mailing List
           </Typography>
-          <Typography sx={{ color: "rgba(255,255,255,0.65)", fontSize: { xs: 14, md: 15 }, lineHeight: 1.7, mt: 1.5, maxWidth: 460 }}>
+          <Typography sx={{ color: "rgba(var(--fg-rgb), 0.65)", fontSize: { xs: 14, md: 15 }, lineHeight: 1.7, mt: 1.5, maxWidth: 460 }}>
             Logistics insights and yard-optimization tips, straight to your inbox.
           </Typography>
         </Box>
@@ -75,7 +75,7 @@ export default function MailingListCTA() {
               <CheckCircleRoundedIcon sx={{ color: ACCENT, fontSize: 28, flexShrink: 0 }} />
               <Box>
                 <Typography sx={{ fontWeight: 800, fontSize: 20 }}>You are on the list!</Typography>
-                <Typography sx={{ color: "rgba(255,255,255,0.65)", fontSize: 14, lineHeight: 1.7, mt: 0.5 }}>
+                <Typography sx={{ color: "rgba(var(--fg-rgb), 0.65)", fontSize: 14, lineHeight: 1.7, mt: 0.5 }}>
                   Thanks for subscribing. We will keep you posted.
                 </Typography>
               </Box>
@@ -95,13 +95,13 @@ export default function MailingListCTA() {
                   sx={{
                     minWidth: 0,
                     "& .MuiOutlinedInput-root": {
-                      height: 52, color: "#fff", bgcolor: "#091826", borderRadius: "12px",
-                      "& fieldset": { borderColor: "rgba(255,255,255,0.2)" },
-                      "&:hover fieldset": { borderColor: "rgba(255,255,255,0.4)" },
+                      height: 52, color: "var(--fg)", bgcolor: "var(--bg)", borderRadius: "12px",
+                      "& fieldset": { borderColor: "rgba(var(--fg-rgb), 0.2)" },
+                      "&:hover fieldset": { borderColor: "rgba(var(--fg-rgb), 0.4)" },
                       "&.Mui-focused fieldset": { borderColor: ACCENT },
                     },
-                    "& input::placeholder": { color: "rgba(255,255,255,0.5)", opacity: 1 },
-                    "& input:-webkit-autofill": { WebkitBoxShadow: "0 0 0 1000px #091826 inset", WebkitTextFillColor: "#fff", caretColor: "#fff" },
+                    "& input::placeholder": { color: "rgba(var(--fg-rgb), 0.5)", opacity: 1 },
+                    "& input:-webkit-autofill": { WebkitBoxShadow: "0 0 0 1000px var(--bg) inset", WebkitTextFillColor: "var(--fg)", caretColor: "var(--fg)" },
                   }}
                 />
                 <Button type="submit" disableElevation disabled={status === "loading"}
@@ -110,7 +110,7 @@ export default function MailingListCTA() {
                     minHeight: 52, minWidth: 150, flexShrink: 0, bgcolor: ACCENT, color: "#081c31",
                     fontWeight: 800, px: 3, borderRadius: "12px", textTransform: "none", fontSize: 14,
                     "&:hover": { bgcolor: ACCENT_HOVER },
-                    "&.Mui-focusVisible": { outline: "2px solid #fff", outlineOffset: 3 },
+                    "&.Mui-focusVisible": { outline: "2px solid var(--fg)", outlineOffset: 3 },
                     "&.Mui-disabled": { bgcolor: ACCENT, opacity: 0.7, color: "#081c31" },
                   }}
                 >
@@ -118,7 +118,7 @@ export default function MailingListCTA() {
                 </Button>
               </Box>
               {error && <Typography id="newsletter-error" role="alert" sx={{ color: "#ff9c9c", fontSize: 13, mt: 1.5, overflowWrap: "anywhere" }}>{error}</Typography>}
-              <Typography id="newsletter-hint" sx={{ color: "rgba(255,255,255,0.55)", fontSize: 12, lineHeight: 1.6, mt: 1.5 }}>
+              <Typography id="newsletter-hint" sx={{ color: "rgba(var(--fg-rgb), 0.55)", fontSize: 12, lineHeight: 1.6, mt: 1.5 }}>
                 No spam. Unsubscribe anytime.
               </Typography>
             </Box>

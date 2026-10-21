@@ -21,12 +21,12 @@ const WEEKS = 52;
 
 const fieldSx = {
   "& .MuiOutlinedInput-root": {
-    color: "#fff",
+    color: "var(--fg)",
     borderRadius: "12px",
-    bgcolor: "rgba(255,255,255,0.03)",
+    bgcolor: "rgba(var(--fg-rgb), 0.03)",
     fontWeight: 600,
-    "& fieldset": { borderColor: "rgba(255,255,255,0.14)" },
-    "&:hover fieldset": { borderColor: "rgba(255,255,255,0.32)" },
+    "& fieldset": { borderColor: "rgba(var(--fg-rgb), 0.14)" },
+    "&:hover fieldset": { borderColor: "rgba(var(--fg-rgb), 0.32)" },
     "&.Mui-focused fieldset": { borderColor: ACCENT },
   },
 } as const;
@@ -220,7 +220,7 @@ function Gauge({ value, active }: { value: number; active: boolean }) {
         <Typography
           sx={{
             fontSize: 9,
-            color: "rgba(255,255,255,0.5)",
+            color: "rgba(var(--fg-rgb), 0.5)",
             letterSpacing: 1.5,
             mt: 0.3,
           }}
@@ -250,7 +250,7 @@ function Bar({
         position: "relative",
         height: 6,
         borderRadius: 3,
-        bgcolor: "rgba(255,255,255,0.08)",
+        bgcolor: "rgba(var(--fg-rgb), 0.08)",
         overflow: "hidden",
         mt: 1,
       }}
@@ -284,7 +284,7 @@ function Bar({
               bottom: 0,
               width: "45%",
               background:
-                "linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent)",
+                "linear-gradient(90deg, transparent, rgba(var(--fg-rgb), 0.6), transparent)",
             }}
           />
         )}
@@ -302,7 +302,7 @@ function Confetti() {
         x: (Math.random() - 0.5) * 220,
         y: -(90 + Math.random() * 150),
         rot: (Math.random() - 0.5) * 620,
-        color: [ACCENT, ACCENT_2, SKY, "#ffffff"][i % 4],
+        color: [ACCENT, ACCENT_2, SKY, "var(--fg)"][i % 4],
         delay: Math.random() * 0.12,
       })),
     [],
@@ -399,7 +399,7 @@ function NumField({
   return (
     <Box>
       <Typography
-        sx={{ fontSize: 12, color: "rgba(255,255,255,0.5)", mb: 0.75 }}
+        sx={{ fontSize: 12, color: "rgba(var(--fg-rgb), 0.5)", mb: 0.75 }}
       >
         {label}
       </Typography>
@@ -475,8 +475,8 @@ export default function CalculatorSection() {
       aria-labelledby="calc-title"
       sx={{
         position: "relative",
-        bgcolor: "#081c31",
-        color: "#fff",
+        bgcolor: "var(--surface)",
+        color: "var(--fg)",
         py: { xs: 8, md: 2 },
         px: { xs: 3, md: 6 },
         overflow: "hidden",
@@ -508,7 +508,7 @@ export default function CalculatorSection() {
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, margin: "-90px" }}
+          viewport={{ once: true, margin: "-90px" }}
           transition={{ duration: 0.6 }}
         >
           <Typography
@@ -533,13 +533,12 @@ export default function CalculatorSection() {
               fontSize: { xs: "2rem", sm: "2.7rem", md: "3.4rem" },
               maxWidth: 760,
               mx: "auto",
-              background: `linear-gradient(90deg, #ffffff, ${ACCENT}, var(--accent-2), #ffffff)`,
+              background: `linear-gradient(90deg, var(--fg), rgba(var(--fg-rgb), 0.78))`,
               backgroundSize: "200% auto",
               WebkitBackgroundClip: "text",
               backgroundClip: "text",
               color: "transparent",
               WebkitTextFillColor: "transparent",
-              animation: "calcShimmer 6s linear infinite",
               "@keyframes calcShimmer": {
                 to: { backgroundPosition: "200% center" },
               },
@@ -568,13 +567,13 @@ export default function CalculatorSection() {
         <motion.div
           initial={{ opacity: 0, x: -40 }}
           whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: false, margin: "-90px" }}
+          viewport={{ once: true, margin: "-90px" }}
           transition={{ duration: 0.6, ease: "easeOut" }}
         >
           <Typography
             sx={{
               fontSize: 12,
-              color: "rgba(255,255,255,0.4)",
+              color: "rgba(var(--fg-rgb), 0.4)",
               letterSpacing: 2,
               textTransform: "uppercase",
               mb: 1,
@@ -640,7 +639,7 @@ export default function CalculatorSection() {
 
           <Box sx={{ mt: 4, px: 0.5 }}>
             <Typography
-              sx={{ fontSize: 12.5, color: "rgba(255,255,255,0.6)", mb: 1.5 }}
+              sx={{ fontSize: 12.5, color: "rgba(var(--fg-rgb), 0.6)", mb: 1.5 }}
             >
               How significant are your annual detention &amp; demurrage costs?
             </Typography>
@@ -658,12 +657,12 @@ export default function CalculatorSection() {
               sx={{
                 color: ACCENT,
                 "& .MuiSlider-rail": {
-                  bgcolor: "rgba(255,255,255,0.15)",
+                  bgcolor: "rgba(var(--fg-rgb), 0.15)",
                   opacity: 1,
                 },
-                "& .MuiSlider-mark": { bgcolor: "rgba(255,255,255,0.3)" },
+                "& .MuiSlider-mark": { bgcolor: "rgba(var(--fg-rgb), 0.3)" },
                 "& .MuiSlider-markLabel": {
-                  color: "rgba(255,255,255,0.5)",
+                  color: "rgba(var(--fg-rgb), 0.5)",
                   fontSize: 11,
                 },
                 "& .MuiSlider-thumb": {
@@ -681,7 +680,7 @@ export default function CalculatorSection() {
           ref={cardRef}
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, margin: "-80px" }}
+          viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] as const }}
         >
           <Box
@@ -690,14 +689,14 @@ export default function CalculatorSection() {
               borderRadius: "24px",
               p: "1.5px",
               background:
-                "linear-gradient(160deg, rgba(var(--accent-rgb), 0.5), rgba(255,255,255,0.05) 45%)",
+                "linear-gradient(160deg, rgba(var(--accent-rgb), 0.5), rgba(var(--fg-rgb), 0.05) 45%)",
             }}
           >
             <Box
               sx={{
                 position: "relative",
                 borderRadius: "23px",
-                bgcolor: "#0a1b2b",
+                bgcolor: "var(--surface)",
                 p: { xs: 3, md: 4 },
                 overflow: "hidden",
               }}
@@ -745,7 +744,7 @@ export default function CalculatorSection() {
                   <Typography
                     sx={{
                       fontSize: 12,
-                      color: "rgba(255,255,255,0.6)",
+                      color: "rgba(var(--fg-rgb), 0.6)",
                       letterSpacing: 1,
                     }}
                   >
@@ -785,14 +784,14 @@ export default function CalculatorSection() {
                     <Typography
                       sx={{
                         fontSize: 12.5,
-                        color: "rgba(255,255,255,0.5)",
+                        color: "rgba(var(--fg-rgb), 0.5)",
                         mt: 0.5,
                       }}
                     >
                       ≈{" "}
                       <Box
                         component="span"
-                        sx={{ color: "rgba(255,255,255,0.8)", fontWeight: 700 }}
+                        sx={{ color: "rgba(var(--fg-rgb), 0.8)", fontWeight: 700 }}
                       >
                         <AnimatedNumber
                           value={calc.perDay}
@@ -812,7 +811,7 @@ export default function CalculatorSection() {
                 <Typography
                   sx={{
                     fontSize: 12,
-                    color: "rgba(255,255,255,0.45)",
+                    color: "rgba(var(--fg-rgb), 0.45)",
                     letterSpacing: 1,
                     textTransform: "uppercase",
                     mb: 2,
@@ -835,7 +834,7 @@ export default function CalculatorSection() {
                           {r.label}
                         </Typography>
                         <Typography
-                          sx={{ fontSize: 12, color: "rgba(255,255,255,0.45)" }}
+                          sx={{ fontSize: 12, color: "rgba(var(--fg-rgb), 0.45)" }}
                         >
                           {r.sub}
                         </Typography>
@@ -871,8 +870,8 @@ export default function CalculatorSection() {
                   mt: 3,
                   p: 2.5,
                   borderRadius: "16px",
-                  bgcolor: "rgba(255,255,255,0.04)",
-                  border: "1px solid rgba(255,255,255,0.08)",
+                  bgcolor: "rgba(var(--fg-rgb), 0.04)",
+                  border: "1px solid rgba(var(--fg-rgb), 0.08)",
                 }}
               >
                 {sent ? (
@@ -886,7 +885,7 @@ export default function CalculatorSection() {
                   >
                     <CheckCircleRoundedIcon sx={{ color: ACCENT }} />
                     <Typography
-                      sx={{ fontSize: 14, color: "rgba(255,255,255,0.85)" }}
+                      sx={{ fontSize: 14, color: "rgba(var(--fg-rgb), 0.85)" }}
                     >
                       Thanks! Our team will send your custom ROI analysis
                       shortly.
@@ -912,7 +911,7 @@ export default function CalculatorSection() {
                     <Typography
                       sx={{
                         fontSize: 13,
-                        color: "rgba(255,255,255,0.55)",
+                        color: "rgba(var(--fg-rgb), 0.55)",
                         mb: 2,
                       }}
                     >

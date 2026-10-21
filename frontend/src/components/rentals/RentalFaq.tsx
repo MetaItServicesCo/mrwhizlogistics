@@ -32,8 +32,8 @@ export default function RentalFaq({ content = RENTAL_DEFAULTS.page.sections.Rent
       sx={{
         position: "relative",
         overflow: "hidden",
-        bgcolor: "#081521",
-        color: "#fff",
+        bgcolor: "var(--bg)",
+        color: "var(--fg)",
         py: { xs: 8, sm: 10, md: 13 },
       }}
     >
@@ -83,7 +83,7 @@ export default function RentalFaq({ content = RENTAL_DEFAULTS.page.sections.Rent
           component={motion.div}
           initial={reduce ? {} : { opacity: 0, y: 25 }}
           whileInView={reduce ? {} : { opacity: 1, y: 0 }}
-          viewport={{ once: false, amount: 0.2 }}
+          viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.65, ease: EASE }}
           sx={{
             textAlign: "center",
@@ -146,7 +146,7 @@ export default function RentalFaq({ content = RENTAL_DEFAULTS.page.sections.Rent
           <Typography
             sx={{
               mt: 2,
-              color: "rgba(255,255,255,0.52)",
+              color: "rgba(var(--fg-rgb), 0.52)",
               fontSize: { xs: 14, md: 16 },
               lineHeight: 1.7,
             }}
@@ -173,7 +173,7 @@ export default function RentalFaq({ content = RENTAL_DEFAULTS.page.sections.Rent
                 initial={reduce ? {} : { opacity: 0, y: 18 }}
                 whileInView={reduce ? {} : { opacity: 1, y: 0 }}
                 viewport={{
-                  once: false,
+                  once: true,
                   amount: 0.08,
                 }}
                 transition={{
@@ -187,10 +187,10 @@ export default function RentalFaq({ content = RENTAL_DEFAULTS.page.sections.Rent
                   borderRadius: "16px",
                   border: isOpen
                     ? `1px solid ${ACCENT}55`
-                    : "1px solid rgba(255,255,255,0.09)",
+                    : "1px solid rgba(var(--fg-rgb), 0.09)",
                   bgcolor: isOpen
                     ? "rgba(var(--accent-rgb), 0.045)"
-                    : "rgba(255,255,255,0.025)",
+                    : "rgba(var(--fg-rgb), 0.025)",
                   transition: "border-color 0.25s, background 0.25s",
                 }}
               >
@@ -216,7 +216,7 @@ export default function RentalFaq({ content = RENTAL_DEFAULTS.page.sections.Rent
                     width: "100%",
                     border: 0,
                     bgcolor: "transparent",
-                    color: "#fff",
+                    color: "var(--fg)",
                     cursor: "pointer",
                     textAlign: "left",
                     display: "flex",
@@ -233,7 +233,7 @@ export default function RentalFaq({ content = RENTAL_DEFAULTS.page.sections.Rent
                       display: "block",
                       width: 30,
                       flexShrink: 0,
-                      color: isOpen ? ACCENT : "rgba(255,255,255,0.3)",
+                      color: isOpen ? ACCENT : "rgba(var(--fg-rgb), 0.3)",
                       fontSize: 12,
                       fontWeight: 900,
                       letterSpacing: 0.5,
@@ -250,7 +250,7 @@ export default function RentalFaq({ content = RENTAL_DEFAULTS.page.sections.Rent
                       fontSize: { xs: 14, md: 15.5 },
                       fontWeight: 750,
                       lineHeight: 1.45,
-                      color: isOpen ? "#fff" : "rgba(255,255,255,0.82)",
+                      color: isOpen ? "var(--fg)" : "rgba(var(--fg-rgb), 0.82)",
                     }}
                   >
                     {faq.question}
@@ -315,7 +315,7 @@ export default function RentalFaq({ content = RENTAL_DEFAULTS.page.sections.Rent
                       >
                         <Typography
                           sx={{
-                            color: "rgba(255,255,255,0.55)",
+                            color: "rgba(var(--fg-rgb), 0.55)",
                             fontSize: { xs: 13, md: 14 },
                             lineHeight: 1.75,
                           }}
@@ -336,7 +336,7 @@ export default function RentalFaq({ content = RENTAL_DEFAULTS.page.sections.Rent
           component={motion.div}
           initial={reduce ? {} : { opacity: 0, y: 15 }}
           whileInView={reduce ? {} : { opacity: 1, y: 0 }}
-          viewport={{ once: false, amount: 0.2 }}
+          viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.5, ease: EASE }}
           sx={{
             mt: 4,
@@ -355,7 +355,7 @@ export default function RentalFaq({ content = RENTAL_DEFAULTS.page.sections.Rent
 
           <Typography
             sx={{
-              color: "rgba(255,255,255,0.38)",
+              color: "rgba(var(--fg-rgb), 0.38)",
               fontSize: 12,
             }}
           >{copy.stillHaveQuestionsOurRental}</Typography>

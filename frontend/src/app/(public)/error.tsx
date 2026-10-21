@@ -23,7 +23,7 @@ export default function PublicError({ reset }: { error: Error; reset: () => void
         justifyContent: "center",
         px: 3,
         py: 16,
-        bgcolor: "#07131e",
+        bgcolor: "var(--bg)",
         textAlign: "center",
       }}
     >
@@ -33,11 +33,11 @@ export default function PublicError({ reset }: { error: Error; reset: () => void
         </Typography>
         <Typography
           component="h1"
-          sx={{ fontSize: { xs: 28, md: 36 }, fontWeight: 800, color: "#fff", lineHeight: 1.2, mb: 2 }}
+          sx={{ fontSize: { xs: 28, md: 36 }, fontWeight: 800, color: "var(--fg)", lineHeight: 1.2, mb: 2 }}
         >
           This page couldn&apos;t load right now
         </Typography>
-        <Typography sx={{ fontSize: 15, color: "rgba(255,255,255,0.6)", lineHeight: 1.8, mb: 4 }}>
+        <Typography sx={{ fontSize: 15, color: "rgba(var(--fg-rgb), 0.6)", lineHeight: 1.8, mb: 4 }}>
           Our content service didn&apos;t respond. Please try again in a moment.
         </Typography>
         <Box sx={{ display: "flex", gap: 1.5, justifyContent: "center", flexWrap: "wrap" }}>
@@ -61,8 +61,8 @@ export default function PublicError({ reset }: { error: Error; reset: () => void
             component={Link}
             href="/"
             sx={{
-              color: "#fff",
-              border: "1px solid rgba(255,255,255,0.2)",
+              color: "var(--fg)",
+              border: "1px solid rgba(var(--fg-rgb), 0.2)",
               textTransform: "none",
               fontWeight: 700,
               borderRadius: "999px",

@@ -21,7 +21,7 @@ export default function FleetOverview({
   return (
     <Box
       component="section"
-      sx={{ py: { xs: 8, md: 14 }, bgcolor: "#081c31", color: "#fff" }}
+      sx={{ py: { xs: 8, md: 14 }, bgcolor: "var(--surface)", color: "var(--fg)" }}
     >
       <Container maxWidth="lg">
         {/* Main Side-by-Side Flex Layout */}
@@ -68,8 +68,8 @@ export default function FleetOverview({
                   sx={{
                     p: 4,
                     borderRadius: "20px",
-                    bgcolor: "#0c2032",
-                    border: "1px solid rgba(255,255,255,0.08)",
+                    bgcolor: "var(--surface)",
+                    border: "1px solid rgba(var(--fg-rgb), 0.08)",
                     transition: "border-color .3s ease, transform .3s ease",
                     "&:hover": {
                       borderColor: `${ACCENT}55`,
@@ -95,7 +95,7 @@ export default function FleetOverview({
                       fontWeight: 700,
                       fontSize: "1.25rem",
                       mb: 1.5,
-                      color: "#fff",
+                      color: "var(--fg)",
                     }}
                   >
                     {card.title}
@@ -103,7 +103,7 @@ export default function FleetOverview({
                   <Typography
                     sx={{
                       fontSize: 13.5,
-                      color: "rgba(255,255,255,0.6)",
+                      color: "rgba(var(--fg-rgb), 0.6)",
                       lineHeight: 1.6,
                       mb: 2.5,
                     }}
@@ -158,8 +158,8 @@ export default function FleetOverview({
               sx={{
                 p: { xs: 3, md: 4 },
                 borderRadius: "24px",
-                bgcolor: "#0c2032",
-                border: "1px solid rgba(255,255,255,0.08)",
+                bgcolor: "var(--surface)",
+                border: "1px solid rgba(var(--fg-rgb), 0.08)",
               }}
             >
               <Typography
@@ -169,7 +169,7 @@ export default function FleetOverview({
                   fontSize: { xs: "1.5rem", md: "1.8rem" },
                   mb: 4,
                   lineHeight: 1.3,
-                  color: "#fff",
+                  color: "var(--fg)",
                 }}
               >
                 <Box component="span" sx={{ color: ACCENT }}>
@@ -193,7 +193,7 @@ export default function FleetOverview({
                           fontSize: 12,
                           fontWeight: 800,
                           letterSpacing: 1.2,
-                          color: "rgba(255,255,255,0.8)",
+                          color: "rgba(var(--fg-rgb), 0.8)",
                         }}
                       >
                         {skill.name}
@@ -209,7 +209,7 @@ export default function FleetOverview({
                       sx={{
                         width: "100%",
                         height: 8,
-                        bgcolor: "rgba(255,255,255,0.06)",
+                        bgcolor: "rgba(var(--fg-rgb), 0.06)",
                         borderRadius: 4,
                         overflow: "hidden",
                       }}

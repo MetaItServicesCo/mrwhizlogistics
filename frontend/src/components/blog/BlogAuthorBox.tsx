@@ -21,8 +21,8 @@ export default function BlogAuthorBox({
         mt: 5,
         p: { xs: 3, md: 3.5 },
         borderRadius: "18px",
-        bgcolor: "#0b1d2e",
-        border: "1px solid rgba(255,255,255,0.08)",
+        bgcolor: "var(--surface)",
+        border: "1px solid rgba(var(--fg-rgb), 0.08)",
         display: "flex",
         gap: 2.5,
         alignItems: { xs: "flex-start", sm: "center" },
@@ -59,7 +59,7 @@ export default function BlogAuthorBox({
           PUBLISHED BY
         </Typography>
         <Typography
-          sx={{ fontSize: 18, fontWeight: 800, color: "#fff", mb: 0.5 }}
+          sx={{ fontSize: 18, fontWeight: 800, color: "var(--fg)", mb: 0.5 }}
         >
           {post.author}
         </Typography>
@@ -67,7 +67,7 @@ export default function BlogAuthorBox({
           <Typography
             sx={{
               fontSize: 13.5,
-              color: "rgba(255,255,255,0.55)",
+              color: "rgba(var(--fg-rgb), 0.55)",
               lineHeight: 1.7,
               whiteSpace: "pre-line",
             }}

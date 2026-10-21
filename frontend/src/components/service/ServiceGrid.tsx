@@ -33,12 +33,12 @@ export type ServiceItem = {
 };
 
 const gradients = [
-  "radial-gradient(circle at 30% 25%, rgba(var(--accent-rgb), 0.22), transparent 55%), linear-gradient(150deg, #143655, #081c31)",
-  "radial-gradient(circle at 70% 20%, rgba(var(--accent-2-rgb), 0.18), transparent 55%), linear-gradient(150deg, #12202a, #081c31)",
-  "radial-gradient(circle at 40% 30%, rgba(255,179,64,0.16), transparent 55%), linear-gradient(150deg, #2a2612, #081c31)",
-  "radial-gradient(circle at 65% 25%, rgba(var(--accent-rgb), 0.18), transparent 55%), linear-gradient(150deg, #133250, #081c31)",
-  "radial-gradient(circle at 35% 20%, rgba(var(--sky-rgb), 0.14), transparent 55%), linear-gradient(150deg, #12304c, #081c31)",
-  "radial-gradient(circle at 60% 30%, rgba(var(--accent-2-rgb), 0.16), transparent 55%), linear-gradient(150deg, #0e2430, #081c31)",
+  "radial-gradient(circle at 30% 25%, rgba(var(--accent-rgb), 0.22), transparent 55%), linear-gradient(150deg, var(--surface-2), var(--surface))",
+  "radial-gradient(circle at 70% 20%, rgba(var(--accent-2-rgb), 0.18), transparent 55%), linear-gradient(150deg, var(--surface), var(--surface))",
+  "radial-gradient(circle at 40% 30%, rgba(255,179,64,0.16), transparent 55%), linear-gradient(150deg, #2a2612, var(--surface))",
+  "radial-gradient(circle at 65% 25%, rgba(var(--accent-rgb), 0.18), transparent 55%), linear-gradient(150deg, var(--surface-2), var(--surface))",
+  "radial-gradient(circle at 35% 20%, rgba(var(--sky-rgb), 0.14), transparent 55%), linear-gradient(150deg, var(--surface-2), var(--surface))",
+  "radial-gradient(circle at 60% 30%, rgba(var(--accent-2-rgb), 0.16), transparent 55%), linear-gradient(150deg, var(--surface), var(--surface))",
 ];
 
 function Card({ s, i, href }: { s: ServiceItem; i: number; href: string }) {
@@ -157,8 +157,8 @@ function Card({ s, i, href }: { s: ServiceItem; i: number; href: string }) {
           borderRadius: "22px",
           overflow: "hidden",
           cursor: "pointer",
-          bgcolor: "#0a1c2c",
-          border: "1px solid rgba(255,255,255,0.08)",
+          bgcolor: "var(--surface)",
+          border: "1px solid rgba(var(--fg-rgb), 0.08)",
           display: "flex",
           flexDirection: "column",
           transition: "border-color .4s ease, box-shadow .4s ease",
@@ -166,11 +166,11 @@ function Card({ s, i, href }: { s: ServiceItem; i: number; href: string }) {
 
           "&:hover, &:has(a:focus-visible)": {
             borderColor: `${ACCENT}66`,
-            boxShadow: "0 26px 60px rgba(0,0,0,0.55)",
+            boxShadow: "0 26px 60px rgba(var(--shadow-rgb), 0.193)",
           },
 
           "&:has(a:focus-visible)": {
-            boxShadow: `0 0 0 2px ${ACCENT}, 0 26px 60px rgba(0,0,0,0.55)`,
+            boxShadow: `0 0 0 2px ${ACCENT}, 0 26px 60px rgba(var(--shadow-rgb), 0.193)`,
           },
 
           /* IMAGE HOVER */
@@ -258,9 +258,9 @@ function Card({ s, i, href }: { s: ServiceItem; i: number; href: string }) {
               px: 1.2,
               py: 0.4,
               borderRadius: "8px",
-              bgcolor: "rgba(8,28,49,0.7)",
+              bgcolor: "rgba(var(--bg-rgb), 0.7)",
               backdropFilter: "blur(6px)",
-              border: "1px solid rgba(255,255,255,0.12)",
+              border: "1px solid rgba(var(--fg-rgb), 0.12)",
             }}
           >
             <Typography
@@ -287,7 +287,7 @@ function Card({ s, i, href }: { s: ServiceItem; i: number; href: string }) {
               width: "45%",
               height: "100%",
               background:
-                "linear-gradient(120deg, transparent, rgba(255,255,255,0.14), transparent)",
+                "linear-gradient(120deg, transparent, rgba(var(--fg-rgb), 0.14), transparent)",
               transform: "translateX(-160%)",
               transition: "transform .8s ease",
               pointerEvents: "none",
@@ -303,7 +303,7 @@ function Card({ s, i, href }: { s: ServiceItem; i: number; href: string }) {
               inset: 0,
               zIndex: 1,
               background:
-                "linear-gradient(180deg, transparent 48%, rgba(10,28,44,0.96) 100%)",
+                "linear-gradient(180deg, transparent 48%, rgba(var(--bg-rgb), 0.96) 100%)",
             }}
           />
 
@@ -384,7 +384,7 @@ function Card({ s, i, href }: { s: ServiceItem; i: number; href: string }) {
                 md: "1.45rem",
               },
               mb: 1.2,
-              color: "#fff",
+              color: "var(--fg)",
             }}
           >
             <Box
@@ -402,7 +402,7 @@ function Card({ s, i, href }: { s: ServiceItem; i: number; href: string }) {
           <Typography
             sx={{
               position: "relative",
-              color: "rgba(255,255,255,0.6)",
+              color: "rgba(var(--fg-rgb), 0.6)",
               fontSize: 14,
               lineHeight: 1.65,
               mb: 2.5,
@@ -444,7 +444,7 @@ function Card({ s, i, href }: { s: ServiceItem; i: number; href: string }) {
                 <Typography
                   sx={{
                     fontSize: 14,
-                    color: "rgba(255,255,255,0.82)",
+                    color: "rgba(var(--fg-rgb), 0.82)",
                   }}
                 >
                   {p}
@@ -462,7 +462,7 @@ function Card({ s, i, href }: { s: ServiceItem; i: number; href: string }) {
               position: "relative",
               mt: "auto",
               pt: 2.5,
-              borderTop: "1px solid rgba(255,255,255,0.08)",
+              borderTop: "1px solid rgba(var(--fg-rgb), 0.08)",
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
@@ -470,7 +470,7 @@ function Card({ s, i, href }: { s: ServiceItem; i: number; href: string }) {
           >
             <Typography
               sx={{
-                color: "#fff",
+                color: "var(--fg)",
                 fontWeight: 700,
                 fontSize: 13,
                 letterSpacing: 1,
@@ -535,8 +535,8 @@ export default function ServiceGrid({
       component="section"
       sx={{
         position: "relative",
-        bgcolor: "#081c31",
-        color: "#fff",
+        bgcolor: "var(--surface)",
+        color: "var(--fg)",
 
         px: {
           xs: 3,
@@ -599,7 +599,7 @@ export default function ServiceGrid({
             y: 0,
           }}
           viewport={{
-            once: false,
+            once: true,
             margin: "-80px",
           }}
           transition={{
@@ -665,7 +665,7 @@ export default function ServiceGrid({
                 md: "3.2rem",
               },
 
-              background: `linear-gradient(90deg, #ffffff, ${ACCENT}, var(--accent-2), #ffffff)`,
+              background: `linear-gradient(90deg, var(--fg), rgba(var(--fg-rgb), 0.78))`,
 
               backgroundSize: "200% auto",
 
@@ -677,7 +677,6 @@ export default function ServiceGrid({
 
               WebkitTextFillColor: "transparent",
 
-              animation: "svcShimmer 6s linear infinite",
 
               "@keyframes svcShimmer": {
                 to: {
@@ -698,7 +697,7 @@ export default function ServiceGrid({
           <Typography
             sx={{
               mt: 2.5,
-              color: "rgba(255,255,255,0.6)",
+              color: "rgba(var(--fg-rgb), 0.6)",
               fontSize: {
                 xs: 14.5,
                 md: 16,
@@ -730,7 +729,7 @@ export default function ServiceGrid({
         initial="hidden"
         whileInView="show"
         viewport={{
-          once: false,
+          once: true,
           margin: "-100px",
         }}
         sx={{

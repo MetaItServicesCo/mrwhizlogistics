@@ -62,7 +62,7 @@ function ServiceCard({
         y: 0,
       }}
       viewport={{
-        once: false,
+        once: true,
         margin: "-100px",
       }}
       transition={{
@@ -82,17 +82,17 @@ function ServiceCard({
           position: "relative",
           height: "100%",
           textDecoration: "none",
-          color: "#fff",
+          color: "var(--fg)",
           overflow: "hidden",
           borderRadius: "20px",
-          bgcolor: "#0b1d2e",
-          border: "1px solid rgba(255,255,255,.08)",
+          bgcolor: "var(--surface)",
+          border: "1px solid rgba(var(--fg-rgb), .08)",
           transition: "all .45s ease",
 
           "&:hover": {
             transform: "translateY(-10px)",
             borderColor: "rgba(var(--accent-rgb), .45)",
-            boxShadow: "0 30px 80px rgba(0,0,0,.55)",
+            boxShadow: "0 30px 80px rgba(var(--shadow-rgb), 0.193)",
           },
 
           "&:hover .service-image": {
@@ -109,6 +109,7 @@ function ServiceCard({
         {/* IMAGE */}
 
         <Box
+          className="theme-dark"
           sx={{
             position: "relative",
             height: {
@@ -136,7 +137,7 @@ function ServiceCard({
               position: "absolute",
               inset: 0,
               background:
-                "linear-gradient(180deg, rgba(0,0,0,.05) 20%, rgba(7,20,31,.96) 100%)",
+                "linear-gradient(180deg, rgba(0,0,0,.05) 20%, rgba(var(--bg-rgb), .96) 100%)",
             }}
           />
 
@@ -152,7 +153,7 @@ function ServiceCard({
               borderRadius: "8px",
               bgcolor: "rgba(0,0,0,.65)",
               backdropFilter: "blur(10px)",
-              border: "1px solid rgba(255,255,255,.1)",
+              border: "1px solid rgba(var(--fg-rgb), .1)",
             }}
           >
             <Typography
@@ -224,7 +225,7 @@ function ServiceCard({
                 md: "1.55rem",
               },
               fontWeight: 900,
-              color: "#fff",
+              color: "var(--fg)",
               mb: 1.2,
             }}
           >
@@ -233,7 +234,7 @@ function ServiceCard({
 
           <Typography
             sx={{
-              color: "rgba(255,255,255,.58)",
+              color: "rgba(var(--fg-rgb), .58)",
               fontSize: 14,
               lineHeight: 1.7,
               minHeight: {
@@ -272,7 +273,7 @@ function ServiceCard({
 
                 <Typography
                   sx={{
-                    color: "rgba(255,255,255,.78)",
+                    color: "rgba(var(--fg-rgb), .78)",
                     fontSize: 12,
                   }}
                 >
@@ -288,7 +289,7 @@ function ServiceCard({
             sx={{
               mt: 3,
               pt: 2,
-              borderTop: "1px solid rgba(255,255,255,.08)",
+              borderTop: "1px solid rgba(var(--fg-rgb), .08)",
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
@@ -296,7 +297,7 @@ function ServiceCard({
           >
             <Typography
               sx={{
-                color: "#fff",
+                color: "var(--fg)",
                 fontSize: 11,
                 fontWeight: 900,
                 letterSpacing: 1,
@@ -348,8 +349,8 @@ export default function HotShotServices({
       component="section"
       sx={{
         position: "relative",
-        bgcolor: "#07141f",
-        color: "#fff",
+        bgcolor: "var(--bg)",
+        color: "var(--fg)",
         px: {
           xs: 2.5,
           sm: 4,
@@ -409,7 +410,7 @@ export default function HotShotServices({
         <Typography
           component="h2"
           sx={{
-            color: "#fff",
+            color: "var(--fg)",
             fontWeight: 900,
             fontSize: {
               xs: "2.1rem",
@@ -426,7 +427,7 @@ export default function HotShotServices({
         <Typography
           sx={{
             mt: 2.5,
-            color: "rgba(255,255,255,.55)",
+            color: "rgba(var(--fg-rgb), .55)",
             fontSize: 15,
             lineHeight: 1.7,
           }}

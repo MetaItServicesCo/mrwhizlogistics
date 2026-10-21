@@ -39,8 +39,8 @@ export default function AboutExpertise({
       component="section"
       sx={{
         position: "relative",
-        bgcolor: "#081c31",
-        color: "#fff",
+        bgcolor: "var(--surface)",
+        color: "var(--fg)",
         px: { xs: 3, sm: 4, md: 6, lg: 8 },
         py: { xs: 8, md: 13 },
         overflow: "hidden",
@@ -163,7 +163,7 @@ export default function AboutExpertise({
             component={motion.p}
             variants={fadeUp}
             sx={{
-              color: "rgba(255,255,255,0.6)",
+              color: "rgba(var(--fg-rgb), 0.6)",
               fontSize: { xs: 15, md: 16 },
               lineHeight: 1.8,
               mb: 4,
@@ -191,14 +191,14 @@ export default function AboutExpertise({
                   position: "relative",
                   p: 2.5,
                   borderRadius: "14px",
-                  bgcolor: "#0b1d2e",
+                  bgcolor: "var(--surface)",
                   borderLeft: `2px solid ${ACCENT}`,
-                  border: "1px solid rgba(255,255,255,0.08)",
+                  border: "1px solid rgba(var(--fg-rgb), 0.08)",
                   borderLeftColor: ACCENT,
                   borderLeftWidth: 2,
                   transition: "all .3s",
                   "&:hover": {
-                    bgcolor: "#0d2236",
+                    bgcolor: "var(--surface)",
                     transform: "translateY(-4px)",
                   },
                   "&:hover .af-icon": { transform: "scale(1.1)" },
@@ -219,7 +219,7 @@ export default function AboutExpertise({
                   sx={{
                     fontWeight: 800,
                     fontSize: 15.5,
-                    color: "#fff",
+                    color: "var(--fg)",
                     mb: 0.8,
                   }}
                 >
@@ -228,7 +228,7 @@ export default function AboutExpertise({
                 <Typography
                   sx={{
                     fontSize: 13,
-                    color: "rgba(255,255,255,0.55)",
+                    color: "rgba(var(--fg-rgb), 0.55)",
                     lineHeight: 1.6,
                   }}
                 >
@@ -276,7 +276,7 @@ export default function AboutExpertise({
                   width: "55%",
                   height: "100%",
                   background:
-                    "linear-gradient(120deg, transparent, rgba(255,255,255,0.6), transparent)",
+                    "linear-gradient(120deg, transparent, rgba(var(--fg-rgb), 0.6), transparent)",
                   transform: "skewX(-20deg)",
                   transition: "left .6s ease",
                 },
@@ -318,7 +318,7 @@ export default function AboutExpertise({
                   Make a Phone Call
                 </Typography>
                 <Typography
-                  sx={{ fontSize: 15, fontWeight: 800, color: "#fff" }}
+                  sx={{ fontSize: 15, fontWeight: 800, color: "var(--fg)" }}
                 >
                   {callCta.label}
                 </Typography>
@@ -370,9 +370,9 @@ export default function AboutExpertise({
               height: "70%",
               borderRadius: "18px",
               overflow: "hidden",
-              border: "1px solid rgba(255,255,255,0.1)",
-              boxShadow: "0 20px 50px rgba(0,0,0,0.4)",
-              ...(IMG_BACK ? {} : { background: "linear-gradient(150deg, #143655, #081c31)" }),
+              border: "1px solid rgba(var(--fg-rgb), 0.1)",
+              boxShadow: "0 20px 50px rgba(var(--shadow-rgb), 0.14)",
+              ...(IMG_BACK ? {} : { background: "linear-gradient(150deg, var(--surface-2), var(--surface))" }),
             }}
           >
             {IMG_BACK && <CoverImage src={mediaUrl(IMG_BACK)} alt={content.backImage.alt} />}
@@ -398,9 +398,9 @@ export default function AboutExpertise({
               borderRadius: "18px",
               overflow: "hidden",
               border: `2px solid ${ACCENT}44`,
-              boxShadow: "0 24px 60px rgba(0,0,0,0.5)",
+              boxShadow: "0 24px 60px rgba(var(--shadow-rgb), 0.175)",
               zIndex: 2,
-              ...(IMG_FRONT ? {} : { background: "linear-gradient(150deg, #12202a, #081c31)" }),
+              ...(IMG_FRONT ? {} : { background: "linear-gradient(150deg, var(--surface), var(--surface))" }),
             }}
           >
             {IMG_FRONT && <CoverImage src={mediaUrl(IMG_FRONT)} alt={content.frontImage.alt} />}
@@ -463,7 +463,7 @@ export default function AboutExpertise({
                   width: 52,
                   height: 52,
                   borderRadius: "50%",
-                  bgcolor: "#081c31",
+                  bgcolor: "var(--surface)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",

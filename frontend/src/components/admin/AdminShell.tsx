@@ -18,7 +18,7 @@ export default function AdminShell({
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <Box sx={{ display: "flex", minHeight: "100vh", bgcolor: "#07131e" }}>
+    <Box className="theme-dark" sx={{ display: "flex", minHeight: "100vh", bgcolor: "#07131e" }}>
       {/* desktop sidebar (fixed) */}
       <Box
         sx={{

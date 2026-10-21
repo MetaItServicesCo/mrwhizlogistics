@@ -56,17 +56,17 @@ export default async function ContentPage({ slug }: { slug: string }) {
   return (
     <main>
       <HotShotHero title={page.title} crumb={page.title} badge={legal ? "LEGAL" : company.toUpperCase()} />
-      <Box sx={{ bgcolor: "#081c31", px: { xs: 3, sm: 5, md: 8 }, py: { xs: 6, md: 10 } }}>
+      <Box sx={{ bgcolor: "var(--surface)", px: { xs: 3, sm: 5, md: 8 }, py: { xs: 6, md: 10 } }}>
         <Box component="article" sx={{ maxWidth: 820, mx: "auto" }}>
           {updated && (
-            <Typography sx={{ color: "rgba(255,255,255,0.5)", fontSize: 14, mb: 4 }}>
-              Last updated: <Box component="time" dateTime={page.updated_at ?? undefined} sx={{ color: "#fff" }}>{updated}</Box>
+            <Typography sx={{ color: "rgba(var(--fg-rgb), 0.5)", fontSize: 14, mb: 4 }}>
+              Last updated: <Box component="time" dateTime={page.updated_at ?? undefined} sx={{ color: "var(--fg)" }}>{updated}</Box>
             </Typography>
           )}
           {page.content ? (
             <RichContent html={page.content} />
           ) : (
-            <Typography sx={{ color: "rgba(255,255,255,0.6)" }}>This page is being updated.</Typography>
+            <Typography sx={{ color: "rgba(var(--fg-rgb), 0.6)" }}>This page is being updated.</Typography>
           )}
         </Box>
       </Box>

@@ -73,8 +73,8 @@ export default function WhyRentWithUs({ content = RENTAL_DEFAULTS.page.sections.
         position: "relative",
         overflow: "hidden",
 
-        bgcolor: "#081c31",
-        color: "#fff",
+        bgcolor: "var(--surface)",
+        color: "var(--fg)",
 
         px: {
           xs: 2.5,
@@ -191,7 +191,7 @@ export default function WhyRentWithUs({ content = RENTAL_DEFAULTS.page.sections.
             x: 0,
           }}
           viewport={{
-            once: false,
+            once: true,
             margin: "-100px",
           }}
           transition={{
@@ -279,7 +279,7 @@ export default function WhyRentWithUs({ content = RENTAL_DEFAULTS.page.sections.
 
               maxWidth: 480,
 
-              color: "rgba(255,255,255,0.55)",
+              color: "rgba(var(--fg-rgb), 0.55)",
 
               fontSize: {
                 xs: 14.5,
@@ -316,9 +316,9 @@ export default function WhyRentWithUs({ content = RENTAL_DEFAULTS.page.sections.
 
                   borderRadius: "14px",
 
-                  bgcolor: "rgba(255,255,255,0.025)",
+                  bgcolor: "rgba(var(--fg-rgb), 0.025)",
 
-                  border: "1px solid rgba(255,255,255,0.07)",
+                  border: "1px solid rgba(var(--fg-rgb), 0.07)",
                 }}
               >
                 <Typography
@@ -342,7 +342,7 @@ export default function WhyRentWithUs({ content = RENTAL_DEFAULTS.page.sections.
                   sx={{
                     mt: 0.8,
 
-                    color: "rgba(255,255,255,0.42)",
+                    color: "rgba(var(--fg-rgb), 0.42)",
 
                     fontSize: 10.5,
 
@@ -378,7 +378,7 @@ export default function WhyRentWithUs({ content = RENTAL_DEFAULTS.page.sections.
           initial="hidden"
           whileInView="show"
           viewport={{
-            once: false,
+            once: true,
             margin: "-90px",
           }}
           sx={{
@@ -435,9 +435,9 @@ export default function WhyRentWithUs({ content = RENTAL_DEFAULTS.page.sections.
                   md: "22px",
                 },
 
-                bgcolor: "#0b1e30",
+                bgcolor: "var(--surface)",
 
-                border: "1px solid rgba(255,255,255,0.07)",
+                border: "1px solid rgba(var(--fg-rgb), 0.07)",
 
                 transition:
                   "transform .35s ease, border-color .35s ease, box-shadow .35s ease",
@@ -448,7 +448,7 @@ export default function WhyRentWithUs({ content = RENTAL_DEFAULTS.page.sections.
                   borderColor: `${ACCENT}55`,
 
                   boxShadow:
-                    "0 22px 55px rgba(0,0,0,0.4), 0 0 35px rgba(var(--accent-rgb), 0.04)",
+                    "0 22px 55px rgba(var(--shadow-rgb), 0.14), 0 0 35px rgba(var(--accent-rgb), 0.04)",
                 },
 
                 "&:hover .why-icon": {
@@ -473,7 +473,7 @@ export default function WhyRentWithUs({ content = RENTAL_DEFAULTS.page.sections.
                   top: 14,
                   right: 18,
 
-                  color: "rgba(255,255,255,0.035)",
+                  color: "rgba(var(--fg-rgb), 0.035)",
 
                   fontSize: {
                     xs: 52,
@@ -529,7 +529,7 @@ export default function WhyRentWithUs({ content = RENTAL_DEFAULTS.page.sections.
 
                   mt: 3,
 
-                  color: "#fff",
+                  color: "var(--fg)",
 
                   fontWeight: 850,
 
@@ -552,7 +552,7 @@ export default function WhyRentWithUs({ content = RENTAL_DEFAULTS.page.sections.
 
                   mt: 1.2,
 
-                  color: "rgba(255,255,255,0.5)",
+                  color: "rgba(var(--fg-rgb), 0.5)",
 
                   fontSize: 13.5,
 

@@ -62,8 +62,8 @@ export default function AdvancedFooterCTA({
     <Box
       component="footer"
       sx={{
-        bgcolor: "#081623",
-        color: "#fff",
+        bgcolor: "var(--bg)",
+        color: "var(--fg)",
         position: "relative",
         overflow: "hidden",
 
@@ -274,7 +274,7 @@ export default function AdvancedFooterCTA({
               {footer.showName && (
                 <Typography
                   sx={{
-                    color: "#fff",
+                    color: "var(--fg)",
                     fontWeight: 700,
                     fontSize: {
                       xs: 20,
@@ -300,7 +300,7 @@ export default function AdvancedFooterCTA({
                     sm: "1.2rem",
                   },
                   letterSpacing: "0.5px",
-                  color: "#fff",
+                  color: "var(--fg)",
                   textDecoration: "none",
                   mb: 0.5,
                   "&:hover": { color: ACCENT },
@@ -311,7 +311,7 @@ export default function AdvancedFooterCTA({
 
               <Typography
                 sx={{
-                  color: "rgba(255,255,255,0.55)",
+                  color: "rgba(var(--fg-rgb), 0.55)",
                   fontSize: {
                     xs: "12px",
                     sm: "13px",
@@ -347,7 +347,7 @@ export default function AdvancedFooterCTA({
                 },
                 fontWeight: 700,
                 letterSpacing: "2.5px",
-                color: "#fff",
+                color: "var(--fg)",
                 textTransform: "uppercase",
                 mb: 0.5,
               }}
@@ -359,7 +359,7 @@ export default function AdvancedFooterCTA({
               href="/hot-shot"
               style={{
                 textDecoration: "none",
-                color: "#fff",
+                color: "var(--fg)",
                 fontSize: "16px",
                 fontWeight: 500,
               }}
@@ -371,7 +371,7 @@ export default function AdvancedFooterCTA({
               href="/box-truck"
               style={{
                 textDecoration: "none",
-                color: "#fff",
+                color: "var(--fg)",
                 fontSize: "16px",
                 fontWeight: 500,
               }}
@@ -383,7 +383,7 @@ export default function AdvancedFooterCTA({
               href="/semi-truck"
               style={{
                 textDecoration: "none",
-                color: "#fff",
+                color: "var(--fg)",
                 fontSize: "16px",
                 fontWeight: 500,
               }}
@@ -409,7 +409,7 @@ export default function AdvancedFooterCTA({
                 },
                 fontWeight: 700,
                 letterSpacing: "2.5px",
-                color: "#fff",
+                color: "var(--fg)",
                 textTransform: "uppercase",
                 mb: 0.5,
               }}
@@ -421,7 +421,7 @@ export default function AdvancedFooterCTA({
               href="/about"
               style={{
                 textDecoration: "none",
-                color: "#fff",
+                color: "var(--fg)",
                 fontSize: "16px",
                 fontWeight: 500,
               }}
@@ -433,7 +433,7 @@ export default function AdvancedFooterCTA({
               href="/blog"
               style={{
                 textDecoration: "none",
-                color: "#fff",
+                color: "var(--fg)",
                 fontSize: "16px",
                 fontWeight: 500,
               }}
@@ -445,7 +445,7 @@ export default function AdvancedFooterCTA({
               href="/contact"
               style={{
                 textDecoration: "none",
-                color: "#fff",
+                color: "var(--fg)",
                 fontSize: "16px",
                 fontWeight: 500,
               }}
@@ -482,11 +482,11 @@ export default function AdvancedFooterCTA({
 
               border: "1px solid rgba(var(--accent-rgb), 0.2)",
 
-              backgroundColor: "rgba(9,24,38, 0.75)",
+              backgroundColor: "rgba(var(--bg-rgb), 0.75)",
 
               backdropFilter: "blur(16px)",
 
-              boxShadow: "0 20px 50px rgba(0,0,0,0.5)",
+              boxShadow: "0 20px 50px rgba(var(--shadow-rgb), 0.175)",
 
               overflow: "hidden",
 
@@ -518,7 +518,7 @@ export default function AdvancedFooterCTA({
 
                 fontWeight: 500,
 
-                color: "#fff",
+                color: "var(--fg)",
 
                 lineHeight: 1.4,
 
@@ -543,7 +543,7 @@ export default function AdvancedFooterCTA({
 
             <Typography
               sx={{
-                color: "rgba(255,255,255,0.45)",
+                color: "rgba(var(--fg-rgb), 0.45)",
                 fontSize: "13.5px",
                 mb: 3,
               }}
@@ -566,11 +566,11 @@ export default function AdvancedFooterCTA({
                       width: 38,
                       height: 38,
                       borderRadius: "50%",
-                      bgcolor: "rgba(255,255,255,0.06)",
+                      bgcolor: "rgba(var(--fg-rgb), 0.06)",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      color: "#fff",
+                      color: "var(--fg)",
                       transition: "0.2s",
                       "&:hover": {
                         bgcolor: ACCENT,
@@ -612,11 +612,11 @@ export default function AdvancedFooterCTA({
 
             gap: 2,
 
-            color: "rgba(255,255,255,0.35)",
+            color: "rgba(var(--fg-rgb), 0.35)",
 
             fontSize: "12px",
 
-            borderTop: "1px solid rgba(255, 255, 255, 0.05)",
+            borderTop: "1px solid rgba(var(--fg-rgb), 0.05)",
 
             textAlign: {
               xs: "center",
@@ -631,7 +631,7 @@ export default function AdvancedFooterCTA({
                   xs: "11px",
                   sm: "12px",
                 },
-                color: "#fff",
+                color: "var(--fg)",
               }}
             >
               {companyName} © {new Date().getFullYear()} All Rights Reserved
@@ -649,7 +649,7 @@ export default function AdvancedFooterCTA({
                   component={Link}
                   href={l.href}
                   sx={{
-                    color: "rgba(255,255,255,0.6)",
+                    color: "rgba(var(--fg-rgb), 0.6)",
                     fontSize: { xs: "11px", sm: "12px" },
                     textDecoration: "none",
                     "&:hover": { color: ACCENT },

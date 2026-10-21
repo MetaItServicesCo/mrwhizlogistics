@@ -1,4 +1,5 @@
 import ChatWidget from "@/components/chat/ChatWidget";
+import SmoothScroll from "@/components/common/SmoothScroll";
 import AdminBar from "@/components/common/AdminBar";
 import GoogleAnalytics from "@/components/common/GoogleAnalytics";
 import { CtaProvider } from "@/components/common/CtaProvider";
@@ -57,6 +58,7 @@ export default async function PublicLayout({
       {siteSchema.map((block, i) => (
         <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(block) }} />
       ))}
+      <SmoothScroll />
       <Navbar
         phone={settings.phone}
         logo={logo}

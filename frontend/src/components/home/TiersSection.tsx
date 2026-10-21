@@ -154,8 +154,8 @@ function TierCard({ tier }: { tier: Tier }) {
             p: "1.5px",
 
             background: tier.featured
-              ? "linear-gradient(160deg, rgba(var(--accent-rgb), 0.7), rgba(255,255,255,0.05) 45%)"
-              : "rgba(255,255,255,0.09)",
+              ? "linear-gradient(160deg, rgba(var(--accent-rgb), 0.7), rgba(var(--fg-rgb), 0.05) 45%)"
+              : "rgba(var(--fg-rgb), 0.09)",
 
             transform: {
               xs: "none",
@@ -189,7 +189,7 @@ function TierCard({ tier }: { tier: Tier }) {
               position: "relative",
               height: "100%",
               borderRadius: "25px",
-              bgcolor: "#0a1a29",
+              bgcolor: "var(--bg)",
               p: {
                 xs: 3,
                 md: 3.5,
@@ -254,7 +254,7 @@ function TierCard({ tier }: { tier: Tier }) {
                   transition: "transform .5s ease",
 
                   background:
-                    "radial-gradient(circle at 30% 20%, rgba(var(--accent-rgb), 0.16), transparent 55%), linear-gradient(150deg, #102b45, #081c31)",
+                    "radial-gradient(circle at 30% 20%, rgba(var(--accent-rgb), 0.16), transparent 55%), linear-gradient(150deg, var(--surface-2), var(--surface))",
 
                   display: "flex",
                   alignItems: "center",
@@ -313,7 +313,7 @@ function TierCard({ tier }: { tier: Tier }) {
                   },
 
                   fontWeight: 700,
-                  color: "#fff",
+                  color: "var(--fg)",
                   mb: 2,
                   lineHeight: 1.25,
                 }}
@@ -338,9 +338,9 @@ function TierCard({ tier }: { tier: Tier }) {
                     sx={{
                       fontSize: 12.5,
                       fontWeight: 500,
-                      color: "rgba(255,255,255,0.85)",
-                      bgcolor: "rgba(255,255,255,0.04)",
-                      border: "1px solid rgba(255,255,255,0.08)",
+                      color: "rgba(var(--fg-rgb), 0.85)",
+                      bgcolor: "rgba(var(--fg-rgb), 0.04)",
+                      border: "1px solid rgba(var(--fg-rgb), 0.08)",
                       borderRadius: "8px",
                       px: 1.5,
                       py: 0.8,
@@ -351,7 +351,7 @@ function TierCard({ tier }: { tier: Tier }) {
                       "&:hover": {
                         borderColor: "rgba(var(--accent-rgb), 0.4)",
                         bgcolor: "rgba(var(--accent-rgb), 0.06)",
-                        color: "#fff",
+                        color: "var(--fg)",
                       },
                     }}
                   >
@@ -390,8 +390,8 @@ function TierCard({ tier }: { tier: Tier }) {
                         },
                       }
                     : {
-                        color: "#fff",
-                        borderColor: "rgba(255,255,255,0.25)",
+                        color: "var(--fg)",
+                        borderColor: "rgba(var(--fg-rgb), 0.25)",
                         fontWeight: 600,
                         borderRadius: "999px",
                         py: 1.1,
@@ -426,8 +426,8 @@ export default function TiersSection() {
       sx={{
         scrollMarginTop: 96,
         position: "relative",
-        bgcolor: "#081c31",
-        color: "#fff",
+        bgcolor: "var(--surface)",
+        color: "var(--fg)",
         py: {
           xs: 8,
           md: 10,
@@ -479,7 +479,7 @@ export default function TiersSection() {
             y: 0,
           }}
           viewport={{
-            once: false,
+            once: true,
             margin: "-80px",
           }}
           transition={{
@@ -511,7 +511,7 @@ export default function TiersSection() {
                 md: "3.6rem",
               },
 
-              background: `linear-gradient(90deg, #ffffff, ${ACCENT}, var(--accent-2), #ffffff)`,
+              background: `linear-gradient(90deg, var(--fg), rgba(var(--fg-rgb), 0.78))`,
               backgroundSize: "200% auto",
 
               WebkitBackgroundClip: "text",
@@ -519,7 +519,6 @@ export default function TiersSection() {
               color: "transparent",
               WebkitTextFillColor: "transparent",
 
-              animation: "tierShimmer 6s linear infinite",
 
               "@keyframes tierShimmer": {
                 to: {
@@ -534,7 +533,7 @@ export default function TiersSection() {
           <Typography
             sx={{
               mt: 2.5,
-              color: "rgba(255,255,255,0.6)",
+              color: "rgba(var(--fg-rgb), 0.6)",
               fontSize: {
                 xs: 15,
                 md: 17,
@@ -562,7 +561,7 @@ export default function TiersSection() {
         initial="hidden"
         whileInView="show"
         viewport={{
-          once: false,
+          once: true,
           margin: "-100px",
         }}
         style={{

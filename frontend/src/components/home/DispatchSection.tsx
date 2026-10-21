@@ -59,7 +59,7 @@ function CheckMark() {
         strokeLinejoin="round"
         initial={{ pathLength: 0 }}
         whileInView={{ pathLength: 1 }}
-        viewport={{ once: false }}
+        viewport={{ once: true }}
         transition={{ duration: 0.7, ease: "easeInOut" }}
       />
     </Box>
@@ -91,7 +91,7 @@ function TruckDrawing() {
   const draw = (delay: number) => ({
     initial: { pathLength: 0, opacity: 0 },
     whileInView: { pathLength: 1, opacity: 1 },
-    viewport: { once: false },
+    viewport: { once: true },
     transition: {
       pathLength: { duration: 1.4, ease: "easeInOut" as const, delay },
       opacity: { duration: 0.2, delay },
@@ -215,7 +215,7 @@ function AccordionRow({
           transition: { duration: 0.5, ease: "easeOut" },
         },
       }}
-      style={{ borderBottom: "1px solid rgba(255,255,255,0.1)" }}
+      style={{ borderBottom: "1px solid rgba(var(--fg-rgb), 0.1)" }}
     >
       <Box component="h3" sx={{ m: 0 }}>
         <Box
@@ -248,7 +248,7 @@ function AccordionRow({
               fontSize: { xs: 20, md: 24 },
               fontWeight: 800,
               minWidth: 34,
-              color: open ? ACCENT : "rgba(255,255,255,0.45)",
+              color: open ? ACCENT : "rgba(var(--fg-rgb), 0.45)",
               transition: "color .3s",
             }}
           >
@@ -260,7 +260,7 @@ function AccordionRow({
               flex: 1,
               fontSize: { xs: "1.1rem", md: "1.35rem" },
               fontWeight: 700,
-              color: open ? ACCENT : "#fff",
+              color: open ? ACCENT : "var(--fg)",
               transition: "color .3s",
             }}
           >
@@ -268,7 +268,7 @@ function AccordionRow({
           </Box>
           <KeyboardArrowDownRoundedIcon
             sx={{
-              color: open ? ACCENT : "rgba(255,255,255,0.5)",
+              color: open ? ACCENT : "rgba(var(--fg-rgb), 0.5)",
               transition: "transform .3s, color .3s",
               transform: open ? "rotate(180deg)" : "none",
             }}
@@ -291,7 +291,7 @@ function AccordionRow({
             pl: "50px",
             pr: 4,
             pb: 2.5,
-            color: "rgba(255,255,255,0.6)",
+            color: "rgba(var(--fg-rgb), 0.6)",
             fontSize: { xs: 14, md: 15 },
             lineHeight: 1.75,
           }}
@@ -312,8 +312,8 @@ export default function DispatchSection() {
       aria-labelledby="dispatch-title"
       sx={{
         position: "relative",
-        bgcolor: "#081c31",
-        color: "#fff",
+        bgcolor: "var(--surface)",
+        color: "var(--fg)",
         py: { xs: 8, md: 8 },
         px: { xs: 3, md: 8 },
         overflow: "hidden",
@@ -326,12 +326,12 @@ export default function DispatchSection() {
           position: "absolute",
           inset: 0,
           backgroundImage:
-            "radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px)",
+            "radial-gradient(rgba(var(--fg-rgb), 0.04) 1px, transparent 1px)",
           backgroundSize: "34px 34px",
           WebkitMaskImage:
-            "radial-gradient(circle at 50% 40%, #040a11 35%, transparent 80%)",
+            "radial-gradient(circle at 50% 40%, var(--bg) 35%, transparent 80%)",
           maskImage:
-            "radial-gradient(circle at 50% 40%, #040a11 35%, transparent 80%)",
+            "radial-gradient(circle at 50% 40%, var(--bg) 35%, transparent 80%)",
           pointerEvents: "none",
         }}
       />
@@ -366,7 +366,7 @@ export default function DispatchSection() {
         <motion.div
           initial={{ opacity: 0, x: -40 }}
           whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: false, margin: "-80px" }}
+          viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.6, ease: "easeOut" }}
         >
           <CheckMark />
@@ -397,7 +397,7 @@ export default function DispatchSection() {
           <motion.div
             initial={{ scaleX: 0 }}
             whileInView={{ scaleX: 1 }}
-            viewport={{ once: false }}
+            viewport={{ once: true }}
             transition={{ duration: 0.7, ease: "easeOut", delay: 0.3 }}
             style={{
               transformOrigin: "0%",
@@ -411,7 +411,7 @@ export default function DispatchSection() {
           <Typography
             sx={{
               mt: 3,
-              color: "rgba(255,255,255,0.6)",
+              color: "rgba(var(--fg-rgb), 0.6)",
               fontSize: { xs: 15, md: 16 },
               lineHeight: 1.7,
               maxWidth: 460,
@@ -432,8 +432,8 @@ export default function DispatchSection() {
           }}
           initial="hidden"
           whileInView="show"
-          viewport={{ once: false, margin: "-80px" }}
-          style={{ borderTop: "1px solid rgba(255,255,255,0.1)" }}
+          viewport={{ once: true, margin: "-80px" }}
+          style={{ borderTop: "1px solid rgba(var(--fg-rgb), 0.1)" }}
         >
           {ITEMS.map((item, i) => (
             <AccordionRow

@@ -63,7 +63,7 @@ function FeatureCard({ feature, index }: { feature: Feature; index: number }) {
     <motion.div
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: false, margin: "-80px" }}
+      viewport={{ once: true, margin: "-80px" }}
       transition={{ duration: 0.6, delay: index * 0.06, ease: EASE }}
       style={{ height: "100%" }}
     >
@@ -78,15 +78,15 @@ function FeatureCard({ feature, index }: { feature: Feature; index: number }) {
           display: "flex",
           gap: 2,
           borderRadius: "16px",
-          bgcolor: "#0b1d2e",
-          border: "1px solid rgba(255,255,255,.08)",
+          bgcolor: "var(--surface)",
+          border: "1px solid rgba(var(--fg-rgb), .08)",
           overflow: "hidden",
           transition:
             "transform .35s ease, border-color .35s ease, box-shadow .35s ease",
           "&:hover": {
             transform: "translateY(-6px)",
             borderColor: "rgba(var(--accent-rgb), .4)",
-            boxShadow: "0 20px 46px rgba(0,0,0,.5)",
+            boxShadow: "0 20px 46px rgba(var(--shadow-rgb), 0.175)",
           },
           "&:hover .fc-icon": {
             transform: "translateY(-3px) rotate(-6deg)",
@@ -156,14 +156,14 @@ function FeatureCard({ feature, index }: { feature: Feature; index: number }) {
         {/* text */}
         <Box sx={{ position: "relative" }}>
           <Typography
-            sx={{ color: "#fff", fontSize: 14, fontWeight: 900, mb: feature.description ? 0.7 : 0 }}
+            sx={{ color: "var(--fg)", fontSize: 14, fontWeight: 900, mb: feature.description ? 0.7 : 0 }}
           >
             {feature.title}
           </Typography>
           {feature.description && (
             <Typography
               sx={{
-                color: "rgba(255,255,255,.48)",
+                color: "rgba(var(--fg-rgb), .48)",
                 fontSize: 12,
                 lineHeight: 1.7,
               }}
@@ -204,7 +204,7 @@ export default function HotShotWhyChoose({
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: false, margin: "-100px" }}
+        viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.7, ease: EASE }}
       >
         <Typography
@@ -221,7 +221,7 @@ export default function HotShotWhyChoose({
         <Typography
           component="h2"
           sx={{
-            color: "#fff",
+            color: "var(--fg)",
             fontSize: { xs: 27, md: 38 },
             fontWeight: 900,
             letterSpacing: "-1px",
@@ -232,7 +232,7 @@ export default function HotShotWhyChoose({
         </Typography>
         <Typography
           sx={{
-            color: "rgba(255,255,255,.48)",
+            color: "rgba(var(--fg-rgb), .48)",
             fontSize: 14,
             lineHeight: 1.7,
             mb: 4,

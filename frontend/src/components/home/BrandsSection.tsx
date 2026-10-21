@@ -49,9 +49,9 @@ function LogoChip({ brand }: { brand: Brand }) {
         alignItems: "center",
         justifyContent: "center",
         borderRadius: "16px",
-        border: "1px solid rgba(255,255,255,0.08)",
-        bgcolor: "rgba(255,255,255,0.02)",
-        color: "rgba(255,255,255,0.55)",
+        border: "1px solid rgba(var(--fg-rgb), 0.08)",
+        bgcolor: "rgba(var(--fg-rgb), 0.02)",
+        color: "rgba(var(--fg-rgb), 0.55)",
         cursor: "pointer",
         transition: "all .35s ease",
         "& img": {
@@ -134,8 +134,8 @@ export default function BrandsSection() {
       aria-labelledby="brands-title"
       sx={{
         position: "relative",
-        bgcolor: "#081c31",
-        color: "#fff",
+        bgcolor: "var(--surface)",
+        color: "var(--fg)",
         py: { xs: 8, md: 8 },
         overflow: "hidden",
       }}
@@ -169,7 +169,7 @@ export default function BrandsSection() {
         <motion.div
           initial={{ opacity: 0, y: 80 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, margin: "-80px" }}
+          viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.6, ease: "easeOut" }}
         >
           <Typography
@@ -220,9 +220,9 @@ export default function BrandsSection() {
           flexDirection: "column",
           gap: { xs: 2, md: 3 },
           WebkitMaskImage:
-            "linear-gradient(to right, transparent, #040a11 8%, #040a11 92%, transparent)",
+            "linear-gradient(to right, transparent, var(--bg) 8%, var(--bg) 92%, transparent)",
           maskImage:
-            "linear-gradient(to right, transparent, #040a11 8%, #040a11 92%, transparent)",
+            "linear-gradient(to right, transparent, var(--bg) 8%, var(--bg) 92%, transparent)",
           padding: { xs: "2px0 0px", md: "20px 0px" },
         }}
       >

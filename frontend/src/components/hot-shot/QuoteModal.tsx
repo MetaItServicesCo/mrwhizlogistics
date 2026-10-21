@@ -29,7 +29,7 @@ function Confetti() {
     x: (Math.random() - 0.5) * 260,
     y: -(70 + Math.random() * 150),
     rot: (Math.random() - 0.5) * 600,
-    color: [ACCENT, ACCENT_2, SKY, "#fff"][i % 4],
+    color: [ACCENT, ACCENT_2, SKY, "var(--fg)"][i % 4],
     delay: Math.random() * 0.1,
   }));
   return (
@@ -63,27 +63,27 @@ function Confetti() {
 }
 
 const fieldSx = {
-  "& .MuiInputLabel-root": { color: "rgba(255,255,255,0.5)", fontSize: 14 },
+  "& .MuiInputLabel-root": { color: "rgba(var(--fg-rgb), 0.5)", fontSize: 14 },
   "& .MuiInputLabel-root.Mui-focused": { color: ACCENT },
   "& .MuiOutlinedInput-root": {
-    color: "#fff",
+    color: "var(--fg)",
     borderRadius: "12px",
-    bgcolor: "rgba(255,255,255,0.03)",
+    bgcolor: "rgba(var(--fg-rgb), 0.03)",
     "& fieldset": {
-      borderColor: "rgba(255,255,255,0.14)",
+      borderColor: "rgba(var(--fg-rgb), 0.14)",
       transition: "border-color .25s, box-shadow .25s",
     },
-    "&:hover fieldset": { borderColor: "rgba(255,255,255,0.3)" },
+    "&:hover fieldset": { borderColor: "rgba(var(--fg-rgb), 0.3)" },
     "&.Mui-focused fieldset": {
       borderColor: ACCENT,
       boxShadow: "0 0 0 3px rgba(var(--accent-rgb), 0.15)",
     },
   },
   "& input::placeholder, & textarea::placeholder": {
-    color: "rgba(255,255,255,0.3)",
+    color: "rgba(var(--fg-rgb), 0.3)",
     opacity: 1,
   },
-  "& .MuiSelect-icon": { color: "rgba(255,255,255,0.5)" },
+  "& .MuiSelect-icon": { color: "rgba(var(--fg-rgb), 0.5)" },
 } as const;
 
 export default function QuoteModal({
@@ -207,15 +207,15 @@ export default function QuoteModal({
               overflowY: "auto",
               borderRadius: "22px",
               p: "1.5px",
-              background: `linear-gradient(150deg, rgba(var(--accent-rgb), 0.55), rgba(255,255,255,0.06) 45%)`,
-              boxShadow: "0 30px 80px rgba(0,0,0,0.6)",
+              background: `linear-gradient(150deg, rgba(var(--accent-rgb), 0.55), rgba(var(--fg-rgb), 0.06) 45%)`,
+              boxShadow: "0 30px 80px rgba(var(--shadow-rgb), 0.21)",
             }}
           >
             <Box
               sx={{
                 position: "relative",
                 borderRadius: "21px",
-                bgcolor: "#0a1b2b",
+                bgcolor: "var(--surface)",
                 p: { xs: 3, md: 4 },
                 overflow: "hidden",
               }}
@@ -243,10 +243,10 @@ export default function QuoteModal({
                   top: 12,
                   right: 12,
                   zIndex: 3,
-                  color: "rgba(255,255,255,0.6)",
+                  color: "rgba(var(--fg-rgb), 0.6)",
                   "&:hover": {
-                    color: "#fff",
-                    bgcolor: "rgba(255,255,255,0.08)",
+                    color: "var(--fg)",
+                    bgcolor: "rgba(var(--fg-rgb), 0.08)",
                   },
                 }}
               >
@@ -287,14 +287,14 @@ export default function QuoteModal({
                         fontSize: "1.5rem",
                         fontWeight: 800,
                         mt: 2,
-                        color: "#fff",
+                        color: "var(--fg)",
                       }}
                     >
                       Quote request sent!
                     </Typography>
                     <Typography
                       sx={{
-                        color: "rgba(255,255,255,0.6)",
+                        color: "rgba(var(--fg-rgb), 0.6)",
                         fontSize: 14.5,
                         mt: 1,
                         maxWidth: 380,
@@ -361,7 +361,7 @@ export default function QuoteModal({
                       sx={{
                         fontWeight: 800,
                         fontSize: { xs: "1.5rem", md: "1.8rem" },
-                        color: "#fff",
+                        color: "var(--fg)",
                         mb: 0.5,
                       }}
                     >
@@ -369,7 +369,7 @@ export default function QuoteModal({
                     </Typography>
                     <Typography
                       sx={{
-                        color: "rgba(255,255,255,0.6)",
+                        color: "rgba(var(--fg-rgb), 0.6)",
                         fontSize: 14,
                         mb: 3,
                       }}
@@ -434,7 +434,7 @@ export default function QuoteModal({
                               <Typography
                                 sx={{
                                   fontSize: 10.5,
-                                  color: "rgba(255,255,255,0.45)",
+                                  color: "rgba(var(--fg-rgb), 0.45)",
                                   letterSpacing: 0.5,
                                   mb: 0.3,
                                 }}
@@ -445,7 +445,7 @@ export default function QuoteModal({
                                 sx={{
                                   fontSize: 15,
                                   fontWeight: 800,
-                                  color: "#fff",
+                                  color: "var(--fg)",
                                 }}
                               >
                                 {form.selectedService}
@@ -469,13 +469,13 @@ export default function QuoteModal({
                                   sx: {
                                     zIndex: 3000,
                                     "& .MuiPaper-root": {
-                                      bgcolor: "#0d2338",
-                                      color: "#fff",
+                                      bgcolor: "var(--surface)",
+                                      color: "var(--fg)",
                                       borderRadius: "12px",
                                       border:
-                                        "1px solid rgba(255,255,255,0.14)",
+                                        "1px solid rgba(var(--fg-rgb), 0.14)",
                                       mt: 1,
-                                      boxShadow: "0 10px 30px rgba(0,0,0,0.8)",
+                                      boxShadow: "0 10px 30px rgba(var(--shadow-rgb), 0.28)",
                                     },
                                     "& .MuiMenuItem-root": {
                                       fontSize: 14,
@@ -584,7 +584,7 @@ export default function QuoteModal({
                           width: "55%",
                           height: "100%",
                           background:
-                            "linear-gradient(120deg, transparent, rgba(255,255,255,0.6), transparent)",
+                            "linear-gradient(120deg, transparent, rgba(var(--fg-rgb), 0.6), transparent)",
                           transform: "skewX(-20deg)",
                           transition: "left .6s ease",
                         },
@@ -599,7 +599,7 @@ export default function QuoteModal({
                     </Button>
                     <Typography
                       sx={{
-                        color: "rgba(255,255,255,0.4)",
+                        color: "rgba(var(--fg-rgb), 0.4)",
                         fontSize: 12,
                         mt: 1.5,
                         textAlign: "center",

@@ -48,7 +48,7 @@ export default function BlogArticle({ post }: { post: BlogPost }) {
           <Typography
             key={i}
             sx={{
-              color: "rgba(255,255,255,0.7)",
+              color: "rgba(var(--fg-rgb), 0.7)",
               fontSize: { xs: 15, md: 16 },
               lineHeight: 1.9,
               mb: 2.5,
@@ -64,7 +64,7 @@ export default function BlogArticle({ post }: { post: BlogPost }) {
         sx={{
           mt: 5,
           pt: 3,
-          borderTop: "1px solid rgba(255,255,255,0.08)",
+          borderTop: "1px solid rgba(var(--fg-rgb), 0.08)",
           display: "flex",
           flexWrap: "wrap",
           gap: 2,
@@ -84,7 +84,7 @@ export default function BlogArticle({ post }: { post: BlogPost }) {
             sx={{
               fontSize: 13,
               fontWeight: 800,
-              color: "rgba(255,255,255,0.5)",
+              color: "rgba(var(--fg-rgb), 0.5)",
               mr: 0.5,
             }}
           >
@@ -97,9 +97,9 @@ export default function BlogArticle({ post }: { post: BlogPost }) {
                 px: 1.4,
                 py: 0.5,
                 borderRadius: "999px",
-                border: "1px solid rgba(255,255,255,0.14)",
+                border: "1px solid rgba(var(--fg-rgb), 0.14)",
                 fontSize: 12,
-                color: "rgba(255,255,255,0.7)",
+                color: "rgba(var(--fg-rgb), 0.7)",
               }}
             >
               #{t}
@@ -111,7 +111,7 @@ export default function BlogArticle({ post }: { post: BlogPost }) {
             sx={{
               fontSize: 13,
               fontWeight: 800,
-              color: "rgba(255,255,255,0.5)",
+              color: "rgba(var(--fg-rgb), 0.5)",
             }}
           >
             SHARE:
@@ -125,8 +125,8 @@ export default function BlogArticle({ post }: { post: BlogPost }) {
                 width: 34,
                 height: 34,
                 borderRadius: "50%",
-                bgcolor: "rgba(255,255,255,0.06)",
-                color: "#fff",
+                bgcolor: "rgba(var(--fg-rgb), 0.06)",
+                color: "var(--fg)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",

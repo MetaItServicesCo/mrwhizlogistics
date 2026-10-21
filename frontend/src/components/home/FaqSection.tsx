@@ -230,7 +230,7 @@ function FaqRow({
       }}
       sx={{
         position: "relative",
-        borderBottom: "1px solid rgba(255,255,255,0.1)",
+        borderBottom: "1px solid rgba(var(--fg-rgb), 0.1)",
       }}
     >
       {/* OPEN ACCENT */}
@@ -306,7 +306,7 @@ function FaqRow({
 
               fontWeight: 600,
 
-              color: open ? ACCENT : "#fff",
+              color: open ? ACCENT : "var(--fg)",
 
               transition: "color .3s",
 
@@ -320,7 +320,7 @@ function FaqRow({
             component={motion.div}
             animate={{
               rotate: open ? 135 : 0,
-              color: open ? ACCENT : "rgba(255,255,255,0.5)",
+              color: open ? ACCENT : "rgba(var(--fg-rgb), 0.5)",
             }}
             transition={{
               duration: 0.3,
@@ -369,7 +369,7 @@ function FaqRow({
 
             pb: 2.6,
 
-            color: "rgba(255,255,255,0.62)",
+            color: "rgba(var(--fg-rgb), 0.62)",
 
             fontSize: {
               xs: 14,
@@ -470,9 +470,9 @@ export default function FaqSection() {
         sx={{
           position: "relative",
 
-          bgcolor: "#081c31",
+          bgcolor: "var(--surface)",
 
-          color: "#fff",
+          color: "var(--fg)",
 
           py: {
             xs: 6,
@@ -577,7 +577,7 @@ export default function FaqSection() {
                 y: 0,
               }}
               viewport={{
-                once: false,
+                once: true,
                 margin: "-90px",
               }}
               transition={{
@@ -624,7 +624,7 @@ export default function FaqSection() {
 
               <Typography
                 sx={{
-                  color: "rgba(255,255,255,0.6)",
+                  color: "rgba(var(--fg-rgb), 0.6)",
 
                   fontSize: {
                     xs: 14.5,
@@ -680,7 +680,7 @@ export default function FaqSection() {
                       sx={{
                         fontSize: 11,
                         fontWeight: 600,
-                        color: "rgba(255,255,255,0.65)",
+                        color: "rgba(var(--fg-rgb), 0.65)",
                       }}
                     >
                       {item}
@@ -760,7 +760,7 @@ export default function FaqSection() {
 
                       border: "1px solid transparent",
 
-                      color: active ? "#081c31" : "rgba(255,255,255,0.7)",
+                      color: active ? "#081c31" : "rgba(var(--fg-rgb), 0.7)",
 
                       transition: "color .3s",
 
@@ -801,7 +801,7 @@ export default function FaqSection() {
 
                           borderRadius: "999px",
 
-                          border: "1px solid rgba(255,255,255,0.15)",
+                          border: "1px solid rgba(var(--fg-rgb), 0.15)",
 
                           zIndex: -1,
                         }}
@@ -867,7 +867,7 @@ export default function FaqSection() {
                   sx={{
                     fontSize: 15,
                     fontWeight: 800,
-                    color: "#fff",
+                    color: "var(--fg)",
                   }}
                 >
                   {cat}
@@ -876,7 +876,7 @@ export default function FaqSection() {
                 <Typography
                   sx={{
                     fontSize: 11,
-                    color: "rgba(255,255,255,0.4)",
+                    color: "rgba(var(--fg-rgb), 0.4)",
                     mt: 0.2,
                   }}
                 >
@@ -906,7 +906,7 @@ export default function FaqSection() {
                   opacity: 0,
                 }}
                 sx={{
-                  borderTop: "1px solid rgba(255,255,255,0.1)",
+                  borderTop: "1px solid rgba(var(--fg-rgb), 0.1)",
                 }}
               >
                 {list.map((faq, index) => {

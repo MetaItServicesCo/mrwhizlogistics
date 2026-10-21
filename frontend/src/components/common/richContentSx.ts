@@ -9,8 +9,8 @@ import { ACCENT, ACCENT_HOVER } from "@/theme/brand";
 
 
 const TONES = {
-  blog: { color: "rgba(255,255,255,0.7)", size: { xs: 15, md: 16 } },
-  service: { color: "rgba(255,255,255,.5)", size: { xs: 14, md: 15 } },
+  blog: { color: "rgba(var(--fg-rgb), 0.7)", size: { xs: 15, md: 16 } },
+  service: { color: "rgba(var(--fg-rgb), .5)", size: { xs: 14, md: 15 } },
 } as const;
 
 export function richContentSx(tone: keyof typeof TONES = "blog") {
@@ -23,7 +23,7 @@ export function richContentSx(tone: keyof typeof TONES = "blog") {
 
     "& p": { m: 0, mb: 2.5 },
     "& h2, & h3, & h4": {
-      color: "#fff",
+      color: "var(--fg)",
       fontWeight: 800,
       lineHeight: 1.3,
       mt: 4,
@@ -34,7 +34,7 @@ export function richContentSx(tone: keyof typeof TONES = "blog") {
     "& h4": { fontSize: { xs: 16, md: 18 } },
     "& > :first-of-type": { mt: 0 },
 
-    "& strong, & b": { color: "#fff", fontWeight: 700 },
+    "& strong, & b": { color: "var(--fg)", fontWeight: 700 },
     "& a": {
       color: ACCENT,
       textDecoration: "underline",
@@ -59,7 +59,7 @@ export function richContentSx(tone: keyof typeof TONES = "blog") {
       pl: 2.5,
       py: 0.5,
       borderLeft: `3px solid ${ACCENT}`,
-      color: "rgba(255,255,255,0.85)",
+      color: "rgba(var(--fg-rgb), 0.85)",
       fontStyle: "italic",
       "& p": { mb: 0 },
     },
@@ -74,7 +74,7 @@ export function richContentSx(tone: keyof typeof TONES = "blog") {
 
     "& hr": {
       border: "none",
-      borderTop: "1px solid rgba(255,255,255,0.12)",
+      borderTop: "1px solid rgba(var(--fg-rgb), 0.12)",
       my: 4,
     },
 
@@ -84,8 +84,8 @@ export function richContentSx(tone: keyof typeof TONES = "blog") {
       px: 0.6,
       py: 0.2,
       borderRadius: "5px",
-      bgcolor: "rgba(255,255,255,0.08)",
-      color: "#fff",
+      bgcolor: "rgba(var(--fg-rgb), 0.08)",
+      color: "var(--fg)",
     },
     "& pre": {
       p: 2,

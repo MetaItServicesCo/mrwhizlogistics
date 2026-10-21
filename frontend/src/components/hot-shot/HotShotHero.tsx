@@ -30,6 +30,7 @@ export default function HotShotHero({
 
   return (
     <Box
+      className="theme-dark"
       component="section"
       sx={{
         position: "relative",
@@ -40,8 +41,8 @@ export default function HotShotHero({
         display: "flex",
         alignItems: "center",
         overflow: "hidden",
-        bgcolor: "#081c31",
-        color: "#fff",
+        bgcolor: "var(--surface)",
+        color: "var(--fg)",
       }}
     >
       {/* BACKGROUND IMAGE (Ken Burns) */}
@@ -61,7 +62,7 @@ export default function HotShotHero({
                 backgroundSize: "cover",
                 backgroundPosition: "center",
               }
-            : { background: "linear-gradient(135deg, #122f4b, #07131e)" }),
+            : { background: "linear-gradient(135deg, var(--surface-2), var(--bg))" }),
         }}
       />
 
@@ -73,7 +74,7 @@ export default function HotShotHero({
           inset: 0,
           zIndex: 1,
           background:
-            "linear-gradient(90deg, rgba(8,28,49,0.92) 0%, rgba(8,28,49,0.7) 42%, rgba(8,28,49,0.35) 100%)",
+            "linear-gradient(90deg, rgba(var(--bg-rgb), 0.92) 0%, rgba(var(--bg-rgb), 0.7) 42%, rgba(var(--bg-rgb), 0.35) 100%)",
         }}
       /> */}
       <Box
@@ -83,7 +84,7 @@ export default function HotShotHero({
           inset: 0,
           zIndex: 1,
           background:
-            "linear-gradient(180deg, rgba(8,28,49,0.5) 0%, transparent 30%, rgba(8,28,49,0.55) 100%)",
+            "linear-gradient(180deg, rgba(var(--bg-rgb), 0.5) 0%, transparent 30%, rgba(var(--bg-rgb), 0.55) 100%)",
         }}
       />
       <Box
@@ -238,7 +239,7 @@ export default function HotShotHero({
                   textDecoration: "none",
                   fontWeight: 700,
                   fontSize: { xs: 14, md: 16 },
-                  "&:hover": { color: "#fff" },
+                  "&:hover": { color: "var(--fg)" },
                 }}
               >
                 Home
@@ -248,12 +249,12 @@ export default function HotShotHero({
                   width: 5,
                   height: 5,
                   borderRadius: "50%",
-                  bgcolor: "rgba(255,255,255,0.4)",
+                  bgcolor: "rgba(var(--fg-rgb), 0.4)",
                 }}
               />
               <Typography
                 sx={{
-                  color: "rgba(255,255,255,0.85)",
+                  color: "rgba(var(--fg-rgb), 0.85)",
                   fontWeight: 600,
                   fontSize: { xs: 14, md: 16 },
                 }}

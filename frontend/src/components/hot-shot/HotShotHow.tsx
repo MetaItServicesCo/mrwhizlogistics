@@ -63,8 +63,8 @@ function StepCard({ s, i }: { s: (typeof STEPS)[number]; i: number }) {
             width: { xs: 66, md: 84 },
             height: { xs: 66, md: 84 },
             borderRadius: "50%",
-            bgcolor: "#0b1d2e",
-            border: `1px solid rgba(255,255,255,0.12)`,
+            bgcolor: "var(--surface)",
+            border: `1px solid rgba(var(--fg-rgb), 0.12)`,
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -101,7 +101,7 @@ function StepCard({ s, i }: { s: (typeof STEPS)[number]; i: number }) {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            border: "3px solid #081c31",
+            border: "3px solid var(--surface)",
           }}
         >
           {i + 1}
@@ -116,14 +116,14 @@ function StepCard({ s, i }: { s: (typeof STEPS)[number]; i: number }) {
             fontWeight: 700,
             fontSize: { xs: "1.1rem", md: "1.2rem" },
             mb: 0.75,
-            color: "#fff",
+            color: "var(--fg)",
           }}
         >
           {s.t}
         </Typography>
         <Typography
           sx={{
-            color: "rgba(255,255,255,0.6)",
+            color: "rgba(var(--fg-rgb), 0.6)",
             fontSize: 14,
             lineHeight: 1.65,
             maxWidth: { md: 210 },
@@ -155,8 +155,8 @@ export default function HotShotHow() {
       aria-labelledby="hs-how-title"
       sx={{
         position: "relative",
-        bgcolor: "#081c31",
-        color: "#fff",
+        bgcolor: "var(--surface)",
+        color: "var(--fg)",
         px: { xs: 3, sm: 4, md: 6, lg: 8 },
         py: { xs: 8, md: 13 },
         overflow: "hidden",
@@ -191,7 +191,7 @@ export default function HotShotHow() {
         <motion.div
           initial={{ opacity: 0, y: 26 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, margin: "-80px" }}
+          viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.6, ease: EASE }}
         >
           <Box
@@ -226,13 +226,12 @@ export default function HotShotHow() {
               lineHeight: 1.1,
               letterSpacing: "-0.5px",
               fontSize: { xs: "2rem", sm: "2.7rem", md: "3.4rem" },
-              background: `linear-gradient(90deg, #ffffff, ${ACCENT}, var(--accent-2), #ffffff)`,
+              background: `linear-gradient(90deg, var(--fg), rgba(var(--fg-rgb), 0.78))`,
               backgroundSize: "200% auto",
               WebkitBackgroundClip: "text",
               backgroundClip: "text",
               color: "transparent",
               WebkitTextFillColor: "transparent",
-              animation: "hsHowShimmer 6s linear infinite",
               "@keyframes hsHowShimmer": {
                 to: { backgroundPosition: "200% center" },
               },
@@ -254,7 +253,7 @@ export default function HotShotHow() {
         }}
         initial="hidden"
         whileInView="show"
-        viewport={{ once: false, margin: "-90px" }}
+        viewport={{ once: true, margin: "-90px" }}
         sx={{
           position: "relative",
           maxWidth: 1120,
@@ -274,7 +273,7 @@ export default function HotShotHow() {
             left: "12%",
             right: "12%",
             height: 3,
-            bgcolor: "rgba(255,255,255,0.1)",
+            bgcolor: "rgba(var(--fg-rgb), 0.1)",
             borderRadius: 2,
             overflow: "hidden",
             zIndex: 0,
@@ -303,7 +302,7 @@ export default function HotShotHow() {
             bottom: 0,
             left: 33,
             width: 3,
-            bgcolor: "rgba(255,255,255,0.1)",
+            bgcolor: "rgba(var(--fg-rgb), 0.1)",
             borderRadius: 2,
             overflow: "hidden",
             zIndex: 0,

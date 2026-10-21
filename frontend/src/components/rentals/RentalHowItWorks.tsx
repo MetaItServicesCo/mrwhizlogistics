@@ -68,8 +68,8 @@ export default function RentalHowItWorks({ content = RENTAL_DEFAULTS.page.sectio
       sx={{
         position: "relative",
         overflow: "hidden",
-        bgcolor: "#081521",
-        color: "#fff",
+        bgcolor: "var(--bg)",
+        color: "var(--fg)",
         py: {
           xs: 9,
           sm: 4,
@@ -148,8 +148,8 @@ export default function RentalHowItWorks({ content = RENTAL_DEFAULTS.page.sectio
           opacity: 0.14,
           pointerEvents: "none",
           backgroundImage: `
-            linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px)
+            linear-gradient(rgba(var(--fg-rgb), 0.025) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(var(--fg-rgb), 0.025) 1px, transparent 1px)
           `,
           backgroundSize: "70px 70px",
           maskImage:
@@ -182,7 +182,7 @@ export default function RentalHowItWorks({ content = RENTAL_DEFAULTS.page.sectio
           component={motion.div}
           initial={reduce ? {} : { opacity: 0, y: 30 }}
           whileInView={reduce ? {} : { opacity: 1, y: 0 }}
-          viewport={{ once: false, amount: 0.25 }}
+          viewport={{ once: true, amount: 0.25 }}
           transition={{
             duration: 0.7,
             ease: EASE,
@@ -259,7 +259,7 @@ export default function RentalHowItWorks({ content = RENTAL_DEFAULTS.page.sectio
           <Typography
             sx={{
               mt: 2.5,
-              color: "rgba(255,255,255,0.58)",
+              color: "rgba(var(--fg-rgb), 0.58)",
               fontSize: {
                 xs: 14,
                 sm: 16,
@@ -340,7 +340,7 @@ export default function RentalHowItWorks({ content = RENTAL_DEFAULTS.page.sectio
                       }
                 }
                 viewport={{
-                  once: false,
+                  once: true,
                   amount: 0.2,
                 }}
                 transition={{
@@ -372,9 +372,9 @@ export default function RentalHowItWorks({ content = RENTAL_DEFAULTS.page.sectio
                     overflow: "hidden",
 
                     /* Cleaner black glass */
-                    bgcolor: "rgba(255,255,255,0.025)",
+                    bgcolor: "rgba(var(--fg-rgb), 0.025)",
 
-                    border: "1px solid rgba(255,255,255,0.085)",
+                    border: "1px solid rgba(var(--fg-rgb), 0.085)",
 
                     transition:
                       "transform 0.35s ease, border-color 0.35s ease, background-color 0.35s ease, box-shadow 0.35s ease",
@@ -389,7 +389,7 @@ export default function RentalHowItWorks({ content = RENTAL_DEFAULTS.page.sectio
                       bgcolor: "rgba(var(--accent-rgb), 0.018)",
 
                       boxShadow: `
-                        0 25px 60px rgba(0,0,0,0.32),
+                        0 25px 60px rgba(var(--shadow-rgb), 0.112),
                         0 0 24px rgba(var(--accent-rgb), 0.035)
                       `,
                     },
@@ -426,7 +426,7 @@ export default function RentalHowItWorks({ content = RENTAL_DEFAULTS.page.sectio
                       letterSpacing: "-4px",
 
                       /* slightly darker than before */
-                      color: "rgba(255,255,255,0.028)",
+                      color: "rgba(var(--fg-rgb), 0.028)",
 
                       userSelect: "none",
                     }}
@@ -474,7 +474,7 @@ export default function RentalHowItWorks({ content = RENTAL_DEFAULTS.page.sectio
                         height: 13,
                         borderRadius: "50%",
                         bgcolor: ACCENT,
-                        border: "3px solid #081521",
+                        border: "3px solid var(--bg)",
                       }}
                     />
                   </Box>
@@ -502,7 +502,7 @@ export default function RentalHowItWorks({ content = RENTAL_DEFAULTS.page.sectio
                       mt: 1.2,
                       fontSize: 13.5,
                       lineHeight: 1.7,
-                      color: "rgba(255,255,255,0.52)",
+                      color: "rgba(var(--fg-rgb), 0.52)",
                     }}
                   >
                     {step.description}
@@ -528,7 +528,7 @@ export default function RentalHowItWorks({ content = RENTAL_DEFAULTS.page.sectio
                         fontSize: 10,
                         fontWeight: 800,
                         letterSpacing: 1.4,
-                        color: "rgba(255,255,255,0.25)",
+                        color: "rgba(var(--fg-rgb), 0.25)",
                       }}
                     >{copy.step}{step.number}
                     </Typography>
@@ -558,7 +558,7 @@ export default function RentalHowItWorks({ content = RENTAL_DEFAULTS.page.sectio
           initial={reduce ? {} : { opacity: 0, y: 25 }}
           whileInView={reduce ? {} : { opacity: 1, y: 0 }}
           viewport={{
-            once: false,
+            once: true,
             amount: 0.3,
           }}
           transition={{
@@ -630,8 +630,8 @@ export default function RentalHowItWorks({ content = RENTAL_DEFAULTS.page.sectio
               px: 3,
               py: 1.35,
               borderRadius: "12px",
-              borderColor: "rgba(255,255,255,0.15)",
-              color: "#fff",
+              borderColor: "rgba(var(--fg-rgb), 0.15)",
+              color: "var(--fg)",
               fontSize: 14,
               fontWeight: 800,
               textTransform: "none",

@@ -36,6 +36,7 @@ export default function HotShotDetailHero({
 
   return (
     <Box
+      className="theme-dark"
       component="section"
       aria-labelledby="service-hero-title"
       sx={{
@@ -49,8 +50,8 @@ export default function HotShotDetailHero({
         display: "flex",
         alignItems: "center",
         overflow: "hidden",
-        bgcolor: "#081c31",
-        color: "#fff",
+        bgcolor: "var(--surface)",
+        color: "var(--fg)",
       }}
     >
       {/* =========================================================
@@ -90,16 +91,16 @@ export default function HotShotDetailHero({
           background: `
             linear-gradient(
               90deg,
-              rgba(6,16,26,0.94) 0%,
-              rgba(6,16,26,0.78) 35%,
-              rgba(6,16,26,0.42) 68%,
-              rgba(6,16,26,0.58) 100%
+              rgba(var(--bg-rgb), 0.94) 0%,
+              rgba(var(--bg-rgb), 0.78) 35%,
+              rgba(var(--bg-rgb), 0.42) 68%,
+              rgba(var(--bg-rgb), 0.58) 100%
             ),
             linear-gradient(
               180deg,
-              rgba(6,16,26,0.48) 0%,
+              rgba(var(--bg-rgb), 0.48) 0%,
               transparent 35%,
-              rgba(6,16,26,0.72) 100%
+              rgba(var(--bg-rgb), 0.72) 100%
             )
           `,
         }}
@@ -118,12 +119,12 @@ export default function HotShotDetailHero({
           opacity: 0.055,
           backgroundImage: `
             linear-gradient(
-              rgba(255,255,255,0.25) 1px,
+              rgba(var(--fg-rgb), 0.25) 1px,
               transparent 1px
             ),
             linear-gradient(
               90deg,
-              rgba(255,255,255,0.25) 1px,
+              rgba(var(--fg-rgb), 0.25) 1px,
               transparent 1px
             )
           `,
@@ -283,7 +284,7 @@ export default function HotShotDetailHero({
               display: "inline-flex",
               alignItems: "center",
               gap: 0.9,
-              color: "rgba(255,255,255,0.72)",
+              color: "rgba(var(--fg-rgb), 0.72)",
               textDecoration: "none",
               fontSize: {
                 xs: 10,
@@ -430,7 +431,7 @@ export default function HotShotDetailHero({
         >
           <Typography
             sx={{
-              color: "rgba(255,255,255,0.34)",
+              color: "rgba(var(--fg-rgb), 0.34)",
               fontSize: {
                 xs: 11,
                 md: 13,
@@ -515,7 +516,7 @@ export default function HotShotDetailHero({
               id="service-hero-title"
               component="h1"
               sx={{
-                color: "#fff",
+                color: "var(--fg)",
                 fontWeight: 900,
                 lineHeight: 0.94,
                 letterSpacing: {
@@ -597,7 +598,7 @@ export default function HotShotDetailHero({
                     transition: "color .25s ease",
 
                     "&:hover": {
-                      color: "#fff",
+                      color: "var(--fg)",
                     },
                   }}
                 >
@@ -609,7 +610,7 @@ export default function HotShotDetailHero({
                     width: 5,
                     height: 5,
                     borderRadius: "50%",
-                    bgcolor: "rgba(255,255,255,0.38)",
+                    bgcolor: "rgba(var(--fg-rgb), 0.38)",
                   }}
                 />
 
@@ -617,7 +618,7 @@ export default function HotShotDetailHero({
                   component={Link}
                   href={categoryPath}
                   sx={{
-                    color: "rgba(255,255,255,0.72)",
+                    color: "rgba(var(--fg-rgb), 0.72)",
                     textDecoration: "none",
                     fontWeight: 600,
                     fontSize: {
@@ -639,13 +640,13 @@ export default function HotShotDetailHero({
                     width: 5,
                     height: 5,
                     borderRadius: "50%",
-                    bgcolor: "rgba(255,255,255,0.38)",
+                    bgcolor: "rgba(var(--fg-rgb), 0.38)",
                   }}
                 />
 
                 <Typography
                   sx={{
-                    color: "rgba(255,255,255,0.88)",
+                    color: "rgba(var(--fg-rgb), 0.88)",
                     fontWeight: 700,
                     fontSize: {
                       xs: 13,
@@ -698,7 +699,7 @@ export default function HotShotDetailHero({
                 md: 9,
               },
               maxWidth: 720,
-              color: "rgba(255,255,255,0.70)",
+              color: "rgba(var(--fg-rgb), 0.70)",
               fontSize: {
                 xs: 14.5,
                 sm: 16,

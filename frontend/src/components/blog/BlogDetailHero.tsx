@@ -26,6 +26,7 @@ export default function BlogDetailHero({ post }: { post: BlogPost }) {
 
   return (
     <Box
+      className="theme-dark"
       component="section"
       sx={{
         position: "relative",
@@ -39,8 +40,8 @@ export default function BlogDetailHero({ post }: { post: BlogPost }) {
         pt: { xs: "112px", md: "190px" },
         pb: { xs: "48px", md: "72px" },
         overflow: "hidden",
-        bgcolor: "#081c31",
-        color: "#fff",
+        bgcolor: "var(--surface)",
+        color: "var(--fg)",
       }}
     >
       {/* background image (Ken Burns) */}
@@ -60,7 +61,7 @@ export default function BlogDetailHero({ post }: { post: BlogPost }) {
                 backgroundSize: "cover",
                 backgroundPosition: "center",
               }
-            : { background: "linear-gradient(135deg, #122f4b, #07131e)" }),
+            : { background: "linear-gradient(135deg, var(--surface-2), var(--bg))" }),
         }}
       />
 
@@ -72,7 +73,7 @@ export default function BlogDetailHero({ post }: { post: BlogPost }) {
           inset: 0,
           zIndex: 1,
           background:
-            "linear-gradient(90deg, rgba(8,28,49,0.94) 0%, rgba(8,28,49,0.72) 45%, rgba(8,28,49,0.4) 100%)",
+            "linear-gradient(90deg, rgba(var(--bg-rgb), 0.94) 0%, rgba(var(--bg-rgb), 0.72) 45%, rgba(var(--bg-rgb), 0.4) 100%)",
         }}
       />
       <Box
@@ -82,7 +83,7 @@ export default function BlogDetailHero({ post }: { post: BlogPost }) {
           inset: 0,
           zIndex: 1,
           background:
-            "linear-gradient(180deg, rgba(8,28,49,0.5) 0%, transparent 35%, rgba(8,28,49,0.6) 100%)",
+            "linear-gradient(180deg, rgba(var(--bg-rgb), 0.5) 0%, transparent 35%, rgba(var(--bg-rgb), 0.6) 100%)",
         }}
       />
       <Box
@@ -200,7 +201,7 @@ export default function BlogDetailHero({ post }: { post: BlogPost }) {
                     textDecoration: "none",
                     fontWeight: 700,
                     fontSize: { xs: 13, md: 15 },
-                    "&:hover": { color: "#fff" },
+                    "&:hover": { color: "var(--fg)" },
                   }}
                 >
                   Home
@@ -210,7 +211,7 @@ export default function BlogDetailHero({ post }: { post: BlogPost }) {
                     width: 5,
                     height: 5,
                     borderRadius: "50%",
-                    bgcolor: "rgba(255,255,255,0.4)",
+                    bgcolor: "rgba(var(--fg-rgb), 0.4)",
                   }}
                 />
                 <Box
@@ -221,7 +222,7 @@ export default function BlogDetailHero({ post }: { post: BlogPost }) {
                     textDecoration: "none",
                     fontWeight: 700,
                     fontSize: { xs: 13, md: 15 },
-                    "&:hover": { color: "#fff" },
+                    "&:hover": { color: "var(--fg)" },
                   }}
                 >
                   Blog
@@ -231,12 +232,12 @@ export default function BlogDetailHero({ post }: { post: BlogPost }) {
                     width: 5,
                     height: 5,
                     borderRadius: "50%",
-                    bgcolor: "rgba(255,255,255,0.4)",
+                    bgcolor: "rgba(var(--fg-rgb), 0.4)",
                   }}
                 />
                 <Typography
                   sx={{
-                    color: "rgba(255,255,255,0.85)",
+                    color: "rgba(var(--fg-rgb), 0.85)",
                     fontWeight: 600,
                     fontSize: { xs: 13, md: 15 },
                   }}
@@ -251,7 +252,7 @@ export default function BlogDetailHero({ post }: { post: BlogPost }) {
                   // full-width grey bar whenever this row wrapped.
                   width: "1px",
                   height: 16,
-                  bgcolor: "rgba(255,255,255,0.2)",
+                  bgcolor: "rgba(var(--fg-rgb), 0.2)",
                   display: { xs: "none", md: "block" },
                 }}
               />
@@ -262,7 +263,7 @@ export default function BlogDetailHero({ post }: { post: BlogPost }) {
                   display: "flex",
                   alignItems: "center",
                   gap: 2,
-                  color: "rgba(255,255,255,0.7)",
+                  color: "rgba(var(--fg-rgb), 0.7)",
                 }}
               >
                 <Box sx={{ display: "flex", alignItems: "center", gap: 0.6 }}>

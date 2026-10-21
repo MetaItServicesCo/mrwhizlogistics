@@ -18,9 +18,9 @@ const EASE = [0.22, 1, 0.36, 1] as const;
 const PER_PAGE = 6;
 
 const gradients = [
-  "radial-gradient(circle at 30% 25%, rgba(var(--accent-rgb), 0.2), transparent 55%), linear-gradient(150deg, #143655, #081c31)",
-  "radial-gradient(circle at 70% 20%, rgba(var(--accent-2-rgb), 0.16), transparent 55%), linear-gradient(150deg, #12202a, #081c31)",
-  "radial-gradient(circle at 40% 30%, rgba(255,179,64,0.15), transparent 55%), linear-gradient(150deg, #2a2612, #081c31)",
+  "radial-gradient(circle at 30% 25%, rgba(var(--accent-rgb), 0.2), transparent 55%), linear-gradient(150deg, var(--surface-2), var(--surface))",
+  "radial-gradient(circle at 70% 20%, rgba(var(--accent-2-rgb), 0.16), transparent 55%), linear-gradient(150deg, var(--surface), var(--surface))",
+  "radial-gradient(circle at 40% 30%, rgba(255,179,64,0.15), transparent 55%), linear-gradient(150deg, #2a2612, var(--surface))",
 ];
 
 function fmt(date: string) {
@@ -59,8 +59,8 @@ function Card({
         borderRadius: "18px",
         overflow: "hidden",
         cursor: "pointer",
-        bgcolor: "#0a1c2c",
-        border: "1px solid rgba(255,255,255,0.08)",
+        bgcolor: "var(--surface)",
+        border: "1px solid rgba(var(--fg-rgb), 0.08)",
         display: "flex",
         flexDirection: "column",
         outline: "none",
@@ -69,10 +69,10 @@ function Card({
         "&:hover, &:has(a:focus-visible)": {
           transform: "translateY(-8px)",
           borderColor: `${ACCENT}55`,
-          boxShadow: "0 24px 55px rgba(0,0,0,0.5)",
+          boxShadow: "0 24px 55px rgba(var(--shadow-rgb), 0.175)",
         },
         "&:has(a:focus-visible)": {
-          boxShadow: `0 0 0 2px ${ACCENT}, 0 24px 55px rgba(0,0,0,0.5)`,
+          boxShadow: `0 0 0 2px ${ACCENT}, 0 24px 55px rgba(var(--shadow-rgb), 0.175)`,
         },
         "&:hover .bl-media": { transform: "scale(1.08)" },
         "&:hover .bl-sheen": { transform: "translateX(220%)" },
@@ -107,7 +107,7 @@ function Card({
             width: "45%",
             height: "100%",
             background:
-              "linear-gradient(120deg, transparent, rgba(255,255,255,0.14), transparent)",
+              "linear-gradient(120deg, transparent, rgba(var(--fg-rgb), 0.14), transparent)",
             transform: "translateX(-160%)",
             transition: "transform .8s ease",
             pointerEvents: "none",
@@ -151,7 +151,7 @@ function Card({
             px: 1.3,
             py: 0.45,
             borderRadius: "999px",
-            bgcolor: "rgba(8,28,49,0.72)",
+            bgcolor: "rgba(var(--bg-rgb), 0.72)",
             backdropFilter: "blur(6px)",
             border: `1px solid ${ACCENT}55`,
           }}
@@ -175,7 +175,7 @@ function Card({
             position: "absolute",
             inset: 0,
             background:
-              "linear-gradient(180deg, transparent 55%, rgba(10,28,44,0.85) 100%)",
+              "linear-gradient(180deg, transparent 55%, rgba(var(--bg-rgb), 0.85) 100%)",
           }}
         />
       </Box>
@@ -196,7 +196,7 @@ function Card({
             alignItems: "center",
             gap: 2,
             mb: 1.5,
-            color: "rgba(255,255,255,0.5)",
+            color: "rgba(var(--fg-rgb), 0.5)",
           }}
         >
           <Box sx={{ display: "flex", alignItems: "center", gap: 0.6 }}>
@@ -221,7 +221,7 @@ function Card({
             fontWeight: 800,
             fontSize: { xs: "1.2rem", md: "1.3rem" },
             lineHeight: 1.3,
-            color: "#fff",
+            color: "var(--fg)",
             mb: 1.2,
             transition: "color .3s",
           }}
@@ -237,7 +237,7 @@ function Card({
         </Typography>
         <Typography
           sx={{
-            color: "rgba(255,255,255,0.55)",
+            color: "rgba(var(--fg-rgb), 0.55)",
             fontSize: 14,
             lineHeight: 1.7,
             mb: 3,
@@ -303,8 +303,8 @@ export default function BlogGrid({
       component="section"
       sx={{
         position: "relative",
-        bgcolor: "#081c31",
-        color: "#fff",
+        bgcolor: "var(--surface)",
+        color: "var(--fg)",
         px: { xs: 3, sm: 4, md: 6, lg: 8 },
         py: { xs: 8, md: 12 },
         overflow: "hidden",
@@ -340,7 +340,7 @@ export default function BlogGrid({
         <motion.div
           initial={{ opacity: 0, y: 26 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, margin: "-80px" }}
+          viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.6, ease: EASE }}
         >
           <Box
@@ -374,13 +374,12 @@ export default function BlogGrid({
               lineHeight: 1.1,
               letterSpacing: "-0.5px",
               fontSize: { xs: "2rem", sm: "2.6rem", md: "3.2rem" },
-              background: `linear-gradient(90deg, #ffffff, ${ACCENT}, var(--accent-2), #ffffff)`,
+              background: `linear-gradient(90deg, var(--fg), rgba(var(--fg-rgb), 0.78))`,
               backgroundSize: "200% auto",
               WebkitBackgroundClip: "text",
               backgroundClip: "text",
               color: "transparent",
               WebkitTextFillColor: "transparent",
-              animation: "blogShimmer 6s linear infinite",
               "@keyframes blogShimmer": {
                 to: { backgroundPosition: "200% center" },
               },
@@ -462,12 +461,12 @@ export default function BlogGrid({
                 border:
                   page === n
                     ? `1px solid ${ACCENT}`
-                    : "1px solid rgba(255,255,255,0.14)",
+                    : "1px solid rgba(var(--fg-rgb), 0.14)",
                 bgcolor: page === n ? ACCENT : "transparent",
-                color: page === n ? "#081c31" : "rgba(255,255,255,0.7)",
+                color: page === n ? "#081c31" : "rgba(var(--fg-rgb), 0.7)",
                 "&:hover": {
                   borderColor: ACCENT,
-                  color: page === n ? "#081c31" : "#fff",
+                  color: page === n ? "#081c31" : "var(--fg)",
                 },
               }}
             >
@@ -513,9 +512,9 @@ function PageBtn({
         alignItems: "center",
         justifyContent: "center",
         cursor: disabled ? "default" : "pointer",
-        border: "1px solid rgba(255,255,255,0.14)",
+        border: "1px solid rgba(var(--fg-rgb), 0.14)",
         bgcolor: "transparent",
-        color: "#fff",
+        color: "var(--fg)",
         transition: "all .25s ease",
         opacity: disabled ? 0.3 : 1,
         "&:hover": disabled ? {} : { borderColor: ACCENT, color: ACCENT },

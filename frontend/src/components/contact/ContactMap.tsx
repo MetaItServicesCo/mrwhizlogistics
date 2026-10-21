@@ -24,7 +24,7 @@ export default function ContactMap({
       component="section"
       sx={{
         position: "relative",
-        bgcolor: "#081c31",
+        bgcolor: "var(--surface)",
         px: { xs: 3, sm: 4, md: 6, lg: 8 },
         pb: { xs: 8, md: 13 },
       }}
@@ -41,8 +41,8 @@ export default function ContactMap({
           mx: "auto",
           borderRadius: "22px",
           p: "1.5px",
-          background: `linear-gradient(140deg, rgba(var(--accent-rgb), 0.5), rgba(255,255,255,0.05) 45%)`,
-          boxShadow: "0 26px 60px rgba(0,0,0,0.5)",
+          background: `linear-gradient(140deg, rgba(var(--accent-rgb), 0.5), rgba(var(--fg-rgb), 0.05) 45%)`,
+          boxShadow: "0 26px 60px rgba(var(--shadow-rgb), 0.175)",
         }}
       >
         <Box
@@ -50,7 +50,7 @@ export default function ContactMap({
             position: "relative",
             borderRadius: "21px",
             overflow: "hidden",
-            bgcolor: "#0a1b2b",
+            bgcolor: "var(--surface)",
           }}
         >
           {/* map */}
@@ -80,7 +80,7 @@ export default function ContactMap({
               maxWidth: { xs: "calc(100% - 28px)", md: 380 },
               p: { xs: 2, md: 2.5 },
               borderRadius: "16px",
-              bgcolor: "rgba(10,27,43,0.9)",
+              bgcolor: "rgba(var(--bg-rgb), 0.9)",
               backdropFilter: "blur(10px)",
               border: `1px solid ${ACCENT}33`,
               display: "flex",
@@ -119,7 +119,7 @@ export default function ContactMap({
               <Typography
                 sx={{
                   fontSize: 13.5,
-                  color: "rgba(255,255,255,0.85)",
+                  color: "rgba(var(--fg-rgb), 0.85)",
                   lineHeight: 1.55,
                   mb: 1,
                 }}

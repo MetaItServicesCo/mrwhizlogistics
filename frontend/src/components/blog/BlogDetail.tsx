@@ -25,8 +25,8 @@ export default function BlogDetail({
     <Box
       component="section"
       sx={{
-        bgcolor: "#081c31",
-        color: "#fff",
+        bgcolor: "var(--surface)",
+        color: "var(--fg)",
         px: { xs: 3, sm: 4, md: 6, lg: 8 },
         py: { xs: 8, md: 12 },
       }}

@@ -127,8 +127,8 @@ export default function RentalCard({
         position: "relative",
         borderRadius: "22px",
         overflow: "hidden",
-        bgcolor: "#0a1c2c",
-        border: "1px solid rgba(255,255,255,0.08)",
+        bgcolor: "var(--surface)",
+        border: "1px solid rgba(var(--fg-rgb), 0.08)",
         display: "grid",
         gridTemplateColumns: {
           xs: "1fr",
@@ -138,7 +138,7 @@ export default function RentalCard({
         transition: "border-color .4s ease, box-shadow .4s ease",
         "&:hover": {
           borderColor: `${ACCENT}55`,
-          boxShadow: "0 26px 60px rgba(0,0,0,0.55)",
+          boxShadow: "0 26px 60px rgba(var(--shadow-rgb), 0.193)",
         },
         "&:hover .rc-media-inner": { transform: "scale(1.055)" },
         "&:hover .rc-slider-arrow": {
@@ -156,7 +156,7 @@ export default function RentalCard({
           minHeight: { xs: 260, md: 360 },
           overflow: "hidden",
           order: { xs: 0, md: flip ? 1 : 0 },
-          bgcolor: "#07141f",
+          bgcolor: "var(--bg)",
         }}
       >
         {images.length > 0 ? (
@@ -171,7 +171,7 @@ export default function RentalCard({
               position: "absolute",
               inset: 0,
               background:
-                "radial-gradient(circle at 30% 25%, rgba(var(--accent-rgb), 0.2), transparent 55%), linear-gradient(150deg, #143655, #081c31)",
+                "radial-gradient(circle at 30% 25%, rgba(var(--accent-rgb), 0.2), transparent 55%), linear-gradient(150deg, var(--surface-2), var(--surface))",
             }}
           />
         )}
@@ -187,13 +187,13 @@ export default function RentalCard({
               px: 1.6,
               py: 0.7,
               borderRadius: "999px",
-              bgcolor: "rgba(8,28,49,0.85)",
+              bgcolor: "rgba(var(--bg-rgb), 0.85)",
               backdropFilter: "blur(8px)",
               border: `1px solid ${ACCENT}66`,
               display: "flex",
               alignItems: "center",
               gap: 0.6,
-              boxShadow: "0 8px 20px rgba(0,0,0,0.4)",
+              boxShadow: "0 8px 20px rgba(var(--shadow-rgb), 0.14)",
             }}
           >
             <LocalOfferRoundedIcon sx={{ fontSize: 13, color: ACCENT }} />
@@ -227,7 +227,7 @@ export default function RentalCard({
                 height: 42,
                 color: "#fff",
                 bgcolor: "rgba(0,0,0,0.55)",
-                border: "1px solid rgba(255,255,255,0.16)",
+                border: "1px solid rgba(var(--fg-rgb), 0.16)",
                 backdropFilter: "blur(8px)",
                 opacity: { xs: 1, md: 0 },
                 transition: "opacity .3s ease, transform .3s ease",
@@ -251,7 +251,7 @@ export default function RentalCard({
                 height: 42,
                 color: "#fff",
                 bgcolor: "rgba(0,0,0,0.55)",
-                border: "1px solid rgba(255,255,255,0.16)",
+                border: "1px solid rgba(var(--fg-rgb), 0.16)",
                 backdropFilter: "blur(8px)",
                 opacity: { xs: 1, md: 0 },
                 transition: "opacity .3s ease, transform .3s ease",
@@ -299,7 +299,7 @@ export default function RentalCard({
             fontSize: { xs: 60, md: 92 },
             fontWeight: 900,
             lineHeight: 1,
-            color: "rgba(255,255,255,0.04)",
+            color: "rgba(var(--fg-rgb), 0.04)",
             pointerEvents: "none",
             userSelect: "none",
           }}
@@ -335,7 +335,7 @@ export default function RentalCard({
             fontWeight: 800,
             fontSize: { xs: "1.4rem", md: "1.85rem" },
             lineHeight: 1.15,
-            color: "#fff",
+            color: "var(--fg)",
             mb: 1.5,
             "&:hover": { color: ACCENT }, // Title par hover effect taake link jaisa feel aaye
             transition: "color .2s ease",
@@ -356,7 +356,7 @@ export default function RentalCard({
         <Typography
           sx={{
             position: "relative",
-            color: "rgba(255,255,255,0.6)",
+            color: "rgba(var(--fg-rgb), 0.6)",
             fontSize: { xs: 13.5, md: 14.5 },
             lineHeight: 1.7,
             mb: 2,
@@ -386,7 +386,7 @@ export default function RentalCard({
               sx={{
                 fontSize: 13.5,
                 fontWeight: 600,
-                color: "rgba(255,255,255,0.85)",
+                color: "rgba(var(--fg-rgb), 0.85)",
               }}
             >
               {item.pricingIncludes}
@@ -415,15 +415,15 @@ export default function RentalCard({
                   px: 1.2,
                   py: 0.5,
                   borderRadius: "8px",
-                  bgcolor: "rgba(255,255,255,0.03)",
-                  border: "1px solid rgba(255,255,255,0.08)",
+                  bgcolor: "rgba(var(--fg-rgb), 0.03)",
+                  border: "1px solid rgba(var(--fg-rgb), 0.08)",
                 }}
               >
                 <CheckRoundedIcon sx={{ fontSize: 13, color: ACCENT }} />
                 <Typography
                   sx={{
                     fontSize: 11.5,
-                    color: "rgba(255,255,255,0.75)",
+                    color: "rgba(var(--fg-rgb), 0.75)",
                     fontWeight: 600,
                   }}
                 >
@@ -476,8 +476,8 @@ export default function RentalCard({
             startIcon={<PhoneInTalkRoundedIcon />}
             variant="outlined"
             sx={{
-              color: "#fff",
-              borderColor: "rgba(255,255,255,0.2)",
+              color: "var(--fg)",
+              borderColor: "rgba(var(--fg-rgb), 0.2)",
               fontWeight: 700,
               borderRadius: "12px",
               px: 2.5,

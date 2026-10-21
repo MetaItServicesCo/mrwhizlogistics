@@ -43,7 +43,7 @@ export default function HotShotHowItWorks() {
       <motion.div
         initial={{ opacity: 0, y: 28 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: false, margin: "-100px" }}
+        viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.7, ease: EASE }}
       >
         <Typography
@@ -60,7 +60,7 @@ export default function HotShotHowItWorks() {
         <Typography
           component="h2"
           sx={{
-            color: "#fff",
+            color: "var(--fg)",
             fontWeight: 900,
             fontSize: { xs: "2rem", md: "3rem" },
             lineHeight: 1.05,
@@ -86,7 +86,7 @@ export default function HotShotHowItWorks() {
         }}
         initial="hidden"
         whileInView="show"
-        viewport={{ once: false, margin: "-100px" }}
+        viewport={{ once: true, margin: "-100px" }}
         sx={{ position: "relative", pl: { xs: 0, sm: 1 } }}
       >
         {/* vertical track (behind) */}
@@ -98,7 +98,7 @@ export default function HotShotHowItWorks() {
             bottom: 24,
             left: 27,
             width: 2,
-            bgcolor: "rgba(255,255,255,0.1)",
+            bgcolor: "rgba(var(--fg-rgb), 0.1)",
             overflow: "hidden",
             zIndex: 0,
           }}
@@ -143,7 +143,7 @@ export default function HotShotHowItWorks() {
                 width: 56,
                 height: 56,
                 borderRadius: "14px",
-                bgcolor: "#0a1b2b",
+                bgcolor: "var(--surface)",
                 border: `1px solid ${ACCENT}44`,
                 display: "flex",
                 alignItems: "center",
@@ -169,7 +169,7 @@ export default function HotShotHowItWorks() {
               <Typography
                 component="h3"
                 sx={{
-                  color: "#fff",
+                  color: "var(--fg)",
                   fontWeight: 900,
                   fontSize: { xs: "1.15rem", md: "1.35rem" },
                   mb: 1,
@@ -179,7 +179,7 @@ export default function HotShotHowItWorks() {
               </Typography>
               <Typography
                 sx={{
-                  color: "rgba(255,255,255,0.5)",
+                  color: "rgba(var(--fg-rgb), 0.5)",
                   fontSize: { xs: 14, md: 15 },
                   lineHeight: 1.8,
                   maxWidth: 560,

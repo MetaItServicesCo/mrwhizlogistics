@@ -30,6 +30,7 @@ export default function BlogHero({
 
   return (
     <Box
+      className="theme-dark"
       component="section"
       sx={{
         position: "relative",
@@ -44,8 +45,8 @@ export default function BlogHero({
         display: "flex",
         alignItems: "center",
         overflow: "hidden",
-        bgcolor: "#081c31",
-        color: "#fff",
+        bgcolor: "var(--surface)",
+        color: "var(--fg)",
       }}
     >
       {/* =====================================================
@@ -73,7 +74,7 @@ export default function BlogHero({
                 backgroundPosition: "center",
               }
             : {
-                background: "linear-gradient(135deg, #122f4b, #07131e)",
+                background: "linear-gradient(135deg, var(--surface-2), var(--bg))",
               }),
         }}
       />
@@ -89,7 +90,7 @@ export default function BlogHero({
           inset: 0,
           zIndex: 1,
           background:
-            "linear-gradient(180deg, rgba(8,28,49,0.5) 0%, transparent 30%, rgba(8,28,49,0.55) 100%)",
+            "linear-gradient(180deg, rgba(var(--bg-rgb), 0.5) 0%, transparent 30%, rgba(var(--bg-rgb), 0.55) 100%)",
         }}
       />
 
@@ -342,7 +343,7 @@ export default function BlogHero({
                   },
 
                   "&:hover": {
-                    color: "#fff",
+                    color: "var(--fg)",
                   },
                 }}
               >
@@ -356,7 +357,7 @@ export default function BlogHero({
                   width: 5,
                   height: 5,
                   borderRadius: "50%",
-                  bgcolor: "rgba(255,255,255,0.4)",
+                  bgcolor: "rgba(var(--fg-rgb), 0.4)",
                   flexShrink: 0,
                 }}
               />
@@ -365,7 +366,7 @@ export default function BlogHero({
 
               <Typography
                 sx={{
-                  color: "rgba(255,255,255,0.85)",
+                  color: "rgba(var(--fg-rgb), 0.85)",
                   fontWeight: 600,
                   fontSize: {
                     xs: 14,

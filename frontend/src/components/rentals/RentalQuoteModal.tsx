@@ -41,9 +41,9 @@ import { submitRentalQuote } from "@/lib/publicApi";
 import { errorMessage } from "@/lib/useResource";
 import { ACCENT, ACCENT_HOVER } from "@/theme/brand";
 
-const BG_DARK = "#081623";
-const CARD_BG = "#0c2135";
-const BORDER = "rgba(255, 255, 255, 0.08)";
+const BG_DARK = "var(--bg)";
+const CARD_BG = "var(--surface)";
+const BORDER = "rgba(var(--fg-rgb), 0.08)";
 
 type RentalQuoteModalProps = {
   open: boolean;
@@ -79,15 +79,15 @@ const initialForm: RentalQuoteFormData = {
 const STEPS = ["Customer Info", "Timeline & Routing", "Review & Submit"];
 
 const textFieldStyles = {
-  "& .MuiInputBase-input": { color: "#ffffff !important" },
-  "& .MuiInputLabel-root": { color: "#ffffff !important" },
+  "& .MuiInputBase-input": { color: "var(--fg) !important" },
+  "& .MuiInputLabel-root": { color: "var(--fg) !important" },
   "& .MuiInputLabel-root.Mui-focused": { color: `${ACCENT} !important` },
   "& .MuiOutlinedInput-root": {
-    "& fieldset": { borderColor: "rgba(255, 255, 255, 0.2)" },
-    "&:hover fieldset": { borderColor: "rgba(255, 255, 255, 0.4)" },
+    "& fieldset": { borderColor: "rgba(var(--fg-rgb), 0.2)" },
+    "&:hover fieldset": { borderColor: "rgba(var(--fg-rgb), 0.4)" },
     "&.Mui-focused fieldset": { borderColor: ACCENT },
   },
-  "& .MuiSelect-icon": { color: "#ffffff !important" },
+  "& .MuiSelect-icon": { color: "var(--fg) !important" },
   /* Fix for native HTML date picker calendar icon color in dark mode */
   "& input[type='date']::-webkit-calendar-picker-indicator": {
     filter: "invert(1) brightness(2)",
@@ -243,11 +243,11 @@ export default function RentalQuoteModal({
           sx: {
             bgcolor: BG_DARK,
             backgroundImage: "none",
-            color: "#fff",
+            color: "var(--fg)",
             border: `1px solid ${BORDER}`,
             borderRadius: { xs: 3, sm: 4 },
             overflow: "hidden",
-            boxShadow: "0 25px 60px rgba(0,0,0,0.8)",
+            boxShadow: "0 25px 60px rgba(var(--shadow-rgb), 0.28)",
             mx: { xs: 2, sm: "auto" },
           },
         },
@@ -293,7 +293,7 @@ export default function RentalQuoteModal({
                     variant="h4"
 
                     sx={{
-                      color: "#ffffff !important",
+                      color: "var(--fg) !important",
                       fontWeight: 900,
                       letterSpacing: "-0.5px",
                       fontSize: { xs: "1.5rem", sm: "2rem" },
@@ -303,7 +303,7 @@ export default function RentalQuoteModal({
                   </Typography>
                   <Typography
                     sx={{
-                      color: "rgba(255, 255, 255, 0.9) !important",
+                      color: "rgba(var(--fg-rgb), 0.9) !important",
                       lineHeight: 1.6,
                       fontSize: 14.5,
                     }}
@@ -311,7 +311,7 @@ export default function RentalQuoteModal({
                     Thank you,{" "}
                     <Box
                       component="span"
-                      sx={{ color: "#ffffff !important", fontWeight: 700 }}
+                      sx={{ color: "var(--fg) !important", fontWeight: 700 }}
                     >
                       {form.fullName}
                     </Box>
@@ -393,7 +393,7 @@ export default function RentalQuoteModal({
                       noWrap
                       sx={{
                         maxWidth: { xs: 200, sm: 400 },
-                        color: "#fff",
+                        color: "var(--fg)",
                         fontWeight: 800,
                         fontSize: { xs: "1.1rem", sm: "1.25rem" },
                       }}
@@ -411,10 +411,10 @@ export default function RentalQuoteModal({
                     width: 38,
                     height: 38,
                     borderRadius: "50%",
-                    color: "#fff",
-                    bgcolor: "rgba(255,255,255,0.04)",
+                    color: "var(--fg)",
+                    bgcolor: "rgba(var(--fg-rgb), 0.04)",
                     border: `1px solid ${BORDER}`,
-                    "&:hover": { bgcolor: "rgba(255,255,255,0.1)" },
+                    "&:hover": { bgcolor: "rgba(var(--fg-rgb), 0.1)" },
                   }}
                 >
                   <CloseRounded fontSize="small" />
@@ -452,7 +452,7 @@ export default function RentalQuoteModal({
                   </Typography>
                   <Typography
                     sx={{
-                      color: "rgba(255, 255, 255, 0.9)",
+                      color: "rgba(var(--fg-rgb), 0.9)",
                       fontSize: 11,
                       fontWeight: 600,
                     }}
@@ -466,7 +466,7 @@ export default function RentalQuoteModal({
                   sx={{
                     height: 6,
                     borderRadius: 3,
-                    bgcolor: "rgba(255,255,255,0.05)",
+                    bgcolor: "rgba(var(--fg-rgb), 0.05)",
                     "& .MuiLinearProgress-bar": {
                       bgcolor: ACCENT,
                       borderRadius: 3,
@@ -486,7 +486,7 @@ export default function RentalQuoteModal({
                   bgcolor: BG_DARK,
                   "&::-webkit-scrollbar": { width: "5px" },
                   "&::-webkit-scrollbar-thumb": {
-                    bgcolor: "rgba(255,255,255,0.1)",
+                    bgcolor: "rgba(var(--fg-rgb), 0.1)",
                     borderRadius: "3px",
                   },
                 }}
@@ -501,13 +501,13 @@ export default function RentalQuoteModal({
                       <Box>
                         <Typography
                           variant="h6"
-                          sx={{ color: "#ffffff !important", fontWeight: 700 }}
+                          sx={{ color: "var(--fg) !important", fontWeight: 700 }}
                         >
                           Client Identity
                         </Typography>
                         <Typography
                           variant="body2"
-                          sx={{ color: "rgba(255, 255, 255, 0.8) !important" }}
+                          sx={{ color: "rgba(var(--fg-rgb), 0.8) !important" }}
                         >
                           Enter your personal or corporate contact information.
                         </Typography>
@@ -598,13 +598,13 @@ export default function RentalQuoteModal({
                       <Box>
                         <Typography
                           variant="h6"
-                          sx={{ color: "#ffffff !important", fontWeight: 700 }}
+                          sx={{ color: "var(--fg) !important", fontWeight: 700 }}
                         >
                           Timeline & Routing
                         </Typography>
                         <Typography
                           variant="body2"
-                          sx={{ color: "rgba(255, 255, 255, 0.8) !important" }}
+                          sx={{ color: "rgba(var(--fg-rgb), 0.8) !important" }}
                         >
                           Define rental duration and dispatch/delivery path.
                         </Typography>
@@ -652,7 +652,7 @@ export default function RentalQuoteModal({
                             htmlInput: { min: today },
                             inputLabel: {
                               shrink: true,
-                              style: { color: "#ffffff" },
+                              style: { color: "var(--fg)" },
                             },
                           }}
                         />
@@ -674,7 +674,7 @@ export default function RentalQuoteModal({
                               htmlInput: { min: form.startDate || today },
                               inputLabel: {
                                 shrink: true,
-                                style: { color: "#ffffff" },
+                                style: { color: "var(--fg)" },
                               },
                             }}
                           />
@@ -723,14 +723,14 @@ export default function RentalQuoteModal({
                               updateField("deliveryRequired", e.target.checked)
                             }
                             sx={{
-                              color: "#ffffff",
+                              color: "var(--fg)",
                               "&.Mui-checked": { color: ACCENT },
                             }}
                           />
                         }
                         label={
                           <Typography
-                            sx={{ color: "#ffffff !important", fontSize: 13.5 }}
+                            sx={{ color: "var(--fg) !important", fontSize: 13.5 }}
                           >
                             Require transport/rig delivery to my site location
                           </Typography>
@@ -765,13 +765,13 @@ export default function RentalQuoteModal({
                       <Box>
                         <Typography
                           variant="h6"
-                          sx={{ color: "#ffffff !important", fontWeight: 700 }}
+                          sx={{ color: "var(--fg) !important", fontWeight: 700 }}
                         >
                           Review Quote Details
                         </Typography>
                         <Typography
                           variant="body2"
-                          sx={{ color: "rgba(255, 255, 255, 0.8) !important" }}
+                          sx={{ color: "rgba(var(--fg-rgb), 0.8) !important" }}
                         >
                           Confirm your specifications before transmitting.
                         </Typography>
@@ -796,7 +796,7 @@ export default function RentalQuoteModal({
                           <Box>
                             <Typography
                               sx={{
-                                color: "rgba(255, 255, 255, 0.7) !important",
+                                color: "rgba(var(--fg-rgb), 0.7) !important",
                                 fontSize: 11,
                               }}
                             >
@@ -804,7 +804,7 @@ export default function RentalQuoteModal({
                             </Typography>
                             <Typography
                               sx={{
-                                color: "#ffffff !important",
+                                color: "var(--fg) !important",
                                 fontWeight: 600,
                                 fontSize: 14,
                               }}
@@ -815,7 +815,7 @@ export default function RentalQuoteModal({
                           <Box>
                             <Typography
                               sx={{
-                                color: "rgba(255, 255, 255, 0.7) !important",
+                                color: "rgba(var(--fg-rgb), 0.7) !important",
                                 fontSize: 11,
                               }}
                             >
@@ -823,7 +823,7 @@ export default function RentalQuoteModal({
                             </Typography>
                             <Typography
                               sx={{
-                                color: "#ffffff !important",
+                                color: "var(--fg) !important",
                                 fontWeight: 600,
                                 fontSize: 14,
                               }}
@@ -834,7 +834,7 @@ export default function RentalQuoteModal({
                           <Box>
                             <Typography
                               sx={{
-                                color: "rgba(255, 255, 255, 0.7) !important",
+                                color: "rgba(var(--fg-rgb), 0.7) !important",
                                 fontSize: 11,
                               }}
                             >
@@ -842,7 +842,7 @@ export default function RentalQuoteModal({
                             </Typography>
                             <Typography
                               sx={{
-                                color: "#ffffff !important",
+                                color: "var(--fg) !important",
                                 fontWeight: 600,
                                 fontSize: 14,
                               }}
@@ -853,7 +853,7 @@ export default function RentalQuoteModal({
                           <Box>
                             <Typography
                               sx={{
-                                color: "rgba(255, 255, 255, 0.7) !important",
+                                color: "rgba(var(--fg-rgb), 0.7) !important",
                                 fontSize: 11,
                               }}
                             >
@@ -861,7 +861,7 @@ export default function RentalQuoteModal({
                             </Typography>
                             <Typography
                               sx={{
-                                color: "#ffffff !important",
+                                color: "var(--fg) !important",
                                 fontWeight: 600,
                                 fontSize: 14,
                               }}
@@ -870,7 +870,7 @@ export default function RentalQuoteModal({
                           <Box>
                             <Typography
                               sx={{
-                                color: "rgba(255, 255, 255, 0.7) !important",
+                                color: "rgba(var(--fg-rgb), 0.7) !important",
                                 fontSize: 11,
                               }}
                             >
@@ -878,7 +878,7 @@ export default function RentalQuoteModal({
                             </Typography>
                             <Typography
                               sx={{
-                                color: "#ffffff !important",
+                                color: "var(--fg) !important",
                                 fontWeight: 600,
                                 fontSize: 14,
                               }}
@@ -889,7 +889,7 @@ export default function RentalQuoteModal({
                           <Box>
                             <Typography
                               sx={{
-                                color: "rgba(255, 255, 255, 0.7) !important",
+                                color: "rgba(var(--fg-rgb), 0.7) !important",
                                 fontSize: 11,
                               }}
                             >
@@ -897,7 +897,7 @@ export default function RentalQuoteModal({
                             </Typography>
                             <Typography
                               sx={{
-                                color: "#ffffff !important",
+                                color: "var(--fg) !important",
                                 fontWeight: 600,
                                 fontSize: 14,
                               }}
@@ -909,7 +909,7 @@ export default function RentalQuoteModal({
                         <Divider sx={{ borderColor: BORDER, my: 1.5 }} />
                         <Typography
                           sx={{
-                            color: "rgba(255, 255, 255, 0.7) !important",
+                            color: "rgba(var(--fg-rgb), 0.7) !important",
                             fontSize: 12,
                             textTransform: "uppercase",
                             fontWeight: 700,
@@ -920,7 +920,7 @@ export default function RentalQuoteModal({
                           Intended Use
                         </Typography>
                         <Typography
-                          sx={{ color: "#ffffff !important", fontSize: 13.5 }}
+                          sx={{ color: "var(--fg) !important", fontSize: 13.5 }}
                         >
                           {form.intendedUse || "None specified"}
                         </Typography>
@@ -935,14 +935,14 @@ export default function RentalQuoteModal({
                                 updateField("agreeToContact", e.target.checked)
                               }
                               sx={{
-                                color: "#ffffff",
+                                color: "var(--fg)",
                                 "&.Mui-checked": { color: ACCENT },
                               }}
                             />
                           }
                           label={
                             <Typography
-                              sx={{ color: "#ffffff !important", fontSize: 13 }}
+                              sx={{ color: "var(--fg) !important", fontSize: 13 }}
                             >
                               I confirm the details above are accurate and
                               authorize Hot Shot Rentals to contact me.
@@ -998,11 +998,11 @@ export default function RentalQuoteModal({
                   onClick={handleBack}
                   disabled={activeStep === 0 || submitting}
                   sx={{
-                    color: activeStep === 0 ? "transparent" : "#fff",
+                    color: activeStep === 0 ? "transparent" : "var(--fg)",
                     visibility: activeStep === 0 ? "hidden" : "visible",
                     fontWeight: 700,
                     textTransform: "none",
-                    "&:hover": { bgcolor: "rgba(255,255,255,0.05)" },
+                    "&:hover": { bgcolor: "rgba(var(--fg-rgb), 0.05)" },
                   }}
                 >
                   Back

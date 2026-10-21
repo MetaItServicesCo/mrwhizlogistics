@@ -187,7 +187,7 @@ const navItemSx = {
   display: "flex",
   alignItems: "center",
   gap: "3px",
-  color: "rgba(255,255,255,0.75)",
+  color: "rgba(var(--fg-rgb), 0.75)",
   fontSize: 14,
   fontWeight: 500,
   px: 1.8,
@@ -201,7 +201,7 @@ const navItemSx = {
   zIndex: 1,
   overflow: "hidden",
   transition: "color .2s ease",
-  "&:hover": { color: "#fff" },
+  "&:hover": { color: "var(--fg)" },
 } as const;
 
 const mobileLinkSx = { py: 1.4, fontSize: 17, fontWeight: 500 } as const;
@@ -282,11 +282,11 @@ export default function Navbar({
             py: { xs: 0.8, md: 0.8 },
             minHeight: { xs: 56, md: 110 },
             borderRadius: "999px",
-            bgcolor: "rgba(12,31,49,0.85)",
-            backdropFilter: "blur(16px)",
-            WebkitBackdropFilter: "blur(16px)",
-            border: "1px solid rgba(255,255,255,0.1)",
-            boxShadow: "0 12px 40px rgba(0,0,0,0.5)",
+            // Near-opaque instead of a backdrop blur: blurring the page under a
+            // fixed bar is re-done on every scroll frame and made scrolling janky.
+            bgcolor: "rgba(var(--bg-rgb), 0.96)",
+            border: "1px solid rgba(var(--fg-rgb), 0.1)",
+            boxShadow: "0 12px 40px rgba(var(--shadow-rgb), 0.12)",
           }}
         >
           {Logo}
@@ -354,7 +354,7 @@ export default function Navbar({
                     onMouseLeave={scheduleClose}
                     sx={{
                       ...navItemSx,
-                      color: isActiveState ? "#fff" : navItemSx.color,
+                      color: isActiveState ? "var(--fg)" : navItemSx.color,
                       fontWeight: isActiveState ? 600 : 500,
                     }}
                   >
@@ -500,13 +500,13 @@ export default function Navbar({
               href={tel}
               aria-label="Call us"
               sx={{
-                border: "1px solid rgba(255,255,255,0.15)",
-                color: "#fff",
+                border: "1px solid rgba(var(--fg-rgb), 0.15)",
+                color: "var(--fg)",
                 width: 36,
                 height: 36,
                 "&:hover": {
-                  bgcolor: "rgba(255,255,255,0.08)",
-                  borderColor: "#fff",
+                  bgcolor: "rgba(var(--fg-rgb), 0.08)",
+                  borderColor: "var(--fg)",
                 },
               }}
             >
@@ -534,16 +534,16 @@ export default function Navbar({
             <Button
               {...ctaProps(secondaryCta)}
               sx={{
-                color: "#fff",
+                color: "var(--fg)",
                 fontWeight: 600,
                 fontSize: 11.5,
                 px: 1.8,
                 py: 0.8,
                 borderRadius: "999px",
-                border: "1px solid rgba(255,255,255,0.2)",
+                border: "1px solid rgba(var(--fg-rgb), 0.2)",
                 "&:hover": {
-                  bgcolor: "rgba(255,255,255,0.06)",
-                  borderColor: "#fff",
+                  bgcolor: "rgba(var(--fg-rgb), 0.06)",
+                  borderColor: "var(--fg)",
                 },
               }}
             >
@@ -555,7 +555,7 @@ export default function Navbar({
           {/* HAMBURGER */}
           <IconButton
             onClick={() => setDrawerOpen(true)}
-            sx={{ display: { xs: "inline-flex", lg: "none" }, color: "#fff" }}
+            sx={{ display: { xs: "inline-flex", lg: "none" }, color: "var(--fg)" }}
           >
             <MenuRoundedIcon />
           </IconButton>
@@ -593,12 +593,12 @@ export default function Navbar({
               >
                 <Box
                   sx={{
-                    bgcolor: "rgba(12,31,49,0.96)",
+                    bgcolor: "rgba(var(--bg-rgb), 0.96)",
                     backdropFilter: "blur(20px)",
-                    border: "1px solid rgba(255,255,255,0.1)",
+                    border: "1px solid rgba(var(--fg-rgb), 0.1)",
                     borderRadius: "20px",
                     p: 2.5,
-                    boxShadow: "0 24px 60px rgba(0,0,0,0.6)",
+                    boxShadow: "0 24px 60px rgba(var(--shadow-rgb), 0.21)",
                   }}
                 >
                   <Link
@@ -641,7 +641,7 @@ export default function Navbar({
                             borderRadius: "14px",
                             cursor: "pointer",
                             transition: "background .2s",
-                            "&:hover": { bgcolor: "rgba(255,255,255,0.06)" },
+                            "&:hover": { bgcolor: "rgba(var(--fg-rgb), 0.06)" },
                             "&:hover .mi-icon": {
                               transform: "translateY(-3px)",
                               color: ACCENT,
@@ -651,8 +651,8 @@ export default function Navbar({
                           <Box
                             className="mi-icon"
                             sx={{
-                              color: "#fff",
-                              bgcolor: "rgba(255,255,255,0.08)",
+                              color: "var(--fg)",
+                              bgcolor: "rgba(var(--fg-rgb), 0.08)",
                               width: 38,
                               height: 38,
                               borderRadius: "10px",
@@ -669,7 +669,7 @@ export default function Navbar({
                           <Box>
                             <Typography
                               sx={{
-                                color: "#fff",
+                                color: "var(--fg)",
                                 fontSize: 14,
                                 fontWeight: 600,
                               }}
@@ -678,7 +678,7 @@ export default function Navbar({
                             </Typography>
                             <Typography
                               sx={{
-                                color: "rgba(255,255,255,0.5)",
+                                color: "rgba(var(--fg-rgb), 0.5)",
                                 fontSize: 12,
                               }}
                             >
@@ -706,8 +706,8 @@ export default function Navbar({
             sx: {
               width: "85%",
               maxWidth: 360,
-              bgcolor: "#091928",
-              color: "#fff",
+              bgcolor: "var(--bg)",
+              color: "var(--fg)",
               p: 2.5,
             },
           },
@@ -721,7 +721,7 @@ export default function Navbar({
           {Logo}
           <IconButton
             onClick={() => setDrawerOpen(false)}
-            sx={{ color: "#fff" }}
+            sx={{ color: "var(--fg)" }}
           >
             <CloseRoundedIcon />
           </IconButton>
@@ -732,9 +732,9 @@ export default function Navbar({
           style={{ textDecoration: "none" }}
           onClick={() => setDrawerOpen(false)}
         >
-          <Typography sx={{ ...mobileLinkSx, color: "#fff" }}>Home</Typography>
+          <Typography sx={{ ...mobileLinkSx, color: "var(--fg)" }}>Home</Typography>
         </Link>
-        <Divider sx={{ borderColor: "rgba(255,255,255,0.06)" }} />
+        <Divider sx={{ borderColor: "rgba(var(--fg-rgb), 0.06)" }} />
 
         {MEGA_KEYS.map((key) => (
           <Box key={key}>
@@ -744,7 +744,7 @@ export default function Navbar({
                 ...mobileLinkSx,
                 justifyContent: "space-between",
                 alignItems: "center",
-                color: "#fff",
+                color: "var(--fg)",
               }}
             >
               <Link
@@ -786,8 +786,8 @@ export default function Navbar({
                       sx={{
                         alignItems: "center",
                         py: 1,
-                        color: "rgba(255,255,255,0.75)",
-                        "&:hover": { color: "#fff" },
+                        color: "rgba(var(--fg-rgb), 0.75)",
+                        "&:hover": { color: "var(--fg)" },
                       }}
                     >
                       <Box
@@ -805,7 +805,7 @@ export default function Navbar({
                 ))}
               </Stack>
             </Collapse>
-            <Divider sx={{ borderColor: "rgba(255,255,255,0.06)" }} />
+            <Divider sx={{ borderColor: "rgba(var(--fg-rgb), 0.06)" }} />
           </Box>
         ))}
 
@@ -814,25 +814,25 @@ export default function Navbar({
           style={{ textDecoration: "none" }}
           onClick={() => setDrawerOpen(false)}
         >
-          <Typography sx={{ ...mobileLinkSx, color: "#fff" }}>
+          <Typography sx={{ ...mobileLinkSx, color: "var(--fg)" }}>
             Rental
           </Typography>
         </Link>
-        <Divider sx={{ borderColor: "rgba(255,255,255,0.06)" }} />
+        <Divider sx={{ borderColor: "rgba(var(--fg-rgb), 0.06)" }} />
         <Link
           href="/blog"
           style={{ textDecoration: "none" }}
           onClick={() => setDrawerOpen(false)}
         >
-          <Typography sx={{ ...mobileLinkSx, color: "#fff" }}>Blog</Typography>
+          <Typography sx={{ ...mobileLinkSx, color: "var(--fg)" }}>Blog</Typography>
         </Link>
-        <Divider sx={{ borderColor: "rgba(255,255,255,0.06)" }} />
+        <Divider sx={{ borderColor: "rgba(var(--fg-rgb), 0.06)" }} />
         <Link
           href="/about"
           style={{ textDecoration: "none" }}
           onClick={() => setDrawerOpen(false)}
         >
-          <Typography sx={{ ...mobileLinkSx, color: "#fff" }}>About</Typography>
+          <Typography sx={{ ...mobileLinkSx, color: "var(--fg)" }}>About</Typography>
         </Link>
 
         <Stack spacing={1.2} sx={{ mt: 3 }}>
@@ -860,8 +860,8 @@ export default function Navbar({
             fullWidth
             variant="outlined"
             sx={{
-              borderColor: "rgba(255,255,255,0.25)",
-              color: "#fff",
+              borderColor: "rgba(var(--fg-rgb), 0.25)",
+              color: "var(--fg)",
               py: 1.1,
               borderRadius: "999px",
             }}
@@ -876,8 +876,8 @@ export default function Navbar({
             startIcon={<PhoneInTalkRoundedIcon />}
             variant="outlined"
             sx={{
-              borderColor: "rgba(255,255,255,0.18)",
-              color: "#fff",
+              borderColor: "rgba(var(--fg-rgb), 0.18)",
+              color: "var(--fg)",
               py: 1.1,
               borderRadius: "999px",
             }}

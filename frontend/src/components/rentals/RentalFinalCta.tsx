@@ -32,8 +32,8 @@ export default function RentalFinalCta({ content = RENTAL_DEFAULTS.page.sections
       sx={{
         position: "relative",
         overflow: "hidden",
-        bgcolor: "#081c31",
-        color: "#fff",
+        bgcolor: "var(--surface)",
+        color: "var(--fg)",
         py: { xs: 8, sm: 10, md: 12 },
       }}
     >
@@ -62,8 +62,8 @@ export default function RentalFinalCta({ content = RENTAL_DEFAULTS.page.sections
           inset: 0,
           opacity: 0.22,
           backgroundImage: `
-            linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px)
+            linear-gradient(rgba(var(--fg-rgb), 0.035) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(var(--fg-rgb), 0.035) 1px, transparent 1px)
           `,
           backgroundSize: "55px 55px",
           maskImage: "linear-gradient(90deg, black, transparent 80%)",
@@ -101,8 +101,8 @@ export default function RentalFinalCta({ content = RENTAL_DEFAULTS.page.sections
             borderRadius: { xs: "24px", md: "32px" },
             border: "1px solid rgba(var(--accent-rgb), 0.15)",
             background:
-              "linear-gradient(135deg, rgba(var(--accent-rgb), 0.04), rgba(255,255,255,0.015) 45%, rgba(255,255,255,0.008))",
-            boxShadow: "0 35px 100px rgba(0,0,0,0.45)",
+              "linear-gradient(135deg, rgba(var(--accent-rgb), 0.04), rgba(var(--fg-rgb), 0.015) 45%, rgba(var(--fg-rgb), 0.008))",
+            boxShadow: "0 35px 100px rgba(var(--shadow-rgb), 0.158)",
           }}
         >
           {/* Decorative circle */}
@@ -167,7 +167,7 @@ export default function RentalFinalCta({ content = RENTAL_DEFAULTS.page.sections
                 component={motion.div}
                 initial={reduce ? {} : { opacity: 0, y: 15 }}
                 whileInView={reduce ? {} : { opacity: 1, y: 0 }}
-                viewport={{ once: false, amount: 0.2 }}
+                viewport={{ once: true, amount: 0.2 }}
                 transition={{
                   duration: 0.5,
                   ease: EASE,
@@ -227,7 +227,7 @@ export default function RentalFinalCta({ content = RENTAL_DEFAULTS.page.sections
                 sx={{
                   maxWidth: 620,
                   mt: 2.5,
-                  color: "rgba(255,255,255,0.55)",
+                  color: "rgba(var(--fg-rgb), 0.55)",
                   fontSize: {
                     xs: 14,
                     md: 16,
@@ -254,7 +254,7 @@ export default function RentalFinalCta({ content = RENTAL_DEFAULTS.page.sections
                     component={motion.div}
                     initial={reduce ? {} : { opacity: 0, x: -10 }}
                     whileInView={reduce ? {} : { opacity: 1, x: 0 }}
-                    viewport={{ once: false, amount: 0.2 }}
+                    viewport={{ once: true, amount: 0.2 }}
                     transition={{
                       duration: 0.4,
                       ease: EASE,
@@ -275,7 +275,7 @@ export default function RentalFinalCta({ content = RENTAL_DEFAULTS.page.sections
 
                     <Typography
                       sx={{
-                        color: "rgba(255,255,255,0.65)",
+                        color: "rgba(var(--fg-rgb), 0.65)",
                         fontSize: 13,
                       }}
                     >
@@ -328,15 +328,15 @@ export default function RentalFinalCta({ content = RENTAL_DEFAULTS.page.sections
                     minHeight: 52,
                     px: 2.7,
                     borderRadius: "13px",
-                    color: "#fff",
-                    border: "1px solid rgba(255,255,255,0.16)",
-                    bgcolor: "rgba(255,255,255,0.04)",
+                    color: "var(--fg)",
+                    border: "1px solid rgba(var(--fg-rgb), 0.16)",
+                    bgcolor: "rgba(var(--fg-rgb), 0.04)",
                     fontSize: 14,
                     fontWeight: 800,
                     textTransform: "none",
                     "&:hover": {
-                      bgcolor: "rgba(255,255,255,0.09)",
-                      borderColor: "rgba(255,255,255,0.28)",
+                      bgcolor: "rgba(var(--fg-rgb), 0.09)",
+                      borderColor: "rgba(var(--fg-rgb), 0.28)",
                     },
                   }}
                 >
@@ -396,7 +396,7 @@ export default function RentalFinalCta({ content = RENTAL_DEFAULTS.page.sections
                       }
                 }
                 viewport={{
-                  once: false,
+                  once: true,
                   amount: 0.3,
                 }}
                 transition={{
@@ -487,10 +487,10 @@ export default function RentalFinalCta({ content = RENTAL_DEFAULTS.page.sections
                   px: 1.6,
                   py: 1.2,
                   borderRadius: "13px",
-                  bgcolor: "rgba(10,27,43,0.92)",
-                  border: "1px solid rgba(255,255,255,0.1)",
+                  bgcolor: "rgba(var(--bg-rgb), 0.92)",
+                  border: "1px solid rgba(var(--fg-rgb), 0.1)",
                   backdropFilter: "blur(5px)",
-                  boxShadow: "0 15px 40px rgba(0,0,0,0.2)",
+                  boxShadow: "0 15px 40px rgba(var(--shadow-rgb), 0.07)",
                 }}
               >
                 <Box
@@ -514,7 +514,7 @@ export default function RentalFinalCta({ content = RENTAL_DEFAULTS.page.sections
                     sx={{
                       fontSize: 11,
                       fontWeight: 800,
-                      color: "#fff",
+                      color: "var(--fg)",
                     }}
                   >{copy.rentalFleet}</Typography>
                 </Box>
@@ -523,7 +523,7 @@ export default function RentalFinalCta({ content = RENTAL_DEFAULTS.page.sections
                   sx={{
                     mt: 0.4,
                     fontSize: 10,
-                    color: "rgba(255,255,255,0.4)",
+                    color: "rgba(var(--fg-rgb), 0.4)",
                   }}
                 >{copy.checkAvailabilityToday}</Typography>
               </Box>
@@ -536,7 +536,7 @@ export default function RentalFinalCta({ content = RENTAL_DEFAULTS.page.sections
           sx={{
             textAlign: "center",
             mt: 3,
-            color: "rgba(255,255,255,0.25)",
+            color: "rgba(var(--fg-rgb), 0.25)",
             fontSize: 10.5,
           }}
         >{copy.needHelpChoosingEquipmentContact}</Typography>

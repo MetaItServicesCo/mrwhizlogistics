@@ -63,7 +63,7 @@ function OptionCard({ option, index }: { option: Option; index: number }) {
     <motion.div
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: false, margin: "-80px" }}
+      viewport={{ once: true, margin: "-80px" }}
       transition={{ duration: 0.6, delay: index * 0.07, ease: EASE }}
       style={{ height: "100%" }}
     >
@@ -76,15 +76,15 @@ function OptionCard({ option, index }: { option: Option; index: number }) {
           minHeight: 190,
           p: { xs: 2.75, md: 3.25 },
           borderRadius: "16px",
-          bgcolor: "#0b1d2e",
-          border: "1px solid rgba(255,255,255,.08)",
+          bgcolor: "var(--surface)",
+          border: "1px solid rgba(var(--fg-rgb), .08)",
           overflow: "hidden",
           transition:
             "transform .35s ease, border-color .35s ease, box-shadow .35s ease",
           "&:hover": {
             transform: "translateY(-6px)",
             borderColor: "rgba(var(--accent-rgb), .4)",
-            boxShadow: "0 22px 50px rgba(0,0,0,.5)",
+            boxShadow: "0 22px 50px rgba(var(--shadow-rgb), 0.175)",
           },
           "&:hover .to-icon": { transform: "translateY(-4px) rotate(-6deg)" },
           "&:hover .to-spot": { opacity: 1 },
@@ -130,7 +130,7 @@ function OptionCard({ option, index }: { option: Option; index: number }) {
             position: "absolute",
             top: 16,
             right: 18,
-            color: "rgba(255,255,255,.18)",
+            color: "rgba(var(--fg-rgb), .18)",
             fontSize: 26,
             fontWeight: 900,
             lineHeight: 1,
@@ -178,7 +178,7 @@ function OptionCard({ option, index }: { option: Option; index: number }) {
         <Typography
           sx={{
             position: "relative",
-            color: "#fff",
+            color: "var(--fg)",
             fontSize: 15,
             fontWeight: 900,
             mb: 0.8,
@@ -189,7 +189,7 @@ function OptionCard({ option, index }: { option: Option; index: number }) {
         <Typography
           sx={{
             position: "relative",
-            color: "rgba(255,255,255,.48)",
+            color: "rgba(var(--fg-rgb), .48)",
             fontSize: 12.5,
             lineHeight: 1.7,
             maxWidth: 360,
@@ -229,7 +229,7 @@ export default function HotShotTransportOptions({
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: false, margin: "-100px" }}
+        viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.7, ease: EASE }}
       >
         <Typography
@@ -246,7 +246,7 @@ export default function HotShotTransportOptions({
         <Typography
           component="h2"
           sx={{
-            color: "#fff",
+            color: "var(--fg)",
             fontSize: { xs: 27, md: 38 },
             fontWeight: 900,
             letterSpacing: "-1px",
@@ -256,7 +256,7 @@ export default function HotShotTransportOptions({
           Transport options
         </Typography>
         <Typography
-          sx={{ color: "rgba(255,255,255,.48)", fontSize: 14, mb: 4 }}
+          sx={{ color: "rgba(var(--fg-rgb), .48)", fontSize: 14, mb: 4 }}
         >
           Flexible transportation solutions for different shipment requirements.
         </Typography>

@@ -48,7 +48,7 @@ function Sidebar({
       {/* SERVICE MENU */}
       <Typography
         sx={{
-          color: "#fff",
+          color: "var(--fg)",
           fontSize: 16,
           fontWeight: 900,
           mb: 1.5,
@@ -60,7 +60,7 @@ function Sidebar({
       <Box
         sx={{
           mb: 4,
-          borderTop: "1px solid rgba(255,255,255,.08)",
+          borderTop: "1px solid rgba(var(--fg-rgb), .08)",
         }}
       >
         {Array.isArray(services) &&
@@ -75,10 +75,10 @@ function Sidebar({
                 justifyContent: "space-between",
                 minHeight: 48,
                 px: 1.5,
-                borderBottom: "1px solid rgba(255,255,255,.07)",
+                borderBottom: "1px solid rgba(var(--fg-rgb), .07)",
                 textDecoration: "none",
                 color:
-                  item.slug === service?.slug ? ACCENT : "rgba(255,255,255,.48)",
+                  item.slug === service?.slug ? ACCENT : "rgba(var(--fg-rgb), .48)",
                 bgcolor:
                   item.slug === service?.slug
                     ? "rgba(var(--accent-rgb), .06)"
@@ -114,13 +114,13 @@ function Sidebar({
         component={motion.div}
         initial={{ opacity: 0, y: 80 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: false, margin: "-60px" }}
+        viewport={{ once: true, margin: "-60px" }}
         transition={{ duration: 0.2, ease: EASE }}
         sx={{
           position: "relative",
           borderRadius: "16px",
           p: "1px",
-          background: `linear-gradient(150deg, rgba(var(--accent-rgb), .4), rgba(255,255,255,.05) 45%)`,
+          background: `linear-gradient(150deg, rgba(var(--accent-rgb), .4), rgba(var(--fg-rgb), .05) 45%)`,
           transition: "transform .35s ease",
           "&:hover": { transform: "translateY(-4px)" },
           "&:hover .help-icon": { transform: "scale(1.08)" },
@@ -133,7 +133,7 @@ function Sidebar({
             position: "relative",
             overflow: "hidden",
             borderRadius: "15px",
-            bgcolor: "#0b1d2e",
+            bgcolor: "var(--surface)",
             p: 3,
           }}
         >
@@ -217,7 +217,7 @@ function Sidebar({
             />
             <Typography
               sx={{
-                color: "rgba(255,255,255,.5)",
+                color: "rgba(var(--fg-rgb), .5)",
                 fontSize: 9.5,
                 fontWeight: 800,
                 letterSpacing: 1,
@@ -231,7 +231,7 @@ function Sidebar({
           <Typography
             sx={{
               position: "relative",
-              color: "#fff",
+              color: "var(--fg)",
               fontWeight: 900,
               fontSize: 18,
               mb: 1,
@@ -243,7 +243,7 @@ function Sidebar({
           <Typography
             sx={{
               position: "relative",
-              color: "rgba(255,255,255,.45)",
+              color: "rgba(var(--fg-rgb), .45)",
               fontSize: 14,
               lineHeight: 1.7,
               mb: 2,
@@ -308,8 +308,8 @@ export default function HotShotServiceDetail({
     <Box
       component="main"
       sx={{
-        bgcolor: "#07141f",
-        color: "#fff",
+        bgcolor: "var(--bg)",
+        color: "var(--fg)",
         minHeight: "100vh",
       }}
     >
@@ -364,7 +364,7 @@ export default function HotShotServiceDetail({
                 y: 0,
               }}
               viewport={{
-                once: false,
+                once: true,
                 margin: "-100px",
               }}
               transition={{
@@ -387,7 +387,7 @@ export default function HotShotServiceDetail({
               <Typography
                 component="h2"
                 sx={{
-                  color: "#fff",
+                  color: "var(--fg)",
                   fontWeight: 900,
                   fontSize: {
                     xs: "2rem",
@@ -425,7 +425,7 @@ export default function HotShotServiceDetail({
                 y: 0,
               }}
               viewport={{
-                once: false,
+                once: true,
                 margin: "-100px",
               }}
               transition={{
@@ -434,6 +434,7 @@ export default function HotShotServiceDetail({
               }}
             >
               <Box
+                className="theme-dark"
                 sx={{
                   position: "relative",
                   height: {
@@ -479,7 +480,7 @@ export default function HotShotServiceDetail({
                     py: 1,
                     bgcolor: "rgba(0,0,0,.72)",
                     backdropFilter: "blur(10px)",
-                    border: "1px solid rgba(255,255,255,.1)",
+                    border: "1px solid rgba(var(--fg-rgb), .1)",
                   }}
                 >
                   <Box
@@ -494,7 +495,7 @@ export default function HotShotServiceDetail({
 
                   <Typography
                     sx={{
-                      color: "#fff",
+                      color: "var(--fg)",
                       fontSize: 9,
                       fontWeight: 900,
                       letterSpacing: 1,
@@ -537,7 +538,7 @@ export default function HotShotServiceDetail({
                     y: 0,
                   }}
                   viewport={{
-                    once: false,
+                    once: true,
                     margin: "-80px",
                   }}
                   transition={{
@@ -548,7 +549,7 @@ export default function HotShotServiceDetail({
                 >
                   <Typography
                     sx={{
-                      color: "rgba(255,255,255,.5)",
+                      color: "rgba(var(--fg-rgb), .5)",
                       fontSize: {
                         xs: 14,
                         md: 15,
@@ -576,7 +577,7 @@ export default function HotShotServiceDetail({
                 y: 0,
               }}
               viewport={{
-                once: false,
+                once: true,
                 margin: "-80px",
               }}
               transition={{
@@ -592,8 +593,8 @@ export default function HotShotServiceDetail({
                     xs: "1fr",
                     sm: "repeat(3,1fr)",
                   },
-                  borderTop: "1px solid rgba(255,255,255,.1)",
-                  borderBottom: "1px solid rgba(255,255,255,.1)",
+                  borderTop: "1px solid rgba(var(--fg-rgb), .1)",
+                  borderBottom: "1px solid rgba(var(--fg-rgb), .1)",
                 }}
               >
                 {service.stats.map((stat) => (
@@ -607,7 +608,7 @@ export default function HotShotServiceDetail({
                       },
                       borderRight: {
                         xs: "none",
-                        sm: "1px solid rgba(255,255,255,.08)",
+                        sm: "1px solid rgba(var(--fg-rgb), .08)",
                       },
                     }}
                   >
@@ -627,7 +628,7 @@ export default function HotShotServiceDetail({
 
                     <Typography
                       sx={{
-                        color: "rgba(255,255,255,.35)",
+                        color: "rgba(var(--fg-rgb), .35)",
                         fontSize: 9,
                         fontWeight: 900,
                         letterSpacing: 1,

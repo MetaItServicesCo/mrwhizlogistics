@@ -16,8 +16,8 @@ import SupportAgentRoundedIcon from "@mui/icons-material/SupportAgentRounded";
 import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
 import { ACCENT, ACCENT_HOVER } from "@/theme/brand";
 
-const BG = "#081c31";
-const CARD = "#0c2033";
+const BG = "var(--surface)";
+const CARD = "var(--surface)";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -83,7 +83,7 @@ export default function RentalBenefits() {
         position: "relative",
         overflow: "hidden",
         bgcolor: BG,
-        color: "#fff",
+        color: "var(--fg)",
         py: { xs: 9, sm: 11, md: 14 },
       }}
     >
@@ -130,8 +130,8 @@ export default function RentalBenefits() {
           opacity: 0.035,
           pointerEvents: "none",
           backgroundImage: `
-            linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)
+            linear-gradient(rgba(var(--fg-rgb), 0.5) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(var(--fg-rgb), 0.5) 1px, transparent 1px)
           `,
           backgroundSize: "70px 70px",
         }}
@@ -152,7 +152,7 @@ export default function RentalBenefits() {
           component={motion.div}
           initial={reduce ? {} : { opacity: 0, y: 25 }}
           whileInView={reduce ? {} : { opacity: 1, y: 0 }}
-          viewport={{ once: false, amount: 0.25 }}
+          viewport={{ once: true, amount: 0.25 }}
           transition={{
             duration: 0.7,
             ease: EASE,
@@ -229,7 +229,7 @@ export default function RentalBenefits() {
             sx={{
               mt: 2.5,
               maxWidth: 680,
-              color: "rgba(255,255,255,0.58)",
+              color: "rgba(var(--fg-rgb), 0.58)",
               fontSize: { xs: 14, md: 16 },
               lineHeight: 1.75,
             }}
@@ -273,7 +273,7 @@ export default function RentalBenefits() {
           component={motion.div}
           initial={reduce ? {} : { opacity: 0, y: 25 }}
           whileInView={reduce ? {} : { opacity: 1, y: 0 }}
-          viewport={{ once: false, amount: 0.2 }}
+          viewport={{ once: true, amount: 0.2 }}
           transition={{
             duration: 0.7,
             delay: 0.15,
@@ -283,8 +283,8 @@ export default function RentalBenefits() {
             mt: { xs: 4, md: 5 },
             p: { xs: 2.5, md: 3 },
             borderRadius: "20px",
-            border: "1px solid rgba(255,255,255,0.08)",
-            bgcolor: "rgba(255,255,255,0.025)",
+            border: "1px solid rgba(var(--fg-rgb), 0.08)",
+            bgcolor: "rgba(var(--fg-rgb), 0.025)",
             display: "flex",
             flexDirection: { xs: "column", md: "row" },
             alignItems: { xs: "flex-start", md: "center" },
@@ -305,7 +305,7 @@ export default function RentalBenefits() {
             <Typography
               sx={{
                 mt: 0.6,
-                color: "rgba(255,255,255,0.5)",
+                color: "rgba(var(--fg-rgb), 0.5)",
                 fontSize: 13.5,
               }}
             >
@@ -375,7 +375,7 @@ function BenefitCard({
             }
       }
       viewport={{
-        once: false,
+        once: true,
         amount: 0.2,
       }}
       transition={{
@@ -397,11 +397,11 @@ function BenefitCard({
         p: { xs: 2.5, md: 3 },
         borderRadius: "20px",
         bgcolor: CARD,
-        border: "1px solid rgba(255,255,255,0.075)",
+        border: "1px solid rgba(var(--fg-rgb), 0.075)",
         transition: "border-color 0.3s ease, box-shadow 0.3s ease",
         "&:hover": {
           borderColor: `${ACCENT}44`,
-          boxShadow: "0 20px 55px rgba(0,0,0,0.3)",
+          boxShadow: "0 20px 55px rgba(var(--shadow-rgb), 0.105)",
         },
       }}
     >
@@ -429,7 +429,7 @@ function BenefitCard({
           fontSize: 12,
           fontWeight: 900,
           letterSpacing: 1,
-          color: "rgba(255,255,255,0.16)",
+          color: "rgba(var(--fg-rgb), 0.16)",
         }}
       >
         {benefit.number}
@@ -475,7 +475,7 @@ function BenefitCard({
       <Typography
         sx={{
           mt: 1.3,
-          color: "rgba(255,255,255,0.52)",
+          color: "rgba(var(--fg-rgb), 0.52)",
           fontSize: 13.5,
           lineHeight: 1.7,
         }}

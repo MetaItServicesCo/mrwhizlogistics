@@ -163,8 +163,8 @@ function PlatformCard({
   };
 
   const isLime = card.variant === "lime";
-  const textMain = isLime ? "#081c31" : "#fff";
-  const textSub = isLime ? "rgba(0,0,0,0.7)" : "rgba(255,255,255,0.7)";
+  const textMain = isLime ? "#081c31" : "var(--fg)";
+  const textSub = isLime ? "rgba(0,0,0,0.7)" : "rgba(var(--fg-rgb), 0.7)";
 
   return (
     <Box
@@ -182,19 +182,20 @@ function PlatformCard({
         style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
       >
         <Box
+          className="theme-dark"
           sx={{
             position: "relative",
             height: { xs: 340, md: 380 },
             borderRadius: "20px",
             overflow: "hidden",
-            border: "1px solid rgba(255,255,255,0.1)",
+            border: "1px solid rgba(var(--fg-rgb), 0.1)",
             transition:
               "transform .4s ease, box-shadow .4s ease, border-color .4s ease",
-            bgcolor: isLime ? ACCENT : "#0a1a29",
+            bgcolor: isLime ? ACCENT : "var(--bg)",
             "&:hover": {
               transform: "translateY(-6px)",
               borderColor: isLime ? "transparent" : "rgba(var(--accent-rgb), 0.5)",
-              boxShadow: "0 22px 50px rgba(0,0,0,0.5)",
+              boxShadow: "0 22px 50px rgba(var(--shadow-rgb), 0.175)",
             },
             "&:hover .pc-reveal": { opacity: 1, transform: "scale(1.06)" }, // truck image reveal + zoom
             "&:hover .pc-scrim": { opacity: 1 },
@@ -212,8 +213,8 @@ function PlatformCard({
               background: isLime
                 ? "none"
                 : card.variant === "image"
-                  ? "radial-gradient(circle at 30% 20%, rgba(var(--accent-rgb), 0.10), transparent 55%), linear-gradient(155deg, #12314e, #081c31)"
-                  : "radial-gradient(circle at 70% 20%, rgba(var(--accent-2-rgb), 0.08), transparent 55%), linear-gradient(155deg, #0f2840, #081c31)",
+                  ? "radial-gradient(circle at 30% 20%, rgba(var(--accent-rgb), 0.10), transparent 55%), linear-gradient(155deg, var(--surface-2), var(--surface))"
+                  : "radial-gradient(circle at 70% 20%, rgba(var(--accent-2-rgb), 0.08), transparent 55%), linear-gradient(155deg, var(--surface-2), var(--surface))",
             }}
           />
 
@@ -226,7 +227,7 @@ function PlatformCard({
                 top: -6,
                 right: -6,
                 zIndex: 0,
-                color: "rgba(255,255,255,0.05)",
+                color: "rgba(var(--fg-rgb), 0.05)",
                 "& svg": { fontSize: 130 },
               }}
             >
@@ -377,7 +378,7 @@ function PlatformCard({
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                bgcolor: isLime ? "#081c31" : ACCENT,
+                bgcolor: isLime ? "var(--surface)" : ACCENT,
                 color: isLime ? ACCENT : "#081c31",
                 transition: "transform .3s",
               }}
@@ -457,8 +458,8 @@ export default function PlatformSection() {
       aria-labelledby="plat-title"
       sx={{
         position: "relative",
-        bgcolor: "#081c31",
-        color: "#fff",
+        bgcolor: "var(--surface)",
+        color: "var(--fg)",
         py: { xs: 8, md: 4 },
         overflow: "hidden",
       }}
@@ -491,7 +492,7 @@ export default function PlatformSection() {
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, margin: "-80px" }}
+          viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.6 }}
         >
           <Typography
@@ -516,13 +517,12 @@ export default function PlatformSection() {
               fontSize: { xs: "2rem", sm: "2.6rem", md: "3.2rem" },
               maxWidth: 860,
               mx: "auto",
-              background: `linear-gradient(90deg, #ffffff, ${ACCENT}, var(--accent-2), #ffffff)`,
+              background: `linear-gradient(90deg, var(--fg), rgba(var(--fg-rgb), 0.78))`,
               backgroundSize: "200% auto",
               WebkitBackgroundClip: "text",
               backgroundClip: "text",
               color: "transparent",
               WebkitTextFillColor: "transparent",
-              animation: "platShimmer 6s linear infinite",
               "@keyframes platShimmer": {
                 to: { backgroundPosition: "200% center" },
               },
@@ -534,7 +534,7 @@ export default function PlatformSection() {
           <Typography
             sx={{
               mt: 2.5,
-              color: "rgba(255,255,255,0.6)",
+              color: "rgba(var(--fg-rgb), 0.6)",
               fontSize: { xs: 14.5, md: 16 },
               maxWidth: 660,
               mx: "auto",
@@ -588,12 +588,12 @@ export default function PlatformSection() {
                 border:
                   active === i
                     ? `1px solid ${ACCENT}`
-                    : "1px solid rgba(255,255,255,0.15)",
+                    : "1px solid rgba(var(--fg-rgb), 0.15)",
                 bgcolor: active === i ? ACCENT : "transparent",
-                color: active === i ? "#081c31" : "rgba(255,255,255,0.7)",
+                color: active === i ? "#081c31" : "rgba(var(--fg-rgb), 0.7)",
                 "&:hover": {
-                  color: active === i ? "#081c31" : "#fff",
-                  borderColor: active === i ? ACCENT : "rgba(255,255,255,0.4)",
+                  color: active === i ? "#081c31" : "var(--fg)",
+                  borderColor: active === i ? ACCENT : "rgba(var(--fg-rgb), 0.4)",
                 },
               }}
             >
@@ -609,9 +609,9 @@ export default function PlatformSection() {
             onClick={() => goTo(Math.max(0, active - 1))}
             disabled={active === 0}
             sx={{
-              border: "1px solid rgba(255,255,255,0.2)",
-              color: "#fff",
-              "&.Mui-disabled": { opacity: 0.3, color: "#fff" },
+              border: "1px solid rgba(var(--fg-rgb), 0.2)",
+              color: "var(--fg)",
+              "&.Mui-disabled": { opacity: 0.3, color: "var(--fg)" },
               "&:hover": { borderColor: ACCENT, color: ACCENT },
             }}
           >
@@ -621,9 +621,9 @@ export default function PlatformSection() {
             onClick={() => goTo(Math.min(CARDS.length - 1, active + 1))}
             disabled={active === CARDS.length - 1}
             sx={{
-              border: "1px solid rgba(255,255,255,0.2)",
-              color: "#fff",
-              "&.Mui-disabled": { opacity: 0.3, color: "#fff" },
+              border: "1px solid rgba(var(--fg-rgb), 0.2)",
+              color: "var(--fg)",
+              "&.Mui-disabled": { opacity: 0.3, color: "var(--fg)" },
               "&:hover": { borderColor: ACCENT, color: ACCENT },
             }}
           >
@@ -677,7 +677,7 @@ export default function PlatformSection() {
           mt: 3,
           height: 3,
           borderRadius: 2,
-          bgcolor: "rgba(255,255,255,0.1)",
+          bgcolor: "rgba(var(--fg-rgb), 0.1)",
           overflow: "hidden",
         }}
       >

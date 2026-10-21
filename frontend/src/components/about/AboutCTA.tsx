@@ -21,8 +21,8 @@ export default function AboutCTA({
       component="section"
       sx={{
         py: { xs: 8, md: 10 },
-        bgcolor: "#0a1c2c",
-        borderTop: "1px solid rgba(255,255,255,0.08)",
+        bgcolor: "var(--surface)",
+        borderTop: "1px solid rgba(var(--fg-rgb), 0.08)",
       }}
     >
       <Container maxWidth="lg">
@@ -32,7 +32,7 @@ export default function AboutCTA({
             borderRadius: "28px",
             overflow: "hidden",
             p: { xs: 4, md: 6 },
-            bgcolor: "#0d2236",
+            bgcolor: "var(--surface)",
             border: `1px solid ${ACCENT}33`,
             textAlign: "center",
             backgroundImage:
@@ -56,7 +56,7 @@ export default function AboutCTA({
             sx={{
               fontWeight: 800,
               fontSize: { xs: "1.8rem", md: "2.6rem" },
-              color: "#fff",
+              color: "var(--fg)",
               mb: 2,
               maxWidth: 700,
               mx: "auto",
@@ -66,7 +66,7 @@ export default function AboutCTA({
           </Typography>
           <Typography
             sx={{
-              color: "rgba(255,255,255,0.6)",
+              color: "rgba(var(--fg-rgb), 0.6)",
               fontSize: { xs: 14, md: 15 },
               maxWidth: 550,
               mx: "auto",
@@ -110,8 +110,8 @@ export default function AboutCTA({
               startIcon={<PhoneInTalkRoundedIcon />}
               variant="outlined"
               sx={{
-                color: "#fff",
-                borderColor: "rgba(255,255,255,0.2)",
+                color: "var(--fg)",
+                borderColor: "rgba(var(--fg-rgb), 0.2)",
                 fontWeight: 700,
                 borderRadius: "12px",
                 px: 3,

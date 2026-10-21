@@ -78,7 +78,7 @@ function YardVisual({ active }: { active: number }) {
         height: { xs: "42vh", sm: "48vh", md: "100dvh" },
         display: "flex",
         alignItems: "center",
-        bgcolor: { xs: "#081c31", md: "transparent" },
+        bgcolor: { xs: "var(--surface)", md: "transparent" },
         mb: { xs: 2, md: 0 },
       }}
     >
@@ -89,8 +89,8 @@ function YardVisual({ active }: { active: number }) {
           height: { xs: "100%", md: "82vh" },
           borderRadius: { xs: "16px", md: "20px" },
           overflow: "hidden",
-          border: "1px solid rgba(255,255,255,0.1)",
-          bgcolor: "#07131e",
+          border: "1px solid rgba(var(--fg-rgb), 0.1)",
+          bgcolor: "var(--bg)",
         }}
       >
         {/* glow */}
@@ -134,7 +134,7 @@ function YardVisual({ active }: { active: number }) {
                 gap: 8,
                 padding: "8px 16px",
                 borderRadius: 999,
-                background: "rgba(9,23,37,0.8)",
+                background: "rgba(var(--bg-rgb), 0.8)",
                 backdropFilter: "blur(10px)",
                 border: `1px solid ${ACCENT}55`,
                 maxWidth: "90%",
@@ -217,7 +217,7 @@ function YardVisual({ active }: { active: number }) {
                   textAnchor="middle"
                   fontSize={22}
                   fontWeight="700"
-                  fill={on ? ACCENT : "rgba(255,255,255,0.28)"}
+                  fill={on ? ACCENT : "rgba(var(--fg-rgb), 0.28)"}
                   style={{ transition: "fill .35s" }}
                 >
                   {num}
@@ -229,7 +229,7 @@ function YardVisual({ active }: { active: number }) {
                   height={bBot - bTop}
                   rx={4}
                   fill={on ? "rgba(var(--accent-rgb), 0.06)" : "none"}
-                  stroke={on ? ACCENT : "rgba(255,255,255,0.16)"}
+                  stroke={on ? ACCENT : "rgba(var(--fg-rgb), 0.16)"}
                   strokeWidth={on ? 2 : 1.5}
                   style={{ transition: "stroke .35s, fill .35s" }}
                 />
@@ -238,7 +238,7 @@ function YardVisual({ active }: { active: number }) {
                   y1={bTop + 70}
                   x2={x + hw}
                   y2={bTop + 70}
-                  stroke={on ? `${ACCENT}88` : "rgba(255,255,255,0.12)"}
+                  stroke={on ? `${ACCENT}88` : "rgba(var(--fg-rgb), 0.12)"}
                   strokeWidth={1}
                 />
                 <line
@@ -246,7 +246,7 @@ function YardVisual({ active }: { active: number }) {
                   y1={bTop + 150}
                   x2={x + hw}
                   y2={bTop + 150}
-                  stroke={on ? `${ACCENT}88` : "rgba(255,255,255,0.12)"}
+                  stroke={on ? `${ACCENT}88` : "rgba(var(--fg-rgb), 0.12)"}
                   strokeWidth={1}
                 />
               </g>
@@ -337,7 +337,7 @@ function YardVisual({ active }: { active: number }) {
             sx={{
               fontSize: 10,
               letterSpacing: 2,
-              color: "rgba(255,255,255,0.5)",
+              color: "rgba(var(--fg-rgb), 0.5)",
             }}
           >
             YARD OS · LIVE
@@ -389,7 +389,7 @@ function FeatureBlock({
               position: "relative",
               width: 3,
               borderRadius: 2,
-              bgcolor: "rgba(255,255,255,0.1)",
+              bgcolor: "rgba(var(--fg-rgb), 0.1)",
               flexShrink: 0,
               alignSelf: "stretch",
             }}
@@ -415,7 +415,7 @@ function FeatureBlock({
                 fontWeight: 700,
                 letterSpacing: 2,
                 mb: 1,
-                color: on ? ACCENT : "rgba(255,255,255,0.4)",
+                color: on ? ACCENT : "rgba(var(--fg-rgb), 0.4)",
                 transition: "color .4s",
               }}
             >
@@ -431,18 +431,17 @@ function FeatureBlock({
                 fontSize: { xs: "1.5rem", sm: "1.85rem", md: "2.1rem" },
                 ...(on
                   ? {
-                      background: `linear-gradient(90deg, #ffffff, ${ACCENT}, var(--accent-2), #ffffff)`,
+                      background: `linear-gradient(90deg, var(--fg), rgba(var(--fg-rgb), 0.78))`,
                       backgroundSize: "200% auto",
                       WebkitBackgroundClip: "text",
                       backgroundClip: "text",
                       color: "transparent",
                       WebkitTextFillColor: "transparent",
-                      animation: "yosShimmer 5s linear infinite",
                       "@keyframes yosShimmer": {
                         to: { backgroundPosition: "200% center" },
                       },
                     }
-                  : { color: "#fff" }),
+                  : { color: "var(--fg)" }),
               }}
             >
               {f.title}
@@ -450,7 +449,7 @@ function FeatureBlock({
 
             <Typography
               sx={{
-                color: "rgba(255,255,255,0.62)",
+                color: "rgba(var(--fg-rgb), 0.62)",
                 fontSize: { xs: 14.5, md: 16.5 },
                 lineHeight: 1.75,
                 maxWidth: 460,
@@ -474,8 +473,8 @@ export default function YardOSSection() {
       aria-labelledby="yos-title"
       sx={{
         position: "relative",
-        bgcolor: "#081c31",
-        color: "#fff",
+        bgcolor: "var(--surface)",
+        color: "var(--fg)",
         px: { xs: 3, md: 6 },
         py: { xs: 8, md: 6 },
       }}
@@ -492,7 +491,7 @@ export default function YardOSSection() {
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, margin: "-80px" }}
+          viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.6 }}
         >
           <Typography
@@ -522,7 +521,7 @@ export default function YardOSSection() {
           <Typography
             sx={{
               mt: 2.5,
-              color: "rgba(255,255,255,0.6)",
+              color: "rgba(var(--fg-rgb), 0.6)",
               fontSize: { xs: 14.5, md: 16 },
               maxWidth: 640,
               mx: "auto",

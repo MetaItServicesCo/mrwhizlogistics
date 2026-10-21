@@ -102,12 +102,12 @@ const CASES: Case[] = [
 ];
 
 const gradients = [
-  "radial-gradient(circle at 30% 25%, rgba(var(--accent-rgb), 0.18), transparent 55%), linear-gradient(150deg, #143655, #081c31)",
-  "radial-gradient(circle at 70% 20%, rgba(var(--accent-2-rgb), 0.14), transparent 55%), linear-gradient(150deg, #12202a, #081c31)",
-  "radial-gradient(circle at 40% 30%, rgba(var(--accent-2-rgb), 0.16), transparent 55%), linear-gradient(150deg, #0e2430, #081c31)",
-  "radial-gradient(circle at 65% 25%, rgba(var(--accent-rgb), 0.14), transparent 55%), linear-gradient(150deg, #2a2612, #081c31)",
-  "radial-gradient(circle at 35% 20%, rgba(var(--sky-rgb), 0.12), transparent 55%), linear-gradient(150deg, #12304c, #081c31)",
-  "radial-gradient(circle at 60% 30%, rgba(var(--accent-rgb), 0.14), transparent 55%), linear-gradient(150deg, #133250, #081c31)",
+  "radial-gradient(circle at 30% 25%, rgba(var(--accent-rgb), 0.18), transparent 55%), linear-gradient(150deg, var(--surface-2), var(--surface))",
+  "radial-gradient(circle at 70% 20%, rgba(var(--accent-2-rgb), 0.14), transparent 55%), linear-gradient(150deg, var(--surface), var(--surface))",
+  "radial-gradient(circle at 40% 30%, rgba(var(--accent-2-rgb), 0.16), transparent 55%), linear-gradient(150deg, var(--surface), var(--surface))",
+  "radial-gradient(circle at 65% 25%, rgba(var(--accent-rgb), 0.14), transparent 55%), linear-gradient(150deg, #2a2612, var(--surface))",
+  "radial-gradient(circle at 35% 20%, rgba(var(--sky-rgb), 0.12), transparent 55%), linear-gradient(150deg, var(--surface-2), var(--surface))",
+  "radial-gradient(circle at 60% 30%, rgba(var(--accent-rgb), 0.14), transparent 55%), linear-gradient(150deg, var(--surface-2), var(--surface))",
 ];
 
 function Corners() {
@@ -372,12 +372,12 @@ export default function CaseShowSection() {
     zIndex: 4,
     width: 34,
     height: 34,
-    bgcolor: "rgba(8,28,49,0.85)",
-    border: "1px solid rgba(255,255,255,0.18)",
-    color: "#fff",
+    bgcolor: "rgba(var(--bg-rgb), 0.85)",
+    border: "1px solid rgba(var(--fg-rgb), 0.18)",
+    color: "var(--fg)",
     backdropFilter: "blur(6px)",
     "&:hover": {
-      bgcolor: "#040a11",
+      bgcolor: "var(--bg)",
       borderColor: ACCENT,
       color: ACCENT,
     },
@@ -391,8 +391,8 @@ export default function CaseShowSection() {
       aria-labelledby="case-title"
       sx={{
         position: "relative",
-        bgcolor: "#081c31",
-        color: "#fff",
+        bgcolor: "var(--surface)",
+        color: "var(--fg)",
         py: { xs: 8, md: 10, lg: 12 },
         px: { xs: 3, sm: 4, md: 6, lg: 8 },
         overflow: "hidden",
@@ -427,7 +427,7 @@ export default function CaseShowSection() {
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, margin: "-80px" }}
+          viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.6 }}
         >
           <Typography
@@ -456,13 +456,12 @@ export default function CaseShowSection() {
                 md: "3.2rem",
                 lg: "3.6rem",
               },
-              background: `linear-gradient(90deg, #ffffff, ${ACCENT}, var(--accent-2), #ffffff)`,
+              background: `linear-gradient(90deg, var(--fg), rgba(var(--fg-rgb), 0.78))`,
               backgroundSize: "200% auto",
               WebkitBackgroundClip: "text",
               backgroundClip: "text",
               color: "transparent",
               WebkitTextFillColor: "transparent",
-              animation: "caseShimmer 6s linear infinite",
               "@keyframes caseShimmer": {
                 to: {
                   backgroundPosition: "200% center",
@@ -479,7 +478,7 @@ export default function CaseShowSection() {
           <Typography
             sx={{
               mt: 2.5,
-              color: "rgba(255,255,255,0.6)",
+              color: "rgba(var(--fg-rgb), 0.6)",
               fontSize: {
                 xs: 13.5,
                 sm: 14.5,
@@ -522,8 +521,8 @@ export default function CaseShowSection() {
         <Box
           sx={{
             minWidth: 0,
-            bgcolor: "#0b1e30",
-            border: "1px solid rgba(255,255,255,0.08)",
+            bgcolor: "var(--surface)",
+            border: "1px solid rgba(var(--fg-rgb), 0.08)",
             borderRadius: "16px",
             p: {
               xs: 2,
@@ -534,8 +533,8 @@ export default function CaseShowSection() {
           <Box
             sx={{
               display: "inline-block",
-              bgcolor: "#0e273d",
-              border: "1px solid rgba(255,255,255,0.1)",
+              bgcolor: "var(--surface)",
+              border: "1px solid rgba(var(--fg-rgb), 0.1)",
               px: 2,
               py: 1,
               borderRadius: "10px",
@@ -547,7 +546,7 @@ export default function CaseShowSection() {
                 fontSize: 12,
                 fontWeight: 800,
                 letterSpacing: 2,
-                color: "#fff",
+                color: "var(--fg)",
               }}
             >
               SERVICE TYPE
@@ -631,7 +630,7 @@ export default function CaseShowSection() {
                   >
                     <Box
                       sx={{
-                        color: on ? ACCENT : "rgba(255,255,255,0.35)",
+                        color: on ? ACCENT : "rgba(var(--fg-rgb), 0.35)",
                         display: "flex",
                         transition: "color .3s",
                         "& svg": {
@@ -648,7 +647,7 @@ export default function CaseShowSection() {
                           fontSize: 9.5,
                           fontWeight: 700,
                           letterSpacing: 1,
-                          color: on ? ACCENT : "rgba(255,255,255,0.4)",
+                          color: on ? ACCENT : "rgba(var(--fg-rgb), 0.4)",
                           transition: "color .3s",
                         }}
                       >
@@ -659,7 +658,7 @@ export default function CaseShowSection() {
                         sx={{
                           fontSize: 13.5,
                           fontWeight: 600,
-                          color: on ? "#fff" : "rgba(255,255,255,0.6)",
+                          color: on ? "var(--fg)" : "rgba(var(--fg-rgb), 0.6)",
                           whiteSpace: {
                             xs: "nowrap",
                             md: "normal",
@@ -681,6 +680,7 @@ export default function CaseShowSection() {
         <Box sx={{ minWidth: 0 }}>
           {/* MEDIA */}
           <Box
+            className="theme-dark"
             onMouseMove={onMove}
             onMouseLeave={onLeaveMedia}
             sx={{
@@ -694,8 +694,8 @@ export default function CaseShowSection() {
               },
               borderRadius: "20px",
               overflow: "hidden",
-              border: "1px solid rgba(255,255,255,0.1)",
-              bgcolor: "#0a1a29",
+              border: "1px solid rgba(var(--fg-rgb), 0.1)",
+              bgcolor: "var(--bg)",
             }}
           >
             <AnimatePresence>
@@ -757,7 +757,7 @@ export default function CaseShowSection() {
                   {!c.image && (
                     <Box
                       sx={{
-                        color: "rgba(255,255,255,0.07)",
+                        color: "rgba(var(--fg-rgb), 0.07)",
                         "& svg": {
                           fontSize: {
                             xs: 110,
@@ -799,14 +799,14 @@ export default function CaseShowSection() {
                 py: 0.5,
                 borderRadius: "999px",
                 bgcolor: "rgba(0,0,0,0.5)",
-                border: "1px solid rgba(255,255,255,0.14)",
+                border: "1px solid rgba(var(--fg-rgb), 0.14)",
               }}
             >
               <Typography
                 sx={{
                   fontSize: 12,
                   fontWeight: 700,
-                  color: "#fff",
+                  color: "var(--fg)",
                 }}
               >
                 <Box
@@ -917,7 +917,7 @@ export default function CaseShowSection() {
                   {/* BODY */}
                   <Typography
                     sx={{
-                      color: "rgba(255,255,255,0.72)",
+                      color: "rgba(var(--fg-rgb), 0.72)",
                       fontSize: {
                         xs: 12.5,
                         sm: 13.5,
@@ -1013,7 +1013,7 @@ export default function CaseShowSection() {
                             width: "55%",
                             height: "100%",
                             background:
-                              "linear-gradient(120deg, transparent, rgba(255,255,255,0.65), transparent)",
+                              "linear-gradient(120deg, transparent, rgba(var(--fg-rgb), 0.65), transparent)",
                             transform: "skewX(-20deg)",
                             transition: "left .6s ease",
                             pointerEvents: "none",
@@ -1066,7 +1066,7 @@ export default function CaseShowSection() {
                   sx={{
                     fontSize: 12,
                     letterSpacing: 1,
-                    color: "rgba(255,255,255,0.45)",
+                    color: "rgba(var(--fg-rgb), 0.45)",
                     whiteSpace: "nowrap",
                   }}
                 >
@@ -1082,7 +1082,7 @@ export default function CaseShowSection() {
               mt: 1,
               height: 3,
               borderRadius: 2,
-              bgcolor: "rgba(255,255,255,0.1)",
+              bgcolor: "rgba(var(--fg-rgb), 0.1)",
               overflow: "hidden",
             }}
           >
@@ -1147,15 +1147,15 @@ export default function CaseShowSection() {
                 ...(strip.overflow
                   ? {
                       WebkitMaskImage: `linear-gradient(to right, ${
-                        strip.atStart ? "#040a11" : "transparent"
-                      }, #040a11 7%, #040a11 93%, ${
-                        strip.atEnd ? "#040a11" : "transparent"
+                        strip.atStart ? "var(--bg)" : "transparent"
+                      }, var(--bg) 7%, var(--bg) 93%, ${
+                        strip.atEnd ? "var(--bg)" : "transparent"
                       })`,
 
                       maskImage: `linear-gradient(to right, ${
-                        strip.atStart ? "#040a11" : "transparent"
-                      }, #040a11 7%, #040a11 93%, ${
-                        strip.atEnd ? "#040a11" : "transparent"
+                        strip.atStart ? "var(--bg)" : "transparent"
+                      }, var(--bg) 7%, var(--bg) 93%, ${
+                        strip.atEnd ? "var(--bg)" : "transparent"
                       })`,
                     }
                   : {}),
@@ -1198,7 +1198,7 @@ export default function CaseShowSection() {
 
                       border: on
                         ? `2px solid ${ACCENT}`
-                        : "2px solid rgba(255,255,255,0.12)",
+                        : "2px solid rgba(var(--fg-rgb), 0.12)",
 
                       transition: "border-color .3s, transform .3s",
 
@@ -1228,7 +1228,7 @@ export default function CaseShowSection() {
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
-                          color: on ? ACCENT : "rgba(255,255,255,0.3)",
+                          color: on ? ACCENT : "rgba(var(--fg-rgb), 0.3)",
 
                           "& svg": {
                             fontSize: 22,
@@ -1273,8 +1273,8 @@ export default function CaseShowSection() {
                 position: "relative",
                 overflow: "hidden",
                 zIndex: 0,
-                color: "#fff",
-                borderColor: "rgba(255,255,255,0.25)",
+                color: "var(--fg)",
+                borderColor: "rgba(var(--fg-rgb), 0.25)",
                 fontWeight: 700,
                 borderRadius: "999px",
                 px: 3,
@@ -1316,8 +1316,8 @@ export default function CaseShowSection() {
                 onClick={() => go(active - 1)}
                 aria-label="Previous service"
                 sx={{
-                  border: "1px solid rgba(255,255,255,0.2)",
-                  color: "#fff",
+                  border: "1px solid rgba(var(--fg-rgb), 0.2)",
+                  color: "var(--fg)",
 
                   "&:hover": {
                     borderColor: ACCENT,
@@ -1332,8 +1332,8 @@ export default function CaseShowSection() {
                 onClick={() => go(active + 1)}
                 aria-label="Next service"
                 sx={{
-                  border: "1px solid rgba(255,255,255,0.2)",
-                  color: "#fff",
+                  border: "1px solid rgba(var(--fg-rgb), 0.2)",
+                  color: "var(--fg)",
 
                   "&:hover": {
                     borderColor: ACCENT,

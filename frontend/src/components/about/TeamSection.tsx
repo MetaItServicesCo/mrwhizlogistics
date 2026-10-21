@@ -93,14 +93,14 @@ function MemberCard({ m }: { m: Member }) {
         position: "relative",
         borderRadius: "20px",
         overflow: "hidden",
-        bgcolor: "#0b1d2e",
-        border: "1px solid rgba(255,255,255,0.08)",
+        bgcolor: "var(--surface)",
+        border: "1px solid rgba(var(--fg-rgb), 0.08)",
         transition:
           "transform .4s ease, border-color .4s ease, box-shadow .4s ease",
         "&:hover": {
           transform: "translateY(-8px)",
           borderColor: `${ACCENT}55`,
-          boxShadow: "0 24px 55px rgba(0,0,0,0.5)",
+          boxShadow: "0 24px 55px rgba(var(--shadow-rgb), 0.175)",
         },
         "&:hover .tm-photo": {
           transform: "scale(1.07)",
@@ -127,7 +127,7 @@ function MemberCard({ m }: { m: Member }) {
             transition:
               "transform .6s cubic-bezier(.2,.8,.2,1), filter .5s ease",
             filter: "grayscale(0.35)",
-            ...(m.image ? {} : { background: "linear-gradient(150deg, #143655, #081c31)" }),
+            ...(m.image ? {} : { background: "linear-gradient(150deg, var(--surface-2), var(--surface))" }),
           }}
         >
           {m.image && <CoverImage src={m.image} alt={m.imageAlt || m.name} position="center top" />}
@@ -138,7 +138,7 @@ function MemberCard({ m }: { m: Member }) {
             position: "absolute",
             inset: 0,
             background:
-              "linear-gradient(180deg, transparent 55%, rgba(11,29,46,0.95) 100%)",
+              "linear-gradient(180deg, transparent 55%, rgba(var(--bg-rgb), 0.95) 100%)",
           }}
         />
       </Box>
@@ -154,7 +154,7 @@ function MemberCard({ m }: { m: Member }) {
         }}
       >
         <Typography
-          sx={{ fontWeight: 800, fontSize: "1.15rem", color: "#fff", mb: 0.4 }}
+          sx={{ fontWeight: 800, fontSize: "1.15rem", color: "var(--fg)", mb: 0.4 }}
         >
           {m.name}
         </Typography>
@@ -164,7 +164,7 @@ function MemberCard({ m }: { m: Member }) {
             fontSize: 12.5,
             fontWeight: 700,
             letterSpacing: 0.5,
-            color: "rgba(255,255,255,0.55)",
+            color: "rgba(var(--fg-rgb), 0.55)",
             transition: "color .3s",
             mb: 2,
           }}
@@ -197,9 +197,9 @@ function MemberCard({ m }: { m: Member }) {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                bgcolor: "rgba(255,255,255,0.06)",
-                color: "#fff",
-                border: "1px solid rgba(255,255,255,0.1)",
+                bgcolor: "rgba(var(--fg-rgb), 0.06)",
+                color: "var(--fg)",
+                border: "1px solid rgba(var(--fg-rgb), 0.1)",
                 transition: "all .25s",
                 "&:hover": {
                   bgcolor: ACCENT,
@@ -249,8 +249,8 @@ export default function TeamSection({
       component="section"
       sx={{
         position: "relative",
-        bgcolor: "#081c31",
-        color: "#fff",
+        bgcolor: "var(--surface)",
+        color: "var(--fg)",
         px: { xs: 3, sm: 4, md: 6, lg: 8 },
         py: { xs: 8, md: 13 },
         overflow: "hidden",
@@ -319,13 +319,12 @@ export default function TeamSection({
               lineHeight: 1.1,
               letterSpacing: "-0.5px",
               fontSize: { xs: "2rem", sm: "2.7rem", md: "3.4rem" },
-              background: `linear-gradient(90deg, #ffffff, ${ACCENT}, var(--accent-2), #ffffff)`,
+              background: `linear-gradient(90deg, var(--fg), rgba(var(--fg-rgb), 0.78))`,
               backgroundSize: "200% auto",
               WebkitBackgroundClip: "text",
               backgroundClip: "text",
               color: "transparent",
               WebkitTextFillColor: "transparent",
-              animation: "teamShimmer 6s linear infinite",
               "@keyframes teamShimmer": {
                 to: { backgroundPosition: "200% center" },
               },

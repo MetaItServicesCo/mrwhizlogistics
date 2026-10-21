@@ -23,35 +23,35 @@ import { ACCENT, ACCENT_HOVER } from "@/theme/brand";
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 const fieldSx = {
-  "& .MuiInputLabel-root": { color: "rgba(255,255,255,0.5)", fontSize: 14 },
+  "& .MuiInputLabel-root": { color: "rgba(var(--fg-rgb), 0.5)", fontSize: 14 },
   "& .MuiInputLabel-root.Mui-focused": { color: ACCENT },
   "& .MuiOutlinedInput-root": {
-    color: "#fff",
+    color: "var(--fg)",
     borderRadius: "12px",
-    bgcolor: "rgba(255,255,255,0.03)",
+    bgcolor: "rgba(var(--fg-rgb), 0.03)",
     "& fieldset": {
-      borderColor: "rgba(255,255,255,0.14)",
+      borderColor: "rgba(var(--fg-rgb), 0.14)",
       transition: "border-color .25s, box-shadow .25s",
     },
-    "&:hover fieldset": { borderColor: "rgba(255,255,255,0.3)" },
+    "&:hover fieldset": { borderColor: "rgba(var(--fg-rgb), 0.3)" },
     "&.Mui-focused fieldset": {
       borderColor: ACCENT,
       boxShadow: "0 0 0 3px rgba(var(--accent-rgb), 0.15)",
     },
   },
   "& input::placeholder, & textarea::placeholder": {
-    color: "rgba(255,255,255,0.4)",
+    color: "rgba(var(--fg-rgb), 0.4)",
     opacity: 1,
   },
-  "& .MuiSelect-icon": { color: "rgba(255,255,255,0.5)" },
+  "& .MuiSelect-icon": { color: "rgba(var(--fg-rgb), 0.5)" },
 } as const;
 
 const menuSx = {
   "& .MuiPaper-root": {
-    bgcolor: "#0d2338",
-    color: "#fff",
+    bgcolor: "var(--surface)",
+    color: "var(--fg)",
     borderRadius: "12px",
-    border: "1px solid rgba(255,255,255,0.14)",
+    border: "1px solid rgba(var(--fg-rgb), 0.14)",
     mt: 1,
   },
   "& .MuiMenuItem-root": {
@@ -115,8 +115,8 @@ export default function ContactSection({
       component="section"
       sx={{
         position: "relative",
-        bgcolor: "#081c31",
-        color: "#fff",
+        bgcolor: "var(--surface)",
+        color: "var(--fg)",
         px: { xs: 3, sm: 4, md: 6, lg: 8 },
         py: { xs: 8, md: 13 },
         overflow: "hidden",
@@ -156,14 +156,14 @@ export default function ContactSection({
           component={motion.div}
           initial={{ opacity: 0, x: -40 }}
           whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: false, margin: "-80px" }}
+          viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.6, ease: EASE }}
           sx={{
             position: "relative",
             overflow: "hidden",
             borderRadius: "22px",
             p: { xs: 3, md: 4 },
-            background: "linear-gradient(160deg, #102b45, #0a1a2a)",
+            background: "linear-gradient(160deg, var(--surface-2), var(--surface))",
             border: `1px solid ${ACCENT}22`,
           }}
         >
@@ -210,7 +210,7 @@ export default function ContactSection({
             }}
             initial="hidden"
             whileInView="show"
-            viewport={{ once: false }}
+            viewport={{ once: true }}
             sx={{
               position: "relative",
               display: "flex",
@@ -231,8 +231,8 @@ export default function ContactSection({
                   gap: 2,
                   p: 2,
                   borderRadius: "14px",
-                  bgcolor: "rgba(255,255,255,0.03)",
-                  border: "1px solid rgba(255,255,255,0.07)",
+                  bgcolor: "rgba(var(--fg-rgb), 0.03)",
+                  border: "1px solid rgba(var(--fg-rgb), 0.07)",
                   transition: "all .3s",
                   "&:hover": {
                     borderColor: `${ACCENT}44`,
@@ -264,7 +264,7 @@ export default function ContactSection({
                     sx={{
                       fontSize: 14,
                       fontWeight: 800,
-                      color: "#fff",
+                      color: "var(--fg)",
                       mb: 0.3,
                     }}
                   >
@@ -276,7 +276,7 @@ export default function ContactSection({
                       href={it.href}
                       sx={{
                         fontSize: 13,
-                        color: "rgba(255,255,255,0.6)",
+                        color: "rgba(var(--fg-rgb), 0.6)",
                         textDecoration: "none",
                         lineHeight: 1.6,
                         "&:hover": { color: ACCENT },
@@ -288,7 +288,7 @@ export default function ContactSection({
                     <Typography
                       sx={{
                         fontSize: 13,
-                        color: "rgba(255,255,255,0.6)",
+                        color: "rgba(var(--fg-rgb), 0.6)",
                         lineHeight: 1.6,
                       }}
                     >
@@ -306,7 +306,7 @@ export default function ContactSection({
           component={motion.div}
           initial={{ opacity: 0, x: 40 }}
           whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: false, margin: "-80px" }}
+          viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.6, ease: EASE }}
           sx={{ minWidth: 0 }}
         >
@@ -316,13 +316,12 @@ export default function ContactSection({
               fontWeight: 800,
               fontSize: { xs: "1.9rem", md: "2.4rem" },
               mb: 1,
-              background: `linear-gradient(90deg, #ffffff, ${ACCENT}, var(--accent-2), #ffffff)`,
+              background: `linear-gradient(90deg, var(--fg), rgba(var(--fg-rgb), 0.78))`,
               backgroundSize: "200% auto",
               WebkitBackgroundClip: "text",
               backgroundClip: "text",
               color: "transparent",
               WebkitTextFillColor: "transparent",
-              animation: "cShimmer 6s linear infinite",
               "@keyframes cShimmer": {
                 to: { backgroundPosition: "200% center" },
               },
@@ -354,7 +353,7 @@ export default function ContactSection({
                     textAlign: "center",
                     py: 6,
                     borderRadius: "18px",
-                    bgcolor: "#0b1d2e",
+                    bgcolor: "var(--surface)",
                     border: `1px solid ${ACCENT}33`,
                   }}
                 >
@@ -380,7 +379,7 @@ export default function ContactSection({
                   </Typography>
                   <Typography
                     sx={{
-                      color: "rgba(255,255,255,0.6)",
+                      color: "rgba(var(--fg-rgb), 0.6)",
                       fontSize: 14.5,
                       mt: 1,
                     }}
@@ -521,7 +520,7 @@ export default function ContactSection({
                       width: "55%",
                       height: "100%",
                       background:
-                        "linear-gradient(120deg, transparent, rgba(255,255,255,0.6), transparent)",
+                        "linear-gradient(120deg, transparent, rgba(var(--fg-rgb), 0.6), transparent)",
                       transform: "skewX(-20deg)",
                       transition: "left .6s ease",
                     },

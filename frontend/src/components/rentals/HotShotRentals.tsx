@@ -28,8 +28,8 @@ export default function HotShotRentals({ content = RENTAL_DEFAULTS.page.sections
       component="section"
       sx={{
         position: "relative",
-        bgcolor: "#081c31",
-        color: "#fff",
+        bgcolor: "var(--surface)",
+        color: "var(--fg)",
         px: { xs: 3, sm: 4, md: 6, lg: 8 },
         py: { xs: 8, md: 6 },
         overflow: "hidden",
@@ -96,13 +96,12 @@ export default function HotShotRentals({ content = RENTAL_DEFAULTS.page.sections
               lineHeight: 1.1,
               letterSpacing: "-0.5px",
               fontSize: { xs: "2rem", sm: "2.7rem", md: "3.4rem" },
-              background: `linear-gradient(90deg, #ffffff, ${ACCENT}, var(--accent-2), #ffffff)`,
+              background: `linear-gradient(90deg, var(--fg), rgba(var(--fg-rgb), 0.78))`,
               backgroundSize: "200% auto",
               WebkitBackgroundClip: "text",
               backgroundClip: "text",
               color: "transparent",
               WebkitTextFillColor: "transparent",
-              animation: "rentShimmer 6s linear infinite",
               "@keyframes rentShimmer": {
                 to: { backgroundPosition: "200% center" },
               },
@@ -112,7 +111,7 @@ export default function HotShotRentals({ content = RENTAL_DEFAULTS.page.sections
           <Typography
             sx={{
               mt: 2.5,
-              color: "rgba(255,255,255,0.6)",
+              color: "rgba(var(--fg-rgb), 0.6)",
               fontSize: { xs: 14.5, md: 16 },
               maxWidth: 620,
               mx: "auto",

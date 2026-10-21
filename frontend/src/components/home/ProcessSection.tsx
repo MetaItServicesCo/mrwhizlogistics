@@ -94,8 +94,8 @@ function StepCard({
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          bgcolor: "#0b1d2e",
-          border: "1px solid rgba(255,255,255,0.1)",
+          bgcolor: "var(--surface)",
+          border: "1px solid rgba(var(--fg-rgb), 0.1)",
           transition:
             "transform .35s ease, box-shadow .35s ease, border-color .35s ease",
           "& .step-icon": {
@@ -157,7 +157,7 @@ function StepCard({
             justifyContent: "center",
             fontSize: 12,
             fontWeight: 800,
-            border: "3px solid #081c31",
+            border: "3px solid var(--surface)",
           }}
         >
           {index + 1}
@@ -173,7 +173,7 @@ function StepCard({
           sx={{
             fontSize: { xs: "1rem", md: "1.05rem" },
             fontWeight: 700,
-            color: "#fff",
+            color: "var(--fg)",
             mb: 0.5,
           }}
         >
@@ -183,7 +183,7 @@ function StepCard({
           sx={{
             fontSize: 13,
             lineHeight: 1.6,
-            color: "rgba(255,255,255,0.55)",
+            color: "rgba(var(--fg-rgb), 0.55)",
             maxWidth: { md: 190 },
             mx: { md: "auto" },
           }}
@@ -215,8 +215,8 @@ export default function ProcessSection() {
       aria-labelledby="process-title"
       sx={{
         position: "relative",
-        bgcolor: "#081c31",
-        color: "#fff",
+        bgcolor: "var(--surface)",
+        color: "var(--fg)",
         py: { xs: 4, md: 4 },
         px: { xs: 3, sm: 4, md: 6, lg: 8 },
         overflow: "hidden",
@@ -251,7 +251,7 @@ export default function ProcessSection() {
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, margin: "-80px" }}
+          viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.6 }}
         >
           <Typography
@@ -274,13 +274,12 @@ export default function ProcessSection() {
               fontWeight: 800,
               lineHeight: 1.14,
               fontSize: { xs: "1.8rem", sm: "2.4rem", md: "3rem" },
-              background: `linear-gradient(90deg, #ffffff, ${ACCENT}, var(--accent-2), #ffffff)`,
+              background: `linear-gradient(90deg, var(--fg), rgba(var(--fg-rgb), 0.78))`,
               backgroundSize: "200% auto",
               WebkitBackgroundClip: "text",
               backgroundClip: "text",
               color: "transparent",
               WebkitTextFillColor: "transparent",
-              animation: "procShimmer 6s linear infinite",
               "@keyframes procShimmer": {
                 to: { backgroundPosition: "200% center" },
               },
@@ -302,7 +301,7 @@ export default function ProcessSection() {
         }}
         initial="hidden"
         whileInView="show"
-        viewport={{ once: false, margin: "-90px" }}
+        viewport={{ once: true, margin: "-90px" }}
         sx={{
           position: "relative",
           maxWidth: 1180,
@@ -323,7 +322,7 @@ export default function ProcessSection() {
             left: "8%",
             right: "8%",
             height: 3,
-            bgcolor: "rgba(255,255,255,0.1)",
+            bgcolor: "rgba(var(--fg-rgb), 0.1)",
             borderRadius: 2,
             overflow: "hidden",
             zIndex: 0,
@@ -380,7 +379,7 @@ export default function ProcessSection() {
             bottom: 0,
             left: 37,
             width: 3,
-            bgcolor: "rgba(255,255,255,0.1)",
+            bgcolor: "rgba(var(--fg-rgb), 0.1)",
             borderRadius: 2,
             overflow: "hidden",
             zIndex: 0,

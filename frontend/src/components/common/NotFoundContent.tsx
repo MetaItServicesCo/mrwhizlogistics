@@ -37,13 +37,13 @@ export default function NotFoundContent() {
       component="main"
       sx={{
         minHeight: "80vh",
-        bgcolor: "#081c31",
-        color: "#fff",
+        bgcolor: "var(--surface)",
+        color: "var(--fg)",
         px: { xs: 2, md: 4 },
         pt: { xs: 16, md: 24 },
         pb: { xs: 10, md: 14 },
         background:
-          "radial-gradient(circle at 20% 10%, rgba(var(--accent-rgb), 0.12), transparent 45%), #081c31",
+          "radial-gradient(circle at 20% 10%, rgba(var(--accent-rgb), 0.12), transparent 45%), var(--surface)",
       }}
     >
       <Box sx={{ maxWidth: 1100, mx: "auto" }}>
@@ -72,7 +72,7 @@ export default function NotFoundContent() {
         </Typography>
         <Typography
           sx={{
-            color: "rgba(255,255,255,0.65)",
+            color: "rgba(var(--fg-rgb), 0.65)",
             fontSize: { xs: 16, md: 18 },
             maxWidth: 640,
             mb: 5,
@@ -111,9 +111,9 @@ export default function NotFoundContent() {
                 p: 3,
                 borderRadius: "18px",
                 textDecoration: "none",
-                color: "#fff",
-                bgcolor: "#0c1f31",
-                border: "1px solid rgba(255,255,255,0.08)",
+                color: "var(--fg)",
+                bgcolor: "var(--surface)",
+                border: "1px solid rgba(var(--fg-rgb), 0.08)",
                 transition: "border-color .3s, transform .3s",
                 "&:hover, &:focus-visible": {
                   borderColor: `${ACCENT}66`,
@@ -142,7 +142,7 @@ export default function NotFoundContent() {
               </Box>
               <Typography
                 sx={{
-                  color: "rgba(255,255,255,0.55)",
+                  color: "rgba(var(--fg-rgb), 0.55)",
                   fontSize: 14,
                   lineHeight: 1.6,
                 }}

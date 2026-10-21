@@ -68,7 +68,7 @@ function Card({ f }: { f: FeatureItem }) {
     <motion.div
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: false, margin: "-80px" }}
+      viewport={{ once: true, margin: "-80px" }}
       variants={{
         hidden: { opacity: 0, y: 40 },
         show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: EASE } },
@@ -83,15 +83,15 @@ function Card({ f }: { f: FeatureItem }) {
           height: "100%",
           p: { xs: 3, md: 3.5 },
           borderRadius: "16px",
-          bgcolor: "#0b1d2e",
-          border: "1px solid rgba(255,255,255,.08)",
+          bgcolor: "var(--surface)",
+          border: "1px solid rgba(var(--fg-rgb), .08)",
           overflow: "hidden",
           transition:
             "transform .35s ease, border-color .35s ease, box-shadow .35s ease",
           "&:hover": {
             transform: "translateY(-6px)",
             borderColor: `${ACCENT}55`,
-            boxShadow: "0 20px 46px rgba(0,0,0,.5)",
+            boxShadow: "0 20px 46px rgba(var(--shadow-rgb), 0.175)",
           },
           "&:hover .fw-icon": { transform: "translateY(-3px) rotate(-6deg)" },
           "&:hover .fw-spot": { opacity: 1 },
@@ -156,7 +156,7 @@ function Card({ f }: { f: FeatureItem }) {
             fontWeight: 800,
             fontSize: { xs: "1.15rem", md: "1.2rem" },
             mb: 1,
-            color: "#fff",
+            color: "var(--fg)",
           }}
         >
           {f.title}
@@ -164,7 +164,7 @@ function Card({ f }: { f: FeatureItem }) {
         <Typography
           sx={{
             position: "relative",
-            color: "rgba(255,255,255,.6)",
+            color: "rgba(var(--fg-rgb), .6)",
             fontSize: 14,
             lineHeight: 1.65,
           }}
@@ -208,8 +208,8 @@ export default function ServiceWhy({
       component="section"
       sx={{
         position: "relative",
-        bgcolor: "#081c31",
-        color: "#fff",
+        bgcolor: "var(--surface)",
+        color: "var(--fg)",
         px: { xs: 3, sm: 4, md: 6, lg: 8 },
         py: { xs: 8, md: 13 },
         overflow: "hidden",
@@ -242,7 +242,7 @@ export default function ServiceWhy({
         <motion.div
           initial={{ opacity: 0, y: 26 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, margin: "-80px" }}
+          viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.6, ease: EASE }}
         >
           <Box
@@ -276,13 +276,12 @@ export default function ServiceWhy({
               lineHeight: 1.1,
               letterSpacing: "-0.5px",
               fontSize: { xs: "2rem", sm: "2.7rem", md: "3.4rem" },
-              background: `linear-gradient(90deg, #ffffff, ${ACCENT}, var(--accent-2), #ffffff)`,
+              background: `linear-gradient(90deg, var(--fg), rgba(var(--fg-rgb), 0.78))`,
               backgroundSize: "200% auto",
               WebkitBackgroundClip: "text",
               backgroundClip: "text",
               color: "transparent",
               WebkitTextFillColor: "transparent",
-              animation: "swWhyShimmer 6s linear infinite",
               "@keyframes swWhyShimmer": {
                 to: { backgroundPosition: "200% center" },
               },
@@ -295,7 +294,7 @@ export default function ServiceWhy({
             <Typography
               sx={{
                 mt: 2.5,
-                color: "rgba(255,255,255,0.6)",
+                color: "rgba(var(--fg-rgb), 0.6)",
                 fontSize: { xs: 14.5, md: 16 },
                 maxWidth: 620,
                 mx: "auto",
@@ -314,7 +313,7 @@ export default function ServiceWhy({
         }}
         initial="hidden"
         whileInView="show"
-        viewport={{ once: false, margin: "-90px" }}
+        viewport={{ once: true, margin: "-90px" }}
         sx={{
           position: "relative",
           zIndex: 1,

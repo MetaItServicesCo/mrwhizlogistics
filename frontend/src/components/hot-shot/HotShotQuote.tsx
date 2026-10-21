@@ -26,7 +26,7 @@ export default function HotShotQuote({ service }: { service: HotShotService }) {
       <motion.div
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: false, margin: "-80px" }}
+        viewport={{ once: true, margin: "-80px" }}
         transition={{ duration: 0.7, ease: EASE }}
       >
         {/* gradient border */}
@@ -36,8 +36,8 @@ export default function HotShotQuote({ service }: { service: HotShotService }) {
             mt: 9,
             borderRadius: "20px",
             p: "1.5px",
-            background: `linear-gradient(140deg, rgba(var(--accent-rgb), .55), rgba(255,255,255,.05) 45%)`,
-            boxShadow: "0 26px 60px rgba(0,0,0,.5)",
+            background: `linear-gradient(140deg, rgba(var(--accent-rgb), .55), rgba(var(--fg-rgb), .05) 45%)`,
+            boxShadow: "0 26px 60px rgba(var(--shadow-rgb), 0.175)",
           }}
         >
           <Box
@@ -45,7 +45,7 @@ export default function HotShotQuote({ service }: { service: HotShotService }) {
               position: "relative",
               overflow: "hidden",
               borderRadius: "19px",
-              bgcolor: "#0a1b2b",
+              bgcolor: "var(--surface)",
               p: { xs: 3.5, md: 5 },
             }}
           >
@@ -121,7 +121,7 @@ export default function HotShotQuote({ service }: { service: HotShotService }) {
                 <Typography
                   component="h2"
                   sx={{
-                    color: "#fff",
+                    color: "var(--fg)",
                     fontWeight: 900,
                     fontSize: { xs: 22, md: 30 },
                     lineHeight: 1.1,
@@ -137,7 +137,7 @@ export default function HotShotQuote({ service }: { service: HotShotService }) {
                 </Typography>
                 <Typography
                   sx={{
-                    color: "rgba(255,255,255,.5)",
+                    color: "rgba(var(--fg-rgb), .5)",
                     fontSize: { xs: 13, md: 14.5 },
                     lineHeight: 1.7,
                     maxWidth: 440,
@@ -186,7 +186,7 @@ export default function HotShotQuote({ service }: { service: HotShotService }) {
                       width: "55%",
                       height: "100%",
                       background:
-                        "linear-gradient(120deg, transparent, rgba(255,255,255,.6), transparent)",
+                        "linear-gradient(120deg, transparent, rgba(var(--fg-rgb), .6), transparent)",
                       transform: "skewX(-20deg)",
                       transition: "left .6s ease",
                     },
@@ -203,8 +203,8 @@ export default function HotShotQuote({ service }: { service: HotShotService }) {
                   startIcon={<PhoneInTalkRoundedIcon />}
                   variant="outlined"
                   sx={{
-                    color: "#fff",
-                    borderColor: "rgba(255,255,255,.25)",
+                    color: "var(--fg)",
+                    borderColor: "rgba(var(--fg-rgb), .25)",
                     fontWeight: 800,
                     borderRadius: "12px",
                     px: 3,

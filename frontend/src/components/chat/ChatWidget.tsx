@@ -46,8 +46,8 @@ import type { ProactiveSettings } from "@/lib/chatbotSettings";
 import { ACCENT, ACCENT_HOVER } from "@/theme/brand";
 
 const DARK = "#081c31";
-const PANEL = "#0a1b2b";
-const MESSAGE = "#0e273d";
+const PANEL = "var(--surface)";
+const MESSAGE = "var(--surface)";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -844,8 +844,8 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
               borderRadius: "18px 18px 6px 18px",
               bgcolor: PANEL,
               border: `1px solid ${ACCENT}55`,
-              boxShadow: "0 18px 40px rgba(0,0,0,0.55)",
-              color: "#fff",
+              boxShadow: "0 18px 40px rgba(var(--shadow-rgb), 0.193)",
+              color: "var(--fg)",
             }}
           >
             <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}>
@@ -869,7 +869,7 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
                 size="small"
                 aria-label="Dismiss message"
                 onClick={dismissInvite}
-                sx={{ color: "rgba(255,255,255,0.5)", "&:hover": { color: "#fff" } }}
+                sx={{ color: "rgba(var(--fg-rgb), 0.5)", "&:hover": { color: "var(--fg)" } }}
               >
                 <CloseRoundedIcon sx={{ fontSize: 18 }} />
               </IconButton>
@@ -884,7 +884,7 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
                 display: "block",
                 fontSize: 14,
                 lineHeight: 1.55,
-                color: "rgba(255,255,255,0.92)",
+                color: "rgba(var(--fg-rgb), 0.92)",
                 mb: 1.5,
                 "&:focus-visible": { outline: `2px solid ${ACCENT}`, outlineOffset: 2, borderRadius: "6px" },
               }}
@@ -912,7 +912,7 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
               </Button>
               <Button
                 onClick={dismissInvite}
-                sx={{ color: "rgba(255,255,255,0.65)", textTransform: "none", fontWeight: 700, borderRadius: "10px" }}
+                sx={{ color: "rgba(var(--fg-rgb), 0.65)", textTransform: "none", fontWeight: 700, borderRadius: "10px" }}
               >
                 Not now
               </Button>
@@ -1116,9 +1116,9 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
 
               bgcolor: PANEL,
 
-              border: "1px solid rgba(255,255,255,0.1)",
+              border: "1px solid rgba(var(--fg-rgb), 0.1)",
 
-              boxShadow: "0 30px 100px rgba(0,0,0,0.65)",
+              boxShadow: "0 30px 100px rgba(var(--shadow-rgb), 0.227)",
 
               backdropFilter: "blur(20px)",
             }}
@@ -1151,7 +1151,7 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
                   width: 180,
                   height: 180,
                   borderRadius: "50%",
-                  background: "rgba(255,255,255,0.13)",
+                  background: "rgba(var(--fg-rgb), 0.13)",
                 }}
               />
 
@@ -1341,14 +1341,14 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "space-between",
-                    borderBottom: "1px solid rgba(255,255,255,0.06)",
-                    bgcolor: "rgba(255,255,255,0.015)",
+                    borderBottom: "1px solid rgba(var(--fg-rgb), 0.06)",
+                    bgcolor: "rgba(var(--fg-rgb), 0.015)",
                   }}
                 >
                   <Typography
                     sx={{
                       fontSize: 10.5,
-                      color: "rgba(255,255,255,0.4)",
+                      color: "rgba(var(--fg-rgb), 0.4)",
                     }}
                   >
                     AI assistant · answers from our website
@@ -1367,7 +1367,7 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
                         aria-label="Start a new chat"
                         size="small"
                         sx={{
-                          color: "rgba(255,255,255,0.45)",
+                          color: "rgba(var(--fg-rgb), 0.45)",
                           "&:hover": {
                             color: ACCENT,
                           },
@@ -1460,9 +1460,9 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
                               }
                             : {
                                 bgcolor: MESSAGE,
-                                color: "rgba(255,255,255,0.9)",
+                                color: "rgba(var(--fg-rgb), 0.9)",
                                 borderRadius: "4px 16px 16px 16px",
-                                border: "1px solid rgba(255,255,255,0.04)",
+                                border: "1px solid rgba(var(--fg-rgb), 0.04)",
                               }),
                         }}
                       >
@@ -1480,7 +1480,7 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
                       {/* Sources the answer is based on */}
                       {message.from === "bot" && !message.streaming && message.sources && message.sources.length > 0 && (
                         <Box sx={{ mt: 0.8, display: "flex", flexDirection: "column", gap: 0.4 }}>
-                          <Typography sx={{ fontSize: 9.5, fontWeight: 800, letterSpacing: 0.8, color: "rgba(255,255,255,0.35)", px: 0.5 }}>
+                          <Typography sx={{ fontSize: 9.5, fontWeight: 800, letterSpacing: 0.8, color: "rgba(var(--fg-rgb), 0.35)", px: 0.5 }}>
                             SOURCES
                           </Typography>
                           {message.sources.map((src) => (
@@ -1497,10 +1497,10 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
                                 borderRadius: "8px",
                                 bgcolor: "rgba(var(--accent-rgb), 0.06)",
                                 border: "1px solid rgba(var(--accent-rgb), 0.14)",
-                                color: "rgba(255,255,255,0.75)",
+                                color: "rgba(var(--fg-rgb), 0.75)",
                                 fontSize: 11.5,
                                 textDecoration: "none",
-                                "&:hover": { color: "#fff", borderColor: `${ACCENT}66` },
+                                "&:hover": { color: "var(--fg)", borderColor: `${ACCENT}66` },
                               }}
                             >
                               <LinkRoundedIcon sx={{ fontSize: 14, color: ACCENT }} />
@@ -1531,10 +1531,10 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
                           </Box>
                           {message.leadSummary.map((row) => (
                             <Box key={row.label} sx={{ display: "flex", gap: 1, fontSize: 12.5, lineHeight: 1.7 }}>
-                              <Box component="span" sx={{ color: "rgba(255,255,255,0.5)", minWidth: 78 }}>
+                              <Box component="span" sx={{ color: "rgba(var(--fg-rgb), 0.5)", minWidth: 78 }}>
                                 {row.label}
                               </Box>
-                              <Box component="span" sx={{ color: "#fff", fontWeight: 600 }}>
+                              <Box component="span" sx={{ color: "var(--fg)", fontWeight: 600 }}>
                                 {row.value}
                               </Box>
                             </Box>
@@ -1580,7 +1580,7 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
                         <Typography
                           sx={{
                             fontSize: 9.5,
-                            color: "rgba(255,255,255,0.3)",
+                            color: "rgba(var(--fg-rgb), 0.3)",
                             px: 0.5,
                           }}
                         >
@@ -1600,7 +1600,7 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
                               color:
                                 copiedId === message.id
                                   ? ACCENT
-                                  : "rgba(255,255,255,0.3)",
+                                  : "rgba(var(--fg-rgb), 0.3)",
                             }}
                           >
                             <ContentCopyRoundedIcon
@@ -1632,7 +1632,7 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
                                   height: 26,
                                   color: speakingId === message.id
                                     ? ACCENT
-                                    : "rgba(255,255,255,0.35)",
+                                    : "rgba(var(--fg-rgb), 0.35)",
                                 }}
                               >
                                 {speakingId === message.id ? (
@@ -1701,7 +1701,7 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
                         sx={{
                           fontSize: 10.5,
                           fontWeight: 700,
-                          color: "rgba(255,255,255,0.35)",
+                          color: "rgba(var(--fg-rgb), 0.35)",
                           mb: 1,
                           px: 0.5,
                         }}
@@ -1723,15 +1723,15 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
                             onClick={() => sendQuickPrompt(prompt)}
                             sx={{
                               height: 32,
-                              color: "rgba(255,255,255,0.72)",
-                              bgcolor: "rgba(255,255,255,0.04)",
+                              color: "rgba(var(--fg-rgb), 0.72)",
+                              bgcolor: "rgba(var(--fg-rgb), 0.04)",
                               border: "1px solid rgba(var(--accent-rgb), 0.16)",
                               borderRadius: "10px",
                               fontSize: 11,
                               "&:hover": {
                                 bgcolor: "rgba(var(--accent-rgb), 0.1)",
                                 borderColor: `${ACCENT}55`,
-                                color: "#fff",
+                                color: "var(--fg)",
                               },
                             }}
                           />
@@ -1823,7 +1823,7 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
                         <Typography
                           sx={{
                             fontSize: 13,
-                            color: "rgba(255,255,255,0.72)",
+                            color: "rgba(var(--fg-rgb), 0.72)",
                             lineHeight: 1.5,
                           }}
                         >
@@ -1885,7 +1885,7 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
                         sx={{
                           ml: 0.4,
                           fontSize: 10.5,
-                          color: "rgba(255,255,255,0.4)",
+                          color: "rgba(var(--fg-rgb), 0.4)",
                         }}
                       >
                         AI is thinking...
@@ -1912,7 +1912,7 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
                     sx={{
                       px: 2,
                       py: 0.8,
-                      borderTop: "1px solid rgba(255,255,255,0.06)",
+                      borderTop: "1px solid rgba(var(--fg-rgb), 0.06)",
                       bgcolor: "rgba(var(--accent-rgb), 0.04)",
                       display: "flex",
                       alignItems: "center",
@@ -1944,7 +1944,7 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
                         minWidth: 0,
                         px: 1,
                         py: 0.1,
-                        color: "rgba(255,255,255,0.55)",
+                        color: "rgba(var(--fg-rgb), 0.55)",
                         fontSize: 10,
                         textTransform: "none",
                       }}
@@ -1956,7 +1956,7 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
 
                 <Divider
                   sx={{
-                    borderColor: "rgba(255,255,255,0.06)",
+                    borderColor: "rgba(var(--fg-rgb), 0.06)",
                   }}
                 />
 
@@ -2019,7 +2019,7 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
                             height: 44,
                             bgcolor: listening
                               ? ACCENT
-                              : "rgba(255,255,255,0.06)",
+                              : "rgba(var(--fg-rgb), 0.06)",
                             color: listening ? DARK : ACCENT,
                             border: `1px solid ${
                               listening ? ACCENT : "rgba(var(--accent-rgb), 0.25)"
@@ -2088,11 +2088,11 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
                           bgcolor:
                             input.trim() && !typing && !listening
                               ? ACCENT
-                              : "rgba(255,255,255,0.06)",
+                              : "rgba(var(--fg-rgb), 0.06)",
                           color:
                             input.trim() && !typing && !listening
                               ? DARK
-                              : "rgba(255,255,255,0.3)",
+                              : "rgba(var(--fg-rgb), 0.3)",
                           "&:hover": {
                             bgcolor: ACCENT,
                             color: DARK,
@@ -2128,14 +2128,14 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
                       <MicRoundedIcon
                         sx={{
                           fontSize: 12,
-                          color: "rgba(255,255,255,0.25)",
+                          color: "rgba(var(--fg-rgb), 0.25)",
                         }}
                       />
 
                       <Typography
                         sx={{
                           fontSize: 9.5,
-                          color: "rgba(255,255,255,0.25)",
+                          color: "rgba(var(--fg-rgb), 0.25)",
                           textAlign: "center",
                         }}
                       >
@@ -2146,7 +2146,7 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
                     <Typography
                       sx={{
                         fontSize: 9.5,
-                        color: "rgba(255,255,255,0.25)",
+                        color: "rgba(var(--fg-rgb), 0.25)",
                         textAlign: "center",
                       }}
                     >
@@ -2169,17 +2169,17 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
 
 const fieldSx = {
   "& .MuiOutlinedInput-root": {
-    color: "#fff",
+    color: "var(--fg)",
     borderRadius: "12px",
-    bgcolor: "rgba(255,255,255,0.04)",
+    bgcolor: "rgba(var(--fg-rgb), 0.04)",
     fontSize: 14,
 
     "& fieldset": {
-      borderColor: "rgba(255,255,255,0.14)",
+      borderColor: "rgba(var(--fg-rgb), 0.14)",
     },
 
     "&:hover fieldset": {
-      borderColor: "rgba(255,255,255,0.28)",
+      borderColor: "rgba(var(--fg-rgb), 0.28)",
     },
 
     "&.Mui-focused fieldset": {
@@ -2193,12 +2193,12 @@ const fieldSx = {
   },
 
   "& input::placeholder": {
-    color: "rgba(255,255,255,0.4)",
+    color: "rgba(var(--fg-rgb), 0.4)",
     opacity: 1,
   },
 
   "& textarea::placeholder": {
-    color: "rgba(255,255,255,0.4)",
+    color: "rgba(var(--fg-rgb), 0.4)",
     opacity: 1,
   },
 } as const;

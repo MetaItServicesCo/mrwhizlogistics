@@ -14,7 +14,7 @@ export default function RentalsIntro({ content = RENTAL_DEFAULTS.page.sections.R
     <Box
       component="section"
       sx={{
-        bgcolor: "#081c31",
+        bgcolor: "var(--surface)",
         px: { xs: 3, sm: 4, md: 6, lg: 8 },
         py: { xs: 5, md: 8 },
       }}
@@ -23,7 +23,7 @@ export default function RentalsIntro({ content = RENTAL_DEFAULTS.page.sections.R
         component={motion.div}
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: false, margin: "-80px" }}
+        viewport={{ once: true, margin: "-80px" }}
         transition={{ duration: 0.6, ease: EASE }}
         sx={{
           maxWidth: 1100,
@@ -31,8 +31,8 @@ export default function RentalsIntro({ content = RENTAL_DEFAULTS.page.sections.R
           textAlign: "center",
           borderRadius: "24px",
           p: { xs: 4, md: 7 },
-          bgcolor: "#0b1d2e",
-          border: "1px solid rgba(255,255,255,0.08)",
+          bgcolor: "var(--surface)",
+          border: "1px solid rgba(var(--fg-rgb), 0.08)",
         }}
       >
         <Typography
@@ -41,14 +41,14 @@ export default function RentalsIntro({ content = RENTAL_DEFAULTS.page.sections.R
             fontWeight: 900,
             letterSpacing: "-1px",
             fontSize: { xs: "2rem", sm: "3rem", md: "4rem" },
-            color: "#fff",
+            color: "var(--fg)",
             mb: 2.5,
             lineHeight: 1.05,
           }}
         >{copy.logisticsEquipmentRental}</Typography>
         <Typography
           sx={{
-            color: "rgba(255,255,255,0.6)",
+            color: "rgba(var(--fg-rgb), 0.6)",
             fontSize: { xs: 15, md: 18 },
             lineHeight: 1.7,
             maxWidth: 820,

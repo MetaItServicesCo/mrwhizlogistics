@@ -35,8 +35,8 @@ export default function ServiceCTA({
       component="section"
       sx={{
         position: "relative",
-        bgcolor: "#081c31",
-        color: "#fff",
+        bgcolor: "var(--surface)",
+        color: "var(--fg)",
         px: { xs: 3, sm: 4, md: 6, lg: 8 },
         py: { xs: 8, md: 12 },
         overflow: "hidden",
@@ -46,7 +46,7 @@ export default function ServiceCTA({
         component={motion.div}
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: false, margin: "-80px" }}
+        viewport={{ once: true, margin: "-80px" }}
         transition={{ duration: 0.6, ease: EASE }}
         sx={{
           position: "relative",
@@ -54,8 +54,8 @@ export default function ServiceCTA({
           mx: "auto",
           borderRadius: "28px",
           p: "1.5px",
-          background: `linear-gradient(140deg, rgba(var(--accent-rgb), 0.6), rgba(255,255,255,0.05) 45%)`,
-          boxShadow: "0 30px 70px rgba(0,0,0,0.5)",
+          background: `linear-gradient(140deg, rgba(var(--accent-rgb), 0.6), rgba(var(--fg-rgb), 0.05) 45%)`,
+          boxShadow: "0 30px 70px rgba(var(--shadow-rgb), 0.175)",
         }}
       >
         <Box
@@ -63,7 +63,7 @@ export default function ServiceCTA({
             position: "relative",
             borderRadius: "27px",
             overflow: "hidden",
-            bgcolor: "#0a1b2b",
+            bgcolor: "var(--surface)",
             px: { xs: 3.5, sm: 5, md: 8 },
             py: { xs: 6, md: 8 },
             textAlign: "center",
@@ -187,7 +187,7 @@ export default function ServiceCTA({
 
             <Typography
               sx={{
-                color: "rgba(255,255,255,0.65)",
+                color: "rgba(var(--fg-rgb), 0.65)",
                 fontSize: { xs: 15, md: 17.5 },
                 lineHeight: 1.7,
                 maxWidth: 540,
@@ -233,7 +233,7 @@ export default function ServiceCTA({
                     width: "55%",
                     height: "100%",
                     background:
-                      "linear-gradient(120deg, transparent, rgba(255,255,255,0.6), transparent)",
+                      "linear-gradient(120deg, transparent, rgba(var(--fg-rgb), 0.6), transparent)",
                     transform: "skewX(-20deg)",
                     transition: "left .6s ease",
                   },
@@ -250,8 +250,8 @@ export default function ServiceCTA({
                 startIcon={<PhoneInTalkRoundedIcon />}
                 variant="outlined"
                 sx={{
-                  color: "#fff",
-                  borderColor: "rgba(255,255,255,0.25)",
+                  color: "var(--fg)",
+                  borderColor: "rgba(var(--fg-rgb), 0.25)",
                   fontWeight: 700,
                   borderRadius: "999px",
                   px: 4,
@@ -271,7 +271,7 @@ export default function ServiceCTA({
             </Box>
 
             <Typography
-              sx={{ mt: 3, fontSize: 13, color: "rgba(255,255,255,0.45)" }}
+              sx={{ mt: 3, fontSize: 13, color: "rgba(var(--fg-rgb), 0.45)" }}
             >
               No obligation. Free instant quote.
             </Typography>

@@ -142,7 +142,7 @@ const CATEGORY_INFO: Record<
 
 const fieldSx = {
   "& .MuiInputLabel-root": {
-    color: "rgba(255,255,255,0.5)",
+    color: "rgba(var(--fg-rgb), 0.5)",
     fontSize: 14,
   },
 
@@ -151,17 +151,17 @@ const fieldSx = {
   },
 
   "& .MuiOutlinedInput-root": {
-    color: "#fff",
+    color: "var(--fg)",
     borderRadius: "12px",
-    bgcolor: "rgba(255,255,255,0.03)",
+    bgcolor: "rgba(var(--fg-rgb), 0.03)",
 
     "& fieldset": {
-      borderColor: "rgba(255,255,255,0.14)",
+      borderColor: "rgba(var(--fg-rgb), 0.14)",
       transition: "border-color .25s, box-shadow .25s",
     },
 
     "&:hover fieldset": {
-      borderColor: "rgba(255,255,255,0.3)",
+      borderColor: "rgba(var(--fg-rgb), 0.3)",
     },
 
     "&.Mui-focused fieldset": {
@@ -171,7 +171,7 @@ const fieldSx = {
   },
 
   "& input::placeholder, & textarea::placeholder": {
-    color: "rgba(255,255,255,0.3)",
+    color: "rgba(var(--fg-rgb), 0.3)",
     opacity: 1,
   },
 } as const;
@@ -186,7 +186,7 @@ function Confetti() {
     x: (Math.random() - 0.5) * 260,
     y: -(70 + Math.random() * 150),
     rot: (Math.random() - 0.5) * 600,
-    color: [ACCENT, ACCENT_2, SKY, "#fff"][i % 4],
+    color: [ACCENT, ACCENT_2, SKY, "var(--fg)"][i % 4],
     delay: Math.random() * 0.1,
   }));
 
@@ -388,8 +388,8 @@ export default function ContactSection() {
       aria-labelledby="contact-title"
       sx={{
         position: "relative",
-        bgcolor: "#081c31",
-        color: "#fff",
+        bgcolor: "var(--surface)",
+        color: "var(--fg)",
         py: { xs: 6, md: 6 },
         px: { xs: 3, sm: 4, md: 6, lg: 8 },
         overflow: "hidden",
@@ -433,7 +433,7 @@ export default function ContactSection() {
             y: 0,
           }}
           viewport={{
-            once: false,
+            once: true,
             margin: "-80px",
           }}
           transition={{
@@ -465,13 +465,12 @@ export default function ContactSection() {
                 sm: "2.5rem",
                 md: "3.2rem",
               },
-              background: `linear-gradient(90deg, #ffffff, ${ACCENT}, var(--accent-2), #ffffff)`,
+              background: `linear-gradient(90deg, var(--fg), rgba(var(--fg-rgb), 0.78))`,
               backgroundSize: "200% auto",
               WebkitBackgroundClip: "text",
               backgroundClip: "text",
               color: "transparent",
               WebkitTextFillColor: "transparent",
-              animation: "contactShimmer 6s linear infinite",
 
               "@keyframes contactShimmer": {
                 to: {
@@ -525,7 +524,7 @@ export default function ContactSection() {
             x: 0,
           }}
           viewport={{
-            once: false,
+            once: true,
             margin: "-80px",
           }}
           transition={{
@@ -539,7 +538,7 @@ export default function ContactSection() {
                 xs: 15,
                 md: 16.5,
               },
-              color: "rgba(255,255,255,0.7)",
+              color: "rgba(var(--fg-rgb), 0.7)",
               lineHeight: 1.7,
               mb: 3,
               maxWidth: 420,
@@ -563,7 +562,7 @@ export default function ContactSection() {
             initial="hidden"
             whileInView="show"
             viewport={{
-              once: false,
+              once: true,
             }}
             sx={{
               listStyle: "none",
@@ -609,7 +608,7 @@ export default function ContactSection() {
                 <Typography
                   sx={{
                     fontSize: 15,
-                    color: "rgba(255,255,255,0.85)",
+                    color: "rgba(var(--fg-rgb), 0.85)",
                     fontWeight: 500,
                   }}
                 >
@@ -629,14 +628,14 @@ export default function ContactSection() {
             p: "1.5px",
 
             background:
-              "linear-gradient(160deg, rgba(var(--accent-rgb), 0.5), rgba(255,255,255,0.05) 45%)",
+              "linear-gradient(160deg, rgba(var(--accent-rgb), 0.5), rgba(var(--fg-rgb), 0.05) 45%)",
           }}
         >
           <Box
             sx={{
               position: "relative",
               borderRadius: "23px",
-              bgcolor: "#0a1b2b",
+              bgcolor: "var(--surface)",
               p: {
                 xs: 3,
                 md: 4,
@@ -721,7 +720,7 @@ export default function ContactSection() {
 
                   <Typography
                     sx={{
-                      color: "rgba(255,255,255,0.6)",
+                      color: "rgba(var(--fg-rgb), 0.6)",
                       fontSize: 14.5,
                       mt: 1,
                       maxWidth: 340,
@@ -749,7 +748,7 @@ export default function ContactSection() {
                   initial="hidden"
                   whileInView="show"
                   viewport={{
-                    once: false,
+                    once: true,
                     margin: "-60px",
                   }}
                   sx={{
@@ -859,7 +858,7 @@ export default function ContactSection() {
                       sx={{
                         display: "block",
                         fontSize: 14,
-                        color: "rgba(255,255,255,0.5)",
+                        color: "rgba(var(--fg-rgb), 0.5)",
                         mb: 1,
                       }}
                     >
@@ -887,11 +886,11 @@ export default function ContactSection() {
                         border:
                           truckOpen || selectedTruck
                             ? `1px solid ${ACCENT}`
-                            : "1px solid rgba(255,255,255,0.14)",
+                            : "1px solid rgba(var(--fg-rgb), 0.14)",
 
-                        bgcolor: "rgba(255,255,255,0.03)",
+                        bgcolor: "rgba(var(--fg-rgb), 0.03)",
 
-                        color: "#fff",
+                        color: "var(--fg)",
 
                         display: "flex",
                         alignItems: "center",
@@ -910,8 +909,8 @@ export default function ContactSection() {
                           : "none",
 
                         "&:hover": {
-                          borderColor: "rgba(255,255,255,0.3)",
-                          bgcolor: "rgba(255,255,255,0.045)",
+                          borderColor: "rgba(var(--fg-rgb), 0.3)",
+                          bgcolor: "rgba(var(--fg-rgb), 0.045)",
                         },
                       }}
                     >
@@ -925,11 +924,11 @@ export default function ContactSection() {
 
                           bgcolor: selectedTruck
                             ? "rgba(var(--accent-rgb), 0.12)"
-                            : "rgba(255,255,255,0.06)",
+                            : "rgba(var(--fg-rgb), 0.06)",
 
                           border: selectedTruck
                             ? `1px solid ${ACCENT}44`
-                            : "1px solid rgba(255,255,255,0.08)",
+                            : "1px solid rgba(var(--fg-rgb), 0.08)",
 
                           display: "flex",
                           alignItems: "center",
@@ -940,7 +939,7 @@ export default function ContactSection() {
                           "& svg": {
                             color: selectedTruck
                               ? ACCENT
-                              : "rgba(255,255,255,0.55)",
+                              : "rgba(var(--fg-rgb), 0.55)",
                             fontSize: 20,
                           },
                         }}
@@ -966,7 +965,7 @@ export default function ContactSection() {
                               sx={{
                                 fontSize: 14.5,
                                 fontWeight: 700,
-                                color: "#fff",
+                                color: "var(--fg)",
                                 whiteSpace: "nowrap",
                                 overflow: "hidden",
                                 textOverflow: "ellipsis",
@@ -978,7 +977,7 @@ export default function ContactSection() {
                             <Typography
                               sx={{
                                 fontSize: 11.5,
-                                color: "rgba(255,255,255,0.45)",
+                                color: "rgba(var(--fg-rgb), 0.45)",
                                 mt: 0.2,
                               }}
                             >
@@ -989,7 +988,7 @@ export default function ContactSection() {
                           <Typography
                             sx={{
                               fontSize: 14,
-                              color: "rgba(255,255,255,0.38)",
+                              color: "rgba(var(--fg-rgb), 0.38)",
                             }}
                           >
                             Choose your truck or trailer type
@@ -1001,7 +1000,7 @@ export default function ContactSection() {
 
                       <KeyboardArrowDownRoundedIcon
                         sx={{
-                          color: "rgba(255,255,255,0.55)",
+                          color: "rgba(var(--fg-rgb), 0.55)",
                           transform: truckOpen
                             ? "rotate(180deg)"
                             : "rotate(0deg)",
@@ -1032,9 +1031,9 @@ export default function ContactSection() {
 
                             maxWidth: "calc(100vw - 48px)",
 
-                            bgcolor: "#0b1e30",
+                            bgcolor: "var(--surface)",
 
-                            color: "#fff",
+                            color: "var(--fg)",
 
                             border: "1px solid rgba(var(--accent-rgb), 0.25)",
 
@@ -1042,7 +1041,7 @@ export default function ContactSection() {
 
                             overflow: "hidden",
 
-                            boxShadow: "0 24px 70px rgba(0,0,0,0.6)",
+                            boxShadow: "0 24px 70px rgba(var(--shadow-rgb), 0.21)",
 
                             backdropFilter: "blur(20px)",
                           },
@@ -1066,16 +1065,16 @@ export default function ContactSection() {
                           onChange={(e) => setTruckSearch(e.target.value)}
                           sx={{
                             "& .MuiOutlinedInput-root": {
-                              color: "#fff",
-                              bgcolor: "rgba(255,255,255,0.04)",
+                              color: "var(--fg)",
+                              bgcolor: "rgba(var(--fg-rgb), 0.04)",
                               borderRadius: "10px",
 
                               "& fieldset": {
-                                borderColor: "rgba(255,255,255,0.1)",
+                                borderColor: "rgba(var(--fg-rgb), 0.1)",
                               },
 
                               "&:hover fieldset": {
-                                borderColor: "rgba(255,255,255,0.2)",
+                                borderColor: "rgba(var(--fg-rgb), 0.2)",
                               },
 
                               "&.Mui-focused fieldset": {
@@ -1084,7 +1083,7 @@ export default function ContactSection() {
                             },
 
                             "& input::placeholder": {
-                              color: "rgba(255,255,255,0.35)",
+                              color: "rgba(var(--fg-rgb), 0.35)",
                               opacity: 1,
                             },
                           }}
@@ -1094,7 +1093,7 @@ export default function ContactSection() {
                                 <InputAdornment position="start">
                                   <SearchRoundedIcon
                                     sx={{
-                                      color: "rgba(255,255,255,0.4)",
+                                      color: "rgba(var(--fg-rgb), 0.4)",
                                     }}
                                   />
                                 </InputAdornment>
@@ -1109,7 +1108,7 @@ export default function ContactSection() {
                                     sx={{
                                       border: 0,
                                       bgcolor: "transparent",
-                                      color: "rgba(255,255,255,0.5)",
+                                      color: "rgba(var(--fg-rgb), 0.5)",
                                       display: "flex",
                                       cursor: "pointer",
                                       p: 0.5,
@@ -1130,7 +1129,7 @@ export default function ContactSection() {
 
                       <Divider
                         sx={{
-                          borderColor: "rgba(255,255,255,0.07)",
+                          borderColor: "rgba(var(--fg-rgb), 0.07)",
                         }}
                       />
 
@@ -1146,7 +1145,7 @@ export default function ContactSection() {
                           },
 
                           "&::-webkit-scrollbar-thumb": {
-                            bgcolor: "rgba(255,255,255,0.1)",
+                            bgcolor: "rgba(var(--fg-rgb), 0.1)",
                             borderRadius: "10px",
                           },
 
@@ -1158,7 +1157,7 @@ export default function ContactSection() {
                             <Typography
                               sx={{
                                 fontSize: 13.5,
-                                color: "rgba(255,255,255,0.4)",
+                                color: "rgba(var(--fg-rgb), 0.4)",
                               }}
                             >
                               No matching trucks or trailers found
@@ -1191,7 +1190,7 @@ export default function ContactSection() {
                                   "&:hover": {
                                     bgcolor: isSelected
                                       ? "rgba(var(--accent-rgb), 0.18)"
-                                      : "rgba(255,255,255,0.05)",
+                                      : "rgba(var(--fg-rgb), 0.05)",
                                   },
                                   mb: 0.5,
                                 }}
@@ -1203,10 +1202,10 @@ export default function ContactSection() {
                                     borderRadius: "8px",
                                     bgcolor: isSelected
                                       ? "rgba(var(--accent-rgb), 0.2)"
-                                      : "rgba(255,255,255,0.05)",
+                                      : "rgba(var(--fg-rgb), 0.05)",
                                     border: isSelected
                                       ? `1px solid ${ACCENT}66`
-                                      : "1px solid rgba(255,255,255,0.08)",
+                                      : "1px solid rgba(var(--fg-rgb), 0.08)",
                                     display: "flex",
                                     alignItems: "center",
                                     justifyContent: "center",
@@ -1215,7 +1214,7 @@ export default function ContactSection() {
                                       fontSize: 18,
                                       color: isSelected
                                         ? ACCENT
-                                        : "rgba(255,255,255,0.6)",
+                                        : "rgba(var(--fg-rgb), 0.6)",
                                     },
                                   }}
                                 >
@@ -1234,7 +1233,7 @@ export default function ContactSection() {
                                       sx={{
                                         fontSize: 14,
                                         fontWeight: isSelected ? 700 : 600,
-                                        color: isSelected ? ACCENT : "#fff",
+                                        color: isSelected ? ACCENT : "var(--fg)",
                                       }}
                                     >
                                       {item.name}
@@ -1245,8 +1244,8 @@ export default function ContactSection() {
                                         px: 1,
                                         py: 0.2,
                                         borderRadius: "6px",
-                                        bgcolor: "rgba(255,255,255,0.06)",
-                                        color: "rgba(255,255,255,0.5)",
+                                        bgcolor: "rgba(var(--fg-rgb), 0.06)",
+                                        color: "rgba(var(--fg-rgb), 0.5)",
                                       }}
                                     >
                                       {item.category}
@@ -1255,7 +1254,7 @@ export default function ContactSection() {
                                   <Typography
                                     sx={{
                                       fontSize: 12,
-                                      color: "rgba(255,255,255,0.45)",
+                                      color: "rgba(var(--fg-rgb), 0.45)",
                                       mt: 0.2,
                                       whiteSpace: "nowrap",
                                       overflow: "hidden",
@@ -1372,7 +1371,7 @@ export default function ContactSection() {
                           width: "55%",
                           height: "100%",
                           background:
-                            "linear-gradient(120deg, transparent, rgba(255,255,255,0.6), transparent)",
+                            "linear-gradient(120deg, transparent, rgba(var(--fg-rgb), 0.6), transparent)",
                           transform: "skewX(-20deg)",
                           transition: "left .6s ease",
                         },

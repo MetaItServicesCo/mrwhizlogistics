@@ -98,7 +98,7 @@ function Stars({ rating }: { rating: number }) {
           <StarRoundedIcon
             sx={{
               fontSize: { xs: 20, md: 23 },
-              color: i < rating ? ACCENT : "rgba(255,255,255,0.16)",
+              color: i < rating ? ACCENT : "rgba(var(--fg-rgb), 0.16)",
             }}
           />
         </Box>
@@ -202,8 +202,8 @@ export default function TestimonialsSection() {
       aria-labelledby="tst-title"
       sx={{
         position: "relative",
-        bgcolor: "#081c31",
-        color: "#fff",
+        bgcolor: "var(--surface)",
+        color: "var(--fg)",
         py: { xs: 9, md: 14 },
         px: { xs: 3, sm: 4, md: 6, lg: 8 },
         overflow: "hidden",
@@ -251,7 +251,7 @@ export default function TestimonialsSection() {
         <motion.div
           initial={{ opacity: 0, y: 28 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, margin: "-80px" }}
+          viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.6, ease: EASE }}
         >
           <Typography
@@ -275,13 +275,12 @@ export default function TestimonialsSection() {
               lineHeight: 1.12,
               letterSpacing: "-0.5px",
               fontSize: { xs: "1.9rem", sm: "2.5rem", md: "3.2rem" },
-              background: `linear-gradient(90deg, #ffffff, ${ACCENT}, var(--accent-2), #ffffff)`,
+              background: `linear-gradient(90deg, var(--fg), rgba(var(--fg-rgb), 0.78))`,
               backgroundSize: "200% auto",
               WebkitBackgroundClip: "text",
               backgroundClip: "text",
               color: "transparent",
               WebkitTextFillColor: "transparent",
-              animation: "tstShimmer 7s linear infinite",
               "@keyframes tstShimmer": {
                 to: { backgroundPosition: "200% center" },
               },
@@ -298,7 +297,7 @@ export default function TestimonialsSection() {
         component={motion.div}
         initial={{ opacity: 0, y: 36 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: false, margin: "-80px" }}
+        viewport={{ once: true, margin: "-80px" }}
         transition={{ duration: 0.65, ease: EASE }}
         onMouseEnter={() => {
           pausedRef.current = true;
@@ -316,7 +315,7 @@ export default function TestimonialsSection() {
           mx: "auto",
           borderRadius: "28px",
           p: "1.5px",
-          background: `linear-gradient(150deg, rgba(var(--accent-rgb), 0.45), rgba(255,255,255,0.05) 45%)`,
+          background: `linear-gradient(150deg, rgba(var(--accent-rgb), 0.45), rgba(var(--fg-rgb), 0.05) 45%)`,
           cursor: "grab",
           "&:active": { cursor: "grabbing" },
           userSelect: "none",
@@ -326,7 +325,7 @@ export default function TestimonialsSection() {
           sx={{
             position: "relative",
             borderRadius: "27px",
-            bgcolor: "#0a1b2b",
+            bgcolor: "var(--surface)",
             px: { xs: 3.5, sm: 6, md: 8 },
             py: { xs: 5.5, md: 7 },
             overflow: "hidden",
@@ -380,7 +379,7 @@ export default function TestimonialsSection() {
                   fontWeight: 500,
                   lineHeight: 1.55,
                   letterSpacing: "-0.2px",
-                  color: "rgba(255,255,255,0.95)",
+                  color: "rgba(var(--fg-rgb), 0.95)",
                   maxWidth: 700,
                   mx: "auto",
                   mb: 3.5,
@@ -396,7 +395,7 @@ export default function TestimonialsSection() {
                 sx={{
                   fontWeight: 700,
                   fontSize: { xs: 15.5, md: 17 },
-                  color: "#fff",
+                  color: "var(--fg)",
                   letterSpacing: "0.1px",
                 }}
               >
@@ -434,8 +433,8 @@ export default function TestimonialsSection() {
           aria-label="Previous"
           sx={{
             display: { xs: "none", sm: "inline-flex" },
-            border: "1px solid rgba(255,255,255,0.18)",
-            color: "#fff",
+            border: "1px solid rgba(var(--fg-rgb), 0.18)",
+            color: "var(--fg)",
             transition: "all .25s",
             "&:hover": { borderColor: ACCENT, color: ACCENT },
           }}
@@ -531,10 +530,10 @@ export default function TestimonialsSection() {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    color: "#fff",
+                    color: "var(--fg)",
                     fontWeight: 800,
                     fontSize: on ? 18 : 14,
-                    textShadow: "0 1px 3px rgba(0,0,0,0.4)",
+                    textShadow: "0 1px 3px rgba(var(--shadow-rgb), 0.14)",
                     transition: "font-size .35s ease",
                     position: "relative",
                     overflow: "hidden",
@@ -557,8 +556,8 @@ export default function TestimonialsSection() {
           aria-label="Next"
           sx={{
             display: { xs: "none", sm: "inline-flex" },
-            border: "1px solid rgba(255,255,255,0.18)",
-            color: "#fff",
+            border: "1px solid rgba(var(--fg-rgb), 0.18)",
+            color: "var(--fg)",
             transition: "all .25s",
             "&:hover": { borderColor: ACCENT, color: ACCENT },
           }}

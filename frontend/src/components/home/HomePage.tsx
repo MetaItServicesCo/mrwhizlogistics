@@ -51,7 +51,7 @@ const SENTENCE =
 const WORDS = SENTENCE.split(" ");
 // const GRADIENT =
 //   "linear-gradient(90deg, var(--accent) 0%, var(--accent-2) 50%, var(--sky) 100%)";
-const GRADIENT = "#ffffff";
+const GRADIENT = "var(--fg)";
 const STEP = (TEXT_END - TEXT_START) / WORDS.length;
 
 const headingSx = {
@@ -225,7 +225,7 @@ export default function HomePage() {
 
   return (
     <>
-      <Box sx={{ color: "#fff", overflowX: "clip", bgcolor: "#091725" }}>
+      <Box sx={{ color: "var(--fg)", overflowX: "clip", bgcolor: "var(--bg)" }}>
         {/* <Navbar /> */}
 
         {/* HERO — tall section (height = poore sequence ka scroll) */}
@@ -235,6 +235,7 @@ export default function HomePage() {
         >
           {/* Sticky full-screen viewport */}
           <Box
+            className="theme-dark"
             sx={{
               position: "sticky",
               top: 0,
@@ -290,7 +291,7 @@ export default function HomePage() {
               >
                 <Box sx={{ position: "relative", textAlign: "center" }}>
                   {/* Base layer — bright frames par bhi visible */}
-                  {/* <Box sx={{ ...headingSx, color: 'rgba(255,255,255,0.38)', textShadow: '0 2px 24px rgba(0,0,0,0.6)' }}>
+                  {/* <Box sx={{ ...headingSx, color: 'rgba(var(--fg-rgb), 0.38)', textShadow: '0 2px 24px rgba(var(--shadow-rgb), 0.21)' }}>
                   {SENTENCE}
                 </Box> */}
                   {/* The page's H1 (headingSx sets margin 0, so no visual change). */}
@@ -298,13 +299,13 @@ export default function HomePage() {
                     component="h1"
                     sx={{
                       ...headingSx,
-                      color: "#ffffff",
-                      textShadow: "0 2px 24px rgba(0,0,0,0.6)",
+                      color: "var(--fg)",
+                      textShadow: "0 2px 24px rgba(var(--shadow-rgb), 0.21)",
                     }}
                   >
                     {SENTENCE}
                   </Box>
-                  {/* <Box sx={{ ...headingSx, color: '#040a11', textShadow: '0 2px 12px rgba(255,255,255,0.3)' }}>
+                  {/* <Box sx={{ ...headingSx, color: '#040a11', textShadow: '0 2px 12px rgba(var(--fg-rgb), 0.3)' }}>
   {SENTENCE}
 </Box> */}
 
@@ -358,7 +359,7 @@ export default function HomePage() {
                 sx={{
                   fontSize: 11,
                   letterSpacing: 3,
-                  color: "rgba(255,255,255,0.65)",
+                  color: "rgba(var(--fg-rgb), 0.65)",
                 }}
               >
                 SCROLL TO EXPLORE

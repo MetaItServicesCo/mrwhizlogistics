@@ -56,10 +56,10 @@ export default function FleetOverview() {
       component="section"
       sx={{
         py: { xs: 10, md: 14 },
-        bgcolor: "#081c31",
-        color: "#fff",
-        borderTop: "1px solid rgba(255,255,255,0.06)",
-        borderBottom: "1px solid rgba(255,255,255,0.06)",
+        bgcolor: "var(--surface)",
+        color: "var(--fg)",
+        borderTop: "1px solid rgba(var(--fg-rgb), 0.06)",
+        borderBottom: "1px solid rgba(var(--fg-rgb), 0.06)",
       }}
     >
       <Container maxWidth="lg">
@@ -138,8 +138,8 @@ export default function FleetOverview() {
                   height: "100%",
                   borderRadius: "22px",
                   overflow: "hidden",
-                  bgcolor: "#0c2032",
-                  border: "1px solid rgba(255,255,255,0.08)",
+                  bgcolor: "var(--surface)",
+                  border: "1px solid rgba(var(--fg-rgb), 0.08)",
                   display: "flex",
                   flexDirection: "column",
                   transition: "border-color .3s ease, transform .3s ease",
@@ -151,11 +151,12 @@ export default function FleetOverview() {
               >
                 {/* Truck Image Box */}
                 <Box
+                  className="theme-dark"
                   sx={{
                     height: 220,
                     position: "relative",
-                    bgcolor: "#0f2941",
-                    backgroundImage: `linear-gradient(to top, #0c2032, transparent), url("${fleet.image}")`,
+                    bgcolor: "var(--surface-2)",
+                    backgroundImage: `linear-gradient(to top, var(--surface), transparent), url("${fleet.image}")`,
                     backgroundSize: "cover",
                     backgroundPosition: "center",
                   }}
@@ -169,7 +170,7 @@ export default function FleetOverview() {
                       py: 0.5,
                       borderRadius: "6px",
                       bgcolor: "rgba(0,0,0,0.8)",
-                      border: "1px solid rgba(255,255,255,0.1)",
+                      border: "1px solid rgba(var(--fg-rgb), 0.1)",
                     }}
                   >
                     <Typography
@@ -213,7 +214,7 @@ export default function FleetOverview() {
                         fontWeight: 700,
                         fontSize: "1.25rem",
                         mb: 1.5,
-                        color: "#fff",
+                        color: "var(--fg)",
                       }}
                     >
                       {fleet.title}
@@ -221,7 +222,7 @@ export default function FleetOverview() {
                     <Typography
                       sx={{
                         fontSize: 13.5,
-                        color: "rgba(255,255,255,0.6)",
+                        color: "rgba(var(--fg-rgb), 0.6)",
                         lineHeight: 1.6,
                         mb: 3,
                       }}
@@ -234,7 +235,7 @@ export default function FleetOverview() {
                   <Box
                     sx={{
                       pt: 2,
-                      borderTop: "1px solid rgba(255,255,255,0.06)",
+                      borderTop: "1px solid rgba(var(--fg-rgb), 0.06)",
                       display: "flex",
                       flexDirection: "column",
                       gap: 1,
@@ -252,13 +253,13 @@ export default function FleetOverview() {
                       >
                         <ScaleRoundedIcon sx={{ fontSize: 14, color: ACCENT }} />
                         <Typography
-                          sx={{ fontSize: 12, color: "rgba(255,255,255,0.5)" }}
+                          sx={{ fontSize: 12, color: "rgba(var(--fg-rgb), 0.5)" }}
                         >
                           Capacity
                         </Typography>
                       </Box>
                       <Typography
-                        sx={{ fontSize: 12, fontWeight: 700, color: "#fff" }}
+                        sx={{ fontSize: 12, fontWeight: 700, color: "var(--fg)" }}
                       >
                         {fleet.specs.capacity}
                       </Typography>
@@ -278,13 +279,13 @@ export default function FleetOverview() {
                           sx={{ fontSize: 14, color: ACCENT }}
                         />
                         <Typography
-                          sx={{ fontSize: 12, color: "rgba(255,255,255,0.5)" }}
+                          sx={{ fontSize: 12, color: "rgba(var(--fg-rgb), 0.5)" }}
                         >
                           Type
                         </Typography>
                       </Box>
                       <Typography
-                        sx={{ fontSize: 12, fontWeight: 700, color: "#fff" }}
+                        sx={{ fontSize: 12, fontWeight: 700, color: "var(--fg)" }}
                       >
                         {fleet.specs.length}
                       </Typography>
@@ -302,13 +303,13 @@ export default function FleetOverview() {
                       >
                         <SpeedRoundedIcon sx={{ fontSize: 14, color: ACCENT }} />
                         <Typography
-                          sx={{ fontSize: 12, color: "rgba(255,255,255,0.5)" }}
+                          sx={{ fontSize: 12, color: "rgba(var(--fg-rgb), 0.5)" }}
                         >
                           Transit
                         </Typography>
                       </Box>
                       <Typography
-                        sx={{ fontSize: 12, fontWeight: 700, color: "#fff" }}
+                        sx={{ fontSize: 12, fontWeight: 700, color: "var(--fg)" }}
                       >
                         {fleet.specs.transit}
                       </Typography>
