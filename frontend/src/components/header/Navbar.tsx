@@ -27,8 +27,8 @@ import FlatwareRoundedIcon from "@mui/icons-material/FlatwareRounded";
 import AcUnitRoundedIcon from "@mui/icons-material/AcUnitRounded";
 import Inventory2RoundedIcon from "@mui/icons-material/Inventory2Rounded";
 import { ctaProps, useCta } from "@/components/common/CtaProvider";
+import { ACCENT, ACCENT_HOVER } from "@/theme/brand";
 
-const LIME = "#c8ff00";
 
 type MenuItem = {
   title: string;
@@ -282,7 +282,7 @@ export default function Navbar({
             py: { xs: 0.8, md: 0.8 },
             minHeight: { xs: 56, md: 110 },
             borderRadius: "999px",
-            bgcolor: "rgba(18,17,17,0.85)",
+            bgcolor: "rgba(12,31,49,0.85)",
             backdropFilter: "blur(16px)",
             WebkitBackdropFilter: "blur(16px)",
             border: "1px solid rgba(255,255,255,0.1)",
@@ -318,10 +318,10 @@ export default function Navbar({
                     style={{
                       position: "absolute",
                       inset: 0,
-                      background: `linear-gradient(90deg, rgba(200,255,0,0.18) 0%, rgba(200,255,0,0.04) 100%)`,
+                      background: `linear-gradient(90deg, rgba(var(--accent-rgb), 0.18) 0%, rgba(var(--accent-rgb), 0.04) 100%)`,
                       borderRadius: "999px",
                       zIndex: -1,
-                      borderBottom: `2px solid ${LIME}`,
+                      borderBottom: `2px solid ${ACCENT}`,
                     }}
                     initial={{ x: "-100%", opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
@@ -374,11 +374,11 @@ export default function Navbar({
                         style={{
                           position: "absolute",
                           inset: 0,
-                          background: `linear-gradient(90deg, rgba(200,255,0,0.2) 0%, rgba(200,255,0,0.03) 100%)`,
+                          background: `linear-gradient(90deg, rgba(var(--accent-rgb), 0.2) 0%, rgba(var(--accent-rgb), 0.03) 100%)`,
                           borderRadius: "999px",
                           zIndex: -1,
-                          borderBottom: `2px solid ${LIME}`,
-                          boxShadow: `inset 0 -4px 12px rgba(200,255,0,0.15)`,
+                          borderBottom: `2px solid ${ACCENT}`,
+                          boxShadow: `inset 0 -4px 12px rgba(var(--accent-rgb), 0.15)`,
                         }}
                         initial={{ x: "-100%", opacity: 0 }}
                         animate={{ x: 0, opacity: 1 }}
@@ -411,10 +411,10 @@ export default function Navbar({
                     style={{
                       position: "absolute",
                       inset: 0,
-                      background: `linear-gradient(90deg, rgba(200,255,0,0.18) 0%, rgba(200,255,0,0.04) 100%)`,
+                      background: `linear-gradient(90deg, rgba(var(--accent-rgb), 0.18) 0%, rgba(var(--accent-rgb), 0.04) 100%)`,
                       borderRadius: "999px",
                       zIndex: -1,
-                      borderBottom: `2px solid ${LIME}`,
+                      borderBottom: `2px solid ${ACCENT}`,
                     }}
                     initial={{ x: "-100%", opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
@@ -442,10 +442,10 @@ export default function Navbar({
                     style={{
                       position: "absolute",
                       inset: 0,
-                      background: `linear-gradient(90deg, rgba(200,255,0,0.18) 0%, rgba(200,255,0,0.04) 100%)`,
+                      background: `linear-gradient(90deg, rgba(var(--accent-rgb), 0.18) 0%, rgba(var(--accent-rgb), 0.04) 100%)`,
                       borderRadius: "999px",
                       zIndex: -1,
-                      borderBottom: `2px solid ${LIME}`,
+                      borderBottom: `2px solid ${ACCENT}`,
                     }}
                     initial={{ x: "-100%", opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
@@ -473,10 +473,10 @@ export default function Navbar({
                     style={{
                       position: "absolute",
                       inset: 0,
-                      background: `linear-gradient(90deg, rgba(200,255,0,0.18) 0%, rgba(200,255,0,0.04) 100%)`,
+                      background: `linear-gradient(90deg, rgba(var(--accent-rgb), 0.18) 0%, rgba(var(--accent-rgb), 0.04) 100%)`,
                       borderRadius: "999px",
                       zIndex: -1,
-                      borderBottom: `2px solid ${LIME}`,
+                      borderBottom: `2px solid ${ACCENT}`,
                     }}
                     initial={{ x: "-100%", opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
@@ -517,14 +517,14 @@ export default function Navbar({
               {...ctaProps(primaryCta)}
               disableElevation
               sx={{
-                bgcolor: LIME,
-                color: "#000",
+                bgcolor: ACCENT,
+                color: "#040a11",
                 fontWeight: 700,
                 fontSize: 11.5,
                 px: 1.8,
                 py: 0.8,
                 borderRadius: "999px",
-                "&:hover": { bgcolor: "#d4ff33" },
+                "&:hover": { bgcolor: ACCENT_HOVER },
               }}
             >
               {primaryCta.label}
@@ -593,7 +593,7 @@ export default function Navbar({
               >
                 <Box
                   sx={{
-                    bgcolor: "rgba(18,17,17,0.96)",
+                    bgcolor: "rgba(12,31,49,0.96)",
                     backdropFilter: "blur(20px)",
                     border: "1px solid rgba(255,255,255,0.1)",
                     borderRadius: "20px",
@@ -607,7 +607,7 @@ export default function Navbar({
                   >
                     <Typography
                       sx={{
-                        color: LIME,
+                        color: ACCENT,
                         fontSize: 11,
                         fontWeight: 700,
                         letterSpacing: 2,
@@ -644,7 +644,7 @@ export default function Navbar({
                             "&:hover": { bgcolor: "rgba(255,255,255,0.06)" },
                             "&:hover .mi-icon": {
                               transform: "translateY(-3px)",
-                              color: LIME,
+                              color: ACCENT,
                             },
                           }}
                         >
@@ -706,7 +706,7 @@ export default function Navbar({
             sx: {
               width: "85%",
               maxWidth: 360,
-              bgcolor: "#0d0c0c",
+              bgcolor: "#091928",
               color: "#fff",
               p: 2.5,
             },
@@ -761,7 +761,7 @@ export default function Navbar({
                 onClick={() =>
                   setMobileExpand(mobileExpand === key ? null : key)
                 }
-                sx={{ color: LIME }}
+                sx={{ color: ACCENT }}
               >
                 <KeyboardArrowDownRoundedIcon
                   sx={{
@@ -792,7 +792,7 @@ export default function Navbar({
                     >
                       <Box
                         sx={{
-                          color: LIME,
+                          color: ACCENT,
                           display: "flex",
                           "& svg": { fontSize: 18 },
                         }}
@@ -843,8 +843,8 @@ export default function Navbar({
             fullWidth
             disableElevation
             sx={{
-              bgcolor: LIME,
-              color: "#000",
+              bgcolor: ACCENT,
+              color: "#040a11",
               fontWeight: 700,
               py: 1.1,
               borderRadius: "999px",

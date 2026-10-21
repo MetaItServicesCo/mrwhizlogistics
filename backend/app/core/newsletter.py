@@ -38,13 +38,13 @@ def _email_html(content_html: str, preview_text: str | None, unsubscribe_url: st
     content_html = re.sub(r'(?P<attr>\b(?:src|href))="/(?P<path>[^"#]+)"', rf'\g<attr>="{base}/\g<path>"', content_html, flags=re.I)
     preview = html.escape(preview_text or "")
     return f"""<!doctype html>
-<html><body style="margin:0;background:#0a0a0a;color:#f5f5f5;font-family:Arial,sans-serif">
+<html><body style="margin:0;background:#081c31;color:#f5f5f5;font-family:Arial,sans-serif">
 <div style="display:none;max-height:0;overflow:hidden;opacity:0">{preview}</div>
 <main style="max-width:680px;margin:auto;padding:36px 24px">
-<div style="border-top:4px solid #c8ff00;background:#151515;padding:32px;border-radius:10px;line-height:1.65">{content_html}</div>
+<div style="border-top:4px solid #f87802;background:#0e2f4d;padding:32px;border-radius:10px;line-height:1.65">{content_html}</div>
 <p style="color:#999;font-size:12px;line-height:1.6;text-align:center;margin-top:24px">
 You received this because you subscribed to Mr. Whiz Logistics updates.<br>
-<a href="{html.escape(unsubscribe_url, quote=True)}" style="color:#c8ff00">Unsubscribe</a>
+<a href="{html.escape(unsubscribe_url, quote=True)}" style="color:#f87802">Unsubscribe</a>
 </p></main></body></html>"""
 
 

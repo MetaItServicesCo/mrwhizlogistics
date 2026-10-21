@@ -10,7 +10,8 @@ import { api } from "@/lib/api";
 import { useAction, useResource } from "@/lib/useResource";
 import type { SiteSetting } from "@/lib/types";
 import { SEO_PAGES, seoPageCopy, seoPageSettingKey, type SeoPageCopy, type SeoPageId } from "@/lib/seoPages";
-import { Field, LIME, PageHeader, Panel } from "@/components/admin/ui";
+import { Field, ACCENT, PageHeader, Panel } from "@/components/admin/ui";
+import { ACCENT_HOVER } from "@/theme/brand";
 
 export default function SeoPagesAdmin() {
   const settings = useResource<SiteSetting>("/api/settings");
@@ -75,9 +76,9 @@ export default function SeoPagesAdmin() {
                 fontWeight: 700,
                 borderRadius: "10px",
                 mb: 0.5,
-                color: selected === entry.id ? "#0a0a0a" : "#fff",
-                bgcolor: selected === entry.id ? LIME : "transparent",
-                "&:hover": { bgcolor: selected === entry.id ? LIME : "rgba(255,255,255,0.08)" },
+                color: selected === entry.id ? "#081c31" : "#fff",
+                bgcolor: selected === entry.id ? ACCENT : "transparent",
+                "&:hover": { bgcolor: selected === entry.id ? ACCENT : "rgba(255,255,255,0.08)" },
               }}
             >
               {entry.label}
@@ -90,7 +91,7 @@ export default function SeoPagesAdmin() {
               <Typography component="h2" sx={{ color: "#fff", fontSize: 20, fontWeight: 800 }}>{page.label}</Typography>
               <Typography sx={{ color: "rgba(255,255,255,0.55)", fontSize: 13 }}>{`https://mrwhizlogistics.com${page.path === "/" ? "" : page.path}`}</Typography>
             </Box>
-            <Button component={Link} href={page.path} target="_blank" rel="noopener noreferrer" sx={{ color: LIME, textTransform: "none" }}>View page</Button>
+            <Button component={Link} href={page.path} target="_blank" rel="noopener noreferrer" sx={{ color: ACCENT, textTransform: "none" }}>View page</Button>
           </Box>
           <Box sx={{ display: "flex", flexDirection: "column", gap: 2.5 }}>
             <Field
@@ -116,7 +117,7 @@ export default function SeoPagesAdmin() {
               <Button
                 onClick={save}
                 disabled={!dirty || busy || settings.loading || Boolean(settings.error)}
-                sx={{ bgcolor: LIME, color: "#0a0a0a", fontWeight: 800, textTransform: "none", px: 3, borderRadius: "10px", "&:hover": { bgcolor: "#d4ff33" } }}
+                sx={{ bgcolor: ACCENT, color: "#081c31", fontWeight: 800, textTransform: "none", px: 3, borderRadius: "10px", "&:hover": { bgcolor: ACCENT_HOVER } }}
               >
                 {busy ? "Saving…" : "Save metadata"}
               </Button>

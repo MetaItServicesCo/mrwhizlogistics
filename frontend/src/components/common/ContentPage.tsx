@@ -56,7 +56,7 @@ export default async function ContentPage({ slug }: { slug: string }) {
   return (
     <main>
       <HotShotHero title={page.title} crumb={page.title} badge={legal ? "LEGAL" : company.toUpperCase()} />
-      <Box sx={{ bgcolor: "#0a0a0a", px: { xs: 3, sm: 5, md: 8 }, py: { xs: 6, md: 10 } }}>
+      <Box sx={{ bgcolor: "#081c31", px: { xs: 3, sm: 5, md: 8 }, py: { xs: 6, md: 10 } }}>
         <Box component="article" sx={{ maxWidth: 820, mx: "auto" }}>
           {updated && (
             <Typography sx={{ color: "rgba(255,255,255,0.5)", fontSize: 14, mb: 4 }}>

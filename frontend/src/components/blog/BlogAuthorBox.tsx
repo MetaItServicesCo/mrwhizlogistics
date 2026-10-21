@@ -4,8 +4,8 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 import type { BlogPost } from "@/data/blogPosts";
+import { ACCENT } from "@/theme/brand";
 
-const LIME = "#c8ff00";
 
 export default function BlogAuthorBox({
   post,
@@ -21,7 +21,7 @@ export default function BlogAuthorBox({
         mt: 5,
         p: { xs: 3, md: 3.5 },
         borderRadius: "18px",
-        bgcolor: "#101010",
+        bgcolor: "#0b1d2e",
         border: "1px solid rgba(255,255,255,0.08)",
         display: "flex",
         gap: 2.5,
@@ -35,12 +35,12 @@ export default function BlogAuthorBox({
           height: 64,
           borderRadius: "50%",
           flexShrink: 0,
-          bgcolor: "rgba(200,255,0,0.12)",
-          color: LIME,
+          bgcolor: "rgba(var(--accent-rgb), 0.12)",
+          color: ACCENT,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          border: `1px solid ${LIME}33`,
+          border: `1px solid ${ACCENT}33`,
           "& svg": { fontSize: 30 },
         }}
       >
@@ -52,7 +52,7 @@ export default function BlogAuthorBox({
             fontSize: 10,
             fontWeight: 800,
             letterSpacing: 1.5,
-            color: LIME,
+            color: ACCENT,
             mb: 0.5,
           }}
         >

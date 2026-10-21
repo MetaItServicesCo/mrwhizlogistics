@@ -5,8 +5,8 @@ import { useRef, useState } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
+import { ACCENT } from "@/theme/brand";
 
-const LIME = "#c8ff00";
 
 const ITEMS = [
   {
@@ -53,7 +53,7 @@ function CheckMark() {
       <motion.path
         d="M6 24 L24 42 L58 5"
         fill="none"
-        stroke={LIME}
+        stroke={ACCENT}
         strokeWidth={7}
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -115,7 +115,7 @@ function TruckDrawing() {
           y1={210}
           x2={440}
           y2={210}
-          stroke={LIME}
+          stroke={ACCENT}
           strokeWidth={2}
           strokeLinecap="round"
           opacity={0.5}
@@ -163,7 +163,7 @@ function TruckDrawing() {
             cy={184}
             r={22}
             fill="none"
-            stroke={LIME}
+            stroke={ACCENT}
             strokeWidth={2.5}
             {...draw(1.0)}
           />
@@ -172,7 +172,7 @@ function TruckDrawing() {
             cy={184}
             r={22}
             fill="none"
-            stroke={LIME}
+            stroke={ACCENT}
             strokeWidth={2.5}
             {...draw(1.15)}
           />
@@ -181,7 +181,7 @@ function TruckDrawing() {
             cy={184}
             r={22}
             fill="none"
-            stroke={LIME}
+            stroke={ACCENT}
             strokeWidth={2.5}
             {...draw(1.3)}
           />
@@ -248,7 +248,7 @@ function AccordionRow({
               fontSize: { xs: 20, md: 24 },
               fontWeight: 800,
               minWidth: 34,
-              color: open ? LIME : "rgba(255,255,255,0.45)",
+              color: open ? ACCENT : "rgba(255,255,255,0.45)",
               transition: "color .3s",
             }}
           >
@@ -260,7 +260,7 @@ function AccordionRow({
               flex: 1,
               fontSize: { xs: "1.1rem", md: "1.35rem" },
               fontWeight: 700,
-              color: open ? LIME : "#fff",
+              color: open ? ACCENT : "#fff",
               transition: "color .3s",
             }}
           >
@@ -268,7 +268,7 @@ function AccordionRow({
           </Box>
           <KeyboardArrowDownRoundedIcon
             sx={{
-              color: open ? LIME : "rgba(255,255,255,0.5)",
+              color: open ? ACCENT : "rgba(255,255,255,0.5)",
               transition: "transform .3s, color .3s",
               transform: open ? "rotate(180deg)" : "none",
             }}
@@ -312,7 +312,7 @@ export default function DispatchSection() {
       aria-labelledby="dispatch-title"
       sx={{
         position: "relative",
-        bgcolor: "#0a0a0a",
+        bgcolor: "#081c31",
         color: "#fff",
         py: { xs: 8, md: 8 },
         px: { xs: 3, md: 8 },
@@ -329,9 +329,9 @@ export default function DispatchSection() {
             "radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px)",
           backgroundSize: "34px 34px",
           WebkitMaskImage:
-            "radial-gradient(circle at 50% 40%, #000 35%, transparent 80%)",
+            "radial-gradient(circle at 50% 40%, #040a11 35%, transparent 80%)",
           maskImage:
-            "radial-gradient(circle at 50% 40%, #000 35%, transparent 80%)",
+            "radial-gradient(circle at 50% 40%, #040a11 35%, transparent 80%)",
           pointerEvents: "none",
         }}
       />
@@ -345,7 +345,7 @@ export default function DispatchSection() {
           height: 420,
           borderRadius: "50%",
           background:
-            "radial-gradient(circle, rgba(200,255,0,0.10), transparent 70%)",
+            "radial-gradient(circle, rgba(var(--accent-rgb), 0.10), transparent 70%)",
           pointerEvents: "none",
         }}
       />
@@ -388,7 +388,7 @@ export default function DispatchSection() {
               }}
             >
               What Does Our{" "}
-              <Box component="span" sx={{ color: LIME }}>
+              <Box component="span" sx={{ color: ACCENT }}>
                 Trucking Service
               </Box>{" "}
               Include?
@@ -402,7 +402,7 @@ export default function DispatchSection() {
             style={{
               transformOrigin: "0%",
               height: 3,
-              background: LIME,
+              background: ACCENT,
               width: 140,
               marginTop: 14,
               borderRadius: 2,

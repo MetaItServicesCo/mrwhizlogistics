@@ -12,7 +12,7 @@
  * links look like plain text. These rules are un-layered so they win.
  */
 .rich-content a {
-  color: #c8ff00;
+  color: var(--accent);
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 3px;
@@ -20,7 +20,7 @@
   transition: color 0.2s, text-decoration-thickness 0.2s;
 }
 .rich-content a:hover {
-  color: #d4ff33;
+  color: var(--accent-hover);
   text-decoration-thickness: 2px;
 }
 /* Highlighted text: dark text on the highlight colour stays readable.
@@ -28,7 +28,7 @@
    (the saved HTML has it stripped, but the editor view would show white on
    yellow otherwise). */
 .rich-content mark {
-  color: #0a0a0a !important;
+  color: #081c31 !important;
   padding: 0.05em 0.25em;
   border-radius: 4px;
   -webkit-box-decoration-break: clone;
@@ -57,7 +57,7 @@
   min-width: 80px;
 }
 .rich-content th {
-  background: rgba(200, 255, 0, 0.1);
+  background: rgba(var(--accent-rgb), 0.1);
   color: #fff;
   font-weight: 700;
 }
@@ -70,5 +70,5 @@
 }
 /* Editor: show the selected cells while editing a table. */
 .rich-content .selectedCell {
-  background: rgba(200, 255, 0, 0.15);
+  background: rgba(var(--accent-rgb), 0.15);
 }

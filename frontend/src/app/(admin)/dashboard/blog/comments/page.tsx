@@ -16,6 +16,7 @@ import {
   Toast,
   fmtDateTime,
 } from "@/components/admin/ui";
+import { ACCENT } from "@/theme/brand";
 
 export default function BlogCommentsPage() {
   const { items, loading, error, reload } = useResource<BlogComment>(
@@ -173,9 +174,9 @@ export default function BlogCommentsPage() {
             borderRadius: "999px",
             fontSize: 11.5,
             fontWeight: 800,
-            color: c.is_approved ? "#c8ff00" : "#ffb74d",
-            bgcolor: c.is_approved ? "rgba(200,255,0,0.12)" : "rgba(255,183,77,0.12)",
-            border: `1px solid ${c.is_approved ? "rgba(200,255,0,0.3)" : "rgba(255,183,77,0.3)"}`,
+            color: c.is_approved ? ACCENT : "#ffb74d",
+            bgcolor: c.is_approved ? "rgba(var(--accent-rgb), 0.12)" : "rgba(255,183,77,0.12)",
+            border: `1px solid ${c.is_approved ? "rgba(var(--accent-rgb), 0.3)" : "rgba(255,183,77,0.3)"}`,
           }}
         >
           {c.is_approved ? "Approved" : "Pending"}

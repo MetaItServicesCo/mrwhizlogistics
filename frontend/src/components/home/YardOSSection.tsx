@@ -5,8 +5,8 @@ import { motion, AnimatePresence, useInView } from "motion/react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
+import { ACCENT } from "@/theme/brand";
 
-const LIME = "#c8ff00";
 
 const FEATURES = [
   {
@@ -78,7 +78,7 @@ function YardVisual({ active }: { active: number }) {
         height: { xs: "42vh", sm: "48vh", md: "100dvh" },
         display: "flex",
         alignItems: "center",
-        bgcolor: { xs: "#0a0a0a", md: "transparent" },
+        bgcolor: { xs: "#081c31", md: "transparent" },
         mb: { xs: 2, md: 0 },
       }}
     >
@@ -90,7 +90,7 @@ function YardVisual({ active }: { active: number }) {
           borderRadius: { xs: "16px", md: "20px" },
           overflow: "hidden",
           border: "1px solid rgba(255,255,255,0.1)",
-          bgcolor: "#05070a",
+          bgcolor: "#07131e",
         }}
       >
         {/* glow */}
@@ -103,7 +103,7 @@ function YardVisual({ active }: { active: number }) {
             width: 360,
             height: 360,
             background:
-              "radial-gradient(circle, rgba(200,255,0,0.14), transparent 65%)",
+              "radial-gradient(circle, rgba(var(--accent-rgb), 0.14), transparent 65%)",
             pointerEvents: "none",
           }}
         />
@@ -134,15 +134,15 @@ function YardVisual({ active }: { active: number }) {
                 gap: 8,
                 padding: "8px 16px",
                 borderRadius: 999,
-                background: "rgba(10,14,8,0.8)",
+                background: "rgba(9,23,37,0.8)",
                 backdropFilter: "blur(10px)",
-                border: `1px solid ${LIME}55`,
+                border: `1px solid ${ACCENT}55`,
                 maxWidth: "90%",
               }}
             >
               <Typography
                 sx={{
-                  color: LIME,
+                  color: ACCENT,
                   fontSize: { xs: 10.5, md: 13 },
                   fontWeight: 700,
                   letterSpacing: { xs: 1.5, md: 3 },
@@ -151,7 +151,7 @@ function YardVisual({ active }: { active: number }) {
               >
                 {f.hud}
               </Typography>
-              <CheckRoundedIcon sx={{ color: LIME, fontSize: 16 }} />
+              <CheckRoundedIcon sx={{ color: ACCENT, fontSize: 16 }} />
             </motion.div>
           </AnimatePresence>
         </Box>
@@ -194,7 +194,7 @@ function YardVisual({ active }: { active: number }) {
               cx={d.x}
               cy={d.y}
               r={1.6}
-              fill={LIME}
+              fill={ACCENT}
               animate={{ opacity: [0.15, 0.7, 0.15] }}
               transition={{
                 duration: 2.6,
@@ -217,7 +217,7 @@ function YardVisual({ active }: { active: number }) {
                   textAnchor="middle"
                   fontSize={22}
                   fontWeight="700"
-                  fill={on ? LIME : "rgba(255,255,255,0.28)"}
+                  fill={on ? ACCENT : "rgba(255,255,255,0.28)"}
                   style={{ transition: "fill .35s" }}
                 >
                   {num}
@@ -228,8 +228,8 @@ function YardVisual({ active }: { active: number }) {
                   width={hw * 2}
                   height={bBot - bTop}
                   rx={4}
-                  fill={on ? "rgba(200,255,0,0.06)" : "none"}
-                  stroke={on ? LIME : "rgba(255,255,255,0.16)"}
+                  fill={on ? "rgba(var(--accent-rgb), 0.06)" : "none"}
+                  stroke={on ? ACCENT : "rgba(255,255,255,0.16)"}
                   strokeWidth={on ? 2 : 1.5}
                   style={{ transition: "stroke .35s, fill .35s" }}
                 />
@@ -238,7 +238,7 @@ function YardVisual({ active }: { active: number }) {
                   y1={bTop + 70}
                   x2={x + hw}
                   y2={bTop + 70}
-                  stroke={on ? `${LIME}88` : "rgba(255,255,255,0.12)"}
+                  stroke={on ? `${ACCENT}88` : "rgba(255,255,255,0.12)"}
                   strokeWidth={1}
                 />
                 <line
@@ -246,7 +246,7 @@ function YardVisual({ active }: { active: number }) {
                   y1={bTop + 150}
                   x2={x + hw}
                   y2={bTop + 150}
-                  stroke={on ? `${LIME}88` : "rgba(255,255,255,0.12)"}
+                  stroke={on ? `${ACCENT}88` : "rgba(255,255,255,0.12)"}
                   strokeWidth={1}
                 />
               </g>
@@ -275,7 +275,7 @@ function YardVisual({ active }: { active: number }) {
                   key={i}
                   d={d}
                   fill="none"
-                  stroke={LIME}
+                  stroke={ACCENT}
                   strokeWidth={3}
                   strokeLinecap="round"
                 />
@@ -301,7 +301,7 @@ function YardVisual({ active }: { active: number }) {
               y1={0}
               x2={470}
               y2={0}
-              stroke={LIME}
+              stroke={ACCENT}
               strokeWidth={1.5}
               opacity={0.8}
             />
@@ -309,8 +309,8 @@ function YardVisual({ active }: { active: number }) {
 
           <defs>
             <linearGradient id="scanGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor={LIME} stopOpacity={0} />
-              <stop offset="100%" stopColor={LIME} stopOpacity={0.35} />
+              <stop offset="0%" stopColor={ACCENT} stopOpacity={0} />
+              <stop offset="100%" stopColor={ACCENT} stopOpacity={0.35} />
             </linearGradient>
           </defs>
         </Box>
@@ -331,7 +331,7 @@ function YardVisual({ active }: { active: number }) {
             component={motion.span}
             animate={{ opacity: [1, 0.3, 1] }}
             transition={{ duration: 1.6, repeat: Infinity }}
-            sx={{ width: 7, height: 7, borderRadius: "50%", bgcolor: LIME }}
+            sx={{ width: 7, height: 7, borderRadius: "50%", bgcolor: ACCENT }}
           />
           <Typography
             sx={{
@@ -401,7 +401,7 @@ function FeatureBlock({
               sx={{
                 position: "absolute",
                 inset: 0,
-                bgcolor: LIME,
+                bgcolor: ACCENT,
                 borderRadius: 2,
                 transformOrigin: "top",
               }}
@@ -415,7 +415,7 @@ function FeatureBlock({
                 fontWeight: 700,
                 letterSpacing: 2,
                 mb: 1,
-                color: on ? LIME : "rgba(255,255,255,0.4)",
+                color: on ? ACCENT : "rgba(255,255,255,0.4)",
                 transition: "color .4s",
               }}
             >
@@ -431,7 +431,7 @@ function FeatureBlock({
                 fontSize: { xs: "1.5rem", sm: "1.85rem", md: "2.1rem" },
                 ...(on
                   ? {
-                      background: `linear-gradient(90deg, #ffffff, ${LIME}, #00e5ff, #ffffff)`,
+                      background: `linear-gradient(90deg, #ffffff, ${ACCENT}, var(--accent-2), #ffffff)`,
                       backgroundSize: "200% auto",
                       WebkitBackgroundClip: "text",
                       backgroundClip: "text",
@@ -474,7 +474,7 @@ export default function YardOSSection() {
       aria-labelledby="yos-title"
       sx={{
         position: "relative",
-        bgcolor: "#0a0a0a",
+        bgcolor: "#081c31",
         color: "#fff",
         px: { xs: 3, md: 6 },
         py: { xs: 8, md: 6 },
@@ -498,7 +498,7 @@ export default function YardOSSection() {
           <Typography
             component="p"
             sx={{
-              color: LIME,
+              color: ACCENT,
               letterSpacing: 3,
               fontSize: 12,
               fontWeight: 700,

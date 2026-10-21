@@ -13,8 +13,8 @@ import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 import ReplyRoundedIcon from "@mui/icons-material/ReplyRounded";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import ChatBubbleOutlineRoundedIcon from "@mui/icons-material/ChatBubbleOutlineRounded";
+import { ACCENT, ACCENT_2, ACCENT_HOVER, SKY } from "@/theme/brand";
 
-const LIME = "#c8ff00";
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 type Comment = {
@@ -65,7 +65,7 @@ const fromApi = (c: ApiComment): Comment => ({
   replies: (c.replies ?? []).map(fromApi),
 });
 
-const AVATAR_COLORS = ["#c8ff00", "#00e5ff", "#ff4dd8", "#ffb340", "#a78bfa"];
+const AVATAR_COLORS = [ACCENT, ACCENT_2, SKY, "#ffb340", "#a78bfa"];
 const colorFor = (name: string) =>
   AVATAR_COLORS[name.charCodeAt(0) % AVATAR_COLORS.length];
 const initials = (name: string) =>
@@ -86,7 +86,7 @@ const fieldSx = {
     fontSize: 14,
     "& fieldset": { borderColor: "rgba(255,255,255,0.14)" },
     "&:hover fieldset": { borderColor: "rgba(255,255,255,0.3)" },
-    "&.Mui-focused fieldset": { borderColor: LIME },
+    "&.Mui-focused fieldset": { borderColor: ACCENT },
   },
   "& input::placeholder, & textarea::placeholder": {
     color: "rgba(255,255,255,0.4)",
@@ -156,15 +156,15 @@ function CommentForm({
           onClick={handle}
           disableElevation
           sx={{
-            bgcolor: LIME,
-            color: "#0a0a0a",
+            bgcolor: ACCENT,
+            color: "#081c31",
             fontWeight: 800,
             borderRadius: "12px",
             px: 3.5,
             py: 1.1,
             textTransform: "none",
             fontSize: 14,
-            "&:hover": { bgcolor: "#d4ff33" },
+            "&:hover": { bgcolor: ACCENT_HOVER },
           }}
         >
           {compact ? "Post Reply" : "Post Comment"}
@@ -220,7 +220,7 @@ function CommentItem({
         ...(depth > 0 && {
           ml: { xs: 2.5, md: 5 },
           pl: { xs: 2, md: 3 },
-          borderLeft: `2px solid ${LIME}22`,
+          borderLeft: `2px solid ${ACCENT}22`,
         }),
       }}
     >
@@ -228,7 +228,7 @@ function CommentItem({
         sx={{
           p: { xs: 2.5, md: 3 },
           borderRadius: "16px",
-          bgcolor: depth > 0 ? "#0d0d0d" : "#101010",
+          bgcolor: depth > 0 ? "#0a1a29" : "#0b1d2e",
           border: "1px solid rgba(255,255,255,0.08)",
           display: "flex",
           gap: 2,
@@ -288,13 +288,13 @@ function CommentItem({
               onClick={() => setReplyingTo(isReplying ? null : comment.id)}
               startIcon={<ReplyRoundedIcon sx={{ fontSize: 16 }} />}
               sx={{
-                color: isReplying ? LIME : "rgba(255,255,255,0.55)",
+                color: isReplying ? ACCENT : "rgba(255,255,255,0.55)",
                 fontWeight: 700,
                 fontSize: 12.5,
                 textTransform: "none",
                 p: 0,
                 minWidth: 0,
-                "&:hover": { color: LIME, bgcolor: "transparent" },
+                "&:hover": { color: ACCENT, bgcolor: "transparent" },
               }}
             >
               {isReplying ? "Cancel" : "Reply"}
@@ -318,15 +318,15 @@ function CommentItem({
               sx={{
                 p: { xs: 2, md: 2.5 },
                 borderRadius: "14px",
-                bgcolor: "#0d0d0d",
-                border: `1px solid ${LIME}22`,
+                bgcolor: "#0a1a29",
+                border: `1px solid ${ACCENT}22`,
               }}
             >
               <Typography
                 sx={{ fontSize: 12.5, color: "rgba(255,255,255,0.5)", mb: 1.5 }}
               >
                 Replying to{" "}
-                <Box component="span" sx={{ color: LIME, fontWeight: 700 }}>
+                <Box component="span" sx={{ color: ACCENT, fontWeight: 700 }}>
                   {comment.name}
                 </Box>
               </Typography>
@@ -449,7 +449,7 @@ export default function BlogComments({ postSlug }: { postSlug: string }) {
         }}
       >
         <Box sx={{ display: "flex", alignItems: "center", gap: 1.2 }}>
-          <ChatBubbleOutlineRoundedIcon sx={{ color: LIME, fontSize: 22 }} />
+          <ChatBubbleOutlineRoundedIcon sx={{ color: ACCENT, fontSize: 22 }} />
           <Typography
             component="h2"
             sx={{
@@ -467,7 +467,7 @@ export default function BlogComments({ postSlug }: { postSlug: string }) {
             gap: 0.5,
             p: 0.5,
             borderRadius: "999px",
-            bgcolor: "#101010",
+            bgcolor: "#0b1d2e",
             border: "1px solid rgba(255,255,255,0.08)",
           }}
         >
@@ -487,8 +487,8 @@ export default function BlogComments({ postSlug }: { postSlug: string }) {
                 fontWeight: 700,
                 textTransform: "capitalize",
                 transition: "all .2s",
-                bgcolor: sort === s ? LIME : "transparent",
-                color: sort === s ? "#0a0a0a" : "rgba(255,255,255,0.6)",
+                bgcolor: sort === s ? ACCENT : "transparent",
+                color: sort === s ? "#081c31" : "rgba(255,255,255,0.6)",
               }}
             >
               {s}
@@ -548,11 +548,11 @@ export default function BlogComments({ postSlug }: { postSlug: string }) {
               mb: 2.5,
               p: 2,
               borderRadius: "12px",
-              bgcolor: "rgba(200,255,0,0.08)",
-              border: `1px solid ${LIME}44`,
+              bgcolor: "rgba(var(--accent-rgb), 0.08)",
+              border: `1px solid ${ACCENT}44`,
             }}
           >
-            <CheckCircleRoundedIcon sx={{ color: LIME, fontSize: 20 }} />
+            <CheckCircleRoundedIcon sx={{ color: ACCENT, fontSize: 20 }} />
             <Typography sx={{ fontSize: 14, color: "rgba(255,255,255,0.85)" }}>
               Thanks! Your comment has been posted.
             </Typography>

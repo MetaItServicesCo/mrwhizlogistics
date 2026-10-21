@@ -14,7 +14,7 @@ import {
   ConfirmDialog,
   Field,
   FormDialog,
-  LIME,
+  ACCENT,
   PageHeader,
   SearchBox,
   SelectField,
@@ -270,9 +270,9 @@ export default function FaqsPage() {
           onChange={() => void toggleFaq(f)}
           size="small"
           sx={{
-            "& .Mui-checked": { color: LIME },
+            "& .Mui-checked": { color: ACCENT },
             "& .Mui-checked + .MuiSwitch-track": {
-              backgroundColor: `${LIME} !important`,
+              backgroundColor: `${ACCENT} !important`,
             },
           }}
         />
@@ -338,8 +338,8 @@ export default function FaqsPage() {
             fontSize: 14,
             minHeight: 40,
           },
-          "& .Mui-selected": { color: `${LIME} !important` },
-          "& .MuiTabs-indicator": { backgroundColor: LIME },
+          "& .Mui-selected": { color: `${ACCENT} !important` },
+          "& .MuiTabs-indicator": { backgroundColor: ACCENT },
         }}
       >
         <Tab label={`Questions (${faqs.items.length})`} />
@@ -455,9 +455,9 @@ export default function FaqsPage() {
                 setFaqForm((f) => ({ ...f, is_active: e.target.checked }))
               }
               sx={{
-                "& .Mui-checked": { color: LIME },
+                "& .Mui-checked": { color: ACCENT },
                 "& .Mui-checked + .MuiSwitch-track": {
-                  backgroundColor: `${LIME} !important`,
+                  backgroundColor: `${ACCENT} !important`,
                 },
               }}
             />
@@ -519,9 +519,9 @@ export default function FaqsPage() {
                 setCatForm((f) => ({ ...f, is_active: e.target.checked }))
               }
               sx={{
-                "& .Mui-checked": { color: LIME },
+                "& .Mui-checked": { color: ACCENT },
                 "& .Mui-checked + .MuiSwitch-track": {
-                  backgroundColor: `${LIME} !important`,
+                  backgroundColor: `${ACCENT} !important`,
                 },
               }}
             />

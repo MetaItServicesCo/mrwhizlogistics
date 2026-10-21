@@ -35,10 +35,10 @@ import OpenInNewRoundedIcon from "@mui/icons-material/OpenInNewRounded";
 import type { RentalItem } from "@/data/hotShotRentals";
 import RichContent from "@/components/common/RichContent";
 import { ctaProps, useCta } from "@/components/common/CtaProvider";
+import { ACCENT, ACCENT_HOVER } from "@/theme/brand";
 
-const LIME = "#c8ff00";
-const BG = "#070807";
-const PANEL = "#0d0f0d";
+const BG = "#07131e";
+const PANEL = "#0a1b2b";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -75,7 +75,7 @@ export default function RentalDetailContent({
 
   const availabilityColor =
     availability === "Available"
-      ? LIME
+      ? ACCENT
       : availability === "Limited"
         ? "#ffd54a"
         : "#ffffff";
@@ -110,7 +110,7 @@ export default function RentalDetailContent({
           height: 700,
           borderRadius: "50%",
           background:
-            "radial-gradient(circle, rgba(200,255,0,0.035), transparent 68%)",
+            "radial-gradient(circle, rgba(var(--accent-rgb), 0.035), transparent 68%)",
           filter: "blur(30px)",
           pointerEvents: "none",
         }}
@@ -327,7 +327,7 @@ export default function RentalDetailContent({
                   md: "28px",
                 },
                 overflow: "hidden",
-                bgcolor: "#101210",
+                bgcolor: "#0b1e30",
                 border: "1px solid rgba(255,255,255,0.08)",
                 boxShadow: "0 35px 100px rgba(0,0,0,0.38)",
               }}
@@ -425,8 +425,8 @@ export default function RentalDetailContent({
                     px: 1.4,
                     py: 0.75,
                     borderRadius: "999px",
-                    bgcolor: "rgba(200,255,0,0.9)",
-                    color: "#070807",
+                    bgcolor: "rgba(var(--accent-rgb), 0.9)",
+                    color: "#07131e",
                   }}
                 >
                   <CheckRoundedIcon sx={{ fontSize: 14 }} />
@@ -492,7 +492,7 @@ export default function RentalDetailContent({
                   sx={{
                     fontSize: 10,
                     fontWeight: 900,
-                    color: LIME,
+                    color: ACCENT,
                     textTransform: "uppercase",
                     letterSpacing: 2,
                     mb: 0.9,
@@ -598,15 +598,15 @@ export default function RentalDetailContent({
                         cursor: "pointer",
                         borderRadius: "13px",
                         border: active
-                          ? `1px solid ${LIME}`
+                          ? `1px solid ${ACCENT}`
                           : "1px solid rgba(255,255,255,0.08)",
                         bgcolor: active
-                          ? "rgba(200,255,0,0.05)"
+                          ? "rgba(var(--accent-rgb), 0.05)"
                           : "rgba(255,255,255,0.02)",
                         transition: "all .3s ease",
 
                         "&:hover": {
-                          borderColor: "rgba(200,255,0,0.4)",
+                          borderColor: "rgba(var(--accent-rgb), 0.4)",
                         },
                       }}
                     >
@@ -633,8 +633,8 @@ export default function RentalDetailContent({
                             bottom: -1,
                             height: 2,
                             borderRadius: 10,
-                            bgcolor: LIME,
-                            boxShadow: `0 0 12px ${LIME}`,
+                            bgcolor: ACCENT,
+                            boxShadow: `0 0 12px ${ACCENT}`,
                           }}
                         />
                       )}
@@ -747,7 +747,7 @@ export default function RentalDetailContent({
                 sx={{
                   fontSize: 10.5,
                   fontWeight: 900,
-                  color: LIME,
+                  color: ACCENT,
                   letterSpacing: 1.8,
                   textTransform: "uppercase",
                   mb: 2,
@@ -828,8 +828,8 @@ export default function RentalDetailContent({
                   background: `
                     linear-gradient(
                       90deg,
-                      ${LIME},
-                      rgba(200,255,0,0.25) 55%,
+                      ${ACCENT},
+                      rgba(var(--accent-rgb), 0.25) 55%,
                       transparent
                     )
                   `,
@@ -860,7 +860,7 @@ export default function RentalDetailContent({
                     sx={{
                       fontSize: 10.5,
                       fontWeight: 900,
-                      color: LIME,
+                      color: ACCENT,
                       letterSpacing: 2,
                       textTransform: "uppercase",
                     }}
@@ -969,7 +969,7 @@ export default function RentalDetailContent({
                         },
                         lineHeight: 1,
                         fontWeight: 950,
-                        color: LIME,
+                        color: ACCENT,
                         letterSpacing: "-0.8px",
                       }}
                     >
@@ -985,9 +985,9 @@ export default function RentalDetailContent({
                         alignItems: "center",
                         justifyContent: "center",
                         borderRadius: "13px",
-                        color: LIME,
-                        bgcolor: "rgba(200,255,0,0.065)",
-                        border: "1px solid rgba(200,255,0,0.13)",
+                        color: ACCENT,
+                        bgcolor: "rgba(var(--accent-rgb), 0.065)",
+                        border: "1px solid rgba(var(--accent-rgb), 0.13)",
                       }}
                     >
                       <LocalOfferRoundedIcon />
@@ -1086,12 +1086,12 @@ export default function RentalDetailContent({
                     sx={{
                       minHeight: 55,
                       borderRadius: "14px",
-                      bgcolor: LIME,
-                      color: "#070807",
+                      bgcolor: ACCENT,
+                      color: "#07131e",
                       fontSize: 14.5,
                       fontWeight: 950,
                       textTransform: "none",
-                      boxShadow: "0 15px 38px rgba(200,255,0,0.10)",
+                      boxShadow: "0 15px 38px rgba(var(--accent-rgb), 0.10)",
                       transition:
                         "transform .3s ease, background-color .3s ease, box-shadow .3s ease",
 
@@ -1100,9 +1100,9 @@ export default function RentalDetailContent({
                       },
 
                       "&:hover": {
-                        bgcolor: "#d6ff35",
+                        bgcolor: ACCENT_HOVER,
                         transform: "translateY(-2px)",
-                        boxShadow: "0 20px 45px rgba(200,255,0,0.15)",
+                        boxShadow: "0 20px 45px rgba(var(--accent-rgb), 0.15)",
 
                         "& .MuiButton-endIcon": {
                           transform: "translateX(4px)",
@@ -1153,7 +1153,7 @@ export default function RentalDetailContent({
                 >
                   <ShieldRoundedIcon
                     sx={{
-                      color: LIME,
+                      color: ACCENT,
                       fontSize: 15,
                     }}
                   />
@@ -1205,7 +1205,7 @@ export default function RentalDetailContent({
                   sx={{
                     fontSize: 10.5,
                     fontWeight: 900,
-                    color: LIME,
+                    color: ACCENT,
                     letterSpacing: 2,
                     textTransform: "uppercase",
                     mb: 0.9,
@@ -1292,14 +1292,14 @@ export default function RentalDetailContent({
                           height: 360,
                           overflow: "hidden",
                           borderRadius: "22px",
-                          bgcolor: "#0d0f0d",
+                          bgcolor: "#0a1b2b",
                           border: "1px solid rgba(255,255,255,0.07)",
                           transition:
                             "transform .35s ease, border-color .35s ease, box-shadow .35s ease",
 
                           "&:hover": {
                             transform: "translateY(-7px)",
-                            borderColor: "rgba(200,255,0,0.24)",
+                            borderColor: "rgba(var(--accent-rgb), 0.24)",
                             boxShadow: "0 28px 65px rgba(0,0,0,0.35)",
                           },
 
@@ -1308,8 +1308,8 @@ export default function RentalDetailContent({
                           },
 
                           "&:hover .related-arrow": {
-                            bgcolor: LIME,
-                            color: "#080a08",
+                            bgcolor: ACCENT,
+                            color: "#081521",
                             transform: "translate(3px,-3px)",
                           },
                         }}
@@ -1357,7 +1357,7 @@ export default function RentalDetailContent({
                               display: "flex",
                               alignItems: "center",
                               justifyContent: "center",
-                              bgcolor: "rgba(5,5,5,0.62)",
+                              bgcolor: "rgba(6,16,26,0.62)",
                               color: "#fff",
                               border: "1px solid rgba(255,255,255,0.15)",
                               backdropFilter: "blur(12px)",
@@ -1381,7 +1381,7 @@ export default function RentalDetailContent({
                               mb: 0.6,
                               fontSize: 10,
                               fontWeight: 900,
-                              color: LIME,
+                              color: ACCENT,
                               letterSpacing: 1.7,
                               textTransform: "uppercase",
                             }}
@@ -1457,7 +1457,7 @@ function InfoRailItem({
       <Box
         sx={{
           display: "flex",
-          color: accent ? LIME : "rgba(255,255,255,0.45)",
+          color: accent ? ACCENT : "rgba(255,255,255,0.45)",
 
           "& svg": {
             fontSize: 19,
@@ -1484,7 +1484,7 @@ function InfoRailItem({
           sx={{
             mt: 0.15,
             fontSize: 12,
-            color: accent ? LIME : "rgba(255,255,255,0.8)",
+            color: accent ? ACCENT : "rgba(255,255,255,0.8)",
             fontWeight: 750,
           }}
         >
@@ -1530,7 +1530,7 @@ function GlassBadge({
         px: 1.4,
         py: 0.75,
         borderRadius: "999px",
-        bgcolor: "rgba(5,7,5,0.72)",
+        bgcolor: "rgba(6,17,28,0.72)",
         border: "1px solid rgba(255,255,255,0.13)",
         backdropFilter: "blur(12px)",
         ...sx,
@@ -1564,7 +1564,7 @@ function GalleryButton({
         height: 46,
         p: 0,
         borderRadius: "50%",
-        bgcolor: "rgba(7,8,7,0.7)",
+        bgcolor: "rgba(7,19,30,0.7)",
         color: "#fff",
         border: "1px solid rgba(255,255,255,0.15)",
         backdropFilter: "blur(14px)",
@@ -1575,9 +1575,9 @@ function GalleryButton({
         },
 
         "&:hover": {
-          bgcolor: LIME,
-          color: "#080a08",
-          borderColor: LIME,
+          bgcolor: ACCENT,
+          color: "#081521",
+          borderColor: ACCENT,
         },
       }}
     >
@@ -1605,7 +1605,7 @@ function SectionHeading({
         sx={{
           fontSize: 10.5,
           fontWeight: 900,
-          color: LIME,
+          color: ACCENT,
           letterSpacing: 2,
           textTransform: "uppercase",
           mb: 0.8,
@@ -1683,7 +1683,7 @@ function SpecTile({
 
         "&:hover": {
           transform: "translateY(-3px)",
-          borderColor: "rgba(200,255,0,0.18)",
+          borderColor: "rgba(var(--accent-rgb), 0.18)",
           bgcolor: "rgba(255,255,255,0.032)",
         },
       }}
@@ -1705,9 +1705,9 @@ function SpecTile({
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          color: LIME,
-          bgcolor: "rgba(200,255,0,0.065)",
-          border: "1px solid rgba(200,255,0,0.12)",
+          color: ACCENT,
+          bgcolor: "rgba(var(--accent-rgb), 0.065)",
+          border: "1px solid rgba(var(--accent-rgb), 0.12)",
 
           "& svg": {
             fontSize: {
@@ -1802,8 +1802,8 @@ function HighlightItem({ text }: { text: string }) {
           alignItems: "center",
           justifyContent: "center",
           borderRadius: "50%",
-          bgcolor: "rgba(200,255,0,0.08)",
-          color: LIME,
+          bgcolor: "rgba(var(--accent-rgb), 0.08)",
+          color: ACCENT,
         }}
       >
         <CheckRoundedIcon sx={{ fontSize: 14 }} />
@@ -1896,9 +1896,9 @@ function Requirement({ text }: { text: string }) {
           alignItems: "center",
           justifyContent: "center",
           borderRadius: "50%",
-          bgcolor: "rgba(200,255,0,0.07)",
-          border: "1px solid rgba(200,255,0,0.14)",
-          color: LIME,
+          bgcolor: "rgba(var(--accent-rgb), 0.07)",
+          border: "1px solid rgba(var(--accent-rgb), 0.14)",
+          color: ACCENT,
         }}
       >
         <CheckRoundedIcon sx={{ fontSize: 13 }} />

@@ -13,8 +13,9 @@ import { useAction, useResource } from "@/lib/useResource";
 import { useDeepLinkEdit } from "@/lib/adminNav";
 import { LEGAL_PAGES, pagePath as legalPath } from "@/lib/contentPages";
 import type { SitePage } from "@/lib/types";
-import { EmptyState, ErrorState, Field, FormDialog, LIME, LoadingState, PageHeader, Panel, Toast, fmtDateTime } from "@/components/admin/ui";
+import { EmptyState, ErrorState, Field, FormDialog, ACCENT, LoadingState, PageHeader, Panel, Toast, fmtDateTime } from "@/components/admin/ui";
 import RichTextEditor from "@/components/admin/RichTextEditor";
+import { ACCENT_HOVER } from "@/theme/brand";
 
 const META_TITLE_MAX = 60;
 const META_DESC_MAX = 160;
@@ -134,7 +135,7 @@ export default function LegalPagesAdmin() {
                         fontWeight: 800,
                         letterSpacing: 0.4,
                         ...(p.is_active
-                          ? { bgcolor: `${LIME}22`, color: LIME }
+                          ? { bgcolor: `${ACCENT}22`, color: ACCENT }
                           : { bgcolor: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.65)" }),
                       }}
                     >
@@ -160,7 +161,7 @@ export default function LegalPagesAdmin() {
                   onClick={() => open(p)}
                   startIcon={<EditRoundedIcon />}
                   aria-label={`Edit ${p.title}`}
-                  sx={{ color: "#0a0a0a", bgcolor: LIME, textTransform: "none", fontWeight: 800, borderRadius: "10px", px: 2, "&:hover": { bgcolor: "#d4ff33" } }}
+                  sx={{ color: "#081c31", bgcolor: ACCENT, textTransform: "none", fontWeight: 800, borderRadius: "10px", px: 2, "&:hover": { bgcolor: ACCENT_HOVER } }}
                 >
                   Edit
                 </Button>
@@ -208,8 +209,8 @@ export default function LegalPagesAdmin() {
                 onChange={(e) => set({ is_active: e.target.checked })}
                 slotProps={{ input: { "aria-label": "Published" } }}
                 sx={{
-                  "& .MuiSwitch-switchBase.Mui-checked": { color: LIME },
-                  "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": { bgcolor: LIME },
+                  "& .MuiSwitch-switchBase.Mui-checked": { color: ACCENT },
+                  "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": { bgcolor: ACCENT },
                 }}
               />
             </Box>

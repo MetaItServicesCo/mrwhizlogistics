@@ -13,8 +13,8 @@ import VerifiedRoundedIcon from "@mui/icons-material/VerifiedRounded";
 import PriceCheckRoundedIcon from "@mui/icons-material/PriceCheckRounded";
 import SupportAgentRoundedIcon from "@mui/icons-material/SupportAgentRounded";
 import Inventory2RoundedIcon from "@mui/icons-material/Inventory2Rounded";
+import { ACCENT } from "@/theme/brand";
 
-const LIME = "#c8ff00";
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 const benefits = [
@@ -73,7 +73,7 @@ export default function WhyRentWithUs({ content = RENTAL_DEFAULTS.page.sections.
         position: "relative",
         overflow: "hidden",
 
-        bgcolor: "#0a0a0a",
+        bgcolor: "#081c31",
         color: "#fff",
 
         px: {
@@ -115,7 +115,7 @@ export default function WhyRentWithUs({ content = RENTAL_DEFAULTS.page.sections.
           borderRadius: "50%",
 
           background:
-            "radial-gradient(circle, rgba(200,255,0,0.07), transparent 70%)",
+            "radial-gradient(circle, rgba(var(--accent-rgb), 0.07), transparent 70%)",
 
           pointerEvents: "none",
         }}
@@ -142,7 +142,7 @@ export default function WhyRentWithUs({ content = RENTAL_DEFAULTS.page.sections.
           borderRadius: "50%",
 
           background:
-            "radial-gradient(circle, rgba(0,229,255,0.045), transparent 70%)",
+            "radial-gradient(circle, rgba(var(--accent-2-rgb), 0.045), transparent 70%)",
 
           pointerEvents: "none",
         }}
@@ -223,13 +223,13 @@ export default function WhyRentWithUs({ content = RENTAL_DEFAULTS.page.sections.
               sx={{
                 width: 30,
                 height: 2,
-                bgcolor: LIME,
+                bgcolor: ACCENT,
               }}
             />
 
             <Typography
               sx={{
-                color: LIME,
+                color: ACCENT,
 
                 fontSize: 11,
                 fontWeight: 900,
@@ -266,7 +266,7 @@ export default function WhyRentWithUs({ content = RENTAL_DEFAULTS.page.sections.
               component="span"
               sx={{
                 display: "block",
-                color: LIME,
+                color: ACCENT,
               }}
             >{copy.yourWorkMoving}</Box>
           </Typography>
@@ -323,7 +323,7 @@ export default function WhyRentWithUs({ content = RENTAL_DEFAULTS.page.sections.
               >
                 <Typography
                   sx={{
-                    color: LIME,
+                    color: ACCENT,
 
                     fontSize: {
                       xs: "1.25rem",
@@ -435,7 +435,7 @@ export default function WhyRentWithUs({ content = RENTAL_DEFAULTS.page.sections.
                   md: "22px",
                 },
 
-                bgcolor: "#101210",
+                bgcolor: "#0b1e30",
 
                 border: "1px solid rgba(255,255,255,0.07)",
 
@@ -445,15 +445,15 @@ export default function WhyRentWithUs({ content = RENTAL_DEFAULTS.page.sections.
                 "&:hover": {
                   transform: reduce ? "none" : "translateY(-6px)",
 
-                  borderColor: `${LIME}55`,
+                  borderColor: `${ACCENT}55`,
 
                   boxShadow:
-                    "0 22px 55px rgba(0,0,0,0.4), 0 0 35px rgba(200,255,0,0.04)",
+                    "0 22px 55px rgba(0,0,0,0.4), 0 0 35px rgba(var(--accent-rgb), 0.04)",
                 },
 
                 "&:hover .why-icon": {
-                  bgcolor: LIME,
-                  color: "#090b09",
+                  bgcolor: ACCENT,
+                  color: "#081623",
 
                   transform: "rotate(-5deg) scale(1.06)",
                 },
@@ -504,11 +504,11 @@ export default function WhyRentWithUs({ content = RENTAL_DEFAULTS.page.sections.
                   alignItems: "center",
                   justifyContent: "center",
 
-                  bgcolor: "rgba(200,255,0,0.09)",
+                  bgcolor: "rgba(var(--accent-rgb), 0.09)",
 
-                  color: LIME,
+                  color: ACCENT,
 
-                  border: `1px solid ${LIME}30`,
+                  border: `1px solid ${ACCENT}30`,
 
                   transition: "all .35s cubic-bezier(.2,.8,.2,1)",
 
@@ -578,8 +578,8 @@ export default function WhyRentWithUs({ content = RENTAL_DEFAULTS.page.sections.
 
                   background: `linear-gradient(
                     90deg,
-                    ${LIME},
-                    #00e5ff
+                    ${ACCENT},
+                    var(--accent-2)
                   )`,
 
                   transform: "scaleX(0)",

@@ -21,7 +21,7 @@ import {
   type CtaOverrides,
 } from "@/lib/cta";
 import type { SiteSetting } from "@/lib/types";
-import { Field, LIME, Panel } from "@/components/admin/ui";
+import { Field, ACCENT, Panel } from "@/components/admin/ui";
 
 function errorMessage(e: unknown) {
   if (e instanceof ApiError) return e.message;
@@ -142,7 +142,7 @@ export default function CtaSettingsPanel({
         gap: 2,
         flexWrap: "wrap",
         borderRadius: "16px",
-        bgcolor: "rgba(20,21,20,0.95)",
+        bgcolor: "rgba(13,34,55,0.95)",
         backdropFilter: "blur(8px)",
         border: "1px solid rgba(255,255,255,0.1)",
       }}
@@ -168,13 +168,13 @@ export default function CtaSettingsPanel({
         disableElevation
         startIcon={saving ? <CircularProgress size={16} sx={{ color: "inherit" }} /> : undefined}
         sx={{
-          bgcolor: LIME,
-          color: "#0a0a0a",
+          bgcolor: ACCENT,
+          color: "#081c31",
           fontWeight: 800,
           textTransform: "none",
           borderRadius: "999px",
           px: 3,
-          "&:hover": { bgcolor: "#b5e600" },
+          "&:hover": { bgcolor: "#e66f00" },
           "&.Mui-disabled": { bgcolor: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.35)" },
         }}
       >
@@ -192,9 +192,9 @@ export default function CtaSettingsPanel({
         <Typography sx={{ fontSize: 13.5, color: "rgba(255,255,255,0.55)", lineHeight: 1.7 }}>
           Change the text or destination of any call-to-action button, or hide
           it. Leave a field empty to keep the original. Use{" "}
-          <Box component="code" sx={{ color: LIME }}>{"{phone}"}</Box> for the
+          <Box component="code" sx={{ color: ACCENT }}>{"{phone}"}</Box> for the
           company phone and{" "}
-          <Box component="code" sx={{ color: LIME }}>{"{tel}"}</Box> for a
+          <Box component="code" sx={{ color: ACCENT }}>{"{tel}"}</Box> for a
           tap-to-call link — both follow the phone number in Site settings.
         </Typography>
       </Panel>
@@ -224,7 +224,7 @@ export default function CtaSettingsPanel({
                       p: 2,
                       borderRadius: "14px",
                       border: "1px solid",
-                      borderColor: custom ? `${LIME}44` : "rgba(255,255,255,0.08)",
+                      borderColor: custom ? `${ACCENT}44` : "rgba(255,255,255,0.08)",
                       bgcolor: o.hidden ? "rgba(255,255,255,0.015)" : "rgba(255,255,255,0.03)",
                     }}
                   >
@@ -240,8 +240,8 @@ export default function CtaSettingsPanel({
                           borderRadius: "999px",
                           fontSize: 12,
                           fontWeight: 800,
-                          bgcolor: o.hidden ? "rgba(255,255,255,0.06)" : LIME,
-                          color: o.hidden ? "rgba(255,255,255,0.4)" : "#0a0a0a",
+                          bgcolor: o.hidden ? "rgba(255,255,255,0.06)" : ACCENT,
+                          color: o.hidden ? "rgba(255,255,255,0.4)" : "#081c31",
                           textDecoration: o.hidden ? "line-through" : "none",
                           maxWidth: 260,
                           overflow: "hidden",
@@ -260,8 +260,8 @@ export default function CtaSettingsPanel({
                           onChange={(e) => update(def.id, { hidden: !e.target.checked })}
                           slotProps={{ input: { "aria-label": `Show ${def.location}` } }}
                           sx={{
-                            "& .MuiSwitch-switchBase.Mui-checked": { color: LIME },
-                            "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": { bgcolor: LIME },
+                            "& .MuiSwitch-switchBase.Mui-checked": { color: ACCENT },
+                            "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": { bgcolor: ACCENT },
                           }}
                         />
                       </Box>
@@ -303,7 +303,7 @@ export default function CtaSettingsPanel({
                                   target="_blank"
                                   rel="noopener"
                                   aria-label={`Open ${preview.href}`}
-                                  sx={{ color: LIME, display: "inline-flex" }}
+                                  sx={{ color: ACCENT, display: "inline-flex" }}
                                 >
                                   <OpenInNewRoundedIcon sx={{ fontSize: 13 }} />
                                 </Box>

@@ -6,7 +6,6 @@ import { motion } from "motion/react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
-const LIME = "#c8ff00";
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 export default function RentalsIntro({ content = RENTAL_DEFAULTS.page.sections.RentalsIntro }: { content?: RentalPageContent["sections"]["RentalsIntro"] }) {
@@ -15,7 +14,7 @@ export default function RentalsIntro({ content = RENTAL_DEFAULTS.page.sections.R
     <Box
       component="section"
       sx={{
-        bgcolor: "#0a0a0a",
+        bgcolor: "#081c31",
         px: { xs: 3, sm: 4, md: 6, lg: 8 },
         py: { xs: 5, md: 8 },
       }}
@@ -32,7 +31,7 @@ export default function RentalsIntro({ content = RENTAL_DEFAULTS.page.sections.R
           textAlign: "center",
           borderRadius: "24px",
           p: { xs: 4, md: 7 },
-          bgcolor: "#101010",
+          bgcolor: "#0b1d2e",
           border: "1px solid rgba(255,255,255,0.08)",
         }}
       >

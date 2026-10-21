@@ -3,8 +3,8 @@
 import { motion } from "motion/react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import { ACCENT } from "@/theme/brand";
 
-const LIME = "#c8ff00";
 // Apne real client logos yahan daalein: src: '/logos/xyz.svg' (public/logos/ mein)
 // src na ho to text wordmark render hoga (placeholder).
 type Brand = { name: string; src?: string };
@@ -63,11 +63,11 @@ function LogoChip({ brand }: { brand: Brand }) {
           transition: "all .35s ease",
         },
         "&:hover": {
-          color: LIME,
-          borderColor: "rgba(200,255,0,0.5)",
-          bgcolor: "rgba(200,255,0,0.05)",
+          color: ACCENT,
+          borderColor: "rgba(var(--accent-rgb), 0.5)",
+          bgcolor: "rgba(var(--accent-rgb), 0.05)",
           transform: "translateY(-6px)",
-          boxShadow: "0 14px 34px rgba(200,255,0,0.14)",
+          boxShadow: "0 14px 34px rgba(var(--accent-rgb), 0.14)",
         },
         "&:hover img": { filter: "grayscale(0)", opacity: 1 },
       }}
@@ -134,7 +134,7 @@ export default function BrandsSection() {
       aria-labelledby="brands-title"
       sx={{
         position: "relative",
-        bgcolor: "#0a0a0a",
+        bgcolor: "#081c31",
         color: "#fff",
         py: { xs: 8, md: 8 },
         overflow: "hidden",
@@ -151,7 +151,7 @@ export default function BrandsSection() {
           width: 640,
           height: 320,
           background:
-            "radial-gradient(ellipse, rgba(200,255,0,0.09), transparent 70%)",
+            "radial-gradient(ellipse, rgba(var(--accent-rgb), 0.09), transparent 70%)",
           pointerEvents: "none",
         }}
       />
@@ -175,7 +175,7 @@ export default function BrandsSection() {
           <Typography
             component="p"
             sx={{
-              color: LIME,
+              color: ACCENT,
               letterSpacing: 3,
               fontSize: 12,
               fontWeight: 700,
@@ -194,7 +194,7 @@ export default function BrandsSection() {
               fontSize: { xs: "1.9rem", sm: "2.6rem", md: "3.2rem" },
               maxWidth: 900,
               mx: "auto",
-              background: `linear-gradient(90deg, ${LIME}, #00e5ff, #ff4dd8, ${LIME})`,
+              background: `linear-gradient(90deg, ${ACCENT}, var(--accent-2), var(--sky), ${ACCENT})`,
               backgroundSize: "200% auto",
               WebkitBackgroundClip: "text",
               backgroundClip: "text",
@@ -220,9 +220,9 @@ export default function BrandsSection() {
           flexDirection: "column",
           gap: { xs: 2, md: 3 },
           WebkitMaskImage:
-            "linear-gradient(to right, transparent, #000 8%, #000 92%, transparent)",
+            "linear-gradient(to right, transparent, #040a11 8%, #040a11 92%, transparent)",
           maskImage:
-            "linear-gradient(to right, transparent, #000 8%, #000 92%, transparent)",
+            "linear-gradient(to right, transparent, #040a11 8%, #040a11 92%, transparent)",
           padding: { xs: "2px0 0px", md: "20px 0px" },
         }}
       >

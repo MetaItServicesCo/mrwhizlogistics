@@ -46,8 +46,9 @@ import ClosedCaptionRoundedIcon from "@mui/icons-material/ClosedCaptionRounded";
 import { api, mediaUrl } from "@/lib/api";
 import { errorMessage } from "@/lib/useResource";
 import { richContentSx } from "@/components/common/richContentSx";
-import { BORDER, Field, LIME } from "./ui";
+import { BORDER, Field, ACCENT } from "./ui";
 import AltTextField, { ALT_TEXT_MAX } from "./AltTextField";
+import { ACCENT_HOVER } from "@/theme/brand";
 
 type BlockType = "paragraph" | "h2" | "h3" | "h4";
 
@@ -95,9 +96,9 @@ function ToolButton({
           onClick={onClick}
           sx={{
             borderRadius: "8px",
-            color: active ? "#0a0a0a" : "rgba(255,255,255,0.7)",
-            bgcolor: active ? LIME : "transparent",
-            "&:hover": { bgcolor: active ? LIME : "rgba(255,255,255,0.08)" },
+            color: active ? "#081c31" : "rgba(255,255,255,0.7)",
+            bgcolor: active ? ACCENT : "transparent",
+            "&:hover": { bgcolor: active ? ACCENT : "rgba(255,255,255,0.08)" },
             "&.Mui-disabled": { color: "rgba(255,255,255,0.2)" },
             "& svg": { fontSize: 19 },
           }}
@@ -110,7 +111,7 @@ function ToolButton({
 }
 
 const dialogPaperSx = {
-  bgcolor: "#121312",
+  bgcolor: "#0c2033",
   color: "#fff",
   borderRadius: "16px",
   border: BORDER,
@@ -123,7 +124,7 @@ const dialogPaperSx = {
  * .rich-content mark in globals.css).
  */
 const TEXT_COLORS = [
-  { name: "Lime", value: "#c8ff00" },
+  { name: "Brand orange", value: ACCENT },
   { name: "White", value: "#ffffff" },
   { name: "Grey", value: "#a3a3a3" },
   { name: "Sky", value: "#4dd9ff" },
@@ -137,7 +138,7 @@ const TEXT_COLORS = [
 
 const HIGHLIGHT_COLORS = [
   { name: "Yellow", value: "#fde047" },
-  { name: "Lime", value: "#c8ff00" },
+  { name: "Brand orange", value: ACCENT },
   { name: "Green", value: "#86efac" },
   { name: "Sky", value: "#67e8f9" },
   { name: "Pink", value: "#f9a8d4" },
@@ -169,7 +170,7 @@ function ColorMenu({
       anchorEl={anchor}
       onClose={onClose}
       anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
-      slotProps={{ paper: { sx: { mt: 0.5, p: 1.5, bgcolor: "#141514", color: "#fff", border: BORDER, borderRadius: "12px", width: 232 } } }}
+      slotProps={{ paper: { sx: { mt: 0.5, p: 1.5, bgcolor: "#0d2237", color: "#fff", border: BORDER, borderRadius: "12px", width: 232 } } }}
     >
       <Typography sx={{ fontSize: 11.5, fontWeight: 800, letterSpacing: 0.6, color: "rgba(255,255,255,0.5)", textTransform: "uppercase", mb: 1 }}>
         {title}
@@ -282,7 +283,7 @@ function ImageAltDialog({
           onClick={() => onConfirm(alt.trim())}
           disabled={tooLong}
           disableElevation
-          sx={{ bgcolor: LIME, color: "#0a0a0a", fontWeight: 800, textTransform: "none", borderRadius: "10px", px: 2.5, "&:hover": { bgcolor: "#d4ff33" } }}
+          sx={{ bgcolor: ACCENT, color: "#081c31", fontWeight: 800, textTransform: "none", borderRadius: "10px", px: 2.5, "&:hover": { bgcolor: ACCENT_HOVER } }}
         >
           {confirmLabel}
         </Button>
@@ -398,7 +399,7 @@ function Toolbar({
           alignItems: "center",
           gap: 0.4,
           p: 1,
-          bgcolor: "#161716",
+          bgcolor: "#0e253a",
           borderBottom: BORDER,
           borderTopLeftRadius: "12px",
           borderTopRightRadius: "12px",
@@ -422,7 +423,7 @@ function Toolbar({
           }}
           MenuProps={{
             slotProps: {
-              paper: { sx: { bgcolor: "#141514", color: "#fff", border: BORDER } },
+              paper: { sx: { bgcolor: "#0d2237", color: "#fff", border: BORDER } },
             },
           }}
         >
@@ -490,7 +491,7 @@ function Toolbar({
           disabled={uploading}
           onClick={(e) => setImageMenu(e.currentTarget)}
         >
-          {uploading ? <CircularProgress size={16} sx={{ color: LIME }} /> : <ImageRoundedIcon />}
+          {uploading ? <CircularProgress size={16} sx={{ color: ACCENT }} /> : <ImageRoundedIcon />}
         </ToolButton>
         <ToolButton
           title={state.image ? "Image alt text" : "Image alt text (select an image first)"}
@@ -554,7 +555,7 @@ function Toolbar({
         anchorEl={imageMenu}
         open={!!imageMenu}
         onClose={() => setImageMenu(null)}
-        slotProps={{ paper: { sx: { bgcolor: "#141514", color: "#fff", border: BORDER } } }}
+        slotProps={{ paper: { sx: { bgcolor: "#0d2237", color: "#fff", border: BORDER } } }}
       >
         <MenuItem
           sx={{ fontSize: 13.5 }}
@@ -601,7 +602,7 @@ function Toolbar({
               <Checkbox
                 checked={linkNewTab}
                 onChange={(e) => setLinkNewTab(e.target.checked)}
-                sx={{ color: "rgba(255,255,255,0.4)", "&.Mui-checked": { color: LIME } }}
+                sx={{ color: "rgba(255,255,255,0.4)", "&.Mui-checked": { color: ACCENT } }}
               />
             }
             label={<Typography sx={{ fontSize: 13.5 }}>Open in a new tab</Typography>}
@@ -614,7 +615,7 @@ function Toolbar({
           <Button
             onClick={applyLink}
             disableElevation
-            sx={{ bgcolor: LIME, color: "#0a0a0a", fontWeight: 800, textTransform: "none", borderRadius: "10px", px: 2.5, "&:hover": { bgcolor: "#d4ff33" } }}
+            sx={{ bgcolor: ACCENT, color: "#081c31", fontWeight: 800, textTransform: "none", borderRadius: "10px", px: 2.5, "&:hover": { bgcolor: ACCENT_HOVER } }}
           >
             Apply
           </Button>
@@ -642,7 +643,7 @@ function Toolbar({
             onClick={insertImageFromUrl}
             disabled={!imageUrl.trim() || imageAlt.trim().length > ALT_TEXT_MAX}
             disableElevation
-            sx={{ bgcolor: LIME, color: "#0a0a0a", fontWeight: 800, textTransform: "none", borderRadius: "10px", px: 2.5, "&:hover": { bgcolor: "#d4ff33" } }}
+            sx={{ bgcolor: ACCENT, color: "#081c31", fontWeight: 800, textTransform: "none", borderRadius: "10px", px: 2.5, "&:hover": { bgcolor: ACCENT_HOVER } }}
           >
             Insert
           </Button>
@@ -767,7 +768,7 @@ export default function RichTextEditor({
           border: "1px solid rgba(255,255,255,0.14)",
           bgcolor: "rgba(255,255,255,0.03)",
           transition: "border-color .2s",
-          "&:focus-within": { borderColor: LIME },
+          "&:focus-within": { borderColor: ACCENT },
         }}
       >
         {editor ? (
@@ -800,7 +801,7 @@ export default function RichTextEditor({
               outlineOffset: 3,
             },
             "& .ProseMirror img.ProseMirror-selectednode": {
-              outline: `2px solid ${LIME}`,
+              outline: `2px solid ${ACCENT}`,
               outlineOffset: 2,
             },
           }}

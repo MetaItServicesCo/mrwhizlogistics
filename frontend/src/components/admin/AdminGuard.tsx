@@ -6,8 +6,8 @@ import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
 import { useAuth } from "@/lib/auth";
+import { ACCENT } from "@/theme/brand";
 
-const LIME = "#c8ff00";
 
 /** Blocks the admin area until a valid session is confirmed. */
 export default function AdminGuard({ children }: { children: React.ReactNode }) {
@@ -28,10 +28,10 @@ export default function AdminGuard({ children }: { children: React.ReactNode }) 
           alignItems: "center",
           justifyContent: "center",
           gap: 2,
-          bgcolor: "#070807",
+          bgcolor: "#07131e",
         }}
       >
-        <CircularProgress sx={{ color: LIME }} />
+        <CircularProgress sx={{ color: ACCENT }} />
         <Typography sx={{ color: "rgba(255,255,255,0.5)", fontSize: 14 }}>
           {loading ? "Checking your session…" : "Redirecting to sign in…"}
         </Typography>

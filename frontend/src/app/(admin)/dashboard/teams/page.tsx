@@ -15,7 +15,7 @@ import {
   ConfirmDialog,
   Field,
   FormDialog,
-  LIME,
+  ACCENT,
   PageHeader,
   SearchBox,
   Toast,
@@ -240,12 +240,12 @@ export default function TeamsPage() {
             startIcon={<UploadRoundedIcon />}
             size="small"
             sx={{
-              color: LIME,
-              border: `1px solid ${LIME}55`,
+              color: ACCENT,
+              border: `1px solid ${ACCENT}55`,
               borderRadius: "10px",
               textTransform: "none",
               fontWeight: 700,
-              "&:hover": { bgcolor: "rgba(200,255,0,0.08)" },
+              "&:hover": { bgcolor: "rgba(var(--accent-rgb), 0.08)" },
             }}
           >
             {image || editing?.image ? "Replace" : "Upload"}

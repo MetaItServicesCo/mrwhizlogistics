@@ -27,7 +27,7 @@ import {
 } from "@/lib/chatbotSettings";
 import { errorMessage, useResource } from "@/lib/useResource";
 import type { SiteSetting } from "@/lib/types";
-import { ErrorState, Field, LIME, LoadingState, Panel, SelectField, Toast } from "@/components/admin/ui";
+import { ErrorState, Field, ACCENT, LoadingState, Panel, SelectField, Toast } from "@/components/admin/ui";
 
 const shrink = { inputLabel: { shrink: true } };
 
@@ -52,7 +52,7 @@ function ListEditor({
     <Box>
       <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
         <Typography sx={{ flex: 1, fontSize: 13.5, fontWeight: 700, color: "rgba(255,255,255,0.8)" }}>{label}</Typography>
-        <Button size="small" startIcon={<AddRoundedIcon />} disabled={items.length >= max} onClick={() => onChange([...items, ""])} sx={{ color: LIME, textTransform: "none", fontWeight: 700 }}>
+        <Button size="small" startIcon={<AddRoundedIcon />} disabled={items.length >= max} onClick={() => onChange([...items, ""])} sx={{ color: ACCENT, textTransform: "none", fontWeight: 700 }}>
           Add
         </Button>
       </Box>
@@ -172,7 +172,7 @@ export default function ChatbotSettingsPanel() {
             checked={draft.enabled}
             onChange={(e) => set({ enabled: e.target.checked })}
             slotProps={{ input: { "aria-label": "Assistant on the website" } }}
-            sx={{ "& .MuiSwitch-switchBase.Mui-checked": { color: LIME }, "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": { bgcolor: LIME } }}
+            sx={{ "& .MuiSwitch-switchBase.Mui-checked": { color: ACCENT }, "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": { bgcolor: ACCENT } }}
           />
         </Box>
       </Panel>
@@ -241,7 +241,7 @@ export default function ChatbotSettingsPanel() {
             checked={draft.proactive.enabled}
             onChange={(e) => setPro({ enabled: e.target.checked })}
             slotProps={{ input: { "aria-label": "Invite visitors to talk" } }}
-            sx={{ "& .MuiSwitch-switchBase.Mui-checked": { color: LIME }, "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": { bgcolor: LIME } }}
+            sx={{ "& .MuiSwitch-switchBase.Mui-checked": { color: ACCENT }, "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": { bgcolor: ACCENT } }}
           />
         </Box>
         <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", md: "200px 1fr" }, gap: 2, opacity: draft.proactive.enabled ? 1 : 0.55 }}>
@@ -261,7 +261,7 @@ export default function ChatbotSettingsPanel() {
               value={draft.proactive.mode}
               onChange={(_, v) => v && setPro({ mode: v })}
               aria-label="How the invite appears"
-              sx={{ "& .MuiToggleButton-root": { color: "rgba(255,255,255,0.65)", borderColor: "rgba(255,255,255,0.14)", textTransform: "none", px: 2 }, "& .Mui-selected": { color: "#0a0a0a !important", bgcolor: `${LIME} !important` } }}
+              sx={{ "& .MuiToggleButton-root": { color: "rgba(255,255,255,0.65)", borderColor: "rgba(255,255,255,0.14)", textTransform: "none", px: 2 }, "& .Mui-selected": { color: "#081c31 !important", bgcolor: `${ACCENT} !important` } }}
             >
               <ToggleButton value="open">Open the chat window</ToggleButton>
               <ToggleButton value="bubble">Message bubble</ToggleButton>
@@ -288,7 +288,7 @@ export default function ChatbotSettingsPanel() {
             target="_blank"
             rel="noopener"
             endIcon={<OpenInNewRoundedIcon sx={{ fontSize: 16 }} />}
-            sx={{ color: LIME, border: `1px solid ${LIME}55`, borderRadius: "999px", textTransform: "none", fontWeight: 700, px: 2 }}
+            sx={{ color: ACCENT, border: `1px solid ${ACCENT}55`, borderRadius: "999px", textTransform: "none", fontWeight: 700, px: 2 }}
           >
             Preview the invite
           </Button>
@@ -313,7 +313,7 @@ export default function ChatbotSettingsPanel() {
             checked={draft.voice.enabled}
             onChange={(e) => set({ voice: { ...draft.voice, enabled: e.target.checked } })}
             slotProps={{ input: { "aria-label": "Voice in the chat" } }}
-            sx={{ "& .MuiSwitch-switchBase.Mui-checked": { color: LIME }, "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": { bgcolor: LIME } }}
+            sx={{ "& .MuiSwitch-switchBase.Mui-checked": { color: ACCENT }, "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": { bgcolor: ACCENT } }}
           />
         </Box>
         <Box sx={{ maxWidth: 300, opacity: draft.voice.enabled ? 1 : 0.55 }}>
@@ -352,7 +352,7 @@ export default function ChatbotSettingsPanel() {
         </Alert>
       )}
 
-      <Box sx={{ position: "sticky", bottom: 12, zIndex: 5, p: 1.5, pl: 2.5, display: "flex", alignItems: "center", gap: 2, flexWrap: "wrap", borderRadius: "16px", bgcolor: "rgba(20,21,20,0.95)", backdropFilter: "blur(8px)", border: "1px solid rgba(255,255,255,0.1)" }}>
+      <Box sx={{ position: "sticky", bottom: 12, zIndex: 5, p: 1.5, pl: 2.5, display: "flex", alignItems: "center", gap: 2, flexWrap: "wrap", borderRadius: "16px", bgcolor: "rgba(13,34,55,0.95)", backdropFilter: "blur(8px)", border: "1px solid rgba(255,255,255,0.1)" }}>
         <Typography sx={{ flex: 1, minWidth: 160, fontSize: 13.5, color: "rgba(255,255,255,0.6)" }}>{dirty ? "You have unsaved changes." : "All changes saved."}</Typography>
         <Button onClick={() => setDraft(saved)} disabled={!dirty || saving} sx={{ color: "rgba(255,255,255,0.7)", textTransform: "none", fontWeight: 700 }}>
           Discard changes
@@ -361,7 +361,7 @@ export default function ChatbotSettingsPanel() {
           onClick={() => void save()}
           disabled={!dirty || saving || Boolean(problem)}
           startIcon={saving ? <CircularProgress size={16} sx={{ color: "inherit" }} /> : undefined}
-          sx={{ bgcolor: LIME, color: "#0a0a0a", fontWeight: 800, textTransform: "none", borderRadius: "999px", px: 3, "&:hover": { bgcolor: "#b5e600" }, "&.Mui-disabled": { bgcolor: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.35)" } }}
+          sx={{ bgcolor: ACCENT, color: "#081c31", fontWeight: 800, textTransform: "none", borderRadius: "999px", px: 3, "&:hover": { bgcolor: "#e66f00" }, "&.Mui-disabled": { bgcolor: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.35)" } }}
         >
           {saving ? "Saving…" : "Save settings"}
         </Button>

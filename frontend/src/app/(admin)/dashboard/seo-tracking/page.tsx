@@ -33,17 +33,18 @@ import {
   verificationToken,
   type SeoTracking,
 } from "@/lib/seoTracking";
-import { ErrorState, Field, FormDialog, LIME, LoadingState, PageHeader, Panel, Toast } from "@/components/admin/ui";
+import { ErrorState, Field, FormDialog, ACCENT, LoadingState, PageHeader, Panel, Toast } from "@/components/admin/ui";
+import { ACCENT_HOVER } from "@/theme/brand";
 
 type CardId = "verification" | "analytics" | "sitemap" | "robots" | "llms" | "schema";
 const shrink = { inputLabel: { shrink: true } };
 const switchSx = {
-  "& .MuiSwitch-switchBase.Mui-checked": { color: LIME },
-  "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": { bgcolor: LIME },
+  "& .MuiSwitch-switchBase.Mui-checked": { color: ACCENT },
+  "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": { bgcolor: ACCENT },
 };
 const toggleSx = {
   "& .MuiToggleButton-root": { color: "rgba(255,255,255,0.65)", borderColor: "rgba(255,255,255,0.14)", textTransform: "none", px: 2 },
-  "& .Mui-selected": { color: "#0a0a0a !important", bgcolor: `${LIME} !important` },
+  "& .Mui-selected": { color: "#081c31 !important", bgcolor: `${ACCENT} !important` },
 };
 const clone = <T,>(v: T): T => JSON.parse(JSON.stringify(v)) as T;
 
@@ -57,7 +58,7 @@ function Chip({ label, tone = "ok" }: { label: string; tone?: "ok" | "off" }) {
         borderRadius: "999px",
         fontSize: 12,
         fontWeight: 800,
-        ...(tone === "ok" ? { bgcolor: `${LIME}22`, color: LIME } : { bgcolor: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.6)" }),
+        ...(tone === "ok" ? { bgcolor: `${ACCENT}22`, color: ACCENT } : { bgcolor: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.6)" }),
       }}
     >
       {label}
@@ -88,8 +89,8 @@ function SeoCard({
             width: 44,
             height: 44,
             borderRadius: "12px",
-            bgcolor: `${LIME}14`,
-            color: LIME,
+            bgcolor: `${ACCENT}14`,
+            color: ACCENT,
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -123,7 +124,7 @@ function SeoCard({
           onClick={onEdit}
           endIcon={<ChevronRightRoundedIcon />}
           aria-label={`Edit ${title}`}
-          sx={{ bgcolor: LIME, color: "#0a0a0a", fontWeight: 800, textTransform: "none", borderRadius: "10px", px: 2, "&:hover": { bgcolor: "#d4ff33" } }}
+          sx={{ bgcolor: ACCENT, color: "#081c31", fontWeight: 800, textTransform: "none", borderRadius: "10px", px: 2, "&:hover": { bgcolor: ACCENT_HOVER } }}
         >
           Edit
         </Button>
@@ -453,7 +454,7 @@ export default function SeoTrackingPage() {
                 startIcon={<AddRoundedIcon />}
                 disabled={draft.schema.blocks.length >= LIMITS.blocks}
                 onClick={() => set("schema", { blocks: [...draft.schema.blocks, { name: "", json: "" }] })}
-                sx={{ color: LIME, textTransform: "none", fontWeight: 700 }}
+                sx={{ color: ACCENT, textTransform: "none", fontWeight: 700 }}
               >
                 Add block
               </Button>
@@ -492,7 +493,7 @@ export default function SeoTrackingPage() {
               target="_blank"
               rel="noopener"
               endIcon={<OpenInNewRoundedIcon sx={{ fontSize: 15 }} />}
-              sx={{ alignSelf: "flex-start", color: LIME, textTransform: "none", px: 0 }}
+              sx={{ alignSelf: "flex-start", color: ACCENT, textTransform: "none", px: 0 }}
             >
               Test the homepage in Google&apos;s Rich Results Test
             </Button>

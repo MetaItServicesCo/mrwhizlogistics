@@ -22,7 +22,7 @@ import {
   EmptyState,
   ErrorState,
   Field,
-  LIME,
+  ACCENT,
   LoadingState,
   PageHeader,
   Panel,
@@ -30,6 +30,7 @@ import {
   Toast,
   fmtDateTime,
 } from "@/components/admin/ui";
+import { ACCENT_HOVER } from "@/theme/brand";
 
 interface MediaItem {
   name: string;
@@ -108,7 +109,7 @@ const smallBtn = {
   borderRadius: "9px",
   px: 1.2,
   minWidth: 0,
-  "&:hover": { color: LIME, bgcolor: "rgba(200,255,0,0.08)" },
+  "&:hover": { color: ACCENT, bgcolor: "rgba(var(--accent-rgb), 0.08)" },
 } as const;
 
 /**
@@ -328,23 +329,23 @@ export default function MediaLibraryPage() {
               textAlign: "center",
               px: 2,
               borderRadius: "14px",
-              border: `1.5px dashed ${dragOver ? LIME : "rgba(255,255,255,0.18)"}`,
-              bgcolor: dragOver ? "rgba(200,255,0,0.06)" : "rgba(255,255,255,0.02)",
+              border: `1.5px dashed ${dragOver ? ACCENT : "rgba(255,255,255,0.18)"}`,
+              bgcolor: dragOver ? "rgba(var(--accent-rgb), 0.06)" : "rgba(255,255,255,0.02)",
               cursor: uploading ? "progress" : "pointer",
               transition: "border-color .2s, background-color .2s",
-              "&:hover, &:focus-visible": { borderColor: LIME, outline: "none" },
+              "&:hover, &:focus-visible": { borderColor: ACCENT, outline: "none" },
             }}
           >
             {uploading ? (
               <>
-                <CircularProgress size={26} sx={{ color: LIME }} />
+                <CircularProgress size={26} sx={{ color: ACCENT }} />
                 <Typography sx={{ color: "rgba(255,255,255,0.7)", fontSize: 13.5 }}>
                   Uploading… {uploading} left
                 </Typography>
               </>
             ) : (
               <>
-                <CloudUploadRoundedIcon sx={{ fontSize: 34, color: LIME }} />
+                <CloudUploadRoundedIcon sx={{ fontSize: 34, color: ACCENT }} />
                 <Typography sx={{ color: "#fff", fontWeight: 700, fontSize: 14.5 }}>
                   Click to choose images, or drop them here
                 </Typography>
@@ -409,7 +410,7 @@ export default function MediaLibraryPage() {
               return (
                 <Panel
                   key={item.name}
-                  sx={{ display: "flex", flexDirection: "column", ...(isNew ? { borderColor: LIME, boxShadow: `0 0 0 1px ${LIME}` } : {}) }}
+                  sx={{ display: "flex", flexDirection: "column", ...(isNew ? { borderColor: ACCENT, boxShadow: `0 0 0 1px ${ACCENT}` } : {}) }}
                 >
                   <Box
                     component="a"
@@ -421,9 +422,9 @@ export default function MediaLibraryPage() {
                       position: "relative",
                       overflow: "hidden",
                       aspectRatio: "16 / 10",
-                      bgcolor: "#0a0a0a",
+                      bgcolor: "#081c31",
                       backgroundImage:
-                        "linear-gradient(45deg,#151615 25%,transparent 25%),linear-gradient(-45deg,#151615 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#151615 75%),linear-gradient(-45deg,transparent 75%,#151615 75%)",
+                        "linear-gradient(45deg,#0d2439 25%,transparent 25%),linear-gradient(-45deg,#0d2439 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#0d2439 75%),linear-gradient(-45deg,transparent 75%,#0d2439 75%)",
                       backgroundSize: "16px 16px",
                       backgroundPosition: "0 0,0 8px,8px -8px,-8px 0",
                       borderBottom: BORDER,
@@ -447,7 +448,7 @@ export default function MediaLibraryPage() {
                       </Typography>
                       <Typography sx={{ color: "rgba(255,255,255,0.4)", fontSize: 12 }}>
                         {fmtSize(item.size)} · {fmtDateTime(item.modified)}
-                        {isNew && <Box component="span" sx={{ color: LIME, fontWeight: 800 }}> · New</Box>}
+                        {isNew && <Box component="span" sx={{ color: ACCENT, fontWeight: 800 }}> · New</Box>}
                       </Typography>
                     </Box>
 
@@ -462,14 +463,14 @@ export default function MediaLibraryPage() {
                         width: "100%",
                         fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",
                         fontSize: 11.5,
-                        color: LIME,
+                        color: ACCENT,
                         bgcolor: "rgba(255,255,255,0.03)",
                         border: BORDER,
                         borderRadius: "8px",
                         px: 1,
                         py: 0.8,
                         outline: "none",
-                        "&:focus": { borderColor: LIME },
+                        "&:focus": { borderColor: ACCENT },
                       }}
                     />
 
@@ -478,7 +479,7 @@ export default function MediaLibraryPage() {
                         size="small"
                         startIcon={<ContentCopyRoundedIcon sx={{ fontSize: "16px !important" }} />}
                         onClick={() => void copy(link, "Link")}
-                        sx={{ ...smallBtn, color: "#0a0a0a", bgcolor: LIME, "&:hover": { bgcolor: "#d4ff33", color: "#0a0a0a" } }}
+                        sx={{ ...smallBtn, color: "#081c31", bgcolor: ACCENT, "&:hover": { bgcolor: ACCENT_HOVER, color: "#081c31" } }}
                       >
                         Copy link
                       </Button>
@@ -498,7 +499,7 @@ export default function MediaLibraryPage() {
                           size="small"
                           aria-label={`Where is ${item.name} used`}
                           onClick={() => void checkUsage(item)}
-                          sx={{ color: "rgba(255,255,255,0.55)", "&:hover": { color: LIME } }}
+                          sx={{ color: "rgba(255,255,255,0.55)", "&:hover": { color: ACCENT } }}
                         >
                           <TravelExploreRoundedIcon sx={{ fontSize: 18 }} />
                         </IconButton>
@@ -511,7 +512,7 @@ export default function MediaLibraryPage() {
                           target="_blank"
                           rel="noreferrer"
                           aria-label={`Open ${item.name}`}
-                          sx={{ color: "rgba(255,255,255,0.55)", "&:hover": { color: LIME } }}
+                          sx={{ color: "rgba(255,255,255,0.55)", "&:hover": { color: ACCENT } }}
                         >
                           <OpenInNewRoundedIcon sx={{ fontSize: 18 }} />
                         </IconButton>
@@ -554,9 +555,9 @@ export default function MediaLibraryPage() {
               <Button
                 onClick={() => void loadMore()}
                 disabled={loading}
-                sx={{ color: LIME, border: `1px solid ${LIME}55`, borderRadius: "999px", px: 3, textTransform: "none", fontWeight: 700 }}
+                sx={{ color: ACCENT, border: `1px solid ${ACCENT}55`, borderRadius: "999px", px: 3, textTransform: "none", fontWeight: 700 }}
               >
-                {loading ? <CircularProgress size={18} sx={{ color: LIME }} /> : `Load more (${total - items.length} left)`}
+                {loading ? <CircularProgress size={18} sx={{ color: ACCENT }} /> : `Load more (${total - items.length} left)`}
               </Button>
             </Box>
           )}

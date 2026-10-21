@@ -19,8 +19,8 @@ import SensorDoorRoundedIcon from "@mui/icons-material/SensorDoorRounded";
 import GridViewRoundedIcon from "@mui/icons-material/GridViewRounded";
 import WarehouseRoundedIcon from "@mui/icons-material/WarehouseRounded";
 import HubRoundedIcon from "@mui/icons-material/HubRounded";
+import { ACCENT } from "@/theme/brand";
 
-const LIME = "#c8ff00";
 
 type Variant = "image" | "dark" | "lime";
 type Card = {
@@ -115,7 +115,7 @@ function TruckWire() {
       aria-hidden
       sx={{ width: "86%", opacity: 0.9 }}
     >
-      <g fill="none" stroke={LIME} strokeWidth={2.4} strokeLinejoin="round">
+      <g fill="none" stroke={ACCENT} strokeWidth={2.4} strokeLinejoin="round">
         <path d="M24 70 L250 70 L250 160 L24 160 Z" />
         <path d="M258 160 L258 96 L318 96 L346 126 L398 138 L398 160 Z" />
         <path d="M300 104 L340 104 L360 126 L300 126 Z" />
@@ -145,7 +145,7 @@ function PlatformCard({
 
   const spotX = useMotionValue(-200);
   const spotY = useMotionValue(-200);
-  const spotlight = useMotionTemplate`radial-gradient(200px circle at ${spotX}px ${spotY}px, rgba(200,255,0,0.18), transparent 70%)`;
+  const spotlight = useMotionTemplate`radial-gradient(200px circle at ${spotX}px ${spotY}px, rgba(var(--accent-rgb), 0.18), transparent 70%)`;
 
   const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (reduce) return;
@@ -163,7 +163,7 @@ function PlatformCard({
   };
 
   const isLime = card.variant === "lime";
-  const textMain = isLime ? "#0a0a0a" : "#fff";
+  const textMain = isLime ? "#081c31" : "#fff";
   const textSub = isLime ? "rgba(0,0,0,0.7)" : "rgba(255,255,255,0.7)";
 
   return (
@@ -190,10 +190,10 @@ function PlatformCard({
             border: "1px solid rgba(255,255,255,0.1)",
             transition:
               "transform .4s ease, box-shadow .4s ease, border-color .4s ease",
-            bgcolor: isLime ? LIME : "#0d0d0d",
+            bgcolor: isLime ? ACCENT : "#0a1a29",
             "&:hover": {
               transform: "translateY(-6px)",
-              borderColor: isLime ? "transparent" : "rgba(200,255,0,0.5)",
+              borderColor: isLime ? "transparent" : "rgba(var(--accent-rgb), 0.5)",
               boxShadow: "0 22px 50px rgba(0,0,0,0.5)",
             },
             "&:hover .pc-reveal": { opacity: 1, transform: "scale(1.06)" }, // truck image reveal + zoom
@@ -212,8 +212,8 @@ function PlatformCard({
               background: isLime
                 ? "none"
                 : card.variant === "image"
-                  ? "radial-gradient(circle at 30% 20%, rgba(200,255,0,0.10), transparent 55%), linear-gradient(155deg, #20281a, #0a0a0a)"
-                  : "radial-gradient(circle at 70% 20%, rgba(0,229,255,0.08), transparent 55%), linear-gradient(155deg, #16181d, #0a0a0a)",
+                  ? "radial-gradient(circle at 30% 20%, rgba(var(--accent-rgb), 0.10), transparent 55%), linear-gradient(155deg, #12314e, #081c31)"
+                  : "radial-gradient(circle at 70% 20%, rgba(var(--accent-2-rgb), 0.08), transparent 55%), linear-gradient(155deg, #0f2840, #081c31)",
             }}
           />
 
@@ -314,13 +314,13 @@ function PlatformCard({
                 px: 1.2,
                 py: 0.4,
                 borderRadius: "999px",
-                bgcolor: isLime ? "rgba(0,0,0,0.12)" : "rgba(200,255,0,0.12)",
-                border: `1px solid ${isLime ? "rgba(0,0,0,0.2)" : "rgba(200,255,0,0.3)"}`,
+                bgcolor: isLime ? "rgba(0,0,0,0.12)" : "rgba(var(--accent-rgb), 0.12)",
+                border: `1px solid ${isLime ? "rgba(0,0,0,0.2)" : "rgba(var(--accent-rgb), 0.3)"}`,
               }}
             >
               <Box
                 sx={{
-                  color: isLime ? "#0a0a0a" : LIME,
+                  color: isLime ? "#081c31" : ACCENT,
                   display: "flex",
                   "& svg": { fontSize: 14 },
                 }}
@@ -332,7 +332,7 @@ function PlatformCard({
                   fontSize: 10,
                   fontWeight: 700,
                   letterSpacing: 1.3,
-                  color: isLime ? "#0a0a0a" : LIME,
+                  color: isLime ? "#081c31" : ACCENT,
                 }}
               >
                 {card.label}
@@ -377,8 +377,8 @@ function PlatformCard({
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                bgcolor: isLime ? "#0a0a0a" : LIME,
-                color: isLime ? LIME : "#0a0a0a",
+                bgcolor: isLime ? "#081c31" : ACCENT,
+                color: isLime ? ACCENT : "#081c31",
                 transition: "transform .3s",
               }}
             >
@@ -457,7 +457,7 @@ export default function PlatformSection() {
       aria-labelledby="plat-title"
       sx={{
         position: "relative",
-        bgcolor: "#0a0a0a",
+        bgcolor: "#081c31",
         color: "#fff",
         py: { xs: 8, md: 4 },
         overflow: "hidden",
@@ -473,7 +473,7 @@ export default function PlatformSection() {
           width: 640,
           height: 320,
           background:
-            "radial-gradient(ellipse, rgba(200,255,0,0.08), transparent 70%)",
+            "radial-gradient(ellipse, rgba(var(--accent-rgb), 0.08), transparent 70%)",
           pointerEvents: "none",
         }}
       />
@@ -497,7 +497,7 @@ export default function PlatformSection() {
           <Typography
             component="p"
             sx={{
-              color: LIME,
+              color: ACCENT,
               letterSpacing: 3,
               fontSize: 12,
               fontWeight: 700,
@@ -516,7 +516,7 @@ export default function PlatformSection() {
               fontSize: { xs: "2rem", sm: "2.6rem", md: "3.2rem" },
               maxWidth: 860,
               mx: "auto",
-              background: `linear-gradient(90deg, #ffffff, ${LIME}, #00e5ff, #ffffff)`,
+              background: `linear-gradient(90deg, #ffffff, ${ACCENT}, var(--accent-2), #ffffff)`,
               backgroundSize: "200% auto",
               WebkitBackgroundClip: "text",
               backgroundClip: "text",
@@ -587,13 +587,13 @@ export default function PlatformSection() {
                 transition: "all .3s",
                 border:
                   active === i
-                    ? `1px solid ${LIME}`
+                    ? `1px solid ${ACCENT}`
                     : "1px solid rgba(255,255,255,0.15)",
-                bgcolor: active === i ? LIME : "transparent",
-                color: active === i ? "#0a0a0a" : "rgba(255,255,255,0.7)",
+                bgcolor: active === i ? ACCENT : "transparent",
+                color: active === i ? "#081c31" : "rgba(255,255,255,0.7)",
                 "&:hover": {
-                  color: active === i ? "#0a0a0a" : "#fff",
-                  borderColor: active === i ? LIME : "rgba(255,255,255,0.4)",
+                  color: active === i ? "#081c31" : "#fff",
+                  borderColor: active === i ? ACCENT : "rgba(255,255,255,0.4)",
                 },
               }}
             >
@@ -612,7 +612,7 @@ export default function PlatformSection() {
               border: "1px solid rgba(255,255,255,0.2)",
               color: "#fff",
               "&.Mui-disabled": { opacity: 0.3, color: "#fff" },
-              "&:hover": { borderColor: LIME, color: LIME },
+              "&:hover": { borderColor: ACCENT, color: ACCENT },
             }}
           >
             <ChevronLeftRoundedIcon />
@@ -624,7 +624,7 @@ export default function PlatformSection() {
               border: "1px solid rgba(255,255,255,0.2)",
               color: "#fff",
               "&.Mui-disabled": { opacity: 0.3, color: "#fff" },
-              "&:hover": { borderColor: LIME, color: LIME },
+              "&:hover": { borderColor: ACCENT, color: ACCENT },
             }}
           >
             <ChevronRightRoundedIcon />
@@ -685,7 +685,7 @@ export default function PlatformSection() {
           sx={{
             height: "100%",
             width: `${20 + progress * 80}%`,
-            background: `linear-gradient(90deg, ${LIME}, #00e5ff)`,
+            background: `linear-gradient(90deg, ${ACCENT}, var(--accent-2))`,
             borderRadius: 2,
             transition: "width .1s linear",
           }}

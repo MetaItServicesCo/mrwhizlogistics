@@ -5,8 +5,8 @@ import { motion } from "motion/react";
 import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
 import { ctaProps, useCta } from "@/components/common/CtaProvider";
 import { DEFAULT_ABOUT, type AboutContent } from "@/lib/aboutPage";
+import { ACCENT, ACCENT_HOVER } from "@/theme/brand";
 
-const LIME = "#c8ff00";
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 export default function FleetOverview({
@@ -21,7 +21,7 @@ export default function FleetOverview({
   return (
     <Box
       component="section"
-      sx={{ py: { xs: 8, md: 14 }, bgcolor: "#0a0a0a", color: "#fff" }}
+      sx={{ py: { xs: 8, md: 14 }, bgcolor: "#081c31", color: "#fff" }}
     >
       <Container maxWidth="lg">
         {/* Main Side-by-Side Flex Layout */}
@@ -48,7 +48,7 @@ export default function FleetOverview({
                 {content.fleetHeading}
               </Typography>
               <Box
-                sx={{ width: 45, height: 3, bgcolor: LIME, borderRadius: 2 }}
+                sx={{ width: 45, height: 3, bgcolor: ACCENT, borderRadius: 2 }}
               />
             </Box>
 
@@ -68,11 +68,11 @@ export default function FleetOverview({
                   sx={{
                     p: 4,
                     borderRadius: "20px",
-                    bgcolor: "#121212",
+                    bgcolor: "#0c2032",
                     border: "1px solid rgba(255,255,255,0.08)",
                     transition: "border-color .3s ease, transform .3s ease",
                     "&:hover": {
-                      borderColor: `${LIME}55`,
+                      borderColor: `${ACCENT}55`,
                       transform: "translateY(-3px)",
                     },
                   }}
@@ -82,7 +82,7 @@ export default function FleetOverview({
                       fontSize: 10,
                       fontWeight: 800,
                       letterSpacing: 1.5,
-                      color: LIME,
+                      color: ACCENT,
                       mb: 1,
                       textTransform: "uppercase",
                     }}
@@ -120,11 +120,11 @@ export default function FleetOverview({
                     }
                     sx={{
                       p: 0,
-                      color: LIME,
+                      color: ACCENT,
                       fontWeight: 700,
                       fontSize: 13,
                       textTransform: "none",
-                      "&:hover": { bgcolor: "transparent", color: "#d4ff33" },
+                      "&:hover": { bgcolor: "transparent", color: ACCENT_HOVER },
                     }}
                   >
                     {moreCta.label}
@@ -150,7 +150,7 @@ export default function FleetOverview({
                 {content.expertiseHeading}
               </Typography>
               <Box
-                sx={{ width: 45, height: 3, bgcolor: LIME, borderRadius: 2 }}
+                sx={{ width: 45, height: 3, bgcolor: ACCENT, borderRadius: 2 }}
               />
             </Box>
 
@@ -158,7 +158,7 @@ export default function FleetOverview({
               sx={{
                 p: { xs: 3, md: 4 },
                 borderRadius: "24px",
-                bgcolor: "#121212",
+                bgcolor: "#0c2032",
                 border: "1px solid rgba(255,255,255,0.08)",
               }}
             >
@@ -172,7 +172,7 @@ export default function FleetOverview({
                   color: "#fff",
                 }}
               >
-                <Box component="span" sx={{ color: LIME }}>
+                <Box component="span" sx={{ color: ACCENT }}>
                   {content.experienceHighlight}
                 </Box>{" "}
                 {content.experienceText}
@@ -199,7 +199,7 @@ export default function FleetOverview({
                         {skill.name}
                       </Typography>
                       <Typography
-                        sx={{ fontSize: 12, fontWeight: 700, color: LIME }}
+                        sx={{ fontSize: 12, fontWeight: 700, color: ACCENT }}
                       >
                         {skill.progress}%
                       </Typography>
@@ -226,7 +226,7 @@ export default function FleetOverview({
                         }}
                         sx={{
                           height: "100%",
-                          bgcolor: LIME,
+                          bgcolor: ACCENT,
                           borderRadius: 4,
                           backgroundImage: `linear-gradient(45deg, rgba(0,0,0,0.15) 25%, transparent 25%, transparent 50%, rgba(0,0,0,0.15) 50%, rgba(0,0,0,0.15) 75%, transparent 75%, transparent)`,
                           backgroundSize: "16px 16px",

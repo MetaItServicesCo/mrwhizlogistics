@@ -12,12 +12,13 @@ import type { ContactInquiry, Quote, RentalQuote } from "@/lib/types";
 import DataTable, { type Column } from "@/components/admin/DataTable";
 import {
   FormDialog,
-  LIME,
+  ACCENT,
   PageHeader,
   SearchBox,
   StatusChip,
   fmtDateTime,
 } from "@/components/admin/ui";
+import { ACCENT_HOVER } from "@/theme/brand";
 
 type Source = "Quote" | "Contact" | "Rental";
 
@@ -35,7 +36,7 @@ type InboxItem = {
 };
 
 const SOURCE_COLORS: Record<Source, string> = {
-  Quote: LIME,
+  Quote: ACCENT,
   Contact: "#66b2ff",
   Rental: "#ffc46b",
 };
@@ -251,8 +252,8 @@ export default function MessagesPage() {
             fontSize: 14,
             minHeight: 40,
           },
-          "& .Mui-selected": { color: `${LIME} !important` },
-          "& .MuiTabs-indicator": { backgroundColor: LIME },
+          "& .Mui-selected": { color: `${ACCENT} !important` },
+          "& .MuiTabs-indicator": { backgroundColor: ACCENT },
         }}
       >
         {TABS.map((t) => (
@@ -347,9 +348,9 @@ export default function MessagesPage() {
                 sx={{
                   fontSize: 13,
                   fontWeight: 700,
-                  color: LIME,
+                  color: ACCENT,
                   textDecoration: "none",
-                  "&:hover": { color: "#d4ff33" },
+                  "&:hover": { color: ACCENT_HOVER },
                 }}
               >
                 Reply by email →

@@ -12,15 +12,15 @@ import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import type { BlogPost } from "@/data/blogPosts";
 import CoverImage from "@/components/common/CoverImage";
+import { ACCENT, ACCENT_HOVER } from "@/theme/brand";
 
-const LIME = "#c8ff00";
 const EASE = [0.22, 1, 0.36, 1] as const;
 const PER_PAGE = 6;
 
 const gradients = [
-  "radial-gradient(circle at 30% 25%, rgba(200,255,0,0.2), transparent 55%), linear-gradient(150deg, #26301a, #0a0a0a)",
-  "radial-gradient(circle at 70% 20%, rgba(0,229,255,0.16), transparent 55%), linear-gradient(150deg, #12202a, #0a0a0a)",
-  "radial-gradient(circle at 40% 30%, rgba(255,179,64,0.15), transparent 55%), linear-gradient(150deg, #2a2612, #0a0a0a)",
+  "radial-gradient(circle at 30% 25%, rgba(var(--accent-rgb), 0.2), transparent 55%), linear-gradient(150deg, #143655, #081c31)",
+  "radial-gradient(circle at 70% 20%, rgba(var(--accent-2-rgb), 0.16), transparent 55%), linear-gradient(150deg, #12202a, #081c31)",
+  "radial-gradient(circle at 40% 30%, rgba(255,179,64,0.15), transparent 55%), linear-gradient(150deg, #2a2612, #081c31)",
 ];
 
 function fmt(date: string) {
@@ -59,7 +59,7 @@ function Card({
         borderRadius: "18px",
         overflow: "hidden",
         cursor: "pointer",
-        bgcolor: "#0f0f0f",
+        bgcolor: "#0a1c2c",
         border: "1px solid rgba(255,255,255,0.08)",
         display: "flex",
         flexDirection: "column",
@@ -68,16 +68,16 @@ function Card({
           "transform .4s ease, border-color .4s ease, box-shadow .4s ease",
         "&:hover, &:has(a:focus-visible)": {
           transform: "translateY(-8px)",
-          borderColor: `${LIME}55`,
+          borderColor: `${ACCENT}55`,
           boxShadow: "0 24px 55px rgba(0,0,0,0.5)",
         },
         "&:has(a:focus-visible)": {
-          boxShadow: `0 0 0 2px ${LIME}, 0 24px 55px rgba(0,0,0,0.5)`,
+          boxShadow: `0 0 0 2px ${ACCENT}, 0 24px 55px rgba(0,0,0,0.5)`,
         },
         "&:hover .bl-media": { transform: "scale(1.08)" },
         "&:hover .bl-sheen": { transform: "translateX(220%)" },
-        "&:hover .bl-title": { color: LIME },
-        "&:hover .bl-btn": { bgcolor: "#d4ff33" },
+        "&:hover .bl-title": { color: ACCENT },
+        "&:hover .bl-btn": { bgcolor: ACCENT_HOVER },
         "&:hover .bl-btn svg": { transform: "translateX(3px)" },
       }}
     >
@@ -121,13 +121,13 @@ function Card({
             top: 14,
             left: 14,
             zIndex: 3,
-            bgcolor: LIME,
-            color: "#0a0a0a",
+            bgcolor: ACCENT,
+            color: "#081c31",
             borderRadius: "12px",
             px: 1.5,
             py: 0.9,
             textAlign: "center",
-            boxShadow: "0 8px 20px rgba(200,255,0,0.35)",
+            boxShadow: "0 8px 20px rgba(var(--accent-rgb), 0.35)",
             minWidth: 48,
           }}
         >
@@ -151,9 +151,9 @@ function Card({
             px: 1.3,
             py: 0.45,
             borderRadius: "999px",
-            bgcolor: "rgba(10,10,10,0.72)",
+            bgcolor: "rgba(8,28,49,0.72)",
             backdropFilter: "blur(6px)",
-            border: `1px solid ${LIME}55`,
+            border: `1px solid ${ACCENT}55`,
           }}
         >
           <Typography
@@ -161,7 +161,7 @@ function Card({
               fontSize: 10,
               fontWeight: 800,
               letterSpacing: 1,
-              color: LIME,
+              color: ACCENT,
               textTransform: "uppercase",
             }}
           >
@@ -175,7 +175,7 @@ function Card({
             position: "absolute",
             inset: 0,
             background:
-              "linear-gradient(180deg, transparent 55%, rgba(15,15,15,0.85) 100%)",
+              "linear-gradient(180deg, transparent 55%, rgba(10,28,44,0.85) 100%)",
           }}
         />
       </Box>
@@ -200,11 +200,11 @@ function Card({
           }}
         >
           <Box sx={{ display: "flex", alignItems: "center", gap: 0.6 }}>
-            <PersonRoundedIcon sx={{ fontSize: 15, color: LIME }} />
+            <PersonRoundedIcon sx={{ fontSize: 15, color: ACCENT }} />
             <Typography sx={{ fontSize: 12 }}>{p.author}</Typography>
           </Box>
           <Box sx={{ display: "flex", alignItems: "center", gap: 0.6 }}>
-            <ChatBubbleOutlineRoundedIcon sx={{ fontSize: 14, color: LIME }} />
+            <ChatBubbleOutlineRoundedIcon sx={{ fontSize: 14, color: ACCENT }} />
             <Typography sx={{ fontSize: 12 }}>{p.comments}</Typography>
           </Box>
           {p.readTime && (
@@ -258,8 +258,8 @@ function Card({
             display: "inline-flex",
             alignItems: "center",
             gap: 1,
-            bgcolor: LIME,
-            color: "#0a0a0a",
+            bgcolor: ACCENT,
+            color: "#081c31",
             fontWeight: 800,
             fontSize: 13,
             px: 2.2,
@@ -303,7 +303,7 @@ export default function BlogGrid({
       component="section"
       sx={{
         position: "relative",
-        bgcolor: "#0a0a0a",
+        bgcolor: "#081c31",
         color: "#fff",
         px: { xs: 3, sm: 4, md: 6, lg: 8 },
         py: { xs: 8, md: 12 },
@@ -321,7 +321,7 @@ export default function BlogGrid({
           width: 680,
           height: 340,
           background:
-            "radial-gradient(ellipse, rgba(200,255,0,0.06), transparent 70%)",
+            "radial-gradient(ellipse, rgba(var(--accent-rgb), 0.06), transparent 70%)",
           pointerEvents: "none",
         }}
       />
@@ -352,11 +352,11 @@ export default function BlogGrid({
               mb: 2,
             }}
           >
-            <Box sx={{ width: 28, height: 2, bgcolor: LIME, opacity: 0.7 }} />
+            <Box sx={{ width: 28, height: 2, bgcolor: ACCENT, opacity: 0.7 }} />
             <Typography
               component="p"
               sx={{
-                color: LIME,
+                color: ACCENT,
                 letterSpacing: 3,
                 fontSize: 12,
                 fontWeight: 700,
@@ -365,7 +365,7 @@ export default function BlogGrid({
             >
               Our Blog
             </Typography>
-            <Box sx={{ width: 28, height: 2, bgcolor: LIME, opacity: 0.7 }} />
+            <Box sx={{ width: 28, height: 2, bgcolor: ACCENT, opacity: 0.7 }} />
           </Box>
           <Typography
             component="h2"
@@ -374,7 +374,7 @@ export default function BlogGrid({
               lineHeight: 1.1,
               letterSpacing: "-0.5px",
               fontSize: { xs: "2rem", sm: "2.6rem", md: "3.2rem" },
-              background: `linear-gradient(90deg, #ffffff, ${LIME}, #00e5ff, #ffffff)`,
+              background: `linear-gradient(90deg, #ffffff, ${ACCENT}, var(--accent-2), #ffffff)`,
               backgroundSize: "200% auto",
               WebkitBackgroundClip: "text",
               backgroundClip: "text",
@@ -461,13 +461,13 @@ export default function BlogGrid({
                 transition: "all .25s ease",
                 border:
                   page === n
-                    ? `1px solid ${LIME}`
+                    ? `1px solid ${ACCENT}`
                     : "1px solid rgba(255,255,255,0.14)",
-                bgcolor: page === n ? LIME : "transparent",
-                color: page === n ? "#0a0a0a" : "rgba(255,255,255,0.7)",
+                bgcolor: page === n ? ACCENT : "transparent",
+                color: page === n ? "#081c31" : "rgba(255,255,255,0.7)",
                 "&:hover": {
-                  borderColor: LIME,
-                  color: page === n ? "#0a0a0a" : "#fff",
+                  borderColor: ACCENT,
+                  color: page === n ? "#081c31" : "#fff",
                 },
               }}
             >
@@ -518,7 +518,7 @@ function PageBtn({
         color: "#fff",
         transition: "all .25s ease",
         opacity: disabled ? 0.3 : 1,
-        "&:hover": disabled ? {} : { borderColor: LIME, color: LIME },
+        "&:hover": disabled ? {} : { borderColor: ACCENT, color: ACCENT },
       }}
     >
       {children}

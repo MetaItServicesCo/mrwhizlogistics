@@ -14,8 +14,8 @@ import CircularProgress from "@mui/material/CircularProgress";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 import BoltRoundedIcon from "@mui/icons-material/BoltRounded";
+import { ACCENT, ACCENT_2, ACCENT_HOVER, SKY } from "@/theme/brand";
 
-const LIME = "#c8ff00";
 
 const SERVICE_OPTIONS = [
   { value: "Hot Shot", label: "Hot Shot" },
@@ -29,7 +29,7 @@ function Confetti() {
     x: (Math.random() - 0.5) * 260,
     y: -(70 + Math.random() * 150),
     rot: (Math.random() - 0.5) * 600,
-    color: ["#c8ff00", "#00e5ff", "#ff4dd8", "#fff"][i % 4],
+    color: [ACCENT, ACCENT_2, SKY, "#fff"][i % 4],
     delay: Math.random() * 0.1,
   }));
   return (
@@ -64,7 +64,7 @@ function Confetti() {
 
 const fieldSx = {
   "& .MuiInputLabel-root": { color: "rgba(255,255,255,0.5)", fontSize: 14 },
-  "& .MuiInputLabel-root.Mui-focused": { color: LIME },
+  "& .MuiInputLabel-root.Mui-focused": { color: ACCENT },
   "& .MuiOutlinedInput-root": {
     color: "#fff",
     borderRadius: "12px",
@@ -75,8 +75,8 @@ const fieldSx = {
     },
     "&:hover fieldset": { borderColor: "rgba(255,255,255,0.3)" },
     "&.Mui-focused fieldset": {
-      borderColor: LIME,
-      boxShadow: "0 0 0 3px rgba(200,255,0,0.15)",
+      borderColor: ACCENT,
+      boxShadow: "0 0 0 3px rgba(var(--accent-rgb), 0.15)",
     },
   },
   "& input::placeholder, & textarea::placeholder": {
@@ -207,7 +207,7 @@ export default function QuoteModal({
               overflowY: "auto",
               borderRadius: "22px",
               p: "1.5px",
-              background: `linear-gradient(150deg, rgba(200,255,0,0.55), rgba(255,255,255,0.06) 45%)`,
+              background: `linear-gradient(150deg, rgba(var(--accent-rgb), 0.55), rgba(255,255,255,0.06) 45%)`,
               boxShadow: "0 30px 80px rgba(0,0,0,0.6)",
             }}
           >
@@ -215,7 +215,7 @@ export default function QuoteModal({
               sx={{
                 position: "relative",
                 borderRadius: "21px",
-                bgcolor: "#0d100c",
+                bgcolor: "#0a1b2b",
                 p: { xs: 3, md: 4 },
                 overflow: "hidden",
               }}
@@ -229,7 +229,7 @@ export default function QuoteModal({
                   width: 240,
                   height: 240,
                   background:
-                    "radial-gradient(circle, rgba(200,255,0,0.14), transparent 65%)",
+                    "radial-gradient(circle, rgba(var(--accent-rgb), 0.14), transparent 65%)",
                   pointerEvents: "none",
                 }}
               />
@@ -279,7 +279,7 @@ export default function QuoteModal({
                       style={{ display: "inline-flex" }}
                     >
                       <CheckCircleRoundedIcon
-                        sx={{ fontSize: 60, color: LIME }}
+                        sx={{ fontSize: 60, color: ACCENT }}
                       />
                     </motion.div>
                     <Typography
@@ -309,14 +309,14 @@ export default function QuoteModal({
                       disableElevation
                       sx={{
                         mt: 3,
-                        bgcolor: LIME,
-                        color: "#0a0a0a",
+                        bgcolor: ACCENT,
+                        color: "#081c31",
                         fontWeight: 800,
                         borderRadius: "12px",
                         px: 4,
                         py: 1.2,
                         textTransform: "none",
-                        "&:hover": { bgcolor: "#d4ff33" },
+                        "&:hover": { bgcolor: ACCENT_HOVER },
                       }}
                     >
                       Done
@@ -340,17 +340,17 @@ export default function QuoteModal({
                         px: 1.4,
                         py: 0.5,
                         borderRadius: "999px",
-                        bgcolor: "rgba(200,255,0,0.12)",
-                        border: `1px solid ${LIME}55`,
+                        bgcolor: "rgba(var(--accent-rgb), 0.12)",
+                        border: `1px solid ${ACCENT}55`,
                       }}
                     >
-                      <BoltRoundedIcon sx={{ fontSize: 15, color: LIME }} />
+                      <BoltRoundedIcon sx={{ fontSize: 15, color: ACCENT }} />
                       <Typography
                         sx={{
                           fontSize: 10.5,
                           fontWeight: 700,
                           letterSpacing: 1.3,
-                          color: LIME,
+                          color: ACCENT,
                         }}
                       >
                         {form.selectedService.toUpperCase()} QUOTE
@@ -426,8 +426,8 @@ export default function QuoteModal({
                               px: 2,
                               py: 1.5,
                               borderRadius: "12px",
-                              bgcolor: "rgba(200,255,0,0.06)",
-                              border: `1px solid ${LIME}33`,
+                              bgcolor: "rgba(var(--accent-rgb), 0.06)",
+                              border: `1px solid ${ACCENT}33`,
                             }}
                           >
                             <Box>
@@ -452,7 +452,7 @@ export default function QuoteModal({
                               </Typography>
                             </Box>
                             <BoltRoundedIcon
-                              sx={{ color: LIME, fontSize: 20 }}
+                              sx={{ color: ACCENT, fontSize: 20 }}
                             />
                           </Box>
                         ) : (
@@ -469,7 +469,7 @@ export default function QuoteModal({
                                   sx: {
                                     zIndex: 3000,
                                     "& .MuiPaper-root": {
-                                      bgcolor: "#141812",
+                                      bgcolor: "#0d2338",
                                       color: "#fff",
                                       borderRadius: "12px",
                                       border:
@@ -480,15 +480,15 @@ export default function QuoteModal({
                                     "& .MuiMenuItem-root": {
                                       fontSize: 14,
                                       "&:hover": {
-                                        bgcolor: "rgba(200,255,0,0.1)",
-                                        color: LIME,
+                                        bgcolor: "rgba(var(--accent-rgb), 0.1)",
+                                        color: ACCENT,
                                       },
                                       "&.Mui-selected": {
-                                        bgcolor: "rgba(200,255,0,0.18)",
-                                        color: LIME,
+                                        bgcolor: "rgba(var(--accent-rgb), 0.18)",
+                                        color: ACCENT,
                                         fontWeight: 700,
                                         "&:hover": {
-                                          bgcolor: "rgba(200,255,0,0.22)",
+                                          bgcolor: "rgba(var(--accent-rgb), 0.22)",
                                         },
                                       },
                                     },
@@ -563,18 +563,18 @@ export default function QuoteModal({
                         position: "relative",
                         overflow: "hidden",
                         mt: 3,
-                        bgcolor: LIME,
-                        color: "#0a0a0a",
+                        bgcolor: ACCENT,
+                        color: "#081c31",
                         fontWeight: 800,
                         borderRadius: "12px",
                         py: 1.4,
                         textTransform: "none",
                         fontSize: 15,
-                        "&:hover": { bgcolor: "#d4ff33" },
+                        "&:hover": { bgcolor: ACCENT_HOVER },
                         "&.Mui-disabled": {
-                          bgcolor: LIME,
+                          bgcolor: ACCENT,
                           opacity: 0.8,
-                          color: "#0a0a0a",
+                          color: "#081c31",
                         },
                         "&::after": {
                           content: '""',
@@ -592,7 +592,7 @@ export default function QuoteModal({
                       }}
                     >
                       {status === "loading" ? (
-                        <CircularProgress size={22} sx={{ color: "#0a0a0a" }} />
+                        <CircularProgress size={22} sx={{ color: "#081c31" }} />
                       ) : (
                         "Request Quote"
                       )}

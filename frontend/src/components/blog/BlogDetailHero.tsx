@@ -9,8 +9,8 @@ import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 import CalendarMonthRoundedIcon from "@mui/icons-material/CalendarMonthRounded";
 import LocalOfferRoundedIcon from "@mui/icons-material/LocalOfferRounded";
 import type { BlogPost } from "@/data/blogPosts";
+import { ACCENT } from "@/theme/brand";
 
-const LIME = "#c8ff00";
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 function fmtLong(date: string) {
@@ -39,7 +39,7 @@ export default function BlogDetailHero({ post }: { post: BlogPost }) {
         pt: { xs: "112px", md: "190px" },
         pb: { xs: "48px", md: "72px" },
         overflow: "hidden",
-        bgcolor: "#0a0a0a",
+        bgcolor: "#081c31",
         color: "#fff",
       }}
     >
@@ -60,7 +60,7 @@ export default function BlogDetailHero({ post }: { post: BlogPost }) {
                 backgroundSize: "cover",
                 backgroundPosition: "center",
               }
-            : { background: "linear-gradient(135deg, #1c2a15, #05070a)" }),
+            : { background: "linear-gradient(135deg, #122f4b, #07131e)" }),
         }}
       />
 
@@ -72,7 +72,7 @@ export default function BlogDetailHero({ post }: { post: BlogPost }) {
           inset: 0,
           zIndex: 1,
           background:
-            "linear-gradient(90deg, rgba(10,10,10,0.94) 0%, rgba(10,10,10,0.72) 45%, rgba(10,10,10,0.4) 100%)",
+            "linear-gradient(90deg, rgba(8,28,49,0.94) 0%, rgba(8,28,49,0.72) 45%, rgba(8,28,49,0.4) 100%)",
         }}
       />
       <Box
@@ -82,7 +82,7 @@ export default function BlogDetailHero({ post }: { post: BlogPost }) {
           inset: 0,
           zIndex: 1,
           background:
-            "linear-gradient(180deg, rgba(10,10,10,0.5) 0%, transparent 35%, rgba(10,10,10,0.6) 100%)",
+            "linear-gradient(180deg, rgba(8,28,49,0.5) 0%, transparent 35%, rgba(8,28,49,0.6) 100%)",
         }}
       />
       <Box
@@ -94,7 +94,7 @@ export default function BlogDetailHero({ post }: { post: BlogPost }) {
           right: 0,
           height: 3,
           zIndex: 2,
-          background: `linear-gradient(90deg, ${LIME}, transparent 60%)`,
+          background: `linear-gradient(90deg, ${ACCENT}, transparent 60%)`,
         }}
       />
 
@@ -123,18 +123,18 @@ export default function BlogDetailHero({ post }: { post: BlogPost }) {
             px: 1.6,
             py: 0.6,
             borderRadius: "999px",
-            bgcolor: "rgba(200,255,0,0.12)",
-            border: `1px solid ${LIME}55`,
+            bgcolor: "rgba(var(--accent-rgb), 0.12)",
+            border: `1px solid ${ACCENT}55`,
             backdropFilter: "blur(4px)",
           }}
         >
-          <LocalOfferRoundedIcon sx={{ fontSize: 15, color: LIME }} />
+          <LocalOfferRoundedIcon sx={{ fontSize: 15, color: ACCENT }} />
           <Typography
             sx={{
               fontSize: 11,
               fontWeight: 800,
               letterSpacing: 1.5,
-              color: LIME,
+              color: ACCENT,
               textTransform: "uppercase",
             }}
           >
@@ -154,7 +154,7 @@ export default function BlogDetailHero({ post }: { post: BlogPost }) {
             sx={{
               width: { xs: 4, md: 6 },
               borderRadius: 3,
-              background: `linear-gradient(180deg, ${LIME}, #00e5ff)`,
+              background: `linear-gradient(180deg, ${ACCENT}, var(--accent-2))`,
               transformOrigin: "top",
               flexShrink: 0,
             }}
@@ -196,7 +196,7 @@ export default function BlogDetailHero({ post }: { post: BlogPost }) {
                   component={Link}
                   href="/"
                   sx={{
-                    color: LIME,
+                    color: ACCENT,
                     textDecoration: "none",
                     fontWeight: 700,
                     fontSize: { xs: 13, md: 15 },
@@ -217,7 +217,7 @@ export default function BlogDetailHero({ post }: { post: BlogPost }) {
                   component={Link}
                   href="/blog"
                   sx={{
-                    color: LIME,
+                    color: ACCENT,
                     textDecoration: "none",
                     fontWeight: 700,
                     fontSize: { xs: 13, md: 15 },
@@ -266,12 +266,12 @@ export default function BlogDetailHero({ post }: { post: BlogPost }) {
                 }}
               >
                 <Box sx={{ display: "flex", alignItems: "center", gap: 0.6 }}>
-                  <PersonRoundedIcon sx={{ fontSize: 16, color: LIME }} />
+                  <PersonRoundedIcon sx={{ fontSize: 16, color: ACCENT }} />
                   <Typography sx={{ fontSize: 13 }}>{post.author}</Typography>
                 </Box>
                 <Box sx={{ display: "flex", alignItems: "center", gap: 0.6 }}>
                   <CalendarMonthRoundedIcon
-                    sx={{ fontSize: 15, color: LIME }}
+                    sx={{ fontSize: 15, color: ACCENT }}
                   />
                   <Typography sx={{ fontSize: 13 }}>
                     {fmtLong(post.date)}

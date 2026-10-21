@@ -58,7 +58,7 @@ export function buildBlogSchema(post: BlogSchemaInput, origin = siteUrl()) {
       name: DEFAULT_PUBLISHER,
       logo: {
         "@type": "ImageObject",
-        url: absoluteUrl(post.publisherLogo || "/images/logo.png", origin),
+        url: absoluteUrl(post.publisherLogo || "/images/logo-mr-whiz.jpg", origin),
       },
     },
     mainEntityOfPage: { "@type": "WebPage", "@id": url },

@@ -92,7 +92,7 @@ export default function SiteLogo({
       }}
     >
       <Image
-        src="/images/logo.png"
+        src="/images/logo-mr-whiz.jpg"
         alt={alt}
         fill
         sizes="100%"

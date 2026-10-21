@@ -9,8 +9,8 @@ import XIcon from "@mui/icons-material/X";
 import EmailRoundedIcon from "@mui/icons-material/EmailRounded";
 import CoverImage from "@/components/common/CoverImage";
 import { DEFAULT_ABOUT, type AboutContent } from "@/lib/aboutPage";
+import { ACCENT } from "@/theme/brand";
 
-const LIME = "#c8ff00";
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 export type Member = {
@@ -93,13 +93,13 @@ function MemberCard({ m }: { m: Member }) {
         position: "relative",
         borderRadius: "20px",
         overflow: "hidden",
-        bgcolor: "#101010",
+        bgcolor: "#0b1d2e",
         border: "1px solid rgba(255,255,255,0.08)",
         transition:
           "transform .4s ease, border-color .4s ease, box-shadow .4s ease",
         "&:hover": {
           transform: "translateY(-8px)",
-          borderColor: `${LIME}55`,
+          borderColor: `${ACCENT}55`,
           boxShadow: "0 24px 55px rgba(0,0,0,0.5)",
         },
         "&:hover .tm-photo": {
@@ -107,7 +107,7 @@ function MemberCard({ m }: { m: Member }) {
           filter: "grayscale(0)",
         },
         "&:hover .tm-social": { opacity: 1, transform: "translateY(0)" },
-        "&:hover .tm-role": { color: LIME },
+        "&:hover .tm-role": { color: ACCENT },
         "&:hover .tm-bar": { transform: "scaleX(1)" },
       }}
     >
@@ -127,7 +127,7 @@ function MemberCard({ m }: { m: Member }) {
             transition:
               "transform .6s cubic-bezier(.2,.8,.2,1), filter .5s ease",
             filter: "grayscale(0.35)",
-            ...(m.image ? {} : { background: "linear-gradient(150deg, #26301a, #0a0a0a)" }),
+            ...(m.image ? {} : { background: "linear-gradient(150deg, #143655, #081c31)" }),
           }}
         >
           {m.image && <CoverImage src={m.image} alt={m.imageAlt || m.name} position="center top" />}
@@ -138,7 +138,7 @@ function MemberCard({ m }: { m: Member }) {
             position: "absolute",
             inset: 0,
             background:
-              "linear-gradient(180deg, transparent 55%, rgba(16,16,16,0.95) 100%)",
+              "linear-gradient(180deg, transparent 55%, rgba(11,29,46,0.95) 100%)",
           }}
         />
       </Box>
@@ -202,9 +202,9 @@ function MemberCard({ m }: { m: Member }) {
                 border: "1px solid rgba(255,255,255,0.1)",
                 transition: "all .25s",
                 "&:hover": {
-                  bgcolor: LIME,
-                  color: "#0a0a0a",
-                  borderColor: LIME,
+                  bgcolor: ACCENT,
+                  color: "#081c31",
+                  borderColor: ACCENT,
                   transform: "translateY(-3px)",
                 },
                 "& svg": { fontSize: 16 },
@@ -225,7 +225,7 @@ function MemberCard({ m }: { m: Member }) {
             right: 0,
             bottom: 0,
             height: 3,
-            background: `linear-gradient(90deg, ${LIME}, #00e5ff)`,
+            background: `linear-gradient(90deg, ${ACCENT}, var(--accent-2))`,
             transform: "scaleX(0)",
             transformOrigin: "center",
             transition: "transform .4s ease",
@@ -249,7 +249,7 @@ export default function TeamSection({
       component="section"
       sx={{
         position: "relative",
-        bgcolor: "#0a0a0a",
+        bgcolor: "#081c31",
         color: "#fff",
         px: { xs: 3, sm: 4, md: 6, lg: 8 },
         py: { xs: 8, md: 13 },
@@ -266,7 +266,7 @@ export default function TeamSection({
           width: 680,
           height: 340,
           background:
-            "radial-gradient(ellipse, rgba(200,255,0,0.06), transparent 70%)",
+            "radial-gradient(ellipse, rgba(var(--accent-rgb), 0.06), transparent 70%)",
           pointerEvents: "none",
         }}
       />
@@ -297,11 +297,11 @@ export default function TeamSection({
               mb: 2,
             }}
           >
-            <Box sx={{ width: 28, height: 2, bgcolor: LIME, opacity: 0.7 }} />
+            <Box sx={{ width: 28, height: 2, bgcolor: ACCENT, opacity: 0.7 }} />
             <Typography
               component="p"
               sx={{
-                color: LIME,
+                color: ACCENT,
                 letterSpacing: 3,
                 fontSize: 12,
                 fontWeight: 700,
@@ -310,7 +310,7 @@ export default function TeamSection({
             >
               {content.eyebrow}
             </Typography>
-            <Box sx={{ width: 28, height: 2, bgcolor: LIME, opacity: 0.7 }} />
+            <Box sx={{ width: 28, height: 2, bgcolor: ACCENT, opacity: 0.7 }} />
           </Box>
           <Typography
             component="h2"
@@ -319,7 +319,7 @@ export default function TeamSection({
               lineHeight: 1.1,
               letterSpacing: "-0.5px",
               fontSize: { xs: "2rem", sm: "2.7rem", md: "3.4rem" },
-              background: `linear-gradient(90deg, #ffffff, ${LIME}, #00e5ff, #ffffff)`,
+              background: `linear-gradient(90deg, #ffffff, ${ACCENT}, var(--accent-2), #ffffff)`,
               backgroundSize: "200% auto",
               WebkitBackgroundClip: "text",
               backgroundClip: "text",

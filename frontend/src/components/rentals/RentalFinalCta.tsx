@@ -14,8 +14,8 @@ import LocalShippingRoundedIcon from "@mui/icons-material/LocalShippingRounded";
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 import BoltRoundedIcon from "@mui/icons-material/BoltRounded";
 import { ctaProps, useCta } from "@/components/common/CtaProvider";
+import { ACCENT, ACCENT_HOVER } from "@/theme/brand";
 
-const LIME = "#c8ff00";
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 
@@ -32,7 +32,7 @@ export default function RentalFinalCta({ content = RENTAL_DEFAULTS.page.sections
       sx={{
         position: "relative",
         overflow: "hidden",
-        bgcolor: "#0a0a0a",
+        bgcolor: "#081c31",
         color: "#fff",
         py: { xs: 8, sm: 10, md: 12 },
       }}
@@ -49,7 +49,7 @@ export default function RentalFinalCta({ content = RENTAL_DEFAULTS.page.sections
           top: "50%",
           transform: "translateY(-50%)",
           background:
-            "radial-gradient(circle, rgba(200,255,0,0.02), rgba(200,255,0,0.015) 35%, transparent 20%)",
+            "radial-gradient(circle, rgba(var(--accent-rgb), 0.02), rgba(var(--accent-rgb), 0.015) 35%, transparent 20%)",
           pointerEvents: "none",
         }}
       />
@@ -80,7 +80,7 @@ export default function RentalFinalCta({ content = RENTAL_DEFAULTS.page.sections
           left: 0,
           right: 0,
           height: 2,
-          background: `linear-gradient(90deg, transparent, ${LIME}, transparent)`,
+          background: `linear-gradient(90deg, transparent, ${ACCENT}, transparent)`,
         }}
       />
 
@@ -99,9 +99,9 @@ export default function RentalFinalCta({ content = RENTAL_DEFAULTS.page.sections
             position: "relative",
             overflow: "hidden",
             borderRadius: { xs: "24px", md: "32px" },
-            border: "1px solid rgba(200,255,0,0.15)",
+            border: "1px solid rgba(var(--accent-rgb), 0.15)",
             background:
-              "linear-gradient(135deg, rgba(200,255,0,0.04), rgba(255,255,255,0.015) 45%, rgba(255,255,255,0.008))",
+              "linear-gradient(135deg, rgba(var(--accent-rgb), 0.04), rgba(255,255,255,0.015) 45%, rgba(255,255,255,0.008))",
             boxShadow: "0 35px 100px rgba(0,0,0,0.45)",
           }}
         >
@@ -115,8 +115,8 @@ export default function RentalFinalCta({ content = RENTAL_DEFAULTS.page.sections
               width: 350,
               height: 350,
               borderRadius: "50%",
-              border: `1px solid ${LIME}12`,
-              boxShadow: `0 0 0 45px ${LIME}04, 0 0 0 90px ${LIME}02`,
+              border: `1px solid ${ACCENT}12`,
+              boxShadow: `0 0 0 45px ${ACCENT}04, 0 0 0 90px ${ACCENT}02`,
             }}
           />
 
@@ -139,7 +139,7 @@ export default function RentalFinalCta({ content = RENTAL_DEFAULTS.page.sections
                 left: 0,
                 width: "35%",
                 height: 1,
-                background: `linear-gradient(90deg, transparent, rgba(200,255,0,0.6), transparent)`,
+                background: `linear-gradient(90deg, transparent, rgba(var(--accent-rgb), 0.6), transparent)`,
               }}
             />
           )}
@@ -180,20 +180,20 @@ export default function RentalFinalCta({ content = RENTAL_DEFAULTS.page.sections
                   py: 0.65,
                   mb: 2.5,
                   borderRadius: "999px",
-                  bgcolor: "rgba(200,255,0,0.07)",
-                  border: `1px solid ${LIME}30`,
+                  bgcolor: "rgba(var(--accent-rgb), 0.07)",
+                  border: `1px solid ${ACCENT}30`,
                 }}
               >
                 <BoltRoundedIcon
                   sx={{
-                    color: LIME,
+                    color: ACCENT,
                     fontSize: 16,
                   }}
                 />
 
                 <Typography
                   sx={{
-                    color: LIME,
+                    color: ACCENT,
                     fontSize: 10,
                     fontWeight: 900,
                     letterSpacing: 1.6,
@@ -218,7 +218,7 @@ export default function RentalFinalCta({ content = RENTAL_DEFAULTS.page.sections
                   component="span"
                   sx={{
                     display: "block",
-                    color: LIME,
+                    color: ACCENT,
                   }}
                 >{copy.equipment}</Box>
               </Typography>
@@ -268,7 +268,7 @@ export default function RentalFinalCta({ content = RENTAL_DEFAULTS.page.sections
                   >
                     <CheckCircleRoundedIcon
                       sx={{
-                        color: LIME,
+                        color: ACCENT,
                         fontSize: 18,
                       }}
                     />
@@ -303,13 +303,13 @@ export default function RentalFinalCta({ content = RENTAL_DEFAULTS.page.sections
                     minHeight: 52,
                     px: 3,
                     borderRadius: "13px",
-                    bgcolor: LIME,
-                    color: "#0a0a0a",
+                    bgcolor: ACCENT,
+                    color: "#081c31",
                     fontSize: 14,
                     fontWeight: 900,
                     textTransform: "none",
                     "&:hover": {
-                      bgcolor: "#d6ff3d",
+                      bgcolor: ACCENT_HOVER,
                       transform: "translateY(-2px)",
                     },
                     transition: "all 0.25s ease",
@@ -369,7 +369,7 @@ export default function RentalFinalCta({ content = RENTAL_DEFAULTS.page.sections
                   aspectRatio: "1",
                   borderRadius: "50%",
                   background:
-                    "radial-gradient(circle, rgba(200,255,0,0.1), transparent 68%)",
+                    "radial-gradient(circle, rgba(var(--accent-rgb), 0.1), transparent 68%)",
                   filter: "blur(12px)",
                 }}
               />
@@ -424,13 +424,13 @@ export default function RentalFinalCta({ content = RENTAL_DEFAULTS.page.sections
                     md: 285,
                   },
                   borderRadius: "50%",
-                  border: `1px solid ${LIME}25`,
+                  border: `1px solid ${ACCENT}25`,
                   bgcolor: "rgba(0,0,0,0.3)",
                   backdropFilter: "blur(12px)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  boxShadow: `0 0 50px ${LIME}08`,
+                  boxShadow: `0 0 50px ${ACCENT}08`,
                 }}
               >
                 <Box
@@ -438,7 +438,7 @@ export default function RentalFinalCta({ content = RENTAL_DEFAULTS.page.sections
                     width: "76%",
                     height: "76%",
                     borderRadius: "50%",
-                    border: `1px dashed ${LIME}25`,
+                    border: `1px dashed ${ACCENT}25`,
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
@@ -451,8 +451,8 @@ export default function RentalFinalCta({ content = RENTAL_DEFAULTS.page.sections
                         sm: 100,
                         md: 125,
                       },
-                      color: LIME,
-                      filter: `drop-shadow(0 0 10px ${LIME}30)`,
+                      color: ACCENT,
+                      filter: `drop-shadow(0 0 10px ${ACCENT}30)`,
                     }}
                   />
                 </Box>
@@ -487,7 +487,7 @@ export default function RentalFinalCta({ content = RENTAL_DEFAULTS.page.sections
                   px: 1.6,
                   py: 1.2,
                   borderRadius: "13px",
-                  bgcolor: "rgba(13,16,12,0.92)",
+                  bgcolor: "rgba(10,27,43,0.92)",
                   border: "1px solid rgba(255,255,255,0.1)",
                   backdropFilter: "blur(5px)",
                   boxShadow: "0 15px 40px rgba(0,0,0,0.2)",

@@ -43,11 +43,11 @@ import {
   type LeadSummaryItem,
 } from "@/lib/chatClient";
 import type { ProactiveSettings } from "@/lib/chatbotSettings";
+import { ACCENT, ACCENT_HOVER } from "@/theme/brand";
 
-const LIME = "#c8ff00";
-const DARK = "#0a0a0a";
-const PANEL = "#0d100c";
-const MESSAGE = "#16181a";
+const DARK = "#081c31";
+const PANEL = "#0a1b2b";
+const MESSAGE = "#0e273d";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -193,7 +193,7 @@ const LINKIFY = /(https?:\/\/[^\s)]+|(?:\+?1[\s.-]?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.
 
 function RichText({ text, dark }: { text: string; dark?: boolean }) {
   const parts = text.split(LINKIFY);
-  const linkSx = { color: dark ? DARK : LIME, fontWeight: 700, textDecoration: "underline", textUnderlineOffset: "2px" };
+  const linkSx = { color: dark ? DARK : ACCENT, fontWeight: 700, textDecoration: "underline", textUnderlineOffset: "2px" };
   return (
     <>
       {parts.map((part, i) => {
@@ -843,7 +843,7 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
               pt: 1.6,
               borderRadius: "18px 18px 6px 18px",
               bgcolor: PANEL,
-              border: `1px solid ${LIME}55`,
+              border: `1px solid ${ACCENT}55`,
               boxShadow: "0 18px 40px rgba(0,0,0,0.55)",
               color: "#fff",
             }}
@@ -854,7 +854,7 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
                   width: 30,
                   height: 30,
                   borderRadius: "9px",
-                  bgcolor: LIME,
+                  bgcolor: ACCENT,
                   color: DARK,
                   display: "flex",
                   alignItems: "center",
@@ -864,7 +864,7 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
               >
                 <LocalShippingRoundedIcon sx={{ fontSize: 18 }} />
               </Box>
-              <Typography sx={{ flex: 1, fontSize: 12.5, fontWeight: 800, color: LIME }}>Mr. Whiz dispatch</Typography>
+              <Typography sx={{ flex: 1, fontSize: 12.5, fontWeight: 800, color: ACCENT }}>Mr. Whiz dispatch</Typography>
               <IconButton
                 size="small"
                 aria-label="Dismiss message"
@@ -886,7 +886,7 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
                 lineHeight: 1.55,
                 color: "rgba(255,255,255,0.92)",
                 mb: 1.5,
-                "&:focus-visible": { outline: `2px solid ${LIME}`, outlineOffset: 2, borderRadius: "6px" },
+                "&:focus-visible": { outline: `2px solid ${ACCENT}`, outlineOffset: 2, borderRadius: "6px" },
               }}
             >
               {invite.message}
@@ -900,12 +900,12 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
                 startIcon={<LocalShippingRoundedIcon sx={{ fontSize: 17 }} />}
                 sx={{
                   flex: 1,
-                  bgcolor: LIME,
+                  bgcolor: ACCENT,
                   color: DARK,
                   fontWeight: 800,
                   textTransform: "none",
                   borderRadius: "10px",
-                  "&:hover": { bgcolor: "#d4ff33" },
+                  "&:hover": { bgcolor: ACCENT_HOVER },
                 }}
               >
                 {invite.suggestions[0] || "I have a load to move"}
@@ -951,7 +951,7 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
               position: "absolute",
               inset: 0,
               borderRadius: "50%",
-              bgcolor: LIME,
+              bgcolor: ACCENT,
             }}
           />
         )}
@@ -970,12 +970,12 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
             borderRadius: "50%",
             border: "none",
             cursor: "pointer",
-            bgcolor: LIME,
+            bgcolor: ACCENT,
             color: DARK,
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            boxShadow: "0 12px 34px rgba(200,255,0,0.4)",
+            boxShadow: "0 12px 34px rgba(var(--accent-rgb), 0.4)",
             "& svg": {
               fontSize: 28,
             },
@@ -1019,7 +1019,7 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
               py: 0.2,
               borderRadius: "999px",
               bgcolor: DARK,
-              border: `1.5px solid ${LIME}`,
+              border: `1.5px solid ${ACCENT}`,
               zIndex: 2,
             }}
           >
@@ -1027,7 +1027,7 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
               sx={{
                 fontSize: 9,
                 fontWeight: 900,
-                color: LIME,
+                color: ACCENT,
                 letterSpacing: 0.5,
               }}
             >
@@ -1135,8 +1135,8 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
                 py: 2,
                 background: `linear-gradient(
                   135deg,
-                  ${LIME},
-                  #8bbd00
+                  ${ACCENT},
+                  #bd5b00
                 )`,
                 color: DARK,
               }}
@@ -1369,7 +1369,7 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
                         sx={{
                           color: "rgba(255,255,255,0.45)",
                           "&:hover": {
-                            color: LIME,
+                            color: ACCENT,
                           },
                         }}
                       >
@@ -1407,7 +1407,7 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
                     },
 
                     "&::-webkit-scrollbar-thumb": {
-                      background: "rgba(200,255,0,0.18)",
+                      background: "rgba(var(--accent-rgb), 0.18)",
                       borderRadius: 999,
                     },
                   }}
@@ -1453,7 +1453,7 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
 
                           ...(message.from === "user"
                             ? {
-                                bgcolor: LIME,
+                                bgcolor: ACCENT,
                                 color: DARK,
                                 borderRadius: "16px 16px 4px 16px",
                                 fontWeight: 500,
@@ -1471,7 +1471,7 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
                           <Box
                             component="span"
                             aria-hidden
-                            sx={{ display: "inline-block", width: 7, height: 14, ml: 0.4, mb: "-2px", bgcolor: LIME, opacity: 0.7, borderRadius: "2px" }}
+                            sx={{ display: "inline-block", width: 7, height: 14, ml: 0.4, mb: "-2px", bgcolor: ACCENT, opacity: 0.7, borderRadius: "2px" }}
                           />
                         )}
                       </Box>
@@ -1495,15 +1495,15 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
                                 px: 1,
                                 py: 0.5,
                                 borderRadius: "8px",
-                                bgcolor: "rgba(200,255,0,0.06)",
-                                border: "1px solid rgba(200,255,0,0.14)",
+                                bgcolor: "rgba(var(--accent-rgb), 0.06)",
+                                border: "1px solid rgba(var(--accent-rgb), 0.14)",
                                 color: "rgba(255,255,255,0.75)",
                                 fontSize: 11.5,
                                 textDecoration: "none",
-                                "&:hover": { color: "#fff", borderColor: `${LIME}66` },
+                                "&:hover": { color: "#fff", borderColor: `${ACCENT}66` },
                               }}
                             >
-                              <LinkRoundedIcon sx={{ fontSize: 14, color: LIME }} />
+                              <LinkRoundedIcon sx={{ fontSize: 14, color: ACCENT }} />
                               <Box component="span" sx={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                                 {src.title}
                               </Box>
@@ -1519,13 +1519,13 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
                             mt: 0.8,
                             p: 1.4,
                             borderRadius: "12px",
-                            bgcolor: "rgba(200,255,0,0.06)",
-                            border: `1px solid ${LIME}44`,
+                            bgcolor: "rgba(var(--accent-rgb), 0.06)",
+                            border: `1px solid ${ACCENT}44`,
                           }}
                         >
                           <Box sx={{ display: "flex", alignItems: "center", gap: 0.8, mb: 0.8 }}>
-                            <PhoneInTalkRoundedIcon sx={{ fontSize: 16, color: LIME }} />
-                            <Typography sx={{ fontSize: 11, fontWeight: 900, letterSpacing: 0.8, color: LIME }}>
+                            <PhoneInTalkRoundedIcon sx={{ fontSize: 16, color: ACCENT }} />
+                            <Typography sx={{ fontSize: 11, fontWeight: 900, letterSpacing: 0.8, color: ACCENT }}>
                               CALL BACK DETAILS
                             </Typography>
                           </Box>
@@ -1554,8 +1554,8 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
                             px: 1.2,
                             py: 0.6,
                             borderRadius: "999px",
-                            bgcolor: `${LIME}1f`,
-                            color: LIME,
+                            bgcolor: `${ACCENT}1f`,
+                            color: ACCENT,
                             fontSize: 11.5,
                             fontWeight: 800,
                           }}
@@ -1599,7 +1599,7 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
                               height: 26,
                               color:
                                 copiedId === message.id
-                                  ? LIME
+                                  ? ACCENT
                                   : "rgba(255,255,255,0.3)",
                             }}
                           >
@@ -1631,7 +1631,7 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
                                   width: 26,
                                   height: 26,
                                   color: speakingId === message.id
-                                    ? LIME
+                                    ? ACCENT
                                     : "rgba(255,255,255,0.35)",
                                 }}
                               >
@@ -1671,11 +1671,11 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
                           sx={{
                             height: 32,
                             color: DARK,
-                            bgcolor: LIME,
+                            bgcolor: ACCENT,
                             fontWeight: 800,
                             borderRadius: "10px",
                             fontSize: 12,
-                            "&:hover": { bgcolor: "#d4ff33" },
+                            "&:hover": { bgcolor: ACCENT_HOVER },
                           }}
                         />
                       ))}
@@ -1725,12 +1725,12 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
                               height: 32,
                               color: "rgba(255,255,255,0.72)",
                               bgcolor: "rgba(255,255,255,0.04)",
-                              border: "1px solid rgba(200,255,0,0.16)",
+                              border: "1px solid rgba(var(--accent-rgb), 0.16)",
                               borderRadius: "10px",
                               fontSize: 11,
                               "&:hover": {
-                                bgcolor: "rgba(200,255,0,0.1)",
-                                borderColor: `${LIME}55`,
+                                bgcolor: "rgba(var(--accent-rgb), 0.1)",
+                                borderColor: `${ACCENT}55`,
                                 color: "#fff",
                               },
                             }}
@@ -1765,8 +1765,8 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
                           px: 2,
                           py: 1.4,
                           borderRadius: "16px 16px 4px 16px",
-                          bgcolor: "rgba(200,255,0,0.1)",
-                          border: `1px solid ${LIME}44`,
+                          bgcolor: "rgba(var(--accent-rgb), 0.1)",
+                          border: `1px solid ${ACCENT}44`,
                         }}
                       >
                         {/* listening header */}
@@ -1796,7 +1796,7 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
                               width: 8,
                               height: 8,
                               borderRadius: "50%",
-                              bgcolor: LIME,
+                              bgcolor: ACCENT,
                             }}
                           />
 
@@ -1804,7 +1804,7 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
                             sx={{
                               fontSize: 10.5,
                               fontWeight: 900,
-                              color: LIME,
+                              color: ACCENT,
                               letterSpacing: 1,
                             }}
                           >
@@ -1814,7 +1814,7 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
                           <GraphicEqRoundedIcon
                             sx={{
                               fontSize: 16,
-                              color: LIME,
+                              color: ACCENT,
                             }}
                           />
                         </Box>
@@ -1876,7 +1876,7 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
                             width: 7,
                             height: 7,
                             borderRadius: "50%",
-                            bgcolor: LIME,
+                            bgcolor: ACCENT,
                           }}
                         />
                       ))}
@@ -1913,7 +1913,7 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
                       px: 2,
                       py: 0.8,
                       borderTop: "1px solid rgba(255,255,255,0.06)",
-                      bgcolor: "rgba(200,255,0,0.04)",
+                      bgcolor: "rgba(var(--accent-rgb), 0.04)",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
@@ -1922,7 +1922,7 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
                   >
                     <GraphicEqRoundedIcon
                       sx={{
-                        color: LIME,
+                        color: ACCENT,
                         fontSize: 17,
                       }}
                     />
@@ -1930,7 +1930,7 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
                     <Typography
                       sx={{
                         fontSize: 10.5,
-                        color: LIME,
+                        color: ACCENT,
                         fontWeight: 800,
                       }}
                     >
@@ -1997,7 +1997,7 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
                             position: "absolute",
                             inset: 0,
                             borderRadius: "50%",
-                            bgcolor: LIME,
+                            bgcolor: ACCENT,
                           }}
                         />
                       )}
@@ -2018,16 +2018,16 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
                             width: 44,
                             height: 44,
                             bgcolor: listening
-                              ? LIME
+                              ? ACCENT
                               : "rgba(255,255,255,0.06)",
-                            color: listening ? DARK : LIME,
+                            color: listening ? DARK : ACCENT,
                             border: `1px solid ${
-                              listening ? LIME : "rgba(200,255,0,0.25)"
+                              listening ? ACCENT : "rgba(var(--accent-rgb), 0.25)"
                             }`,
                             "&:hover": {
                               bgcolor: listening
-                                ? "#d4ff33"
-                                : "rgba(200,255,0,0.1)",
+                                ? ACCENT_HOVER
+                                : "rgba(var(--accent-rgb), 0.1)",
                             },
                             "&.Mui-disabled": {
                               opacity: 0.35,
@@ -2087,14 +2087,14 @@ export default function ChatWidget({ config = DEFAULT_CONFIG }: { config?: ChatW
                           flexShrink: 0,
                           bgcolor:
                             input.trim() && !typing && !listening
-                              ? LIME
+                              ? ACCENT
                               : "rgba(255,255,255,0.06)",
                           color:
                             input.trim() && !typing && !listening
                               ? DARK
                               : "rgba(255,255,255,0.3)",
                           "&:hover": {
-                            bgcolor: LIME,
+                            bgcolor: ACCENT,
                             color: DARK,
                           },
                         }}
@@ -2183,7 +2183,7 @@ const fieldSx = {
     },
 
     "&.Mui-focused fieldset": {
-      borderColor: LIME,
+      borderColor: ACCENT,
       borderWidth: 1,
     },
 

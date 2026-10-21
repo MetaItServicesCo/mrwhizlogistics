@@ -10,7 +10,7 @@ import RestartAltRoundedIcon from "@mui/icons-material/RestartAltRounded";
 import { api, mediaUrl } from "@/lib/api";
 import { errorMessage } from "@/lib/useResource";
 import AltTextField from "@/components/admin/AltTextField";
-import { LIME } from "@/components/admin/ui";
+import { ACCENT } from "@/components/admin/ui";
 
 const ACCEPT = "image/png,image/jpeg,image/webp";
 const MAX_BYTES = 10 * 1024 * 1024;
@@ -83,7 +83,7 @@ export default function ImageUploadField({
             onClick={() => fileRef.current?.click()}
             disabled={uploading}
             startIcon={uploading ? <CircularProgress size={14} sx={{ color: "inherit" }} /> : <CloudUploadRoundedIcon />}
-            sx={{ color: LIME, border: `1px solid ${LIME}55`, borderRadius: "999px", textTransform: "none", fontWeight: 700, px: 1.6 }}
+            sx={{ color: ACCENT, border: `1px solid ${ACCENT}55`, borderRadius: "999px", textTransform: "none", fontWeight: 700, px: 1.6 }}
           >
             {uploading ? "Uploading…" : "Replace image"}
           </Button>

@@ -10,7 +10,7 @@ import Inventory2RoundedIcon from "@mui/icons-material/Inventory2Rounded";
 import ContactPhoneRoundedIcon from "@mui/icons-material/ContactPhoneRounded";
 import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
 import { getPublicFaqs } from "@/lib/publicApi";
-const LIME = "#c8ff00";
+import { ACCENT } from "@/theme/brand";
 
 // --------------------------------------------------
 // FAQ CATEGORIES
@@ -249,7 +249,7 @@ function FaqRow({
           top: 0,
           bottom: 0,
           width: 3,
-          bgcolor: LIME,
+          bgcolor: ACCENT,
           transformOrigin: "center",
           borderRadius: 2,
         }}
@@ -306,7 +306,7 @@ function FaqRow({
 
               fontWeight: 600,
 
-              color: open ? LIME : "#fff",
+              color: open ? ACCENT : "#fff",
 
               transition: "color .3s",
 
@@ -320,7 +320,7 @@ function FaqRow({
             component={motion.div}
             animate={{
               rotate: open ? 135 : 0,
-              color: open ? LIME : "rgba(255,255,255,0.5)",
+              color: open ? ACCENT : "rgba(255,255,255,0.5)",
             }}
             transition={{
               duration: 0.3,
@@ -470,7 +470,7 @@ export default function FaqSection() {
         sx={{
           position: "relative",
 
-          bgcolor: "#0a0a0a",
+          bgcolor: "#081c31",
 
           color: "#fff",
 
@@ -503,7 +503,7 @@ export default function FaqSection() {
             height: 400,
 
             background:
-              "radial-gradient(ellipse, rgba(200,255,0,0.07), transparent 70%)",
+              "radial-gradient(ellipse, rgba(var(--accent-rgb), 0.07), transparent 70%)",
 
             pointerEvents: "none",
           }}
@@ -523,7 +523,7 @@ export default function FaqSection() {
             height: 420,
 
             background:
-              "radial-gradient(ellipse, rgba(0,229,255,0.045), transparent 70%)",
+              "radial-gradient(ellipse, rgba(var(--accent-2-rgb), 0.045), transparent 70%)",
 
             pointerEvents: "none",
           }}
@@ -587,7 +587,7 @@ export default function FaqSection() {
               <Typography
                 component="p"
                 sx={{
-                  color: LIME,
+                  color: ACCENT,
 
                   letterSpacing: 3,
 
@@ -664,14 +664,14 @@ export default function FaqSection() {
 
                       borderRadius: "999px",
 
-                      border: "1px solid rgba(200,255,0,0.2)",
+                      border: "1px solid rgba(var(--accent-rgb), 0.2)",
 
-                      bgcolor: "rgba(200,255,0,0.04)",
+                      bgcolor: "rgba(var(--accent-rgb), 0.04)",
                     }}
                   >
                     <CheckRoundedIcon
                       sx={{
-                        color: LIME,
+                        color: ACCENT,
                         fontSize: 14,
                       }}
                     />
@@ -760,7 +760,7 @@ export default function FaqSection() {
 
                       border: "1px solid transparent",
 
-                      color: active ? "#0a0a0a" : "rgba(255,255,255,0.7)",
+                      color: active ? "#081c31" : "rgba(255,255,255,0.7)",
 
                       transition: "color .3s",
 
@@ -785,7 +785,7 @@ export default function FaqSection() {
 
                           borderRadius: "999px",
 
-                          bgcolor: LIME,
+                          bgcolor: ACCENT,
 
                           zIndex: -1,
                         }}
@@ -844,15 +844,15 @@ export default function FaqSection() {
 
                   borderRadius: "10px",
 
-                  bgcolor: "rgba(200,255,0,0.1)",
+                  bgcolor: "rgba(var(--accent-rgb), 0.1)",
 
-                  border: "1px solid rgba(200,255,0,0.2)",
+                  border: "1px solid rgba(var(--accent-rgb), 0.2)",
 
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
 
-                  color: LIME,
+                  color: ACCENT,
 
                   "& svg": {
                     fontSize: 20,

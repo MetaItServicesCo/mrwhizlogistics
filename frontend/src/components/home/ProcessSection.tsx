@@ -16,8 +16,8 @@ import RequestQuoteRoundedIcon from "@mui/icons-material/RequestQuoteRounded";
 import HandshakeRoundedIcon from "@mui/icons-material/HandshakeRounded";
 import LocalShippingRoundedIcon from "@mui/icons-material/LocalShippingRounded";
 import Inventory2RoundedIcon from "@mui/icons-material/Inventory2Rounded";
+import { ACCENT } from "@/theme/brand";
 
-const LIME = "#c8ff00";
 
 const STEPS = [
   {
@@ -94,12 +94,12 @@ function StepCard({
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          bgcolor: "#101010",
+          bgcolor: "#0b1d2e",
           border: "1px solid rgba(255,255,255,0.1)",
           transition:
             "transform .35s ease, box-shadow .35s ease, border-color .35s ease",
           "& .step-icon": {
-            color: LIME,
+            color: ACCENT,
             transition: "transform .35s ease",
             "& svg": { fontSize: { xs: 30, md: 40 } },
           },
@@ -109,8 +109,8 @@ function StepCard({
           },
           "&:hover": {
             transform: "translateY(-6px)",
-            borderColor: `${LIME}66`,
-            boxShadow: `0 16px 40px rgba(200,255,0,0.16)`,
+            borderColor: `${ACCENT}66`,
+            boxShadow: `0 16px 40px rgba(var(--accent-rgb), 0.16)`,
           },
           "&:hover .step-icon": { transform: "scale(1.12)" },
           "&:hover .step-ring": { transform: "rotate(90deg)", opacity: 1 },
@@ -134,7 +134,7 @@ function StepCard({
             cy="50"
             r="47"
             fill="none"
-            stroke={LIME}
+            stroke={ACCENT}
             strokeWidth="1.5"
             strokeDasharray="6 10"
             strokeLinecap="round"
@@ -150,14 +150,14 @@ function StepCard({
             width: 26,
             height: 26,
             borderRadius: "50%",
-            bgcolor: LIME,
-            color: "#0a0a0a",
+            bgcolor: ACCENT,
+            color: "#081c31",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             fontSize: 12,
             fontWeight: 800,
-            border: "3px solid #0a0a0a",
+            border: "3px solid #081c31",
           }}
         >
           {index + 1}
@@ -215,7 +215,7 @@ export default function ProcessSection() {
       aria-labelledby="process-title"
       sx={{
         position: "relative",
-        bgcolor: "#0a0a0a",
+        bgcolor: "#081c31",
         color: "#fff",
         py: { xs: 4, md: 4 },
         px: { xs: 3, sm: 4, md: 6, lg: 8 },
@@ -232,7 +232,7 @@ export default function ProcessSection() {
           width: 640,
           height: 320,
           background:
-            "radial-gradient(ellipse, rgba(200,255,0,0.07), transparent 70%)",
+            "radial-gradient(ellipse, rgba(var(--accent-rgb), 0.07), transparent 70%)",
           pointerEvents: "none",
         }}
       />
@@ -257,7 +257,7 @@ export default function ProcessSection() {
           <Typography
             component="p"
             sx={{
-              color: LIME,
+              color: ACCENT,
               letterSpacing: 3,
               fontSize: 12,
               fontWeight: 700,
@@ -274,7 +274,7 @@ export default function ProcessSection() {
               fontWeight: 800,
               lineHeight: 1.14,
               fontSize: { xs: "1.8rem", sm: "2.4rem", md: "3rem" },
-              background: `linear-gradient(90deg, #ffffff, ${LIME}, #00e5ff, #ffffff)`,
+              background: `linear-gradient(90deg, #ffffff, ${ACCENT}, var(--accent-2), #ffffff)`,
               backgroundSize: "200% auto",
               WebkitBackgroundClip: "text",
               backgroundClip: "text",
@@ -336,7 +336,7 @@ export default function ProcessSection() {
               height: "100%",
               width: "100%",
               transformOrigin: "left",
-              background: `linear-gradient(90deg, ${LIME}, #00e5ff)`,
+              background: `linear-gradient(90deg, ${ACCENT}, var(--accent-2))`,
               borderRadius: 2,
             }}
           />
@@ -358,11 +358,11 @@ export default function ProcessSection() {
               width: 36,
               height: 36,
               borderRadius: "50%",
-              bgcolor: LIME,
-              color: "#0a0a0a",
+              bgcolor: ACCENT,
+              color: "#081c31",
               alignItems: "center",
               justifyContent: "center",
-              boxShadow: "0 6px 18px rgba(200,255,0,0.4)",
+              boxShadow: "0 6px 18px rgba(var(--accent-rgb), 0.4)",
               "& svg": { fontSize: 20 },
             }}
           >
@@ -393,7 +393,7 @@ export default function ProcessSection() {
               width: "100%",
               height: "100%",
               transformOrigin: "top",
-              background: `linear-gradient(180deg, ${LIME}, #00e5ff)`,
+              background: `linear-gradient(180deg, ${ACCENT}, var(--accent-2))`,
               borderRadius: 2,
             }}
           />

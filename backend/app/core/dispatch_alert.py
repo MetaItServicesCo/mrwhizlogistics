@@ -58,7 +58,7 @@ def send_dispatch_alert(lead: dict, dashboard_url: str) -> None:
         f"""<div style="font-family:Arial,sans-serif;font-size:15px;color:#111">
 <p>A visitor asked the AI assistant for a <strong>call back right away</strong>.</p>
 <table>{html_rows}</table>
-<p><a href="tel:{escape(tel)}" style="display:inline-block;background:#c8ff00;color:#0a0a0a;padding:10px 18px;border-radius:999px;text-decoration:none;font-weight:bold">Call {escape(phone)}</a></p>
+<p><a href="tel:{escape(tel)}" style="display:inline-block;background:#f87802;color:#081c31;padding:10px 18px;border-radius:999px;text-decoration:none;font-weight:bold">Call {escape(phone)}</a></p>
 <p><a href="{escape(dashboard_url)}">Open the lead and the conversation in the dashboard</a></p>
 </div>""",
         subtype="html",

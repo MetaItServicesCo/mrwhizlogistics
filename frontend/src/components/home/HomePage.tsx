@@ -24,6 +24,7 @@ import FaqSection from "@/components/home/FaqSection";
 import TestimonialsSection from "@/components/home/TestimonialsSection";
 import { settingsMap } from "@/lib/contentAdapters";
 import { getPublicSettings } from "@/lib/publicApi";
+import { ACCENT } from "@/theme/brand";
 
 // ===== Tuning levers =====
 const SECTION_HEIGHT = "300vh"; // zyada = dheema scrub + zyada scroll room
@@ -49,7 +50,7 @@ const SENTENCE =
   "Fast, reliable trucking that moves your freight from pickup to delivery without the hassle";
 const WORDS = SENTENCE.split(" ");
 // const GRADIENT =
-//   "linear-gradient(90deg, #c8ff00 0%, #00e5ff 50%, #ff4dd8 100%)";
+//   "linear-gradient(90deg, var(--accent) 0%, var(--accent-2) 50%, var(--sky) 100%)";
 const GRADIENT = "#ffffff";
 const STEP = (TEXT_END - TEXT_START) / WORDS.length;
 
@@ -224,7 +225,7 @@ export default function HomePage() {
 
   return (
     <>
-      <Box sx={{ color: "#fff", overflowX: "clip", bgcolor: "#0b0b0b" }}>
+      <Box sx={{ color: "#fff", overflowX: "clip", bgcolor: "#091725" }}>
         {/* <Navbar /> */}
 
         {/* HERO — tall section (height = poore sequence ka scroll) */}
@@ -303,7 +304,7 @@ export default function HomePage() {
                   >
                     {SENTENCE}
                   </Box>
-                  {/* <Box sx={{ ...headingSx, color: '#000000', textShadow: '0 2px 12px rgba(255,255,255,0.3)' }}>
+                  {/* <Box sx={{ ...headingSx, color: '#040a11', textShadow: '0 2px 12px rgba(255,255,255,0.3)' }}>
   {SENTENCE}
 </Box> */}
 
@@ -371,7 +372,7 @@ export default function HomePage() {
                 }}
               >
                 <KeyboardDoubleArrowDownRoundedIcon
-                  sx={{ color: "#c8ff00", fontSize: 22 }}
+                  sx={{ color: ACCENT, fontSize: 22 }}
                 />
               </motion.div>
             </motion.div>

@@ -18,8 +18,8 @@ import {
 } from "@/lib/branding";
 import SiteLogo from "@/components/common/SiteLogo";
 import { addressLines } from "@/lib/contactPage";
+import { ACCENT } from "@/theme/brand";
 
-const LIME = "#c8ff00";
 
 export default function AdvancedFooterCTA({
   companyName = "Mr. Whiz Logistics",
@@ -62,7 +62,7 @@ export default function AdvancedFooterCTA({
     <Box
       component="footer"
       sx={{
-        bgcolor: "#04100d",
+        bgcolor: "#081623",
         color: "#fff",
         position: "relative",
         overflow: "hidden",
@@ -90,7 +90,7 @@ export default function AdvancedFooterCTA({
           xl: 10,
         },
 
-        borderTop: "1px solid rgba(200, 255, 0, 0.15)",
+        borderTop: "1px solid rgba(var(--accent-rgb), 0.15)",
       }}
     >
       {/* BACKGROUND FAST & BLINKING CIRCUIT LINES */}
@@ -115,7 +115,7 @@ export default function AdvancedFooterCTA({
           {/* Path 1 */}
           <motion.path
             d="M-100 150 H 350 L 450 250 H 800 L 900 150 H 1500"
-            stroke="rgba(200, 255, 0, 0.7)"
+            style={{ stroke: "rgba(var(--accent-rgb), 0.7)" }}
             strokeWidth="2"
             strokeDasharray="8 8"
             initial={{
@@ -137,7 +137,7 @@ export default function AdvancedFooterCTA({
           {/* Path 2 */}
           <motion.path
             d="M 150 900 L 250 750 H 600 L 700 850 H 1300"
-            stroke="rgba(200, 255, 0, 0.5)"
+            style={{ stroke: "rgba(var(--accent-rgb), 0.5)" }}
             strokeWidth="1.5"
             initial={{
               pathLength: 0,
@@ -160,7 +160,7 @@ export default function AdvancedFooterCTA({
             cx="450"
             cy="250"
             r="4"
-            fill={LIME}
+            fill={ACCENT}
             animate={{
               scale: [1, 2.5, 1],
               opacity: [0.3, 1, 0.3],
@@ -176,7 +176,7 @@ export default function AdvancedFooterCTA({
             cx="700"
             cy="850"
             r="4"
-            fill={LIME}
+            fill={ACCENT}
             animate={{
               scale: [1, 2.5, 1],
               opacity: [0.3, 1, 0.3],
@@ -303,7 +303,7 @@ export default function AdvancedFooterCTA({
                   color: "#fff",
                   textDecoration: "none",
                   mb: 0.5,
-                  "&:hover": { color: LIME },
+                  "&:hover": { color: ACCENT },
                 }}
               >
                 {email}
@@ -480,9 +480,9 @@ export default function AdvancedFooterCTA({
                 lg: "24px",
               },
 
-              border: "1px solid rgba(200, 255, 0, 0.2)",
+              border: "1px solid rgba(var(--accent-rgb), 0.2)",
 
-              backgroundColor: "rgba(5, 18, 14, 0.75)",
+              backgroundColor: "rgba(9,24,38, 0.75)",
 
               backdropFilter: "blur(16px)",
 
@@ -499,7 +499,7 @@ export default function AdvancedFooterCTA({
                 fontSize: "10.5px",
                 fontWeight: 700,
                 letterSpacing: "2.5px",
-                color: LIME,
+                color: ACCENT,
                 textTransform: "uppercase",
                 mb: 2,
               }}
@@ -531,7 +531,7 @@ export default function AdvancedFooterCTA({
                 component="a"
                 href={telHref(phone)}
                 sx={{
-                  color: LIME,
+                  color: ACCENT,
                   fontWeight: 700,
                   textDecoration: "none",
                   "&:hover": { textDecoration: "underline" },
@@ -573,8 +573,8 @@ export default function AdvancedFooterCTA({
                       color: "#fff",
                       transition: "0.2s",
                       "&:hover": {
-                        bgcolor: LIME,
-                        color: "#000",
+                        bgcolor: ACCENT,
+                        color: "#040a11",
                       },
                     }}
                   >
@@ -652,7 +652,7 @@ export default function AdvancedFooterCTA({
                     color: "rgba(255,255,255,0.6)",
                     fontSize: { xs: "11px", sm: "12px" },
                     textDecoration: "none",
-                    "&:hover": { color: LIME },
+                    "&:hover": { color: ACCENT },
                   }}
                 >
                   {l.title}

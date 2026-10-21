@@ -9,8 +9,8 @@ import Typography from "@mui/material/Typography";
 import RentalCard from "./RentalCard";
 import RentalQuoteModal from "./RentalQuoteModal"; // Naya wala modal import kiya hai
 import { HOT_SHOT_RENTALS, type RentalItem } from "@/data/hotShotRentals";
+import { ACCENT } from "@/theme/brand";
 
-const LIME = "#c8ff00";
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 export default function HotShotRentals({ content = RENTAL_DEFAULTS.page.sections.HotShotRentals, items = HOT_SHOT_RENTALS, cardContent }: { content?: RentalPageContent["sections"]["HotShotRentals"]; items?: RentalItem[]; cardContent?: RentalPageContent["sections"]["RentalCard"] }) {
@@ -28,7 +28,7 @@ export default function HotShotRentals({ content = RENTAL_DEFAULTS.page.sections
       component="section"
       sx={{
         position: "relative",
-        bgcolor: "#0a0a0a",
+        bgcolor: "#081c31",
         color: "#fff",
         px: { xs: 3, sm: 4, md: 6, lg: 8 },
         py: { xs: 8, md: 6 },
@@ -45,7 +45,7 @@ export default function HotShotRentals({ content = RENTAL_DEFAULTS.page.sections
           width: 680,
           height: 340,
           background:
-            "radial-gradient(ellipse, rgba(200,255,0,0.06), transparent 70%)",
+            "radial-gradient(ellipse, rgba(var(--accent-rgb), 0.06), transparent 70%)",
           pointerEvents: "none",
         }}
       />
@@ -76,18 +76,18 @@ export default function HotShotRentals({ content = RENTAL_DEFAULTS.page.sections
               mb: 2,
             }}
           >
-            <Box sx={{ width: 28, height: 2, bgcolor: LIME, opacity: 0.7 }} />
+            <Box sx={{ width: 28, height: 2, bgcolor: ACCENT, opacity: 0.7 }} />
             <Typography
               component="p"
               sx={{
-                color: LIME,
+                color: ACCENT,
                 letterSpacing: 3,
                 fontSize: 12,
                 fontWeight: 700,
                 textTransform: "uppercase",
               }}
             >{copy.availableForRent}</Typography>
-            <Box sx={{ width: 28, height: 2, bgcolor: LIME, opacity: 0.7 }} />
+            <Box sx={{ width: 28, height: 2, bgcolor: ACCENT, opacity: 0.7 }} />
           </Box>
           <Typography
             component="h2"
@@ -96,7 +96,7 @@ export default function HotShotRentals({ content = RENTAL_DEFAULTS.page.sections
               lineHeight: 1.1,
               letterSpacing: "-0.5px",
               fontSize: { xs: "2rem", sm: "2.7rem", md: "3.4rem" },
-              background: `linear-gradient(90deg, #ffffff, ${LIME}, #00e5ff, #ffffff)`,
+              background: `linear-gradient(90deg, #ffffff, ${ACCENT}, var(--accent-2), #ffffff)`,
               backgroundSize: "200% auto",
               WebkitBackgroundClip: "text",
               backgroundClip: "text",

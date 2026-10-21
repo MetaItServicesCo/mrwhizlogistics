@@ -15,8 +15,8 @@ import { api, mediaUrl } from "@/lib/api";
 import { useSiteLogo } from "@/lib/useSiteLogo";
 import { logoAlt } from "@/lib/branding";
 import type { DashboardStats } from "@/lib/types";
+import { ACCENT } from "@/theme/brand";
 
-const LIME = "#c8ff00";
 
 function Badge({ n, mini = false }: { n: number; mini?: boolean }) {
   return (
@@ -26,14 +26,14 @@ function Badge({ n, mini = false }: { n: number; mini?: boolean }) {
         height: 18,
         px: 0.6,
         borderRadius: "999px",
-        bgcolor: mini ? LIME : "rgba(200,255,0,0.15)",
-        color: mini ? "#0a0a0a" : LIME,
+        bgcolor: mini ? ACCENT : "rgba(var(--accent-rgb), 0.15)",
+        color: mini ? "#081c31" : ACCENT,
         fontSize: 14,
         fontWeight: 800,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        border: mini ? "none" : `1px solid ${LIME}44`,
+        border: mini ? "none" : `1px solid ${ACCENT}44`,
       }}
     >
       {n}
@@ -116,12 +116,12 @@ export default function AdminSidebar({
     background: "transparent",
     fontFamily: "inherit",
     textAlign: "left" as const,
-    color: active ? "#0a0a0a" : "rgba(255,255,255,0.7)",
-    bgcolor: active ? LIME : "transparent",
+    color: active ? "#081c31" : "rgba(255,255,255,0.7)",
+    bgcolor: active ? ACCENT : "transparent",
     transition: "background .2s, color .2s",
     "&:hover": {
-      bgcolor: active ? LIME : "rgba(255,255,255,0.06)",
-      color: active ? "#0a0a0a" : "#fff",
+      bgcolor: active ? ACCENT : "rgba(255,255,255,0.06)",
+      color: active ? "#081c31" : "#fff",
     },
     "& .nav-ic": { fontSize: 21, flexShrink: 0, display: "flex" },
   });
@@ -132,7 +132,7 @@ export default function AdminSidebar({
         height: "100%",
         display: "flex",
         flexDirection: "column",
-        bgcolor: "#0c0d0c",
+        bgcolor: "#091928",
         borderRight: "1px solid rgba(255,255,255,0.07)",
       }}
     >
@@ -159,8 +159,8 @@ export default function AdminSidebar({
                 width: 38,
                 height: 38,
                 borderRadius: "10px",
-                bgcolor: LIME,
-                color: "#0a0a0a",
+                bgcolor: ACCENT,
+                color: "#081c31",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -188,7 +188,7 @@ export default function AdminSidebar({
                 />
               ) : logo ? (
                 <Image
-                  src="/images/logo.png"
+                  src="/images/logo-mr-whiz.jpg"
                   alt={logoAlt(logo?.alt)}
                   fill
                   sizes="150px"
@@ -346,9 +346,9 @@ export default function AdminSidebar({
                               borderRadius: "9px",
                               textDecoration: "none",
                               transition: "all .2s",
-                              color: cActive ? LIME : "rgba(255,255,255,0.55)",
+                              color: cActive ? ACCENT : "rgba(255,255,255,0.55)",
                               bgcolor: cActive
-                                ? "rgba(200,255,0,0.08)"
+                                ? "rgba(var(--accent-rgb), 0.08)"
                                 : "transparent",
                               "&:hover": {
                                 color: "#fff",
@@ -363,7 +363,7 @@ export default function AdminSidebar({
                                 borderRadius: "50%",
                                 flexShrink: 0,
                                 bgcolor: cActive
-                                  ? LIME
+                                  ? ACCENT
                                   : "rgba(255,255,255,0.3)",
                               }}
                             />
@@ -400,8 +400,8 @@ export default function AdminSidebar({
             sx={{
               p: 2,
               borderRadius: "14px",
-              bgcolor: "rgba(200,255,0,0.05)",
-              border: `1px solid ${LIME}22`,
+              bgcolor: "rgba(var(--accent-rgb), 0.05)",
+              border: `1px solid ${ACCENT}22`,
             }}
           >
             <Typography

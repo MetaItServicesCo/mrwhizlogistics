@@ -4,8 +4,8 @@ import Link from "next/link";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import { ACCENT, ACCENT_HOVER } from "@/theme/brand";
 
-const LIME = "#c8ff00";
 
 /**
  * Shown when a page cannot load its content - chiefly when the API is down and
@@ -23,12 +23,12 @@ export default function PublicError({ reset }: { error: Error; reset: () => void
         justifyContent: "center",
         px: 3,
         py: 16,
-        bgcolor: "#070807",
+        bgcolor: "#07131e",
         textAlign: "center",
       }}
     >
       <Box sx={{ maxWidth: 520 }}>
-        <Typography sx={{ fontSize: 13, fontWeight: 800, letterSpacing: 2, color: LIME, mb: 2 }}>
+        <Typography sx={{ fontSize: 13, fontWeight: 800, letterSpacing: 2, color: ACCENT, mb: 2 }}>
           TEMPORARILY UNAVAILABLE
         </Typography>
         <Typography
@@ -45,14 +45,14 @@ export default function PublicError({ reset }: { error: Error; reset: () => void
             onClick={reset}
             disableElevation
             sx={{
-              bgcolor: LIME,
-              color: "#0a0a0a",
+              bgcolor: ACCENT,
+              color: "#081c31",
               fontWeight: 800,
               textTransform: "none",
               borderRadius: "999px",
               px: 3.5,
               py: 1.2,
-              "&:hover": { bgcolor: "#d4ff33" },
+              "&:hover": { bgcolor: ACCENT_HOVER },
             }}
           >
             Try again
@@ -68,7 +68,7 @@ export default function PublicError({ reset }: { error: Error; reset: () => void
               borderRadius: "999px",
               px: 3.5,
               py: 1.2,
-              "&:hover": { borderColor: LIME, color: LIME },
+              "&:hover": { borderColor: ACCENT, color: ACCENT },
             }}
           >
             Back to home

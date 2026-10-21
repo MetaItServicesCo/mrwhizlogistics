@@ -5,8 +5,8 @@ import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
 import PhoneInTalkRoundedIcon from "@mui/icons-material/PhoneInTalkRounded";
 import { ctaProps, useCta } from "@/components/common/CtaProvider";
 import { DEFAULT_ABOUT, type AboutContent } from "@/lib/aboutPage";
+import { ACCENT, ACCENT_HOVER } from "@/theme/brand";
 
-const LIME = "#c8ff00";
 
 export default function AboutCTA({
   content = DEFAULT_ABOUT.cta,
@@ -21,7 +21,7 @@ export default function AboutCTA({
       component="section"
       sx={{
         py: { xs: 8, md: 10 },
-        bgcolor: "#0f0f0f",
+        bgcolor: "#0a1c2c",
         borderTop: "1px solid rgba(255,255,255,0.08)",
       }}
     >
@@ -32,11 +32,11 @@ export default function AboutCTA({
             borderRadius: "28px",
             overflow: "hidden",
             p: { xs: 4, md: 6 },
-            bgcolor: "#141414",
-            border: `1px solid ${LIME}33`,
+            bgcolor: "#0d2236",
+            border: `1px solid ${ACCENT}33`,
             textAlign: "center",
             backgroundImage:
-              "radial-gradient(circle at 50% 0%, rgba(200,255,0,0.08), transparent 60%)",
+              "radial-gradient(circle at 50% 0%, rgba(var(--accent-rgb), 0.08), transparent 60%)",
           }}
         >
           <Typography
@@ -44,7 +44,7 @@ export default function AboutCTA({
               fontSize: 11,
               fontWeight: 800,
               letterSpacing: 2,
-              color: LIME,
+              color: ACCENT,
               mb: 1.5,
               textTransform: "uppercase",
             }}
@@ -90,15 +90,15 @@ export default function AboutCTA({
               endIcon={<ArrowForwardRoundedIcon />}
               disableElevation
               sx={{
-                bgcolor: LIME,
-                color: "#0a0a0a",
+                bgcolor: ACCENT,
+                color: "#081c31",
                 fontWeight: 800,
                 borderRadius: "12px",
                 px: 3.5,
                 py: 1.5,
                 textTransform: "none",
                 fontSize: 14,
-                "&:hover": { bgcolor: "#d4ff33" },
+                "&:hover": { bgcolor: ACCENT_HOVER },
               }}
             >
               {quoteCta.label}
@@ -119,9 +119,9 @@ export default function AboutCTA({
                 textTransform: "none",
                 fontSize: 14,
                 "&:hover": {
-                  borderColor: LIME,
-                  color: LIME,
-                  bgcolor: "rgba(200,255,0,0.05)",
+                  borderColor: ACCENT,
+                  color: ACCENT,
+                  bgcolor: "rgba(var(--accent-rgb), 0.05)",
                 },
               }}
             >

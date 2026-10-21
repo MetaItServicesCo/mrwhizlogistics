@@ -9,8 +9,8 @@ import ReceiptLongRoundedIcon from "@mui/icons-material/ReceiptLongRounded";
 import VerifiedUserRoundedIcon from "@mui/icons-material/VerifiedUserRounded";
 import BoltRoundedIcon from "@mui/icons-material/BoltRounded";
 import RouteRoundedIcon from "@mui/icons-material/RouteRounded";
+import { ACCENT } from "@/theme/brand";
 
-const LIME = "#c8ff00";
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 const CARDS = [
@@ -59,14 +59,14 @@ function WhyCard({ c }: { c: (typeof CARDS)[number] }) {
         overflow: "hidden",
         p: { xs: 3, md: 3.5 },
         borderRadius: "18px",
-        bgcolor: "#101010",
+        bgcolor: "#0b1d2e",
         border: "1px solid rgba(255,255,255,0.08)",
         transition:
           "transform .35s ease, border-color .35s ease, box-shadow .35s ease",
         "&:hover": {
           transform: "translateY(-6px)",
-          borderColor: `${LIME}55`,
-          boxShadow: "0 20px 46px rgba(200,255,0,0.1)",
+          borderColor: `${ACCENT}55`,
+          boxShadow: "0 20px 46px rgba(var(--accent-rgb), 0.1)",
         },
         "&:hover .wc-icon": { transform: "translateY(-3px) rotate(-6deg)" },
         "&:hover .wc-sheen": { transform: "translateX(120%)" },
@@ -83,7 +83,7 @@ function WhyCard({ c }: { c: (typeof CARDS)[number] }) {
           width: "60%",
           height: "100%",
           background:
-            "linear-gradient(120deg, transparent, rgba(200,255,0,0.06), transparent)",
+            "linear-gradient(120deg, transparent, rgba(var(--accent-rgb), 0.06), transparent)",
           transform: "translateX(-130%)",
           transition: "transform .7s ease",
           pointerEvents: "none",
@@ -96,13 +96,13 @@ function WhyCard({ c }: { c: (typeof CARDS)[number] }) {
           width: 52,
           height: 52,
           borderRadius: "13px",
-          bgcolor: LIME,
-          color: "#0a0a0a",
+          bgcolor: ACCENT,
+          color: "#081c31",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
           mb: 2.5,
-          boxShadow: "0 8px 20px rgba(200,255,0,0.3)",
+          boxShadow: "0 8px 20px rgba(var(--accent-rgb), 0.3)",
           transition: "transform .35s ease",
           "& svg": { fontSize: 26 },
         }}
@@ -136,7 +136,7 @@ export default function HotShotWhy() {
       aria-labelledby="hs-why-title"
       sx={{
         position: "relative",
-        bgcolor: "#0a0a0a",
+        bgcolor: "#081c31",
         color: "#fff",
         px: { xs: 3, sm: 4, md: 6, lg: 8 },
         py: { xs: 8, md: 13 },
@@ -153,7 +153,7 @@ export default function HotShotWhy() {
           width: 680,
           height: 340,
           background:
-            "radial-gradient(ellipse, rgba(200,255,0,0.07), transparent 70%)",
+            "radial-gradient(ellipse, rgba(var(--accent-rgb), 0.07), transparent 70%)",
           pointerEvents: "none",
         }}
       />
@@ -185,11 +185,11 @@ export default function HotShotWhy() {
               mb: 2,
             }}
           >
-            <Box sx={{ width: 28, height: 2, bgcolor: LIME, opacity: 0.7 }} />
+            <Box sx={{ width: 28, height: 2, bgcolor: ACCENT, opacity: 0.7 }} />
             <Typography
               component="p"
               sx={{
-                color: LIME,
+                color: ACCENT,
                 letterSpacing: 3,
                 fontSize: 12,
                 fontWeight: 700,
@@ -198,7 +198,7 @@ export default function HotShotWhy() {
             >
               Why Our Services
             </Typography>
-            <Box sx={{ width: 28, height: 2, bgcolor: LIME, opacity: 0.7 }} />
+            <Box sx={{ width: 28, height: 2, bgcolor: ACCENT, opacity: 0.7 }} />
           </Box>
           <Typography
             id="hs-why-title"
@@ -208,7 +208,7 @@ export default function HotShotWhy() {
               lineHeight: 1.1,
               letterSpacing: "-0.5px",
               fontSize: { xs: "2rem", sm: "2.7rem", md: "3.4rem" },
-              background: `linear-gradient(90deg, #ffffff, ${LIME}, #00e5ff, #ffffff)`,
+              background: `linear-gradient(90deg, #ffffff, ${ACCENT}, var(--accent-2), #ffffff)`,
               backgroundSize: "200% auto",
               WebkitBackgroundClip: "text",
               backgroundClip: "text",

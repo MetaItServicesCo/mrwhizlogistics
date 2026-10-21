@@ -23,13 +23,13 @@ import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
 import LocalShippingRoundedIcon from "@mui/icons-material/LocalShippingRounded";
 import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
 import Alert from "@mui/material/Alert";
+import { ACCENT, ACCENT_HOVER } from "@/theme/brand";
 
-const LIME = "#c8ff00";
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 const fieldSx = {
   "& .MuiInputLabel-root": { color: "rgba(255,255,255,0.5)", fontSize: 14 },
-  "& .MuiInputLabel-root.Mui-focused": { color: LIME },
+  "& .MuiInputLabel-root.Mui-focused": { color: ACCENT },
   "& .MuiOutlinedInput-root": {
     color: "#fff",
     borderRadius: "12px",
@@ -40,15 +40,15 @@ const fieldSx = {
     },
     "&:hover fieldset": { borderColor: "rgba(255,255,255,0.3)" },
     "&.Mui-focused fieldset": {
-      borderColor: LIME,
-      boxShadow: "0 0 0 3px rgba(200,255,0,0.15)",
+      borderColor: ACCENT,
+      boxShadow: "0 0 0 3px rgba(var(--accent-rgb), 0.15)",
     },
   },
   "& .MuiSvgIcon-root": { color: "rgba(255,255,255,0.4)" },
   // Chrome paints autofilled fields light blue with dark text, which broke the
   // dark design. Paint over it with the field's own colour instead.
   "& input:-webkit-autofill, & input:-webkit-autofill:hover, & input:-webkit-autofill:focus": {
-    WebkitBoxShadow: "0 0 0 1000px #151715 inset",
+    WebkitBoxShadow: "0 0 0 1000px #0d243a inset",
     WebkitTextFillColor: "#fff",
     caretColor: "#fff",
     transition: "background-color 600000s 0s",
@@ -144,7 +144,7 @@ export default function AuthForm({ mode }: { mode: "login" | "register" }) {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        bgcolor: "#070807",
+        bgcolor: "#07131e",
         p: { xs: 2, md: 4 },
       }}
     >
@@ -160,7 +160,7 @@ export default function AuthForm({ mode }: { mode: "login" | "register" }) {
           overflow: "hidden",
           display: "grid",
           gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
-          bgcolor: "#0d0f0d",
+          bgcolor: "#0a1b2b",
           border: "1px solid rgba(255,255,255,0.08)",
           boxShadow: "0 40px 100px rgba(0,0,0,0.5)",
         }}
@@ -174,7 +174,7 @@ export default function AuthForm({ mode }: { mode: "login" | "register" }) {
             justifyContent: "space-between",
             p: 5,
             overflow: "hidden",
-            background: "linear-gradient(160deg, #14301f, #071410)",
+            background: "linear-gradient(160deg, #133250, #0a1a2a)",
           }}
         >
           {!reduce && (
@@ -191,7 +191,7 @@ export default function AuthForm({ mode }: { mode: "login" | "register" }) {
                 height: 360,
                 borderRadius: "50%",
                 background:
-                  "radial-gradient(circle, rgba(200,255,0,0.18), transparent 65%)",
+                  "radial-gradient(circle, rgba(var(--accent-rgb), 0.18), transparent 65%)",
                 pointerEvents: "none",
               }}
             />
@@ -215,7 +215,7 @@ export default function AuthForm({ mode }: { mode: "login" | "register" }) {
                   left: 0,
                   width: 120,
                   height: 2,
-                  background: `linear-gradient(90deg, transparent, ${LIME}66, transparent)`,
+                  background: `linear-gradient(90deg, transparent, ${ACCENT}66, transparent)`,
                   opacity: 0.4,
                   pointerEvents: "none",
                 }}
@@ -229,7 +229,7 @@ export default function AuthForm({ mode }: { mode: "login" | "register" }) {
               left: 20,
               width: 120,
               height: 120,
-              backgroundImage: `radial-gradient(${LIME}44 1.5px, transparent 1.5px)`,
+              backgroundImage: `radial-gradient(${ACCENT}44 1.5px, transparent 1.5px)`,
               backgroundSize: "16px 16px",
               opacity: 0.4,
             }}
@@ -249,8 +249,8 @@ export default function AuthForm({ mode }: { mode: "login" | "register" }) {
                   width: 42,
                   height: 42,
                   borderRadius: "12px",
-                  bgcolor: LIME,
-                  color: "#0a0a0a",
+                  bgcolor: ACCENT,
+                  color: "#081c31",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
@@ -312,12 +312,12 @@ export default function AuthForm({ mode }: { mode: "login" | "register" }) {
                     height: 24,
                     borderRadius: "50%",
                     flexShrink: 0,
-                    bgcolor: "rgba(200,255,0,0.14)",
-                    border: `1px solid ${LIME}55`,
+                    bgcolor: "rgba(var(--accent-rgb), 0.14)",
+                    border: `1px solid ${ACCENT}55`,
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    "& svg": { fontSize: 14, color: LIME },
+                    "& svg": { fontSize: 14, color: ACCENT },
                   }}
                 >
                   <CheckRoundedIcon />
@@ -507,10 +507,10 @@ export default function AuthForm({ mode }: { mode: "login" | "register" }) {
                 href="#"
                 sx={{
                   fontSize: 12.5,
-                  color: LIME,
+                  color: ACCENT,
                   textDecoration: "none",
                   fontWeight: 600,
-                  "&:hover": { color: "#d4ff33" },
+                  "&:hover": { color: ACCENT_HOVER },
                 }}
               >
                 Forgot password?
@@ -531,18 +531,18 @@ export default function AuthForm({ mode }: { mode: "login" | "register" }) {
               position: "relative",
               overflow: "hidden",
               mt: 3,
-              bgcolor: LIME,
-              color: "#0a0a0a",
+              bgcolor: ACCENT,
+              color: "#081c31",
               fontWeight: 800,
               borderRadius: "12px",
               py: 1.4,
               textTransform: "none",
               fontSize: 15,
-              "&:hover": { bgcolor: "#d4ff33" },
+              "&:hover": { bgcolor: ACCENT_HOVER },
               "&.Mui-disabled": {
-                bgcolor: LIME,
+                bgcolor: ACCENT,
                 opacity: 0.8,
-                color: "#0a0a0a",
+                color: "#081c31",
               },
               "& .au-a": { transition: "transform .3s" },
               "&:hover .au-a": { transform: "translateX(3px)" },
@@ -562,7 +562,7 @@ export default function AuthForm({ mode }: { mode: "login" | "register" }) {
             }}
           >
             {status === "loading" ? (
-              <CircularProgress size={22} sx={{ color: "#0a0a0a" }} />
+              <CircularProgress size={22} sx={{ color: "#081c31" }} />
             ) : isLogin ? (
               "Sign in"
             ) : (
@@ -621,10 +621,10 @@ export default function AuthForm({ mode }: { mode: "login" | "register" }) {
               component={Link}
               href={isLogin ? "/register" : "/login"}
               sx={{
-                color: LIME,
+                color: ACCENT,
                 fontWeight: 700,
                 textDecoration: "none",
-                "&:hover": { color: "#d4ff33" },
+                "&:hover": { color: ACCENT_HOVER },
               }}
             >
               {isLogin ? "Create one" : "Sign in"}

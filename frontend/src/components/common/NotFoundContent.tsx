@@ -4,8 +4,8 @@ import Link from "next/link";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
+import { ACCENT } from "@/theme/brand";
 
-const LIME = "#c8ff00";
 
 const LINKS = [
   {
@@ -37,19 +37,19 @@ export default function NotFoundContent() {
       component="main"
       sx={{
         minHeight: "80vh",
-        bgcolor: "#0a0a0a",
+        bgcolor: "#081c31",
         color: "#fff",
         px: { xs: 2, md: 4 },
         pt: { xs: 16, md: 24 },
         pb: { xs: 10, md: 14 },
         background:
-          "radial-gradient(circle at 20% 10%, rgba(200,255,0,0.12), transparent 45%), #0a0a0a",
+          "radial-gradient(circle at 20% 10%, rgba(var(--accent-rgb), 0.12), transparent 45%), #081c31",
       }}
     >
       <Box sx={{ maxWidth: 1100, mx: "auto" }}>
         <Typography
           sx={{
-            color: LIME,
+            color: ACCENT,
             fontWeight: 800,
             letterSpacing: 3,
             fontSize: 13,
@@ -80,7 +80,7 @@ export default function NotFoundContent() {
         >
           The page may have moved or no longer exists. Pick a service below,
           head back to the{" "}
-          <Box component={Link} href="/" sx={{ color: LIME, fontWeight: 700 }}>
+          <Box component={Link} href="/" sx={{ color: ACCENT, fontWeight: 700 }}>
             homepage
           </Box>
           , or contact our dispatch team.
@@ -112,11 +112,11 @@ export default function NotFoundContent() {
                 borderRadius: "18px",
                 textDecoration: "none",
                 color: "#fff",
-                bgcolor: "#111211",
+                bgcolor: "#0c1f31",
                 border: "1px solid rgba(255,255,255,0.08)",
                 transition: "border-color .3s, transform .3s",
                 "&:hover, &:focus-visible": {
-                  borderColor: `${LIME}66`,
+                  borderColor: `${ACCENT}66`,
                   transform: "translateY(-4px)",
                   outline: "none",
                 },
@@ -137,7 +137,7 @@ export default function NotFoundContent() {
                 </Typography>
                 <ArrowForwardRoundedIcon
                   className="nf-arrow"
-                  sx={{ color: LIME, transition: "transform .3s" }}
+                  sx={{ color: ACCENT, transition: "transform .3s" }}
                 />
               </Box>
               <Typography

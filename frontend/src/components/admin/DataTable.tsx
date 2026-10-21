@@ -13,7 +13,7 @@ import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import DeleteOutlineRoundedIcon from "@mui/icons-material/DeleteOutlineRounded";
 import VisibilityRoundedIcon from "@mui/icons-material/VisibilityRounded";
 import CheckCircleOutlineRoundedIcon from "@mui/icons-material/CheckCircleOutlineRounded";
-import { EmptyState, ErrorState, LoadingState, Panel, LIME } from "./ui";
+import { EmptyState, ErrorState, LoadingState, Panel, ACCENT } from "./ui";
 
 export type Column<T> = {
   key: string;
@@ -167,7 +167,7 @@ export default function DataTable<T extends { id: number | string }>({
                                   ? "rgba(255,107,107,0.75)"
                                   : "rgba(255,255,255,0.5)",
                                 "&:hover": {
-                                  color: a.danger ? "#ff6b6b" : LIME,
+                                  color: a.danger ? "#ff6b6b" : ACCENT,
                                   bgcolor: "rgba(255,255,255,0.06)",
                                 },
                               }}

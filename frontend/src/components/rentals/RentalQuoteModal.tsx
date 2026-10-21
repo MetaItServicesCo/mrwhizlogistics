@@ -39,10 +39,10 @@ import {
 } from "@/types/rentalQuote";
 import { submitRentalQuote } from "@/lib/publicApi";
 import { errorMessage } from "@/lib/useResource";
+import { ACCENT, ACCENT_HOVER } from "@/theme/brand";
 
-const LIME = "#c8ff00";
-const BG_DARK = "#09090b";
-const CARD_BG = "#121215";
+const BG_DARK = "#081623";
+const CARD_BG = "#0c2135";
 const BORDER = "rgba(255, 255, 255, 0.08)";
 
 type RentalQuoteModalProps = {
@@ -81,11 +81,11 @@ const STEPS = ["Customer Info", "Timeline & Routing", "Review & Submit"];
 const textFieldStyles = {
   "& .MuiInputBase-input": { color: "#ffffff !important" },
   "& .MuiInputLabel-root": { color: "#ffffff !important" },
-  "& .MuiInputLabel-root.Mui-focused": { color: `${LIME} !important` },
+  "& .MuiInputLabel-root.Mui-focused": { color: `${ACCENT} !important` },
   "& .MuiOutlinedInput-root": {
     "& fieldset": { borderColor: "rgba(255, 255, 255, 0.2)" },
     "&:hover fieldset": { borderColor: "rgba(255, 255, 255, 0.4)" },
-    "&.Mui-focused fieldset": { borderColor: LIME },
+    "&.Mui-focused fieldset": { borderColor: ACCENT },
   },
   "& .MuiSelect-icon": { color: "#ffffff !important" },
   /* Fix for native HTML date picker calendar icon color in dark mode */
@@ -279,12 +279,12 @@ export default function RentalQuoteModal({
                       width: 80,
                       height: 80,
                       borderRadius: "50%",
-                      bgcolor: "rgba(200,255,0,0.1)",
+                      bgcolor: "rgba(var(--accent-rgb), 0.1)",
                       display: "grid",
                       placeItems: "center",
-                      color: LIME,
-                      border: `1px solid rgba(200,255,0,0.3)`,
-                      boxShadow: "0 0 30px rgba(200,255,0,0.15)",
+                      color: ACCENT,
+                      border: `1px solid rgba(var(--accent-rgb), 0.3)`,
+                      boxShadow: "0 0 30px rgba(var(--accent-rgb), 0.15)",
                     }}
                   >
                     <CheckCircleRounded sx={{ fontSize: 44 }} />
@@ -323,14 +323,14 @@ export default function RentalQuoteModal({
                     onClick={onClose}
                     sx={{
                       mt: 2,
-                      bgcolor: LIME,
-                      color: "#000",
+                      bgcolor: ACCENT,
+                      color: "#040a11",
                       fontWeight: 800,
                       py: 1.4,
                       px: 5,
                       borderRadius: 2,
                       textTransform: "none",
-                      "&:hover": { bgcolor: "#d7ff4d" },
+                      "&:hover": { bgcolor: ACCENT_HOVER },
                     }}
                   >
                     Done
@@ -368,16 +368,16 @@ export default function RentalQuoteModal({
                       borderRadius: 2,
                       display: "grid",
                       placeItems: "center",
-                      bgcolor: LIME,
-                      color: "#000",
-                      boxShadow: "0 0 15px rgba(200,255,0,0.2)",
+                      bgcolor: ACCENT,
+                      color: "#040a11",
+                      boxShadow: "0 0 15px rgba(var(--accent-rgb), 0.2)",
                     }}
                   >
                     <LocalShippingRounded sx={{ fontSize: 22 }} />
                   </Box>
                   <Box>
                     <Typography
-                      color={LIME}
+                      color={ACCENT}
                       sx={{
                         fontSize: 10,
                         fontWeight: 900,
@@ -440,7 +440,7 @@ export default function RentalQuoteModal({
                   }}
                 >
                   <Typography
-                    color={LIME}
+                    color={ACCENT}
                     sx={{
                       fontSize: 12,
                       fontWeight: 700,
@@ -468,9 +468,9 @@ export default function RentalQuoteModal({
                     borderRadius: 3,
                     bgcolor: "rgba(255,255,255,0.05)",
                     "& .MuiLinearProgress-bar": {
-                      bgcolor: LIME,
+                      bgcolor: ACCENT,
                       borderRadius: 3,
-                      boxShadow: "0 0 10px rgba(200,255,0,0.4)",
+                      boxShadow: "0 0 10px rgba(var(--accent-rgb), 0.4)",
                     },
                   }}
                 />
@@ -724,7 +724,7 @@ export default function RentalQuoteModal({
                             }
                             sx={{
                               color: "#ffffff",
-                              "&.Mui-checked": { color: LIME },
+                              "&.Mui-checked": { color: ACCENT },
                             }}
                           />
                         }
@@ -936,7 +936,7 @@ export default function RentalQuoteModal({
                               }
                               sx={{
                                 color: "#ffffff",
-                                "&.Mui-checked": { color: LIME },
+                                "&.Mui-checked": { color: ACCENT },
                               }}
                             />
                           }
@@ -1014,15 +1014,15 @@ export default function RentalQuoteModal({
                     onClick={handleNext}
                     endIcon={<ArrowForwardRounded />}
                     sx={{
-                      bgcolor: LIME,
-                      color: "#000",
+                      bgcolor: ACCENT,
+                      color: "#040a11",
                       fontWeight: 800,
                       px: 4,
                       py: 1.2,
                       borderRadius: 2,
                       textTransform: "none",
-                      boxShadow: "0 4px 15px rgba(200,255,0,0.2)",
-                      "&:hover": { bgcolor: "#d7ff4d" },
+                      boxShadow: "0 4px 15px rgba(var(--accent-rgb), 0.2)",
+                      "&:hover": { bgcolor: ACCENT_HOVER },
                     }}
                   >
                     Continue
@@ -1034,21 +1034,21 @@ export default function RentalQuoteModal({
                     onClick={() => void handleSubmit()}
                     startIcon={
                       submitting ? (
-                        <CircularProgress size={18} sx={{ color: "#000" }} />
+                        <CircularProgress size={18} sx={{ color: "#040a11" }} />
                       ) : (
                         <SendRounded />
                       )
                     }
                     sx={{
-                      bgcolor: LIME,
-                      color: "#000",
+                      bgcolor: ACCENT,
+                      color: "#040a11",
                       fontWeight: 900,
                       px: 4,
                       py: 1.2,
                       borderRadius: 2,
                       textTransform: "none",
-                      boxShadow: "0 4px 15px rgba(200,255,0,0.2)",
-                      "&:hover": { bgcolor: "#d7ff4d" },
+                      boxShadow: "0 4px 15px rgba(var(--accent-rgb), 0.2)",
+                      "&:hover": { bgcolor: ACCENT_HOVER },
                     }}
                   >
                     Submit Request

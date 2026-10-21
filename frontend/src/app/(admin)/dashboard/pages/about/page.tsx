@@ -16,7 +16,7 @@ import { api } from "@/lib/api";
 import { errorMessage, useResource } from "@/lib/useResource";
 import { ABOUT_PAGE_KEY, DEFAULT_ABOUT, aboutDraftFrom, aboutOverrides, type AboutContent } from "@/lib/aboutPage";
 import type { SiteSetting } from "@/lib/types";
-import { ErrorState, Field, LIME, LoadingState, PageHeader, Panel, Toast } from "@/components/admin/ui";
+import { ErrorState, Field, ACCENT, LoadingState, PageHeader, Panel, Toast } from "@/components/admin/ui";
 import ImageUploadField from "@/components/admin/ImageUploadField";
 import { ALT_TEXT_MAX } from "@/components/admin/AltTextField";
 
@@ -106,7 +106,7 @@ export default function AboutPageEditor() {
         title="About Us page"
         subtitle="Edit the text and photos on the About page. An empty field shows the original wording (in grey)."
       >
-        <Button href="/about" target="_blank" rel="noopener" endIcon={<OpenInNewRoundedIcon sx={{ fontSize: 16 }} />} sx={{ color: LIME, textTransform: "none", fontWeight: 700 }}>
+        <Button href="/about" target="_blank" rel="noopener" endIcon={<OpenInNewRoundedIcon sx={{ fontSize: 16 }} />} sx={{ color: ACCENT, textTransform: "none", fontWeight: 700 }}>
           View page
         </Button>
       </PageHeader>
@@ -265,7 +265,7 @@ export default function AboutPageEditor() {
           {text("team", "eyebrow", "Small label")}
           {text("team", "heading", "Heading")}
         </Box>
-        <Button href="/dashboard/teams" sx={{ mt: 1.5, color: LIME, textTransform: "none", fontWeight: 700, px: 0 }}>
+        <Button href="/dashboard/teams" sx={{ mt: 1.5, color: ACCENT, textTransform: "none", fontWeight: 700, px: 0 }}>
           Manage team members →
         </Button>
       </SectionPanel>
@@ -282,7 +282,7 @@ export default function AboutPageEditor() {
           {text("cta", "heading", "Heading")}
         </Box>
         <Box sx={{ mt: 2 }}>{text("cta", "text", "Text", true)}</Box>
-        <Button href="/dashboard/settings?tab=buttons" sx={{ mt: 1.5, color: LIME, textTransform: "none", fontWeight: 700, px: 0 }}>
+        <Button href="/dashboard/settings?tab=buttons" sx={{ mt: 1.5, color: ACCENT, textTransform: "none", fontWeight: 700, px: 0 }}>
           Edit the buttons →
         </Button>
       </SectionPanel>
@@ -328,7 +328,7 @@ export default function AboutPageEditor() {
           gap: 2,
           flexWrap: "wrap",
           borderRadius: "16px",
-          bgcolor: "rgba(20,21,20,0.95)",
+          bgcolor: "rgba(13,34,55,0.95)",
           backdropFilter: "blur(8px)",
           border: "1px solid rgba(255,255,255,0.1)",
         }}
@@ -346,13 +346,13 @@ export default function AboutPageEditor() {
           disableElevation
           startIcon={saving ? <CircularProgress size={16} sx={{ color: "inherit" }} /> : undefined}
           sx={{
-            bgcolor: LIME,
-            color: "#0a0a0a",
+            bgcolor: ACCENT,
+            color: "#081c31",
             fontWeight: 800,
             textTransform: "none",
             borderRadius: "999px",
             px: 3,
-            "&:hover": { bgcolor: "#b5e600" },
+            "&:hover": { bgcolor: "#e66f00" },
             "&.Mui-disabled": { bgcolor: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.35)" },
           }}
         >
@@ -411,8 +411,8 @@ function SectionPanel({
               onChange={(e) => onVisible(e.target.checked)}
               slotProps={{ input: { "aria-label": `Show ${title} section` } }}
               sx={{
-                "& .MuiSwitch-switchBase.Mui-checked": { color: LIME },
-                "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": { bgcolor: LIME },
+                "& .MuiSwitch-switchBase.Mui-checked": { color: ACCENT },
+                "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": { bgcolor: ACCENT },
               }}
             />
           </Box>
@@ -440,7 +440,7 @@ function ListHeading({ label, disabled, onAdd }: { label: string; disabled: bool
   return (
     <Box sx={{ display: "flex", alignItems: "center", mt: 3, mb: 1.5 }}>
       <Typography sx={{ flex: 1, fontSize: 14, fontWeight: 700, color: "rgba(255,255,255,0.8)" }}>{label}</Typography>
-      <Button size="small" onClick={onAdd} disabled={disabled} startIcon={<AddRoundedIcon />} sx={{ color: LIME, textTransform: "none", fontWeight: 700 }}>
+      <Button size="small" onClick={onAdd} disabled={disabled} startIcon={<AddRoundedIcon />} sx={{ color: ACCENT, textTransform: "none", fontWeight: 700 }}>
         Add
       </Button>
     </Box>

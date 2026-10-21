@@ -34,7 +34,7 @@ import {
 import { publishSiteLogo } from "@/lib/useSiteLogo";
 import type { SiteSetting } from "@/lib/types";
 import SiteLogo from "@/components/common/SiteLogo";
-import { BORDER, LIME, Panel } from "@/components/admin/ui";
+import { BORDER, ACCENT, Panel } from "@/components/admin/ui";
 import AltTextField, { ALT_TEXT_MAX } from "@/components/admin/AltTextField";
 
 const ACCEPT = "image/png,image/jpeg,image/webp";
@@ -104,12 +104,12 @@ const labelSx = {
 const hintSx = { fontSize: 12, color: "rgba(255,255,255,0.4)" } as const;
 
 const primaryBtnSx = {
-  bgcolor: LIME,
-  color: "#0a0a0a",
+  bgcolor: ACCENT,
+  color: "#081c31",
   fontWeight: 800,
   textTransform: "none",
   borderRadius: "999px",
-  "&:hover": { bgcolor: "#b5e600" },
+  "&:hover": { bgcolor: "#e66f00" },
   "&.Mui-disabled": { bgcolor: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.35)" },
 } as const;
 
@@ -223,7 +223,7 @@ function SizeSlider({
     <>
       <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", mb: 0.5 }}>
         <Typography sx={labelSx}>Logo size</Typography>
-        <Typography sx={{ fontSize: 14, fontWeight: 800, color: LIME }}>{value}%</Typography>
+        <Typography sx={{ fontSize: 14, fontWeight: 800, color: ACCENT }}>{value}%</Typography>
       </Box>
       <Slider
         value={value}
@@ -237,7 +237,7 @@ function SizeSlider({
         valueLabelDisplay="auto"
         valueLabelFormat={(v) => `${v}%`}
         sx={{
-          color: LIME,
+          color: ACCENT,
           "& .MuiSlider-markLabel": { color: "rgba(255,255,255,0.45)", fontSize: 11.5 },
           "& .MuiSlider-mark": { bgcolor: "rgba(255,255,255,0.5)", height: 10, width: 2 },
         }}
@@ -299,7 +299,7 @@ function PreviewLabel({ children, dirty }: { children: React.ReactNode; dirty?: 
   return (
     <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 1 }}>
       <Typography sx={labelSx}>{children}</Typography>
-      {dirty && <Typography sx={{ fontSize: 12, fontWeight: 700, color: LIME }}>Unsaved changes</Typography>}
+      {dirty && <Typography sx={{ fontSize: 12, fontWeight: 700, color: ACCENT }}>Unsaved changes</Typography>}
     </Box>
   );
 }
@@ -311,7 +311,7 @@ function LiveSiteLink() {
       target="_blank"
       rel="noopener"
       endIcon={<OpenInNewRoundedIcon sx={{ fontSize: 16 }} />}
-      sx={{ mt: 2, color: LIME, textTransform: "none", fontWeight: 700, px: 0, "&:hover": { bgcolor: "transparent", textDecoration: "underline" } }}
+      sx={{ mt: 2, color: ACCENT, textTransform: "none", fontWeight: 700, px: 0, "&:hover": { bgcolor: "transparent", textDecoration: "underline" } }}
     >
       Check it on the live site
     </Button>
@@ -363,7 +363,7 @@ function NavPreview({ logo, viewport }: { logo: LogoSettings; viewport: "desktop
       sx={{
         p: { xs: 1.5, sm: 2.5 },
         borderRadius: "14px",
-        background: "radial-gradient(circle at 20% 0%, #26301a 0%, #0b0c0b 60%)",
+        background: "radial-gradient(circle at 20% 0%, #143655 0%, #091826 60%)",
         border: BORDER,
         overflowX: "auto",
       }}
@@ -381,7 +381,7 @@ function NavPreview({ logo, viewport }: { logo: LogoSettings; viewport: "desktop
           boxSizing: "border-box",
           maxWidth: desktop ? undefined : "100%",
           borderRadius: "999px",
-          bgcolor: "rgba(18,17,17,0.85)",
+          bgcolor: "rgba(12,31,49,0.85)",
           border: "1px solid rgba(255,255,255,0.1)",
           boxShadow: "0 12px 40px rgba(0,0,0,0.5)",
         }}
@@ -396,7 +396,7 @@ function NavPreview({ logo, viewport }: { logo: LogoSettings; viewport: "desktop
                 {l}
               </Typography>
             ))}
-            <Box sx={{ px: 2.2, py: 1, borderRadius: "999px", bgcolor: LIME, color: "#0a0a0a", fontSize: 13, fontWeight: 800 }}>
+            <Box sx={{ px: 2.2, py: 1, borderRadius: "999px", bgcolor: ACCENT, color: "#081c31", fontSize: 13, fontWeight: 800 }}>
               Call us
             </Box>
           </Box>
@@ -508,7 +508,7 @@ function FooterPreview({
       sx={{
         p: 3,
         borderRadius: "14px",
-        bgcolor: "#050505",
+        bgcolor: "#06101a",
         border: BORDER,
         width: viewport === "mobile" ? 340 : "100%",
         maxWidth: "100%",
@@ -589,8 +589,8 @@ function FooterLogoSection({ settings, onSaved }: Props) {
               disabled={ed.busy}
               slotProps={{ input: { "aria-label": "Show company name next to the footer logo" } }}
               sx={{
-                "& .MuiSwitch-switchBase.Mui-checked": { color: LIME },
-                "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": { bgcolor: LIME },
+                "& .MuiSwitch-switchBase.Mui-checked": { color: ACCENT },
+                "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": { bgcolor: ACCENT },
               }}
             />
           </Box>

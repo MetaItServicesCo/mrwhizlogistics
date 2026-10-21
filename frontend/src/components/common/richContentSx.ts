@@ -1,3 +1,4 @@
+import { ACCENT, ACCENT_HOVER } from "@/theme/brand";
 /**
  * Typography for rich-text HTML, shared by the public detail pages and the
  * dashboard editor so what editors see while writing matches what visitors get.
@@ -6,7 +7,6 @@
  * for their legacy plain-text content.
  */
 
-const LIME = "#c8ff00";
 
 const TONES = {
   blog: { color: "rgba(255,255,255,0.7)", size: { xs: 15, md: 16 } },
@@ -36,10 +36,10 @@ export function richContentSx(tone: keyof typeof TONES = "blog") {
 
     "& strong, & b": { color: "#fff", fontWeight: 700 },
     "& a": {
-      color: LIME,
+      color: ACCENT,
       textDecoration: "underline",
       textUnderlineOffset: "3px",
-      "&:hover": { color: "#d4ff33" },
+      "&:hover": { color: ACCENT_HOVER },
     },
 
     // The global CSS reset sets list-style: none on every list, which hid
@@ -50,15 +50,15 @@ export function richContentSx(tone: keyof typeof TONES = "blog") {
     "& ul ul": { listStyleType: "circle" },
     "& li": { mb: 0.75 },
     "& li > p": { mb: 0 },
-    "& ul li::marker": { color: LIME },
-    "& ol li::marker": { color: LIME, fontWeight: 700 },
+    "& ul li::marker": { color: ACCENT },
+    "& ol li::marker": { color: ACCENT, fontWeight: 700 },
 
     "& blockquote": {
       m: 0,
       mb: 2.5,
       pl: 2.5,
       py: 0.5,
-      borderLeft: `3px solid ${LIME}`,
+      borderLeft: `3px solid ${ACCENT}`,
       color: "rgba(255,255,255,0.85)",
       fontStyle: "italic",
       "& p": { mb: 0 },

@@ -13,8 +13,8 @@ import { ctaProps, useCta } from "@/components/common/CtaProvider";
 import CoverImage from "@/components/common/CoverImage";
 import { mediaUrl } from "@/lib/api";
 import { DEFAULT_ABOUT, type AboutContent } from "@/lib/aboutPage";
+import { ACCENT, ACCENT_HOVER } from "@/theme/brand";
 
-const LIME = "#c8ff00";
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 /** One icon per feature box (the text is edited in the dashboard). */
@@ -39,7 +39,7 @@ export default function AboutExpertise({
       component="section"
       sx={{
         position: "relative",
-        bgcolor: "#0a0a0a",
+        bgcolor: "#081c31",
         color: "#fff",
         px: { xs: 3, sm: 4, md: 6, lg: 8 },
         py: { xs: 8, md: 13 },
@@ -55,7 +55,7 @@ export default function AboutExpertise({
           width: 520,
           height: 420,
           background:
-            "radial-gradient(ellipse, rgba(200,255,0,0.07), transparent 70%)",
+            "radial-gradient(ellipse, rgba(var(--accent-rgb), 0.07), transparent 70%)",
           pointerEvents: "none",
         }}
       />
@@ -89,19 +89,19 @@ export default function AboutExpertise({
             variants={fadeUp}
             sx={{ display: "flex", alignItems: "center", gap: 1.2, mb: 2 }}
           >
-            <Box sx={{ width: 26, height: 2, bgcolor: LIME }} />
+            <Box sx={{ width: 26, height: 2, bgcolor: ACCENT }} />
             <Typography
               sx={{
                 fontSize: 12,
                 fontWeight: 800,
                 letterSpacing: 2.5,
-                color: LIME,
+                color: ACCENT,
                 textTransform: "uppercase",
               }}
             >
               {content.eyebrow}
             </Typography>
-            <LocalShippingRoundedIcon sx={{ fontSize: 18, color: LIME }} />
+            <LocalShippingRoundedIcon sx={{ fontSize: 18, color: ACCENT }} />
           </Box>
 
           {/* heading */}
@@ -122,7 +122,7 @@ export default function AboutExpertise({
               sx={{
                 position: "relative",
                 display: "inline-block",
-                background: `linear-gradient(90deg, ${LIME}, #00e5ff, ${LIME})`,
+                background: `linear-gradient(90deg, ${ACCENT}, var(--accent-2), ${ACCENT})`,
                 backgroundSize: "200% auto",
                 WebkitBackgroundClip: "text",
                 backgroundClip: "text",
@@ -150,7 +150,7 @@ export default function AboutExpertise({
                   right: 0,
                   bottom: -4,
                   height: 3,
-                  bgcolor: LIME,
+                  bgcolor: ACCENT,
                   transformOrigin: "left",
                   borderRadius: 2,
                 }}
@@ -191,14 +191,14 @@ export default function AboutExpertise({
                   position: "relative",
                   p: 2.5,
                   borderRadius: "14px",
-                  bgcolor: "#101010",
-                  borderLeft: `2px solid ${LIME}`,
+                  bgcolor: "#0b1d2e",
+                  borderLeft: `2px solid ${ACCENT}`,
                   border: "1px solid rgba(255,255,255,0.08)",
-                  borderLeftColor: LIME,
+                  borderLeftColor: ACCENT,
                   borderLeftWidth: 2,
                   transition: "all .3s",
                   "&:hover": {
-                    bgcolor: "#141414",
+                    bgcolor: "#0d2236",
                     transform: "translateY(-4px)",
                   },
                   "&:hover .af-icon": { transform: "scale(1.1)" },
@@ -207,7 +207,7 @@ export default function AboutExpertise({
                 <Box
                   className="af-icon"
                   sx={{
-                    color: LIME,
+                    color: ACCENT,
                     mb: 1.2,
                     transition: "transform .3s",
                     "& svg": { fontSize: 30 },
@@ -257,15 +257,15 @@ export default function AboutExpertise({
               sx={{
                 position: "relative",
                 overflow: "hidden",
-                bgcolor: LIME,
-                color: "#0a0a0a",
+                bgcolor: ACCENT,
+                color: "#081c31",
                 fontWeight: 800,
                 borderRadius: "12px",
                 px: 3.5,
                 py: 1.4,
                 textTransform: "none",
                 fontSize: 14.5,
-                "&:hover": { bgcolor: "#d4ff33" },
+                "&:hover": { bgcolor: ACCENT_HOVER },
                 "& .ab-a": { transition: "transform .3s" },
                 "&:hover .ab-a": { transform: "translateX(3px)" },
                 "&::after": {
@@ -302,8 +302,8 @@ export default function AboutExpertise({
                   width: 46,
                   height: 46,
                   borderRadius: "50%",
-                  border: `1px solid ${LIME}44`,
-                  color: LIME,
+                  border: `1px solid ${ACCENT}44`,
+                  color: ACCENT,
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
@@ -314,7 +314,7 @@ export default function AboutExpertise({
                 <PhoneInTalkRoundedIcon />
               </Box>
               <Box>
-                <Typography sx={{ fontSize: 12, color: LIME, fontWeight: 700 }}>
+                <Typography sx={{ fontSize: 12, color: ACCENT, fontWeight: 700 }}>
                   Make a Phone Call
                 </Typography>
                 <Typography
@@ -350,7 +350,7 @@ export default function AboutExpertise({
               right: 0,
               width: 120,
               height: 120,
-              backgroundImage: `radial-gradient(${LIME}55 1.5px, transparent 1.5px)`,
+              backgroundImage: `radial-gradient(${ACCENT}55 1.5px, transparent 1.5px)`,
               backgroundSize: "16px 16px",
               opacity: 0.5,
             }}
@@ -372,7 +372,7 @@ export default function AboutExpertise({
               overflow: "hidden",
               border: "1px solid rgba(255,255,255,0.1)",
               boxShadow: "0 20px 50px rgba(0,0,0,0.4)",
-              ...(IMG_BACK ? {} : { background: "linear-gradient(150deg, #26301a, #0a0a0a)" }),
+              ...(IMG_BACK ? {} : { background: "linear-gradient(150deg, #143655, #081c31)" }),
             }}
           >
             {IMG_BACK && <CoverImage src={mediaUrl(IMG_BACK)} alt={content.backImage.alt} />}
@@ -397,10 +397,10 @@ export default function AboutExpertise({
               height: "66%",
               borderRadius: "18px",
               overflow: "hidden",
-              border: `2px solid ${LIME}44`,
+              border: `2px solid ${ACCENT}44`,
               boxShadow: "0 24px 60px rgba(0,0,0,0.5)",
               zIndex: 2,
-              ...(IMG_FRONT ? {} : { background: "linear-gradient(150deg, #12202a, #0a0a0a)" }),
+              ...(IMG_FRONT ? {} : { background: "linear-gradient(150deg, #12202a, #081c31)" }),
             }}
           >
             {IMG_FRONT && <CoverImage src={mediaUrl(IMG_FRONT)} alt={content.frontImage.alt} />}
@@ -435,9 +435,9 @@ export default function AboutExpertise({
                     d="M50,50 m-38,0 a38,38 0 1,1 76,0 a38,38 0 1,1 -76,0"
                   />
                 </defs>
-                <circle cx="50" cy="50" r="49" fill={LIME} />
+                <circle cx="50" cy="50" r="49" fill={ACCENT} />
                 <text
-                  fill="#0a0a0a"
+                  fill="#081c31"
                   fontSize="9.5"
                   fontWeight="800"
                   letterSpacing="2.5"
@@ -463,11 +463,11 @@ export default function AboutExpertise({
                   width: 52,
                   height: 52,
                   borderRadius: "50%",
-                  bgcolor: "#0a0a0a",
+                  bgcolor: "#081c31",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  "& svg": { fontSize: 26, color: LIME },
+                  "& svg": { fontSize: 26, color: ACCENT },
                 }}
               >
                 <LocalShippingRoundedIcon />

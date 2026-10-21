@@ -11,8 +11,8 @@ import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
 import { getPublicTestimonials } from "@/lib/publicApi";
 import CoverImage from "@/components/common/CoverImage";
+import { ACCENT, withBrandColours } from "@/theme/brand";
 
-const LIME = "#c8ff00";
 const DURATION = 3000;
 const RING_R = 46;
 const RING_C = 2 * Math.PI * RING_R;
@@ -38,7 +38,7 @@ const TESTIMONIALS: T[] = [
     role: "Logistics Manager, WestPoint Freight",
     rating: 5,
     initials: "JC",
-    accent: "linear-gradient(135deg, #c8ff00, #7fb800)",
+    accent: "linear-gradient(135deg, var(--accent), #b85900)",
   },
   {
     quote:
@@ -47,7 +47,7 @@ const TESTIMONIALS: T[] = [
     role: "Operations Manager, Summit Supply Co.",
     rating: 5,
     initials: "ET",
-    accent: "linear-gradient(135deg, #00e5ff, #0088aa)",
+    accent: "linear-gradient(135deg, var(--accent-2), #aa6600)",
   },
   {
     quote:
@@ -56,7 +56,7 @@ const TESTIMONIALS: T[] = [
     role: "Fleet Coordinator, Prime Industrial",
     rating: 5,
     initials: "RW",
-    accent: "linear-gradient(135deg, #ff4dd8, #aa2288)",
+    accent: "linear-gradient(135deg, var(--sky), #226daa)",
   },
   {
     quote:
@@ -98,7 +98,7 @@ function Stars({ rating }: { rating: number }) {
           <StarRoundedIcon
             sx={{
               fontSize: { xs: 20, md: 23 },
-              color: i < rating ? LIME : "rgba(255,255,255,0.16)",
+              color: i < rating ? ACCENT : "rgba(255,255,255,0.16)",
             }}
           />
         </Box>
@@ -136,8 +136,9 @@ export default function TestimonialsSection() {
                 .join("")
                 .slice(0, 2)
                 .toUpperCase(),
-            accent:
-              item.accent || "linear-gradient(135deg, #c8ff00, #7fb800)",
+            accent: item.accent
+              ? withBrandColours(item.accent)
+              : "linear-gradient(135deg, var(--accent), #b85900)",
             image: item.image || undefined,
             imageAlt: item.image_alt || undefined,
           })),
@@ -201,7 +202,7 @@ export default function TestimonialsSection() {
       aria-labelledby="tst-title"
       sx={{
         position: "relative",
-        bgcolor: "#0a0a0a",
+        bgcolor: "#081c31",
         color: "#fff",
         py: { xs: 9, md: 14 },
         px: { xs: 3, sm: 4, md: 6, lg: 8 },
@@ -218,7 +219,7 @@ export default function TestimonialsSection() {
           width: 700,
           height: 340,
           background:
-            "radial-gradient(ellipse, rgba(200,255,0,0.07), transparent 70%)",
+            "radial-gradient(ellipse, rgba(var(--accent-rgb), 0.07), transparent 70%)",
           pointerEvents: "none",
         }}
       />
@@ -228,7 +229,7 @@ export default function TestimonialsSection() {
           position: "absolute",
           top: 40,
           left: { xs: 6, md: 60 },
-          color: "rgba(200,255,0,0.04)",
+          color: "rgba(var(--accent-rgb), 0.04)",
           pointerEvents: "none",
           "& svg": { fontSize: { xs: 150, md: 260 } },
         }}
@@ -256,7 +257,7 @@ export default function TestimonialsSection() {
           <Typography
             component="p"
             sx={{
-              color: LIME,
+              color: ACCENT,
               letterSpacing: 3,
               fontSize: 12,
               fontWeight: 700,
@@ -274,7 +275,7 @@ export default function TestimonialsSection() {
               lineHeight: 1.12,
               letterSpacing: "-0.5px",
               fontSize: { xs: "1.9rem", sm: "2.5rem", md: "3.2rem" },
-              background: `linear-gradient(90deg, #ffffff, ${LIME}, #00e5ff, #ffffff)`,
+              background: `linear-gradient(90deg, #ffffff, ${ACCENT}, var(--accent-2), #ffffff)`,
               backgroundSize: "200% auto",
               WebkitBackgroundClip: "text",
               backgroundClip: "text",
@@ -315,7 +316,7 @@ export default function TestimonialsSection() {
           mx: "auto",
           borderRadius: "28px",
           p: "1.5px",
-          background: `linear-gradient(150deg, rgba(200,255,0,0.45), rgba(255,255,255,0.05) 45%)`,
+          background: `linear-gradient(150deg, rgba(var(--accent-rgb), 0.45), rgba(255,255,255,0.05) 45%)`,
           cursor: "grab",
           "&:active": { cursor: "grabbing" },
           userSelect: "none",
@@ -325,7 +326,7 @@ export default function TestimonialsSection() {
           sx={{
             position: "relative",
             borderRadius: "27px",
-            bgcolor: "#0d100c",
+            bgcolor: "#0a1b2b",
             px: { xs: 3.5, sm: 6, md: 8 },
             py: { xs: 5.5, md: 7 },
             overflow: "hidden",
@@ -341,13 +342,13 @@ export default function TestimonialsSection() {
               width: 260,
               height: 260,
               background:
-                "radial-gradient(circle, rgba(200,255,0,0.13), transparent 65%)",
+                "radial-gradient(circle, rgba(var(--accent-rgb), 0.13), transparent 65%)",
               pointerEvents: "none",
             }}
           />
           <FormatQuoteRoundedIcon
             sx={{
-              color: LIME,
+              color: ACCENT,
               fontSize: { xs: 38, md: 50 },
               mb: 2,
               transform: "scaleX(-1)",
@@ -404,7 +405,7 @@ export default function TestimonialsSection() {
               <Typography
                 sx={{
                   fontSize: { xs: 12.5, md: 13.5 },
-                  color: LIME,
+                  color: ACCENT,
                   mt: 0.5,
                   letterSpacing: "0.2px",
                 }}
@@ -436,7 +437,7 @@ export default function TestimonialsSection() {
             border: "1px solid rgba(255,255,255,0.18)",
             color: "#fff",
             transition: "all .25s",
-            "&:hover": { borderColor: LIME, color: LIME },
+            "&:hover": { borderColor: ACCENT, color: ACCENT },
           }}
         >
           <ArrowBackRoundedIcon />
@@ -502,7 +503,7 @@ export default function TestimonialsSection() {
                       cy="50"
                       r={RING_R}
                       fill="none"
-                      stroke={LIME}
+                      stroke={ACCENT}
                       strokeWidth="3.5"
                       strokeLinecap="round"
                       strokeDasharray={RING_C}
@@ -517,7 +518,7 @@ export default function TestimonialsSection() {
                       position: "absolute",
                       inset: -4,
                       borderRadius: "50%",
-                      border: `2px solid ${LIME}`,
+                      border: `2px solid ${ACCENT}`,
                     }}
                   />
                 )}
@@ -559,7 +560,7 @@ export default function TestimonialsSection() {
             border: "1px solid rgba(255,255,255,0.18)",
             color: "#fff",
             transition: "all .25s",
-            "&:hover": { borderColor: LIME, color: LIME },
+            "&:hover": { borderColor: ACCENT, color: ACCENT },
           }}
         >
           <ArrowForwardRoundedIcon />

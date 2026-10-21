@@ -12,11 +12,12 @@ import {
   BORDER,
   CARD_BG,
   ErrorState,
-  LIME,
+  ACCENT,
   Panel,
   StatusChip,
   fmtDateTime,
 } from "@/components/admin/ui";
+import { ACCENT_HOVER } from "@/theme/brand";
 
 type Recent = {
   quotes: Quote[];
@@ -48,7 +49,7 @@ function StatCard({
         textDecoration: "none",
         display: "block",
         transition: "border-color .2s, transform .2s",
-        "&:hover": { borderColor: `${LIME}55`, transform: "translateY(-2px)" },
+        "&:hover": { borderColor: `${ACCENT}55`, transform: "translateY(-2px)" },
       }}
     >
       <Typography sx={{ fontSize: 12.5, color: "rgba(255,255,255,0.5)", mb: 1 }}>
@@ -66,7 +67,7 @@ function StatCard({
           sx={{
             fontSize: "2rem",
             fontWeight: 800,
-            color: LIME,
+            color: ACCENT,
             lineHeight: 1,
           }}
         >
@@ -257,9 +258,9 @@ function RecentPanel({
           sx={{
             fontSize: 12.5,
             fontWeight: 700,
-            color: LIME,
+            color: ACCENT,
             textDecoration: "none",
-            "&:hover": { color: "#d4ff33" },
+            "&:hover": { color: ACCENT_HOVER },
           }}
         >
           View all

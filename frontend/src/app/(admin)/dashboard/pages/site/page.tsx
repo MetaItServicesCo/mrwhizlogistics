@@ -31,7 +31,7 @@ import {
   ErrorState,
   Field,
   FormDialog,
-  LIME,
+  ACCENT,
   LoadingState,
   PageHeader,
   Panel,
@@ -39,13 +39,14 @@ import {
   fmtDateTime,
 } from "@/components/admin/ui";
 import RichTextEditor from "@/components/admin/RichTextEditor";
+import { ACCENT_HOVER } from "@/theme/brand";
 
 const META_TITLE_MAX = 60;
 const META_DESC_MAX = 160;
 const shrink = { inputLabel: { shrink: true } };
 const switchSx = {
-  "& .MuiSwitch-switchBase.Mui-checked": { color: LIME },
-  "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": { bgcolor: LIME },
+  "& .MuiSwitch-switchBase.Mui-checked": { color: ACCENT },
+  "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": { bgcolor: ACCENT },
 };
 
 interface Draft {
@@ -217,7 +218,7 @@ export default function SitePagesAdmin() {
           onClick={() => open(p)}
           startIcon={<EditRoundedIcon />}
           aria-label={`Edit ${p.title}`}
-          sx={{ color: "#0a0a0a", bgcolor: LIME, textTransform: "none", fontWeight: 800, borderRadius: "10px", px: 2, "&:hover": { bgcolor: "#d4ff33" } }}
+          sx={{ color: "#081c31", bgcolor: ACCENT, textTransform: "none", fontWeight: 800, borderRadius: "10px", px: 2, "&:hover": { bgcolor: ACCENT_HOVER } }}
         >
           Edit
         </Button>
@@ -287,7 +288,7 @@ export default function SitePagesAdmin() {
               ) : (
                 <Panel sx={{ p: 3, textAlign: "center" }}>
                   <Typography sx={{ color: "rgba(255,255,255,0.6)", fontSize: 14, mb: 1.5 }}>No pages yet.</Typography>
-                  <Button onClick={openNew} sx={{ color: LIME, textTransform: "none", fontWeight: 800 }}>
+                  <Button onClick={openNew} sx={{ color: ACCENT, textTransform: "none", fontWeight: 800 }}>
                     Create your first page
                   </Button>
                 </Panel>
@@ -443,7 +444,7 @@ function Chip({ on, label, subtle }: { on: boolean; label: string; subtle?: bool
         fontWeight: 800,
         letterSpacing: 0.4,
         ...(on && !subtle
-          ? { bgcolor: `${LIME}22`, color: LIME }
+          ? { bgcolor: `${ACCENT}22`, color: ACCENT }
           : { bgcolor: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.65)" }),
       }}
     >

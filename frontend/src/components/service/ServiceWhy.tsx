@@ -17,8 +17,8 @@ import RouteRoundedIcon from "@mui/icons-material/RouteRounded";
 import BoltRoundedIcon from "@mui/icons-material/BoltRounded";
 import ConstructionRoundedIcon from "@mui/icons-material/ConstructionRounded";
 import PublicRoundedIcon from "@mui/icons-material/PublicRounded";
+import { ACCENT } from "@/theme/brand";
 
-const LIME = "#c8ff00";
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 export type FeatureItem = { icon: string; title: string; description: string };
@@ -52,7 +52,7 @@ function Card({ f }: { f: FeatureItem }) {
   const reduce = useReducedMotion() ?? false;
   const mx = useMotionValue(-200);
   const my = useMotionValue(-200);
-  const spotlight = useMotionTemplate`radial-gradient(200px circle at ${mx}px ${my}px, rgba(200,255,0,0.1), transparent 70%)`;
+  const spotlight = useMotionTemplate`radial-gradient(200px circle at ${mx}px ${my}px, rgba(var(--accent-rgb), 0.1), transparent 70%)`;
   const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (reduce) return;
     const r = e.currentTarget.getBoundingClientRect();
@@ -83,14 +83,14 @@ function Card({ f }: { f: FeatureItem }) {
           height: "100%",
           p: { xs: 3, md: 3.5 },
           borderRadius: "16px",
-          bgcolor: "#101010",
+          bgcolor: "#0b1d2e",
           border: "1px solid rgba(255,255,255,.08)",
           overflow: "hidden",
           transition:
             "transform .35s ease, border-color .35s ease, box-shadow .35s ease",
           "&:hover": {
             transform: "translateY(-6px)",
-            borderColor: `${LIME}55`,
+            borderColor: `${ACCENT}55`,
             boxShadow: "0 20px 46px rgba(0,0,0,.5)",
           },
           "&:hover .fw-icon": { transform: "translateY(-3px) rotate(-6deg)" },
@@ -122,7 +122,7 @@ function Card({ f }: { f: FeatureItem }) {
             width: "55%",
             height: "100%",
             background:
-              "linear-gradient(120deg, transparent, rgba(200,255,0,0.05), transparent)",
+              "linear-gradient(120deg, transparent, rgba(var(--accent-rgb), 0.05), transparent)",
             transform: "translateX(-150%)",
             transition: "transform .7s ease",
             pointerEvents: "none",
@@ -136,13 +136,13 @@ function Card({ f }: { f: FeatureItem }) {
             width: 52,
             height: 52,
             borderRadius: "13px",
-            bgcolor: LIME,
-            color: "#080808",
+            bgcolor: ACCENT,
+            color: "#07141f",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             mb: 2.5,
-            boxShadow: "0 8px 20px rgba(200,255,0,.3)",
+            boxShadow: "0 8px 20px rgba(var(--accent-rgb), .3)",
             transition: "transform .35s ease",
             "& svg": { fontSize: 26 },
           }}
@@ -181,7 +181,7 @@ function Card({ f }: { f: FeatureItem }) {
             right: 0,
             bottom: 0,
             height: 3,
-            background: `linear-gradient(90deg, ${LIME}, #00e5ff)`,
+            background: `linear-gradient(90deg, ${ACCENT}, var(--accent-2))`,
             transform: "scaleX(0)",
             transformOrigin: "left",
             transition: "transform .4s ease",
@@ -208,7 +208,7 @@ export default function ServiceWhy({
       component="section"
       sx={{
         position: "relative",
-        bgcolor: "#0a0a0a",
+        bgcolor: "#081c31",
         color: "#fff",
         px: { xs: 3, sm: 4, md: 6, lg: 8 },
         py: { xs: 8, md: 13 },
@@ -225,7 +225,7 @@ export default function ServiceWhy({
           width: 680,
           height: 340,
           background:
-            "radial-gradient(ellipse, rgba(200,255,0,0.07), transparent 70%)",
+            "radial-gradient(ellipse, rgba(var(--accent-rgb), 0.07), transparent 70%)",
           pointerEvents: "none",
         }}
       />
@@ -254,11 +254,11 @@ export default function ServiceWhy({
               mb: 2,
             }}
           >
-            <Box sx={{ width: 28, height: 2, bgcolor: LIME, opacity: 0.7 }} />
+            <Box sx={{ width: 28, height: 2, bgcolor: ACCENT, opacity: 0.7 }} />
             <Typography
               component="p"
               sx={{
-                color: LIME,
+                color: ACCENT,
                 letterSpacing: 3,
                 fontSize: 12,
                 fontWeight: 700,
@@ -267,7 +267,7 @@ export default function ServiceWhy({
             >
               {eyebrow}
             </Typography>
-            <Box sx={{ width: 28, height: 2, bgcolor: LIME, opacity: 0.7 }} />
+            <Box sx={{ width: 28, height: 2, bgcolor: ACCENT, opacity: 0.7 }} />
           </Box>
           <Typography
             component="h2"
@@ -276,7 +276,7 @@ export default function ServiceWhy({
               lineHeight: 1.1,
               letterSpacing: "-0.5px",
               fontSize: { xs: "2rem", sm: "2.7rem", md: "3.4rem" },
-              background: `linear-gradient(90deg, #ffffff, ${LIME}, #00e5ff, #ffffff)`,
+              background: `linear-gradient(90deg, #ffffff, ${ACCENT}, var(--accent-2), #ffffff)`,
               backgroundSize: "200% auto",
               WebkitBackgroundClip: "text",
               backgroundClip: "text",

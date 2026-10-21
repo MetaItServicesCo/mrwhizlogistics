@@ -27,7 +27,7 @@ import {
   ConfirmDialog,
   Field,
   FormDialog,
-  LIME,
+  ACCENT,
   PageHeader,
   SearchBox,
   SelectField,
@@ -308,7 +308,7 @@ function SettingsPage() {
             {me?.id === u.id && (
               <Box
                 component="span"
-                sx={{ ml: 1, fontSize: 11, color: LIME, fontWeight: 700 }}
+                sx={{ ml: 1, fontSize: 11, color: ACCENT, fontWeight: 700 }}
               >
                 (you)
               </Box>
@@ -364,8 +364,8 @@ function SettingsPage() {
             fontSize: 14,
             minHeight: 40,
           },
-          "& .Mui-selected": { color: `${LIME} !important` },
-          "& .MuiTabs-indicator": { backgroundColor: LIME },
+          "& .Mui-selected": { color: `${ACCENT} !important` },
+          "& .MuiTabs-indicator": { backgroundColor: ACCENT },
         }}
       >
         <Tab value="branding" label="Branding" />
@@ -565,9 +565,9 @@ function SettingsPage() {
               setUForm((f) => ({ ...f, is_active: e.target.checked }))
             }
             sx={{
-              "& .Mui-checked": { color: LIME },
+              "& .Mui-checked": { color: ACCENT },
               "& .Mui-checked + .MuiSwitch-track": {
-                backgroundColor: `${LIME} !important`,
+                backgroundColor: `${ACCENT} !important`,
               },
             }}
           />

@@ -4,8 +4,8 @@ import { useRef } from "react";
 import { motion, useScroll, useSpring, useReducedMotion } from "motion/react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import { ACCENT } from "@/theme/brand";
 
-const LIME = "#c8ff00";
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 const STEPS = [
@@ -48,7 +48,7 @@ export default function HotShotHowItWorks() {
       >
         <Typography
           sx={{
-            color: LIME,
+            color: ACCENT,
             fontSize: 10,
             fontWeight: 900,
             letterSpacing: 2.5,
@@ -70,7 +70,7 @@ export default function HotShotHowItWorks() {
           }}
         >
           From first call to{" "}
-          <Box component="span" sx={{ color: LIME }}>
+          <Box component="span" sx={{ color: ACCENT }}>
             final delivery.
           </Box>
         </Typography>
@@ -110,7 +110,7 @@ export default function HotShotHowItWorks() {
               width: "100%",
               height: "100%",
               transformOrigin: "top",
-              background: `linear-gradient(180deg, ${LIME}, #00e5ff)`,
+              background: `linear-gradient(180deg, ${ACCENT}, var(--accent-2))`,
             }}
           />
         </Box>
@@ -143,21 +143,21 @@ export default function HotShotHowItWorks() {
                 width: 56,
                 height: 56,
                 borderRadius: "14px",
-                bgcolor: "#0e0e0e",
-                border: `1px solid ${LIME}44`,
+                bgcolor: "#0a1b2b",
+                border: `1px solid ${ACCENT}44`,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                color: LIME,
+                color: ACCENT,
                 fontWeight: 900,
                 fontSize: 20,
                 transition:
                   "transform .35s ease, box-shadow .35s ease, background .35s ease",
                 "&:hover": {
                   transform: "scale(1.08)",
-                  bgcolor: LIME,
-                  color: "#080808",
-                  boxShadow: "0 12px 30px rgba(200,255,0,0.3)",
+                  bgcolor: ACCENT,
+                  color: "#07141f",
+                  boxShadow: "0 12px 30px rgba(var(--accent-rgb), 0.3)",
                 },
               }}
             >

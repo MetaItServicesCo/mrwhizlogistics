@@ -19,8 +19,8 @@ import HotShotTransportOptions from "@/components/hot-shot/HotShotTransportOptio
 import HotShotQuote from "@/components/hot-shot/HotShotQuote";
 import HotShotHowItWorks from "./HotShotHowItWorks";
 import { ctaProps, useCta } from "@/components/common/CtaProvider";
+import { ACCENT, ACCENT_HOVER } from "@/theme/brand";
 
-const LIME = "#c8ff00";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -78,15 +78,15 @@ function Sidebar({
                 borderBottom: "1px solid rgba(255,255,255,.07)",
                 textDecoration: "none",
                 color:
-                  item.slug === service?.slug ? LIME : "rgba(255,255,255,.48)",
+                  item.slug === service?.slug ? ACCENT : "rgba(255,255,255,.48)",
                 bgcolor:
                   item.slug === service?.slug
-                    ? "rgba(200,255,0,.06)"
+                    ? "rgba(var(--accent-rgb), .06)"
                     : "transparent",
                 transition: "all .25s ease",
                 "&:hover": {
-                  color: LIME,
-                  bgcolor: "rgba(200,255,0,.05)",
+                  color: ACCENT,
+                  bgcolor: "rgba(var(--accent-rgb), .05)",
                 },
               }}
             >
@@ -120,7 +120,7 @@ function Sidebar({
           position: "relative",
           borderRadius: "16px",
           p: "1px",
-          background: `linear-gradient(150deg, rgba(200,255,0,.4), rgba(255,255,255,.05) 45%)`,
+          background: `linear-gradient(150deg, rgba(var(--accent-rgb), .4), rgba(255,255,255,.05) 45%)`,
           transition: "transform .35s ease",
           "&:hover": { transform: "translateY(-4px)" },
           "&:hover .help-icon": { transform: "scale(1.08)" },
@@ -133,7 +133,7 @@ function Sidebar({
             position: "relative",
             overflow: "hidden",
             borderRadius: "15px",
-            bgcolor: "#101010",
+            bgcolor: "#0b1d2e",
             p: 3,
           }}
         >
@@ -148,7 +148,7 @@ function Sidebar({
               bottom: -85,
               borderRadius: "50%",
               background:
-                "radial-gradient(circle, rgba(200,255,0,.14), transparent 70%)",
+                "radial-gradient(circle, rgba(var(--accent-rgb), .14), transparent 70%)",
               pointerEvents: "none",
             }}
           />
@@ -162,7 +162,7 @@ function Sidebar({
                 position: "absolute",
                 inset: 0,
                 borderRadius: "12px",
-                border: `1px solid ${LIME}`,
+                border: `1px solid ${ACCENT}`,
                 opacity: 0,
                 transform: "scale(1)",
                 transition: "opacity .4s ease, transform .5s ease",
@@ -175,12 +175,12 @@ function Sidebar({
                 width: "100%",
                 height: "100%",
                 borderRadius: "12px",
-                bgcolor: LIME,
-                color: "#080808",
+                bgcolor: ACCENT,
+                color: "#07141f",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                boxShadow: "0 8px 20px rgba(200,255,0,.28)",
+                boxShadow: "0 8px 20px rgba(var(--accent-rgb), .28)",
                 transition: "transform .35s ease",
                 "& svg": { fontSize: 22 },
               }}
@@ -211,8 +211,8 @@ function Sidebar({
                 width: 7,
                 height: 7,
                 borderRadius: "50%",
-                bgcolor: LIME,
-                boxShadow: `0 0 10px ${LIME}`,
+                bgcolor: ACCENT,
+                boxShadow: `0 0 10px ${ACCENT}`,
               }}
             />
             <Typography
@@ -261,12 +261,12 @@ function Sidebar({
               display: "inline-flex",
               alignItems: "center",
               gap: 1,
-              color: LIME,
+              color: ACCENT,
               textDecoration: "none",
               fontSize: 18,
               fontWeight: 900,
               transition: "color .25s ease",
-              "&:hover": { color: "#d4ff33" },
+              "&:hover": { color: ACCENT_HOVER },
             }}
           >
             <PhoneInTalkRoundedIcon sx={{ fontSize: 17 }} />
@@ -308,7 +308,7 @@ export default function HotShotServiceDetail({
     <Box
       component="main"
       sx={{
-        bgcolor: "#080808",
+        bgcolor: "#07141f",
         color: "#fff",
         minHeight: "100vh",
       }}
@@ -374,7 +374,7 @@ export default function HotShotServiceDetail({
             >
               <Typography
                 sx={{
-                  color: LIME,
+                  color: ACCENT,
                   fontSize: 10,
                   fontWeight: 900,
                   letterSpacing: 2.5,
@@ -404,7 +404,7 @@ export default function HotShotServiceDetail({
                   <Box
                     component="span"
                     sx={{
-                      color: LIME,
+                      color: ACCENT,
                     }}
                   >
                     {overviewAccent}
@@ -487,8 +487,8 @@ export default function HotShotServiceDetail({
                       width: 7,
                       height: 7,
                       borderRadius: "50%",
-                      bgcolor: LIME,
-                      boxShadow: `0 0 12px ${LIME}`,
+                      bgcolor: ACCENT,
+                      boxShadow: `0 0 12px ${ACCENT}`,
                     }}
                   />
 
@@ -613,7 +613,7 @@ export default function HotShotServiceDetail({
                   >
                     <Typography
                       sx={{
-                        color: LIME,
+                        color: ACCENT,
                         fontSize: {
                           xs: 25,
                           md: 31,

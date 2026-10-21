@@ -4,7 +4,7 @@
  * row is missing or empty the site renders exactly as it did before.
  */
 
-export const DEFAULT_LOGO = "/images/logo.png";
+export const DEFAULT_LOGO = "/images/logo-mr-whiz.jpg";
 
 export const LOGO_URL_KEY = "logo_url";
 export const LOGO_SCALE_KEY = "logo_scale";

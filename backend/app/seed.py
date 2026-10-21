@@ -323,7 +323,7 @@ TESTIMONIALS = [
         "role": "Logistics Manager, WestPoint Freight",
         "rating": 5,
         "initials": "JC",
-        "accent": "linear-gradient(135deg, #c8ff00, #7fb800)",
+        "accent": "linear-gradient(135deg, #f87802, #b85900)",
         "sort_order": 1,
     },
     {
@@ -332,7 +332,7 @@ TESTIMONIALS = [
         "role": "Operations Manager, Summit Supply Co.",
         "rating": 5,
         "initials": "ET",
-        "accent": "linear-gradient(135deg, #00e5ff, #0088aa)",
+        "accent": "linear-gradient(135deg, #ffb547, #aa6600)",
         "sort_order": 2,
     },
     {
@@ -341,7 +341,7 @@ TESTIMONIALS = [
         "role": "Fleet Coordinator, Prime Industrial",
         "rating": 5,
         "initials": "RW",
-        "accent": "linear-gradient(135deg, #ff4dd8, #aa2288)",
+        "accent": "linear-gradient(135deg, #6cb4ee, #226daa)",
         "sort_order": 3,
     },
     {

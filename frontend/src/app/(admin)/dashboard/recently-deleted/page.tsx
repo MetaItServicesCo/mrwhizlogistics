@@ -15,7 +15,7 @@ import {
   ConfirmDialog,
   EmptyState,
   ErrorState,
-  LIME,
+  ACCENT,
   LoadingState,
   PageHeader,
   Panel,
@@ -24,6 +24,7 @@ import {
   Toast,
   fmtDateTime,
 } from "@/components/admin/ui";
+import { ACCENT_HOVER } from "@/theme/brand";
 
 interface DeletedItem {
   id: number;
@@ -177,14 +178,14 @@ export default function RecentlyDeletedPage() {
                   startIcon={busy ? <CircularProgress size={14} sx={{ color: "inherit" }} /> : <RestoreRoundedIcon />}
                   aria-label={`Restore ${item.title ?? item.type_label}`}
                   sx={{
-                    bgcolor: LIME,
-                    color: "#0a0a0a",
+                    bgcolor: ACCENT,
+                    color: "#081c31",
                     fontWeight: 800,
                     textTransform: "none",
                     borderRadius: "10px",
                     px: 2,
-                    "&:hover": { bgcolor: "#d4ff33" },
-                    "&.Mui-disabled": { bgcolor: "rgba(200,255,0,0.3)", color: "#0a0a0a" },
+                    "&:hover": { bgcolor: ACCENT_HOVER },
+                    "&.Mui-disabled": { bgcolor: "rgba(var(--accent-rgb), 0.3)", color: "#081c31" },
                   }}
                 >
                   Restore

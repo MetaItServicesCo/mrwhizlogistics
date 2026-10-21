@@ -29,8 +29,8 @@ import ReceiptLongRoundedIcon from "@mui/icons-material/ReceiptLongRounded";
 
 import type { RentalItem } from "@/data/hotShotRentals";
 import { ctaProps, useCta } from "@/components/common/CtaProvider";
+import { ACCENT, ACCENT_HOVER } from "@/theme/brand";
 
-const LIME = "#c8ff00";
 const EASE = [0.22, 1, 0.36, 1] as const;
 const AUTO_SLIDE_TIME = 4000;
 
@@ -91,7 +91,7 @@ export default function RentalCard({
   const spotlight = useMotionTemplate`
     radial-gradient(
       300px circle at ${mx}px ${my}px,
-      rgba(200,255,0,0.1),
+      rgba(var(--accent-rgb), 0.1),
       transparent 70%
     )
   `;
@@ -127,7 +127,7 @@ export default function RentalCard({
         position: "relative",
         borderRadius: "22px",
         overflow: "hidden",
-        bgcolor: "#0f0f0f",
+        bgcolor: "#0a1c2c",
         border: "1px solid rgba(255,255,255,0.08)",
         display: "grid",
         gridTemplateColumns: {
@@ -137,7 +137,7 @@ export default function RentalCard({
         cursor: "pointer", // Cursor pointer taake user ko pata chale ke yeh clickable hai
         transition: "border-color .4s ease, box-shadow .4s ease",
         "&:hover": {
-          borderColor: `${LIME}55`,
+          borderColor: `${ACCENT}55`,
           boxShadow: "0 26px 60px rgba(0,0,0,0.55)",
         },
         "&:hover .rc-media-inner": { transform: "scale(1.055)" },
@@ -156,7 +156,7 @@ export default function RentalCard({
           minHeight: { xs: 260, md: 360 },
           overflow: "hidden",
           order: { xs: 0, md: flip ? 1 : 0 },
-          bgcolor: "#080808",
+          bgcolor: "#07141f",
         }}
       >
         {images.length > 0 ? (
@@ -171,7 +171,7 @@ export default function RentalCard({
               position: "absolute",
               inset: 0,
               background:
-                "radial-gradient(circle at 30% 25%, rgba(200,255,0,0.2), transparent 55%), linear-gradient(150deg, #26301a, #0a0a0a)",
+                "radial-gradient(circle at 30% 25%, rgba(var(--accent-rgb), 0.2), transparent 55%), linear-gradient(150deg, #143655, #081c31)",
             }}
           />
         )}
@@ -187,21 +187,21 @@ export default function RentalCard({
               px: 1.6,
               py: 0.7,
               borderRadius: "999px",
-              bgcolor: "rgba(10,10,10,0.85)",
+              bgcolor: "rgba(8,28,49,0.85)",
               backdropFilter: "blur(8px)",
-              border: `1px solid ${LIME}66`,
+              border: `1px solid ${ACCENT}66`,
               display: "flex",
               alignItems: "center",
               gap: 0.6,
               boxShadow: "0 8px 20px rgba(0,0,0,0.4)",
             }}
           >
-            <LocalOfferRoundedIcon sx={{ fontSize: 13, color: LIME }} />
+            <LocalOfferRoundedIcon sx={{ fontSize: 13, color: ACCENT }} />
             <Typography
               sx={{
                 fontSize: 12,
                 fontWeight: 800,
-                color: LIME,
+                color: ACCENT,
                 letterSpacing: 0.3,
               }}
             >
@@ -231,7 +231,7 @@ export default function RentalCard({
                 backdropFilter: "blur(8px)",
                 opacity: { xs: 1, md: 0 },
                 transition: "opacity .3s ease, transform .3s ease",
-                "&:hover": { bgcolor: LIME, color: "#0a0a0a" },
+                "&:hover": { bgcolor: ACCENT, color: "#081c31" },
               }}
             >
               <ArrowBackIosNewRoundedIcon sx={{ fontSize: 16 }} />
@@ -255,7 +255,7 @@ export default function RentalCard({
                 backdropFilter: "blur(8px)",
                 opacity: { xs: 1, md: 0 },
                 transition: "opacity .3s ease, transform .3s ease",
-                "&:hover": { bgcolor: LIME, color: "#0a0a0a" },
+                "&:hover": { bgcolor: ACCENT, color: "#081c31" },
               }}
             >
               <ArrowForwardIosRoundedIcon sx={{ fontSize: 16 }} />
@@ -316,13 +316,13 @@ export default function RentalCard({
             mb: 1.2,
           }}
         >
-          <Box sx={{ width: 22, height: 2, bgcolor: LIME }} />
+          <Box sx={{ width: 22, height: 2, bgcolor: ACCENT }} />
           <Typography
             sx={{
               fontSize: 10.5,
               fontWeight: 800,
               letterSpacing: 2,
-              color: LIME,
+              color: ACCENT,
               textTransform: "uppercase",
             }}
           >{copy.forRent}</Typography>
@@ -337,7 +337,7 @@ export default function RentalCard({
             lineHeight: 1.15,
             color: "#fff",
             mb: 1.5,
-            "&:hover": { color: LIME }, // Title par hover effect taake link jaisa feel aaye
+            "&:hover": { color: ACCENT }, // Title par hover effect taake link jaisa feel aaye
             transition: "color .2s ease",
           }}
         >
@@ -377,11 +377,11 @@ export default function RentalCard({
               py: 1,
               mb: 2,
               borderRadius: "10px",
-              bgcolor: "rgba(200,255,0,0.04)",
-              border: `1px solid ${LIME}25`,
+              bgcolor: "rgba(var(--accent-rgb), 0.04)",
+              border: `1px solid ${ACCENT}25`,
             }}
           >
-            <ReceiptLongRoundedIcon sx={{ fontSize: 16, color: LIME }} />
+            <ReceiptLongRoundedIcon sx={{ fontSize: 16, color: ACCENT }} />
             <Typography
               sx={{
                 fontSize: 13.5,
@@ -419,7 +419,7 @@ export default function RentalCard({
                   border: "1px solid rgba(255,255,255,0.08)",
                 }}
               >
-                <CheckRoundedIcon sx={{ fontSize: 13, color: LIME }} />
+                <CheckRoundedIcon sx={{ fontSize: 13, color: ACCENT }} />
                 <Typography
                   sx={{
                     fontSize: 11.5,
@@ -454,15 +454,15 @@ export default function RentalCard({
             endIcon={<ArrowForwardRoundedIcon />}
             disableElevation
             sx={{
-              bgcolor: LIME,
-              color: "#0a0a0a",
+              bgcolor: ACCENT,
+              color: "#081c31",
               fontWeight: 800,
               borderRadius: "12px",
               px: 3,
               py: 1.2,
               textTransform: "none",
               fontSize: 14,
-              "&:hover": { bgcolor: "#d4ff33" },
+              "&:hover": { bgcolor: ACCENT_HOVER },
             }}
           >
             {quoteCta.label}
@@ -485,9 +485,9 @@ export default function RentalCard({
               textTransform: "none",
               fontSize: 14,
               "&:hover": {
-                borderColor: LIME,
-                color: LIME,
-                bgcolor: "rgba(200,255,0,0.05)",
+                borderColor: ACCENT,
+                color: ACCENT,
+                bgcolor: "rgba(var(--accent-rgb), 0.05)",
               },
             }}
           >

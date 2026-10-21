@@ -14,7 +14,7 @@ import DataTable, { type Column } from "@/components/admin/DataTable";
 import NewsletterCampaigns from "@/components/admin/NewsletterCampaigns";
 import {
   ConfirmDialog,
-  LIME,
+  ACCENT,
   PageHeader,
   SearchBox,
   StatusChip,
@@ -101,9 +101,9 @@ export default function NewsletterPage() {
           onChange={() => void toggleActive(r)}
           size="small"
           sx={{
-            "& .Mui-checked": { color: LIME },
+            "& .Mui-checked": { color: ACCENT },
             "& .Mui-checked + .MuiSwitch-track": {
-              backgroundColor: `${LIME} !important`,
+              backgroundColor: `${ACCENT} !important`,
             },
           }}
         />
@@ -126,8 +126,8 @@ export default function NewsletterPage() {
           bgcolor: "rgba(255,255,255,0.035)",
           border: "1px solid rgba(255,255,255,0.1)",
           borderRadius: "14px",
-          "& .MuiTabs-indicator": { bgcolor: LIME, height: 3 },
-          "& .MuiTab-root": { minHeight: 50, color: "rgba(255,255,255,0.72)", fontWeight: 800, textTransform: "none", "&.Mui-selected": { color: LIME } },
+          "& .MuiTabs-indicator": { bgcolor: ACCENT, height: 3 },
+          "& .MuiTab-root": { minHeight: 50, color: "rgba(255,255,255,0.72)", fontWeight: 800, textTransform: "none", "&.Mui-selected": { color: ACCENT } },
         }}
       >
         <Tab label="Subscribers" />
@@ -150,14 +150,14 @@ export default function NewsletterPage() {
             disabled={!rows.length}
             startIcon={<DownloadRoundedIcon />}
             sx={{
-              color: LIME,
-              border: `1px solid ${LIME}55`,
+              color: ACCENT,
+              border: `1px solid ${ACCENT}55`,
               borderRadius: "12px",
               textTransform: "none",
               fontWeight: 700,
               px: 2,
               whiteSpace: "nowrap",
-              "&:hover": { bgcolor: "rgba(200,255,0,0.08)" },
+              "&:hover": { bgcolor: "rgba(var(--accent-rgb), 0.08)" },
             }}
           >
             Export CSV

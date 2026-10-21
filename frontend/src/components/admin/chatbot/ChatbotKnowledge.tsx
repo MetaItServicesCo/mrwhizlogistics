@@ -8,8 +8,9 @@ import Typography from "@mui/material/Typography";
 import RefreshRoundedIcon from "@mui/icons-material/RefreshRounded";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import { chatAdmin } from "@/lib/chatClient";
-import { ErrorState, Field, LIME, LoadingState, Panel, Toast, fmtDateTime } from "@/components/admin/ui";
+import { ErrorState, Field, ACCENT, LoadingState, Panel, Toast, fmtDateTime } from "@/components/admin/ui";
 import { Pill, StatTile, friendlyError, useChatAdmin } from "./shared";
+import { ACCENT_HOVER } from "@/theme/brand";
 
 interface KnowledgeStatus {
   chunks: number;
@@ -120,7 +121,7 @@ export default function ChatbotKnowledge() {
           onClick={() => void reindex()}
           disabled={indexing}
           startIcon={indexing ? <CircularProgress size={16} sx={{ color: "inherit" }} /> : <RefreshRoundedIcon />}
-          sx={{ bgcolor: LIME, color: "#0a0a0a", fontWeight: 800, textTransform: "none", borderRadius: "999px", px: 2.5, "&:hover": { bgcolor: "#d4ff33" }, "&.Mui-disabled": { bgcolor: "rgba(200,255,0,0.3)", color: "#0a0a0a" } }}
+          sx={{ bgcolor: ACCENT, color: "#081c31", fontWeight: 800, textTransform: "none", borderRadius: "999px", px: 2.5, "&:hover": { bgcolor: ACCENT_HOVER }, "&.Mui-disabled": { bgcolor: "rgba(var(--accent-rgb), 0.3)", color: "#081c31" } }}
         >
           {indexing ? "Reading the website…" : "Re-read website now"}
         </Button>
@@ -144,7 +145,7 @@ export default function ChatbotKnowledge() {
           <Box sx={{ flex: 1, minWidth: 240 }}>
             <Field size="small" label="Question" value={question} onChange={(e) => setQuestion(e.target.value)} placeholder="e.g. Do you have reefer trailers?" slotProps={{ inputLabel: { shrink: true } }} />
           </Box>
-          <Button type="submit" disabled={searching || question.trim().length < 2} startIcon={searching ? <CircularProgress size={14} sx={{ color: "inherit" }} /> : <SearchRoundedIcon />} sx={{ color: LIME, border: `1px solid ${LIME}55`, borderRadius: "999px", textTransform: "none", fontWeight: 700, px: 2, height: 40 }}>
+          <Button type="submit" disabled={searching || question.trim().length < 2} startIcon={searching ? <CircularProgress size={14} sx={{ color: "inherit" }} /> : <SearchRoundedIcon />} sx={{ color: ACCENT, border: `1px solid ${ACCENT}55`, borderRadius: "999px", textTransform: "none", fontWeight: 700, px: 2, height: 40 }}>
             Search
           </Button>
         </Box>

@@ -17,8 +17,8 @@ import ConstructionRoundedIcon from "@mui/icons-material/ConstructionRounded";
 import PublicRoundedIcon from "@mui/icons-material/PublicRounded";
 
 import type { HotShotService } from "@/types/hotShot";
+import { ACCENT } from "@/theme/brand";
 
-const LIME = "#c8ff00";
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 function getIcon(icon: string) {
@@ -46,7 +46,7 @@ function FeatureCard({ feature, index }: { feature: Feature; index: number }) {
   const reduce = useReducedMotion() ?? false;
   const mx = useMotionValue(-200);
   const my = useMotionValue(-200);
-  const spotlight = useMotionTemplate`radial-gradient(200px circle at ${mx}px ${my}px, rgba(200,255,0,0.1), transparent 70%)`;
+  const spotlight = useMotionTemplate`radial-gradient(200px circle at ${mx}px ${my}px, rgba(var(--accent-rgb), 0.1), transparent 70%)`;
 
   const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (reduce) return;
@@ -78,20 +78,20 @@ function FeatureCard({ feature, index }: { feature: Feature; index: number }) {
           display: "flex",
           gap: 2,
           borderRadius: "16px",
-          bgcolor: "#101010",
+          bgcolor: "#0b1d2e",
           border: "1px solid rgba(255,255,255,.08)",
           overflow: "hidden",
           transition:
             "transform .35s ease, border-color .35s ease, box-shadow .35s ease",
           "&:hover": {
             transform: "translateY(-6px)",
-            borderColor: "rgba(200,255,0,.4)",
+            borderColor: "rgba(var(--accent-rgb), .4)",
             boxShadow: "0 20px 46px rgba(0,0,0,.5)",
           },
           "&:hover .fc-icon": {
             transform: "translateY(-3px) rotate(-6deg)",
-            bgcolor: LIME,
-            color: "#080808",
+            bgcolor: ACCENT,
+            color: "#07141f",
           },
           "&:hover .fc-spot": { opacity: 1 },
           "&:hover .fc-sheen": { transform: "translateX(150%)" },
@@ -123,7 +123,7 @@ function FeatureCard({ feature, index }: { feature: Feature; index: number }) {
             width: "55%",
             height: "100%",
             background:
-              "linear-gradient(120deg, transparent, rgba(200,255,0,0.05), transparent)",
+              "linear-gradient(120deg, transparent, rgba(var(--accent-rgb), 0.05), transparent)",
             transform: "translateX(-150%)",
             transition: "transform .7s ease",
             pointerEvents: "none",
@@ -139,9 +139,9 @@ function FeatureCard({ feature, index }: { feature: Feature; index: number }) {
             height: 46,
             flexShrink: 0,
             borderRadius: "12px",
-            bgcolor: "rgba(200,255,0,.09)",
-            color: LIME,
-            border: "1px solid rgba(200,255,0,.18)",
+            bgcolor: "rgba(var(--accent-rgb), .09)",
+            color: ACCENT,
+            border: "1px solid rgba(var(--accent-rgb), .18)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -183,7 +183,7 @@ function FeatureCard({ feature, index }: { feature: Feature; index: number }) {
             right: 0,
             bottom: 0,
             height: 3,
-            background: `linear-gradient(90deg, ${LIME}, #00e5ff)`,
+            background: `linear-gradient(90deg, ${ACCENT}, var(--accent-2))`,
             transform: "scaleX(0)",
             transformOrigin: "left",
             transition: "transform .4s ease",
@@ -209,7 +209,7 @@ export default function HotShotWhyChoose({
       >
         <Typography
           sx={{
-            color: LIME,
+            color: ACCENT,
             fontSize: 10,
             fontWeight: 900,
             letterSpacing: 2.5,

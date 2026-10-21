@@ -7,8 +7,8 @@ import XIcon from "@mui/icons-material/X";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import type { BlogPost } from "@/data/blogPosts";
 import RichContent from "@/components/common/RichContent";
+import { ACCENT } from "@/theme/brand";
 
-const LIME = "#c8ff00";
 
 export default function BlogArticle({ post }: { post: BlogPost }) {
   const paras = post.content?.length ? post.content : [post.excerpt];
@@ -131,7 +131,7 @@ export default function BlogArticle({ post }: { post: BlogPost }) {
                 alignItems: "center",
                 justifyContent: "center",
                 transition: "all .2s",
-                "&:hover": { bgcolor: LIME, color: "#0a0a0a" },
+                "&:hover": { bgcolor: ACCENT, color: "#081c31" },
                 "& svg": { fontSize: 16 },
               }}
             >

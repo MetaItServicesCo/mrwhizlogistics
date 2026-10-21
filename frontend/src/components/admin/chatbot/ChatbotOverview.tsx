@@ -9,6 +9,7 @@ import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import Typography from "@mui/material/Typography";
 import { ErrorState, LoadingState, Panel } from "@/components/admin/ui";
 import { ROUTE_LABELS, StatTile, useChatAdmin } from "./shared";
+import { ACCENT } from "@/theme/brand";
 
 interface Stats {
   days: number;
@@ -74,7 +75,7 @@ function StatusBanner() {
 
 // Deeper step of the brand lime: passes the dark-surface lightness band
 // (the bright brand lime glares as a large fill). Validated with dataviz.
-const BAR = "#7aa300";
+const BAR = "#a34f00";
 
 function fillDays(daily: Stats["daily"], days: number) {
   const byDate = new Map(daily.map((d) => [d.date, d]));
@@ -138,7 +139,7 @@ function DailyChart({ daily, days }: { daily: Stats["daily"]; days: number }) {
               px: 1.2,
               py: 0.8,
               borderRadius: "8px",
-              bgcolor: "#1c1d1c",
+              bgcolor: "#102c46",
               border: "1px solid rgba(255,255,255,0.14)",
               pointerEvents: "none",
               zIndex: 2,
@@ -204,7 +205,7 @@ export default function ChatbotOverview({ onOpenConversation }: { onOpenConversa
           value={days}
           onChange={(_, v) => v && setDays(v)}
           aria-label="Date range"
-          sx={{ "& .MuiToggleButton-root": { color: "rgba(255,255,255,0.6)", borderColor: "rgba(255,255,255,0.14)", textTransform: "none", px: 1.5 }, "& .Mui-selected": { color: "#0a0a0a !important", bgcolor: "#c8ff00 !important" } }}
+          sx={{ "& .MuiToggleButton-root": { color: "rgba(255,255,255,0.6)", borderColor: "rgba(255,255,255,0.14)", textTransform: "none", px: 1.5 }, "& .Mui-selected": { color: "#081c31 !important", bgcolor: "var(--accent) !important" } }}
         >
           <ToggleButton value={7}>7 days</ToggleButton>
           <ToggleButton value={30}>30 days</ToggleButton>
@@ -284,7 +285,7 @@ export default function ChatbotOverview({ onOpenConversation }: { onOpenConversa
                 sx={{ display: "flex", alignItems: "center", gap: 1, py: 0.8, borderTop: "1px solid rgba(255,255,255,0.06)" }}
               >
                 <Typography sx={{ flex: 1, fontSize: 13, color: "rgba(255,255,255,0.85)", overflowWrap: "anywhere" }}>“{u.question}”</Typography>
-                <Button size="small" onClick={() => onOpenConversation(u.conversation_id)} sx={{ color: "#c8ff00", textTransform: "none", fontWeight: 700, flexShrink: 0 }}>
+                <Button size="small" onClick={() => onOpenConversation(u.conversation_id)} sx={{ color: ACCENT, textTransform: "none", fontWeight: 700, flexShrink: 0 }}>
                   View
                 </Button>
               </Box>

@@ -5,7 +5,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
-import { LIME, PageHeader } from "@/components/admin/ui";
+import { ACCENT, PageHeader } from "@/components/admin/ui";
 import ChatbotOverview from "@/components/admin/chatbot/ChatbotOverview";
 import ChatbotConversations from "@/components/admin/chatbot/ChatbotConversations";
 import ChatbotKnowledge from "@/components/admin/chatbot/ChatbotKnowledge";
@@ -65,8 +65,8 @@ function ChatbotPage() {
           mb: 3,
           borderBottom: "1px solid rgba(255,255,255,0.08)",
           "& .MuiTab-root": { color: "rgba(255,255,255,0.6)", textTransform: "none", fontWeight: 700, fontSize: 14 },
-          "& .Mui-selected": { color: `${LIME} !important` },
-          "& .MuiTabs-indicator": { bgcolor: LIME },
+          "& .Mui-selected": { color: `${ACCENT} !important` },
+          "& .MuiTabs-indicator": { bgcolor: ACCENT },
         }}
       >
         {TABS.map((t) => (

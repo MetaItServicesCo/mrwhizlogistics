@@ -26,8 +26,8 @@ import PublicRoundedIcon from "@mui/icons-material/PublicRounded";
 import StorefrontRoundedIcon from "@mui/icons-material/StorefrontRounded";
 import TrainRoundedIcon from "@mui/icons-material/TrainRounded";
 import { ctaProps, useCta } from "@/components/common/CtaProvider";
+import { ACCENT, ACCENT_HOVER } from "@/theme/brand";
 
-const LIME = "#c8ff00";
 const DURATION = 5000;
 
 type Case = {
@@ -102,12 +102,12 @@ const CASES: Case[] = [
 ];
 
 const gradients = [
-  "radial-gradient(circle at 30% 25%, rgba(200,255,0,0.18), transparent 55%), linear-gradient(150deg, #26301a, #0a0a0a)",
-  "radial-gradient(circle at 70% 20%, rgba(0,229,255,0.14), transparent 55%), linear-gradient(150deg, #12202a, #0a0a0a)",
-  "radial-gradient(circle at 40% 30%, rgba(0,229,255,0.16), transparent 55%), linear-gradient(150deg, #0e2430, #0a0a0a)",
-  "radial-gradient(circle at 65% 25%, rgba(200,255,0,0.14), transparent 55%), linear-gradient(150deg, #2a2612, #0a0a0a)",
-  "radial-gradient(circle at 35% 20%, rgba(255,77,216,0.12), transparent 55%), linear-gradient(150deg, #2a1626, #0a0a0a)",
-  "radial-gradient(circle at 60% 30%, rgba(200,255,0,0.14), transparent 55%), linear-gradient(150deg, #1c2a1a, #0a0a0a)",
+  "radial-gradient(circle at 30% 25%, rgba(var(--accent-rgb), 0.18), transparent 55%), linear-gradient(150deg, #143655, #081c31)",
+  "radial-gradient(circle at 70% 20%, rgba(var(--accent-2-rgb), 0.14), transparent 55%), linear-gradient(150deg, #12202a, #081c31)",
+  "radial-gradient(circle at 40% 30%, rgba(var(--accent-2-rgb), 0.16), transparent 55%), linear-gradient(150deg, #0e2430, #081c31)",
+  "radial-gradient(circle at 65% 25%, rgba(var(--accent-rgb), 0.14), transparent 55%), linear-gradient(150deg, #2a2612, #081c31)",
+  "radial-gradient(circle at 35% 20%, rgba(var(--sky-rgb), 0.12), transparent 55%), linear-gradient(150deg, #12304c, #081c31)",
+  "radial-gradient(circle at 60% 30%, rgba(var(--accent-rgb), 0.14), transparent 55%), linear-gradient(150deg, #133250, #081c31)",
 ];
 
 function Corners() {
@@ -138,7 +138,7 @@ function Corners() {
           key={i}
           d={d}
           fill="none"
-          stroke={LIME}
+          stroke={ACCENT}
           strokeWidth={0.6}
           strokeLinecap="round"
           vectorEffect="non-scaling-stroke"
@@ -372,14 +372,14 @@ export default function CaseShowSection() {
     zIndex: 4,
     width: 34,
     height: 34,
-    bgcolor: "rgba(10,10,10,0.85)",
+    bgcolor: "rgba(8,28,49,0.85)",
     border: "1px solid rgba(255,255,255,0.18)",
     color: "#fff",
     backdropFilter: "blur(6px)",
     "&:hover": {
-      bgcolor: "#000",
-      borderColor: LIME,
-      color: LIME,
+      bgcolor: "#040a11",
+      borderColor: ACCENT,
+      color: ACCENT,
     },
   } as const;
 
@@ -391,7 +391,7 @@ export default function CaseShowSection() {
       aria-labelledby="case-title"
       sx={{
         position: "relative",
-        bgcolor: "#0a0a0a",
+        bgcolor: "#081c31",
         color: "#fff",
         py: { xs: 8, md: 10, lg: 12 },
         px: { xs: 3, sm: 4, md: 6, lg: 8 },
@@ -408,7 +408,7 @@ export default function CaseShowSection() {
           width: 520,
           height: 380,
           background:
-            "radial-gradient(ellipse, rgba(200,255,0,0.08), transparent 70%)",
+            "radial-gradient(ellipse, rgba(var(--accent-rgb), 0.08), transparent 70%)",
           pointerEvents: "none",
         }}
       />
@@ -433,7 +433,7 @@ export default function CaseShowSection() {
           <Typography
             component="p"
             sx={{
-              color: LIME,
+              color: ACCENT,
               letterSpacing: 3,
               fontSize: 12,
               fontWeight: 700,
@@ -456,7 +456,7 @@ export default function CaseShowSection() {
                 md: "3.2rem",
                 lg: "3.6rem",
               },
-              background: `linear-gradient(90deg, #ffffff, ${LIME}, #00e5ff, #ffffff)`,
+              background: `linear-gradient(90deg, #ffffff, ${ACCENT}, var(--accent-2), #ffffff)`,
               backgroundSize: "200% auto",
               WebkitBackgroundClip: "text",
               backgroundClip: "text",
@@ -522,7 +522,7 @@ export default function CaseShowSection() {
         <Box
           sx={{
             minWidth: 0,
-            bgcolor: "#111111",
+            bgcolor: "#0b1e30",
             border: "1px solid rgba(255,255,255,0.08)",
             borderRadius: "16px",
             p: {
@@ -534,7 +534,7 @@ export default function CaseShowSection() {
           <Box
             sx={{
               display: "inline-block",
-              bgcolor: "#181818",
+              bgcolor: "#0e273d",
               border: "1px solid rgba(255,255,255,0.1)",
               px: 2,
               py: 1,
@@ -613,8 +613,8 @@ export default function CaseShowSection() {
                         position: "absolute",
                         inset: 0,
                         borderRadius: "12px",
-                        bgcolor: "rgba(200,255,0,0.08)",
-                        border: `1px solid ${LIME}66`,
+                        bgcolor: "rgba(var(--accent-rgb), 0.08)",
+                        border: `1px solid ${ACCENT}66`,
                       }}
                     />
                   )}
@@ -631,7 +631,7 @@ export default function CaseShowSection() {
                   >
                     <Box
                       sx={{
-                        color: on ? LIME : "rgba(255,255,255,0.35)",
+                        color: on ? ACCENT : "rgba(255,255,255,0.35)",
                         display: "flex",
                         transition: "color .3s",
                         "& svg": {
@@ -648,7 +648,7 @@ export default function CaseShowSection() {
                           fontSize: 9.5,
                           fontWeight: 700,
                           letterSpacing: 1,
-                          color: on ? LIME : "rgba(255,255,255,0.4)",
+                          color: on ? ACCENT : "rgba(255,255,255,0.4)",
                           transition: "color .3s",
                         }}
                       >
@@ -695,7 +695,7 @@ export default function CaseShowSection() {
               borderRadius: "20px",
               overflow: "hidden",
               border: "1px solid rgba(255,255,255,0.1)",
-              bgcolor: "#0d0d0d",
+              bgcolor: "#0a1a29",
             }}
           >
             <AnimatePresence>
@@ -812,7 +812,7 @@ export default function CaseShowSection() {
                 <Box
                   component="span"
                   sx={{
-                    color: LIME,
+                    color: ACCENT,
                   }}
                 >
                   {String(active + 1).padStart(2, "0")}
@@ -868,13 +868,13 @@ export default function CaseShowSection() {
                       px: 1.3,
                       py: 0.4,
                       borderRadius: "999px",
-                      bgcolor: "rgba(200,255,0,0.14)",
-                      border: `1px solid ${LIME}55`,
+                      bgcolor: "rgba(var(--accent-rgb), 0.14)",
+                      border: `1px solid ${ACCENT}55`,
                     }}
                   >
                     <Box
                       sx={{
-                        color: LIME,
+                        color: ACCENT,
                         display: "flex",
                         "& svg": {
                           fontSize: 15,
@@ -889,7 +889,7 @@ export default function CaseShowSection() {
                         fontSize: 10.5,
                         fontWeight: 700,
                         letterSpacing: 1.3,
-                        color: LIME,
+                        color: ACCENT,
                       }}
                     >
                       {c.label.toUpperCase()}
@@ -942,7 +942,7 @@ export default function CaseShowSection() {
                   >
                     <Typography
                       sx={{
-                        color: LIME,
+                        color: ACCENT,
                         fontWeight: 800,
                         fontSize: {
                           xs: 13,
@@ -985,8 +985,8 @@ export default function CaseShowSection() {
                         sx={{
                           position: "relative",
                           overflow: "hidden",
-                          bgcolor: LIME,
-                          color: "#000",
+                          bgcolor: ACCENT,
+                          color: "#040a11",
                           fontWeight: 700,
                           borderRadius: "999px",
                           px: 2.2,
@@ -994,7 +994,7 @@ export default function CaseShowSection() {
                           textTransform: "none",
 
                           "&:hover": {
-                            bgcolor: "#d4ff33",
+                            bgcolor: ACCENT_HOVER,
                           },
 
                           "& .det-arrow": {
@@ -1093,7 +1093,7 @@ export default function CaseShowSection() {
                 width: "100%",
                 transformOrigin: "left",
                 transform: "scaleX(0)",
-                background: `linear-gradient(90deg, ${LIME}, #00e5ff)`,
+                background: `linear-gradient(90deg, ${ACCENT}, var(--accent-2))`,
                 borderRadius: 2,
               }}
             />
@@ -1147,15 +1147,15 @@ export default function CaseShowSection() {
                 ...(strip.overflow
                   ? {
                       WebkitMaskImage: `linear-gradient(to right, ${
-                        strip.atStart ? "#000" : "transparent"
-                      }, #000 7%, #000 93%, ${
-                        strip.atEnd ? "#000" : "transparent"
+                        strip.atStart ? "#040a11" : "transparent"
+                      }, #040a11 7%, #040a11 93%, ${
+                        strip.atEnd ? "#040a11" : "transparent"
                       })`,
 
                       maskImage: `linear-gradient(to right, ${
-                        strip.atStart ? "#000" : "transparent"
-                      }, #000 7%, #000 93%, ${
-                        strip.atEnd ? "#000" : "transparent"
+                        strip.atStart ? "#040a11" : "transparent"
+                      }, #040a11 7%, #040a11 93%, ${
+                        strip.atEnd ? "#040a11" : "transparent"
                       })`,
                     }
                   : {}),
@@ -1197,7 +1197,7 @@ export default function CaseShowSection() {
                       position: "relative",
 
                       border: on
-                        ? `2px solid ${LIME}`
+                        ? `2px solid ${ACCENT}`
                         : "2px solid rgba(255,255,255,0.12)",
 
                       transition: "border-color .3s, transform .3s",
@@ -1228,7 +1228,7 @@ export default function CaseShowSection() {
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
-                          color: on ? LIME : "rgba(255,255,255,0.3)",
+                          color: on ? ACCENT : "rgba(255,255,255,0.3)",
 
                           "& svg": {
                             fontSize: 22,
@@ -1285,7 +1285,7 @@ export default function CaseShowSection() {
                   content: '""',
                   position: "absolute",
                   inset: 0,
-                  background: LIME,
+                  background: ACCENT,
                   transform: "scaleX(0)",
                   transformOrigin: "left",
                   transition: "transform .35s ease",
@@ -1293,8 +1293,8 @@ export default function CaseShowSection() {
                 },
 
                 "&:hover": {
-                  color: "#000",
-                  borderColor: LIME,
+                  color: "#040a11",
+                  borderColor: ACCENT,
                 },
 
                 "&:hover::before": {
@@ -1320,8 +1320,8 @@ export default function CaseShowSection() {
                   color: "#fff",
 
                   "&:hover": {
-                    borderColor: LIME,
-                    color: LIME,
+                    borderColor: ACCENT,
+                    color: ACCENT,
                   },
                 }}
               >
@@ -1336,8 +1336,8 @@ export default function CaseShowSection() {
                   color: "#fff",
 
                   "&:hover": {
-                    borderColor: LIME,
-                    color: LIME,
+                    borderColor: ACCENT,
+                    color: ACCENT,
                   },
                 }}
               >

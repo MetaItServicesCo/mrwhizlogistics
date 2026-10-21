@@ -20,8 +20,8 @@ import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import LanguageRoundedIcon from "@mui/icons-material/LanguageRounded";
+import { ACCENT } from "@/theme/brand";
 
-const LIME = "#c8ff00";
 
 /** Sections whose name isn't just their URL segment title-cased. */
 const SECTION_TITLES: Record<string, string> = { chatbot: "AI Assistant", "seo-tracking": "SEO & Tracking", media: "Media Library" };
@@ -59,7 +59,7 @@ export default function AdminHeader({
         alignItems: "center",
         gap: 2,
         px: { xs: 2, md: 3 },
-        bgcolor: "rgba(12,13,12,0.85)",
+        bgcolor: "rgba(9,25,40,0.85)",
         backdropFilter: "blur(12px)",
         borderBottom: "1px solid rgba(255,255,255,0.07)",
       }}
@@ -77,7 +77,7 @@ export default function AdminHeader({
         sx={{
           display: { xs: "none", lg: "inline-flex" },
           color: "rgba(255,255,255,0.7)",
-          "&:hover": { color: LIME },
+          "&:hover": { color: ACCENT },
         }}
       >
         <MenuOpenRoundedIcon />
@@ -124,7 +124,7 @@ export default function AdminHeader({
           border: "1px solid rgba(255,255,255,0.1)",
           width: 260,
           transition: "border-color .2s",
-          "&:focus-within": { borderColor: LIME },
+          "&:focus-within": { borderColor: ACCENT },
         }}
       >
         <SearchRoundedIcon
@@ -174,14 +174,14 @@ export default function AdminHeader({
             minWidth: 40,
             px: { xs: 0, sm: 1.8 },
             borderRadius: "999px",
-            border: `1px solid ${LIME}55`,
-            color: LIME,
+            border: `1px solid ${ACCENT}55`,
+            color: ACCENT,
             fontSize: 13,
             fontWeight: 700,
             textDecoration: "none",
             whiteSpace: "nowrap",
             transition: "background-color .2s, color .2s",
-            "&:hover": { bgcolor: LIME, color: "#0a0a0a" },
+            "&:hover": { bgcolor: ACCENT, color: "#081c31" },
           }}
         >
           <LanguageRoundedIcon sx={{ fontSize: 19 }} />
@@ -215,8 +215,8 @@ export default function AdminHeader({
               width: 32,
               height: 32,
               borderRadius: "50%",
-              bgcolor: LIME,
-              color: "#0a0a0a",
+              bgcolor: ACCENT,
+              color: "#081c31",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -249,7 +249,7 @@ export default function AdminHeader({
               sx: {
                 mt: 1,
                 minWidth: 200,
-                bgcolor: "#141514",
+                bgcolor: "#0d2237",
                 color: "#fff",
                 border: "1px solid rgba(255,255,255,0.1)",
                 borderRadius: "14px",
@@ -257,7 +257,7 @@ export default function AdminHeader({
                   fontSize: 14,
                   gap: 1.5,
                   py: 1.1,
-                  "&:hover": { bgcolor: "rgba(200,255,0,0.08)", color: LIME },
+                  "&:hover": { bgcolor: "rgba(var(--accent-rgb), 0.08)", color: ACCENT },
                 },
                 "& svg": { fontSize: 19 },
               },

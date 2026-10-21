@@ -17,8 +17,8 @@ import LocationOnRoundedIcon from "@mui/icons-material/LocationOnRounded";
 import StorefrontRoundedIcon from "@mui/icons-material/StorefrontRounded";
 
 import type { HotShotService } from "@/types/hotShot";
+import { ACCENT } from "@/theme/brand";
 
-const LIME = "#c8ff00";
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 function getIcon(icon: string) {
@@ -46,7 +46,7 @@ function OptionCard({ option, index }: { option: Option; index: number }) {
   const reduce = useReducedMotion() ?? false;
   const mx = useMotionValue(-200);
   const my = useMotionValue(-200);
-  const spotlight = useMotionTemplate`radial-gradient(220px circle at ${mx}px ${my}px, rgba(200,255,0,0.12), transparent 70%)`;
+  const spotlight = useMotionTemplate`radial-gradient(220px circle at ${mx}px ${my}px, rgba(var(--accent-rgb), 0.12), transparent 70%)`;
 
   const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (reduce) return;
@@ -76,14 +76,14 @@ function OptionCard({ option, index }: { option: Option; index: number }) {
           minHeight: 190,
           p: { xs: 2.75, md: 3.25 },
           borderRadius: "16px",
-          bgcolor: "#101010",
+          bgcolor: "#0b1d2e",
           border: "1px solid rgba(255,255,255,.08)",
           overflow: "hidden",
           transition:
             "transform .35s ease, border-color .35s ease, box-shadow .35s ease",
           "&:hover": {
             transform: "translateY(-6px)",
-            borderColor: "rgba(200,255,0,.4)",
+            borderColor: "rgba(var(--accent-rgb), .4)",
             boxShadow: "0 22px 50px rgba(0,0,0,.5)",
           },
           "&:hover .to-icon": { transform: "translateY(-4px) rotate(-6deg)" },
@@ -117,7 +117,7 @@ function OptionCard({ option, index }: { option: Option; index: number }) {
             width: "55%",
             height: "100%",
             background:
-              "linear-gradient(120deg, transparent, rgba(200,255,0,0.06), transparent)",
+              "linear-gradient(120deg, transparent, rgba(var(--accent-rgb), 0.06), transparent)",
             transform: "translateX(-140%)",
             transition: "transform .7s ease",
             pointerEvents: "none",
@@ -143,7 +143,7 @@ function OptionCard({ option, index }: { option: Option; index: number }) {
         <Typography
           sx={{
             position: "relative",
-            color: LIME,
+            color: ACCENT,
             fontSize: 8.5,
             fontWeight: 900,
             letterSpacing: 1.4,
@@ -161,13 +161,13 @@ function OptionCard({ option, index }: { option: Option; index: number }) {
             width: 46,
             height: 46,
             borderRadius: "12px",
-            bgcolor: LIME,
-            color: "#080808",
+            bgcolor: ACCENT,
+            color: "#07141f",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             mb: 2.5,
-            boxShadow: "0 8px 20px rgba(200,255,0,.28)",
+            boxShadow: "0 8px 20px rgba(var(--accent-rgb), .28)",
             transition: "transform .35s ease",
             "& svg": { fontSize: 23 },
           }}
@@ -208,7 +208,7 @@ function OptionCard({ option, index }: { option: Option; index: number }) {
             right: 0,
             bottom: 0,
             height: 3,
-            background: `linear-gradient(90deg, ${LIME}, #00e5ff)`,
+            background: `linear-gradient(90deg, ${ACCENT}, var(--accent-2))`,
             transform: "scaleX(0)",
             transformOrigin: "left",
             transition: "transform .4s ease",
@@ -234,7 +234,7 @@ export default function HotShotTransportOptions({
       >
         <Typography
           sx={{
-            color: LIME,
+            color: ACCENT,
             fontSize: 10,
             fontWeight: 900,
             letterSpacing: 2.5,

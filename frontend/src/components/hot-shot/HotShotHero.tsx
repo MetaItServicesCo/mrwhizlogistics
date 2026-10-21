@@ -6,8 +6,8 @@ import { motion, useReducedMotion } from "motion/react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import BoltRoundedIcon from "@mui/icons-material/BoltRounded";
+import { ACCENT } from "@/theme/brand";
 
-const LIME = "#c8ff00";
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 // 👇 Apni banner image daalein (public/images/ mein). Na ho to gradient fallback.
@@ -40,7 +40,7 @@ export default function HotShotHero({
         display: "flex",
         alignItems: "center",
         overflow: "hidden",
-        bgcolor: "#0a0a0a",
+        bgcolor: "#081c31",
         color: "#fff",
       }}
     >
@@ -61,11 +61,11 @@ export default function HotShotHero({
                 backgroundSize: "cover",
                 backgroundPosition: "center",
               }
-            : { background: "linear-gradient(135deg, #1c2a15, #05070a)" }),
+            : { background: "linear-gradient(135deg, #122f4b, #07131e)" }),
         }}
       />
 
-      {/* DARK + LIME OVERLAYS (image ke upar text readable) */}
+      {/* DARK + ACCENT OVERLAYS (image ke upar text readable) */}
       {/* <Box
         aria-hidden
         sx={{
@@ -73,7 +73,7 @@ export default function HotShotHero({
           inset: 0,
           zIndex: 1,
           background:
-            "linear-gradient(90deg, rgba(10,10,10,0.92) 0%, rgba(10,10,10,0.7) 42%, rgba(10,10,10,0.35) 100%)",
+            "linear-gradient(90deg, rgba(8,28,49,0.92) 0%, rgba(8,28,49,0.7) 42%, rgba(8,28,49,0.35) 100%)",
         }}
       /> */}
       <Box
@@ -83,7 +83,7 @@ export default function HotShotHero({
           inset: 0,
           zIndex: 1,
           background:
-            "linear-gradient(180deg, rgba(10,10,10,0.5) 0%, transparent 30%, rgba(10,10,10,0.55) 100%)",
+            "linear-gradient(180deg, rgba(8,28,49,0.5) 0%, transparent 30%, rgba(8,28,49,0.55) 100%)",
         }}
       />
       <Box
@@ -95,7 +95,7 @@ export default function HotShotHero({
           right: 0,
           height: 3,
           zIndex: 2,
-          background: `linear-gradient(90deg, ${LIME}, transparent 60%)`,
+          background: `linear-gradient(90deg, ${ACCENT}, transparent 60%)`,
         }}
       />
       <Box
@@ -108,7 +108,7 @@ export default function HotShotHero({
           height: 360,
           zIndex: 1,
           background:
-            "radial-gradient(circle, rgba(200,255,0,0.12), transparent 70%)",
+            "radial-gradient(circle, rgba(var(--accent-rgb), 0.12), transparent 70%)",
           pointerEvents: "none",
         }}
       />
@@ -134,7 +134,7 @@ export default function HotShotHero({
               zIndex: 2,
               width: { xs: 90, md: 160 },
               height: 2,
-              background: `linear-gradient(90deg, transparent, ${LIME}77, transparent)`,
+              background: `linear-gradient(90deg, transparent, ${ACCENT}77, transparent)`,
               opacity: 0.4,
               pointerEvents: "none",
             }}
@@ -166,18 +166,18 @@ export default function HotShotHero({
             px: 1.6,
             py: 0.6,
             borderRadius: "999px",
-            bgcolor: "rgba(200,255,0,0.12)",
-            border: `1px solid ${LIME}55`,
+            bgcolor: "rgba(var(--accent-rgb), 0.12)",
+            border: `1px solid ${ACCENT}55`,
             backdropFilter: "blur(4px)",
           }}
         >
-          <BoltRoundedIcon sx={{ fontSize: 16, color: LIME }} />
+          <BoltRoundedIcon sx={{ fontSize: 16, color: ACCENT }} />
           <Typography
             sx={{
               fontSize: 11,
               fontWeight: 700,
               letterSpacing: 1.5,
-              color: LIME,
+              color: ACCENT,
             }}
           >
             {badge}
@@ -196,7 +196,7 @@ export default function HotShotHero({
             sx={{
               width: { xs: 4, md: 6 },
               borderRadius: 3,
-              background: `linear-gradient(180deg, ${LIME}, #00e5ff)`,
+              background: `linear-gradient(180deg, ${ACCENT}, var(--accent-2))`,
               transformOrigin: "top",
               flexShrink: 0,
             }}
@@ -234,7 +234,7 @@ export default function HotShotHero({
                 component={Link}
                 href="/"
                 sx={{
-                  color: LIME,
+                  color: ACCENT,
                   textDecoration: "none",
                   fontWeight: 700,
                   fontSize: { xs: 14, md: 16 },

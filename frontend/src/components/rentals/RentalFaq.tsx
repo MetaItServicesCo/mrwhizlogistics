@@ -11,8 +11,8 @@ import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import RemoveRoundedIcon from "@mui/icons-material/RemoveRounded";
 import HelpOutlineRoundedIcon from "@mui/icons-material/HelpOutlineRounded";
 import LocalShippingRoundedIcon from "@mui/icons-material/LocalShippingRounded";
+import { ACCENT } from "@/theme/brand";
 
-const LIME = "#c8ff00";
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 
@@ -32,7 +32,7 @@ export default function RentalFaq({ content = RENTAL_DEFAULTS.page.sections.Rent
       sx={{
         position: "relative",
         overflow: "hidden",
-        bgcolor: "#080a08",
+        bgcolor: "#081521",
         color: "#fff",
         py: { xs: 8, sm: 10, md: 13 },
       }}
@@ -48,7 +48,7 @@ export default function RentalFaq({ content = RENTAL_DEFAULTS.page.sections.Rent
           height: 420,
           borderRadius: "50%",
           background:
-            "radial-gradient(circle, rgba(200,255,0,0.07), transparent 70%)",
+            "radial-gradient(circle, rgba(var(--accent-rgb), 0.07), transparent 70%)",
           pointerEvents: "none",
         }}
       />
@@ -63,7 +63,7 @@ export default function RentalFaq({ content = RENTAL_DEFAULTS.page.sections.Rent
           height: 420,
           borderRadius: "50%",
           background:
-            "radial-gradient(circle, rgba(200,255,0,0.06), transparent 70%)",
+            "radial-gradient(circle, rgba(var(--accent-rgb), 0.06), transparent 70%)",
           pointerEvents: "none",
         }}
       />
@@ -101,20 +101,20 @@ export default function RentalFaq({ content = RENTAL_DEFAULTS.page.sections.Rent
               py: 0.65,
               mb: 2,
               borderRadius: "999px",
-              bgcolor: "rgba(200,255,0,0.08)",
-              border: `1px solid ${LIME}33`,
+              bgcolor: "rgba(var(--accent-rgb), 0.08)",
+              border: `1px solid ${ACCENT}33`,
             }}
           >
             <HelpOutlineRoundedIcon
               sx={{
-                color: LIME,
+                color: ACCENT,
                 fontSize: 17,
               }}
             />
 
             <Typography
               sx={{
-                color: LIME,
+                color: ACCENT,
                 fontSize: 10.5,
                 fontWeight: 900,
                 letterSpacing: 1.7,
@@ -137,7 +137,7 @@ export default function RentalFaq({ content = RENTAL_DEFAULTS.page.sections.Rent
           >{copy.questions}<Box
               component="span"
               sx={{
-                color: LIME,
+                color: ACCENT,
                 display: "block",
               }}
             >{copy.weveGotAnswers}</Box>
@@ -186,10 +186,10 @@ export default function RentalFaq({ content = RENTAL_DEFAULTS.page.sections.Rent
                   overflow: "hidden",
                   borderRadius: "16px",
                   border: isOpen
-                    ? `1px solid ${LIME}55`
+                    ? `1px solid ${ACCENT}55`
                     : "1px solid rgba(255,255,255,0.09)",
                   bgcolor: isOpen
-                    ? "rgba(200,255,0,0.045)"
+                    ? "rgba(var(--accent-rgb), 0.045)"
                     : "rgba(255,255,255,0.025)",
                   transition: "border-color 0.25s, background 0.25s",
                 }}
@@ -202,7 +202,7 @@ export default function RentalFaq({ content = RENTAL_DEFAULTS.page.sections.Rent
                     top: 0,
                     bottom: 0,
                     width: 3,
-                    bgcolor: isOpen ? LIME : "transparent",
+                    bgcolor: isOpen ? ACCENT : "transparent",
                     transition: "background 0.25s",
                   }}
                 />
@@ -233,7 +233,7 @@ export default function RentalFaq({ content = RENTAL_DEFAULTS.page.sections.Rent
                       display: "block",
                       width: 30,
                       flexShrink: 0,
-                      color: isOpen ? LIME : "rgba(255,255,255,0.3)",
+                      color: isOpen ? ACCENT : "rgba(255,255,255,0.3)",
                       fontSize: 12,
                       fontWeight: 900,
                       letterSpacing: 0.5,
@@ -271,11 +271,11 @@ export default function RentalFaq({ content = RENTAL_DEFAULTS.page.sections.Rent
                       height: 34,
                       flexShrink: 0,
                       borderRadius: "10px",
-                      color: isOpen ? "#0a0a0a" : LIME,
-                      bgcolor: isOpen ? LIME : "rgba(200,255,0,0.08)",
+                      color: isOpen ? "#081c31" : ACCENT,
+                      bgcolor: isOpen ? ACCENT : "rgba(var(--accent-rgb), 0.08)",
                       "&:hover": {
-                        bgcolor: LIME,
-                        color: "#0a0a0a",
+                        bgcolor: ACCENT,
+                        color: "#081c31",
                       },
                     }}
                   >
@@ -348,7 +348,7 @@ export default function RentalFaq({ content = RENTAL_DEFAULTS.page.sections.Rent
         >
           <LocalShippingRoundedIcon
             sx={{
-              color: LIME,
+              color: ACCENT,
               fontSize: 17,
             }}
           />

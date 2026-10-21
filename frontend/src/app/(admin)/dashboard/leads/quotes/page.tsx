@@ -13,7 +13,7 @@ import DataTable, { type Column } from "@/components/admin/DataTable";
 import {
   ConfirmDialog,
   Field,
-  LIME,
+  ACCENT,
   FormDialog,
   PageHeader,
   SearchBox,
@@ -22,6 +22,7 @@ import {
   Toast,
   fmtDateTime,
 } from "@/components/admin/ui";
+import { ACCENT_HOVER } from "@/theme/brand";
 
 const SOURCE_OPTIONS = [
   { value: "all", label: "All sources" },
@@ -52,8 +53,8 @@ function SourceBadge({ row }: { row: Quote }) {
         letterSpacing: 0.3,
         verticalAlign: "middle",
         ...(callNow(row)
-          ? { bgcolor: LIME, color: "#0a0a0a" }
-          : { bgcolor: "rgba(200,255,0,0.12)", color: LIME }),
+          ? { bgcolor: ACCENT, color: "#081c31" }
+          : { bgcolor: "rgba(var(--accent-rgb), 0.12)", color: ACCENT }),
       }}
     >
       {callNow(row) ? <PhoneInTalkRoundedIcon sx={{ fontSize: 12 }} /> : <SmartToyRoundedIcon sx={{ fontSize: 12 }} />}
@@ -243,18 +244,18 @@ export default function QuotesPage() {
               flexWrap: "wrap",
               p: 1.5,
               borderRadius: "12px",
-              bgcolor: "rgba(200,255,0,0.08)",
-              border: `1px solid ${LIME}55`,
+              bgcolor: "rgba(var(--accent-rgb), 0.08)",
+              border: `1px solid ${ACCENT}55`,
             }}
           >
-            <PhoneInTalkRoundedIcon sx={{ color: LIME }} />
+            <PhoneInTalkRoundedIcon sx={{ color: ACCENT }} />
             <Typography sx={{ flex: 1, minWidth: 180, fontSize: 13, color: "#fff" }}>
               This visitor asked the AI assistant for a call back. Set the status to Contacted once you&apos;ve called.
             </Typography>
             {editing.phone && (
               <Button
                 href={`tel:${editing.phone.replace(/[^\d+]/g, "")}`}
-                sx={{ bgcolor: LIME, color: "#0a0a0a", fontWeight: 800, textTransform: "none", borderRadius: "999px", px: 2, "&:hover": { bgcolor: "#d4ff33" } }}
+                sx={{ bgcolor: ACCENT, color: "#081c31", fontWeight: 800, textTransform: "none", borderRadius: "999px", px: 2, "&:hover": { bgcolor: ACCENT_HOVER } }}
               >
                 Call {editing.phone}
               </Button>
@@ -301,7 +302,7 @@ export default function QuotesPage() {
               <Button
                 href={`/dashboard/chatbot?conversation=${editing.chat_session_id}`}
                 startIcon={<SmartToyRoundedIcon />}
-                sx={{ mt: 1, color: LIME, textTransform: "none", fontWeight: 700, px: 0 }}
+                sx={{ mt: 1, color: ACCENT, textTransform: "none", fontWeight: 700, px: 0 }}
               >
                 Read the chat conversation
               </Button>

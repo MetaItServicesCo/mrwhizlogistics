@@ -14,7 +14,7 @@ import {
   buildBlogSchema,
   type BlogSchemaInput,
 } from "@/lib/blogSchema";
-import { BORDER, Field, LIME, SelectField, fieldSx } from "./ui";
+import { BORDER, Field, ACCENT, SelectField, fieldSx } from "./ui";
 
 type Obj = Record<string, unknown>;
 
@@ -195,12 +195,12 @@ export default function SchemaMarkupEditor({
             startIcon={<AutoFixHighRoundedIcon />}
             onClick={fillFromPost}
             sx={{
-              color: LIME,
-              border: `1px solid ${LIME}55`,
+              color: ACCENT,
+              border: `1px solid ${ACCENT}55`,
               borderRadius: "10px",
               textTransform: "none",
               fontWeight: 700,
-              "&:hover": { bgcolor: "rgba(200,255,0,0.08)" },
+              "&:hover": { bgcolor: "rgba(var(--accent-rgb), 0.08)" },
             }}
           >
             Fill from post
@@ -268,7 +268,7 @@ export default function SchemaMarkupEditor({
                   <ErrorRoundedIcon sx={{ fontSize: 16 }} /> Invalid JSON
                 </Box>
               ) : (
-                <Box sx={{ display: "flex", alignItems: "center", gap: 0.5, color: LIME, fontSize: 12 }}>
+                <Box sx={{ display: "flex", alignItems: "center", gap: 0.5, color: ACCENT, fontSize: 12 }}>
                   <CheckCircleRoundedIcon sx={{ fontSize: 16 }} /> Valid JSON
                 </Box>
               )}
@@ -294,7 +294,7 @@ export default function SchemaMarkupEditor({
                 fontSize: 12.5,
                 lineHeight: 1.6,
                 outline: "none",
-                "&:focus": { borderColor: parsed.state === "invalid" ? "#ff6b6b" : LIME },
+                "&:focus": { borderColor: parsed.state === "invalid" ? "#ff6b6b" : ACCENT },
               }}
             />
             {parsed.state === "invalid" && (

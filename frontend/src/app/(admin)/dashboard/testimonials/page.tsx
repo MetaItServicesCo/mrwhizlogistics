@@ -13,7 +13,7 @@ import {
   ConfirmDialog,
   Field,
   FormDialog,
-  LIME,
+  ACCENT,
   PageHeader,
   SearchBox,
   Toast,
@@ -189,7 +189,7 @@ export default function TestimonialsPage() {
           value={t.rating}
           readOnly
           size="small"
-          sx={{ "& .MuiRating-iconFilled": { color: LIME } }}
+          sx={{ "& .MuiRating-iconFilled": { color: ACCENT } }}
         />
       ),
     },
@@ -205,9 +205,9 @@ export default function TestimonialsPage() {
           onChange={() => void toggle(t)}
           size="small"
           sx={{
-            "& .Mui-checked": { color: LIME },
+            "& .Mui-checked": { color: ACCENT },
             "& .Mui-checked + .MuiSwitch-track": {
-              backgroundColor: `${LIME} !important`,
+              backgroundColor: `${ACCENT} !important`,
             },
           }}
         />
@@ -326,7 +326,7 @@ export default function TestimonialsPage() {
               onChange={(_, v) =>
                 setForm((f) => ({ ...f, rating: v ?? 5 }))
               }
-              sx={{ "& .MuiRating-iconFilled": { color: LIME } }}
+              sx={{ "& .MuiRating-iconFilled": { color: ACCENT } }}
             />
           </Box>
           <Field
@@ -343,9 +343,9 @@ export default function TestimonialsPage() {
                 setForm((f) => ({ ...f, is_active: e.target.checked }))
               }
               sx={{
-                "& .Mui-checked": { color: LIME },
+                "& .Mui-checked": { color: ACCENT },
                 "& .Mui-checked + .MuiSwitch-track": {
-                  backgroundColor: `${LIME} !important`,
+                  backgroundColor: `${ACCENT} !important`,
                 },
               }}
             />

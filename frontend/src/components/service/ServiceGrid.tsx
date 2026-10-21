@@ -17,8 +17,8 @@ import Typography from "@mui/material/Typography";
 import ArrowOutwardRoundedIcon from "@mui/icons-material/ArrowOutwardRounded";
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 import CoverImage from "@/components/common/CoverImage";
+import { ACCENT } from "@/theme/brand";
 
-const LIME = "#c8ff00";
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 export type ServiceItem = {
@@ -33,12 +33,12 @@ export type ServiceItem = {
 };
 
 const gradients = [
-  "radial-gradient(circle at 30% 25%, rgba(200,255,0,0.22), transparent 55%), linear-gradient(150deg, #26301a, #0a0a0a)",
-  "radial-gradient(circle at 70% 20%, rgba(0,229,255,0.18), transparent 55%), linear-gradient(150deg, #12202a, #0a0a0a)",
-  "radial-gradient(circle at 40% 30%, rgba(255,179,64,0.16), transparent 55%), linear-gradient(150deg, #2a2612, #0a0a0a)",
-  "radial-gradient(circle at 65% 25%, rgba(200,255,0,0.18), transparent 55%), linear-gradient(150deg, #1c2a1a, #0a0a0a)",
-  "radial-gradient(circle at 35% 20%, rgba(255,77,216,0.14), transparent 55%), linear-gradient(150deg, #2a1626, #0a0a0a)",
-  "radial-gradient(circle at 60% 30%, rgba(0,229,255,0.16), transparent 55%), linear-gradient(150deg, #0e2430, #0a0a0a)",
+  "radial-gradient(circle at 30% 25%, rgba(var(--accent-rgb), 0.22), transparent 55%), linear-gradient(150deg, #143655, #081c31)",
+  "radial-gradient(circle at 70% 20%, rgba(var(--accent-2-rgb), 0.18), transparent 55%), linear-gradient(150deg, #12202a, #081c31)",
+  "radial-gradient(circle at 40% 30%, rgba(255,179,64,0.16), transparent 55%), linear-gradient(150deg, #2a2612, #081c31)",
+  "radial-gradient(circle at 65% 25%, rgba(var(--accent-rgb), 0.18), transparent 55%), linear-gradient(150deg, #133250, #081c31)",
+  "radial-gradient(circle at 35% 20%, rgba(var(--sky-rgb), 0.14), transparent 55%), linear-gradient(150deg, #12304c, #081c31)",
+  "radial-gradient(circle at 60% 30%, rgba(var(--accent-2-rgb), 0.16), transparent 55%), linear-gradient(150deg, #0e2430, #081c31)",
 ];
 
 function Card({ s, i, href }: { s: ServiceItem; i: number; href: string }) {
@@ -80,7 +80,7 @@ function Card({ s, i, href }: { s: ServiceItem; i: number; href: string }) {
   const spotlight = useMotionTemplate`
     radial-gradient(
       240px circle at ${spotX}px ${spotY}px,
-      rgba(200,255,0,0.14),
+      rgba(var(--accent-rgb), 0.14),
       transparent 72%
     )
   `;
@@ -157,7 +157,7 @@ function Card({ s, i, href }: { s: ServiceItem; i: number; href: string }) {
           borderRadius: "22px",
           overflow: "hidden",
           cursor: "pointer",
-          bgcolor: "#0f0f0f",
+          bgcolor: "#0a1c2c",
           border: "1px solid rgba(255,255,255,0.08)",
           display: "flex",
           flexDirection: "column",
@@ -165,12 +165,12 @@ function Card({ s, i, href }: { s: ServiceItem; i: number; href: string }) {
           outline: "none",
 
           "&:hover, &:has(a:focus-visible)": {
-            borderColor: `${LIME}66`,
+            borderColor: `${ACCENT}66`,
             boxShadow: "0 26px 60px rgba(0,0,0,0.55)",
           },
 
           "&:has(a:focus-visible)": {
-            boxShadow: `0 0 0 2px ${LIME}, 0 26px 60px rgba(0,0,0,0.55)`,
+            boxShadow: `0 0 0 2px ${ACCENT}, 0 26px 60px rgba(0,0,0,0.55)`,
           },
 
           /* IMAGE HOVER */
@@ -201,9 +201,9 @@ function Card({ s, i, href }: { s: ServiceItem; i: number; href: string }) {
 
           "&:hover .sc-arrow": {
             transform: "translate(2px, -2px) rotate(0deg)",
-            bgcolor: LIME,
-            color: "#0a0a0a",
-            borderColor: LIME,
+            bgcolor: ACCENT,
+            color: "#081c31",
+            borderColor: ACCENT,
           },
         }}
       >
@@ -258,7 +258,7 @@ function Card({ s, i, href }: { s: ServiceItem; i: number; href: string }) {
               px: 1.2,
               py: 0.4,
               borderRadius: "8px",
-              bgcolor: "rgba(10,10,10,0.7)",
+              bgcolor: "rgba(8,28,49,0.7)",
               backdropFilter: "blur(6px)",
               border: "1px solid rgba(255,255,255,0.12)",
             }}
@@ -267,7 +267,7 @@ function Card({ s, i, href }: { s: ServiceItem; i: number; href: string }) {
               sx={{
                 fontSize: 13,
                 fontWeight: 800,
-                color: LIME,
+                color: ACCENT,
               }}
             >
               {s.n}
@@ -303,7 +303,7 @@ function Card({ s, i, href }: { s: ServiceItem; i: number; href: string }) {
               inset: 0,
               zIndex: 1,
               background:
-                "linear-gradient(180deg, transparent 48%, rgba(15,15,15,0.96) 100%)",
+                "linear-gradient(180deg, transparent 48%, rgba(10,28,44,0.96) 100%)",
             }}
           />
 
@@ -321,12 +321,12 @@ function Card({ s, i, href }: { s: ServiceItem; i: number; href: string }) {
               width: 48,
               height: 48,
               borderRadius: "13px",
-              bgcolor: LIME,
-              color: "#0a0a0a",
+              bgcolor: ACCENT,
+              color: "#081c31",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              boxShadow: "0 10px 24px rgba(200,255,0,0.35)",
+              boxShadow: "0 10px 24px rgba(var(--accent-rgb), 0.35)",
               transition: "transform .35s ease",
 
               "& svg": {
@@ -436,7 +436,7 @@ function Card({ s, i, href }: { s: ServiceItem; i: number; href: string }) {
                 <CheckCircleRoundedIcon
                   sx={{
                     fontSize: 19,
-                    color: LIME,
+                    color: ACCENT,
                     flexShrink: 0,
                   }}
                 />
@@ -490,8 +490,8 @@ function Card({ s, i, href }: { s: ServiceItem; i: number; href: string }) {
                 width: 38,
                 height: 38,
                 borderRadius: "50%",
-                border: `1px solid ${LIME}55`,
-                color: LIME,
+                border: `1px solid ${ACCENT}55`,
+                color: ACCENT,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -535,7 +535,7 @@ export default function ServiceGrid({
       component="section"
       sx={{
         position: "relative",
-        bgcolor: "#0a0a0a",
+        bgcolor: "#081c31",
         color: "#fff",
 
         px: {
@@ -567,7 +567,7 @@ export default function ServiceGrid({
           width: 680,
           height: 340,
           background:
-            "radial-gradient(ellipse, rgba(200,255,0,0.07), transparent 70%)",
+            "radial-gradient(ellipse, rgba(var(--accent-rgb), 0.07), transparent 70%)",
           pointerEvents: "none",
         }}
       />
@@ -622,7 +622,7 @@ export default function ServiceGrid({
               sx={{
                 width: 28,
                 height: 2,
-                bgcolor: LIME,
+                bgcolor: ACCENT,
                 opacity: 0.7,
               }}
             />
@@ -630,7 +630,7 @@ export default function ServiceGrid({
             <Typography
               component="p"
               sx={{
-                color: LIME,
+                color: ACCENT,
                 letterSpacing: 3,
                 fontSize: 12,
                 fontWeight: 700,
@@ -644,7 +644,7 @@ export default function ServiceGrid({
               sx={{
                 width: 28,
                 height: 2,
-                bgcolor: LIME,
+                bgcolor: ACCENT,
                 opacity: 0.7,
               }}
             />
@@ -665,7 +665,7 @@ export default function ServiceGrid({
                 md: "3.2rem",
               },
 
-              background: `linear-gradient(90deg, #ffffff, ${LIME}, #00e5ff, #ffffff)`,
+              background: `linear-gradient(90deg, #ffffff, ${ACCENT}, var(--accent-2), #ffffff)`,
 
               backgroundSize: "200% auto",
 

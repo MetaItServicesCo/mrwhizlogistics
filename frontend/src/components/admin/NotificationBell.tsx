@@ -19,8 +19,8 @@ import DoneAllRoundedIcon from "@mui/icons-material/DoneAllRounded";
 import { api } from "@/lib/api";
 import { errorMessage } from "@/lib/useResource";
 import type { NotificationFeed, NotificationKind } from "@/lib/types";
+import { ACCENT } from "@/theme/brand";
 
-const LIME = "#c8ff00";
 const POLL_MS = 60_000;
 
 const KIND_ICON: Record<NotificationKind, React.ReactNode> = {
@@ -123,12 +123,12 @@ export default function NotificationBell() {
         aria-haspopup="dialog"
         aria-expanded={open}
         sx={{
-          color: open ? LIME : "rgba(255,255,255,0.7)",
+          color: open ? ACCENT : "rgba(255,255,255,0.7)",
           border: "1px solid",
-          borderColor: open ? `${LIME}55` : "rgba(255,255,255,0.1)",
+          borderColor: open ? `${ACCENT}55` : "rgba(255,255,255,0.1)",
           width: 40,
           height: 40,
-          "&:hover": { color: LIME, borderColor: `${LIME}55` },
+          "&:hover": { color: ACCENT, borderColor: `${ACCENT}55` },
         }}
       >
         <Badge
@@ -136,14 +136,14 @@ export default function NotificationBell() {
           max={99}
           sx={{
             "& .MuiBadge-badge": {
-              bgcolor: LIME,
-              color: "#0a0a0a",
+              bgcolor: ACCENT,
+              color: "#081c31",
               fontWeight: 800,
               fontSize: 10.5,
               minWidth: 18,
               height: 18,
               px: 0.5,
-              border: "2px solid #0c0d0c",
+              border: "2px solid #091928",
             },
           }}
         >
@@ -165,7 +165,7 @@ export default function NotificationBell() {
               mt: 1,
               width: 380,
               maxWidth: "calc(100vw - 24px)",
-              bgcolor: "#141514",
+              bgcolor: "#0d2237",
               color: "#fff",
               border: "1px solid rgba(255,255,255,0.1)",
               borderRadius: "16px",
@@ -191,8 +191,8 @@ export default function NotificationBell() {
                 px: 1,
                 py: 0.2,
                 borderRadius: "999px",
-                bgcolor: "rgba(200,255,0,0.12)",
-                color: LIME,
+                bgcolor: "rgba(var(--accent-rgb), 0.12)",
+                color: ACCENT,
                 fontSize: 11.5,
                 fontWeight: 800,
               }}
@@ -205,7 +205,7 @@ export default function NotificationBell() {
         <Box sx={{ maxHeight: 420, overflowY: "auto" }}>
           {loading && !feed ? (
             <Box sx={{ display: "flex", justifyContent: "center", py: 5 }}>
-              <CircularProgress size={26} sx={{ color: LIME }} />
+              <CircularProgress size={26} sx={{ color: ACCENT }} />
             </Box>
           ) : error && !feed ? (
             <Box sx={{ p: 3, textAlign: "center" }}>
@@ -213,7 +213,7 @@ export default function NotificationBell() {
               <Button
                 size="small"
                 onClick={() => anchor && void handleOpen(anchor)}
-                sx={{ color: LIME, textTransform: "none", fontWeight: 700 }}
+                sx={{ color: ACCENT, textTransform: "none", fontWeight: 700 }}
               >
                 Try again
               </Button>
@@ -241,11 +241,11 @@ export default function NotificationBell() {
                   py: 1.5,
                   border: 0,
                   borderBottom: "1px solid rgba(255,255,255,0.05)",
-                  bgcolor: n.unread ? "rgba(200,255,0,0.04)" : "transparent",
+                  bgcolor: n.unread ? "rgba(var(--accent-rgb), 0.04)" : "transparent",
                   color: "inherit",
                   font: "inherit",
                   cursor: "pointer",
-                  "&:hover, &:focus-visible": { bgcolor: "rgba(200,255,0,0.08)", outline: "none" },
+                  "&:hover, &:focus-visible": { bgcolor: "rgba(var(--accent-rgb), 0.08)", outline: "none" },
                 }}
               >
                 <Box
@@ -257,8 +257,8 @@ export default function NotificationBell() {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    bgcolor: n.unread ? "rgba(200,255,0,0.14)" : "rgba(255,255,255,0.06)",
-                    color: n.unread ? LIME : "rgba(255,255,255,0.55)",
+                    bgcolor: n.unread ? "rgba(var(--accent-rgb), 0.14)" : "rgba(255,255,255,0.06)",
+                    color: n.unread ? ACCENT : "rgba(255,255,255,0.55)",
                     "& svg": { fontSize: 18 },
                   }}
                 >
@@ -293,7 +293,7 @@ export default function NotificationBell() {
                 {n.unread && (
                   <Box
                     aria-label="new"
-                    sx={{ flexShrink: 0, mt: 0.8, width: 8, height: 8, borderRadius: "50%", bgcolor: LIME }}
+                    sx={{ flexShrink: 0, mt: 0.8, width: 8, height: 8, borderRadius: "50%", bgcolor: ACCENT }}
                   />
                 )}
               </Box>
@@ -305,7 +305,7 @@ export default function NotificationBell() {
           <Button
             fullWidth
             onClick={() => go("/dashboard/messages")}
-            sx={{ color: LIME, textTransform: "none", fontWeight: 700, borderRadius: "10px" }}
+            sx={{ color: ACCENT, textTransform: "none", fontWeight: 700, borderRadius: "10px" }}
           >
             Open all messages
           </Button>

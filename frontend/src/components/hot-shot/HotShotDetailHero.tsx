@@ -11,8 +11,8 @@ import BoltRoundedIcon from "@mui/icons-material/BoltRounded";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 
 import type { HotShotService } from "@/types/hotShot";
+import { ACCENT } from "@/theme/brand";
 
-const LIME = "#c8ff00";
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 /** Listing page and label per service category (the detail hero is shared). */
@@ -49,7 +49,7 @@ export default function HotShotDetailHero({
         display: "flex",
         alignItems: "center",
         overflow: "hidden",
-        bgcolor: "#0a0a0a",
+        bgcolor: "#081c31",
         color: "#fff",
       }}
     >
@@ -90,16 +90,16 @@ export default function HotShotDetailHero({
           background: `
             linear-gradient(
               90deg,
-              rgba(5,5,5,0.94) 0%,
-              rgba(5,5,5,0.78) 35%,
-              rgba(5,5,5,0.42) 68%,
-              rgba(5,5,5,0.58) 100%
+              rgba(6,16,26,0.94) 0%,
+              rgba(6,16,26,0.78) 35%,
+              rgba(6,16,26,0.42) 68%,
+              rgba(6,16,26,0.58) 100%
             ),
             linear-gradient(
               180deg,
-              rgba(5,5,5,0.48) 0%,
+              rgba(6,16,26,0.48) 0%,
               transparent 35%,
-              rgba(5,5,5,0.72) 100%
+              rgba(6,16,26,0.72) 100%
             )
           `,
         }}
@@ -136,7 +136,7 @@ export default function HotShotDetailHero({
       />
 
       {/* =========================================================
-          TOP LIME LINE
+          TOP ACCENT LINE
       ========================================================= */}
 
       <Box
@@ -151,8 +151,8 @@ export default function HotShotDetailHero({
           background: `
             linear-gradient(
               90deg,
-              ${LIME} 0%,
-              rgba(200,255,0,0.65) 25%,
+              ${ACCENT} 0%,
+              rgba(var(--accent-rgb), 0.65) 25%,
               transparent 65%
             )
           `,
@@ -160,7 +160,7 @@ export default function HotShotDetailHero({
       />
 
       {/* =========================================================
-          LIME RADIAL GLOW
+          ACCENT RADIAL GLOW
       ========================================================= */}
 
       <Box
@@ -179,7 +179,7 @@ export default function HotShotDetailHero({
           },
           zIndex: 1,
           background:
-            "radial-gradient(circle, rgba(200,255,0,0.14), transparent 70%)",
+            "radial-gradient(circle, rgba(var(--accent-rgb), 0.14), transparent 70%)",
           pointerEvents: "none",
         }}
       />
@@ -218,7 +218,7 @@ export default function HotShotDetailHero({
                 linear-gradient(
                   90deg,
                   transparent,
-                  ${LIME}77,
+                  ${ACCENT}77,
                   transparent
                 )
               `,
@@ -299,7 +299,7 @@ export default function HotShotDetailHero({
               transition: "color .25s ease",
 
               "&:hover": {
-                color: LIME,
+                color: ACCENT,
               },
             }}
           >
@@ -360,10 +360,10 @@ export default function HotShotDetailHero({
                 md: 0.75,
               },
               borderRadius: "999px",
-              bgcolor: "rgba(200,255,0,0.10)",
-              border: `1px solid ${LIME}55`,
+              bgcolor: "rgba(var(--accent-rgb), 0.10)",
+              border: `1px solid ${ACCENT}55`,
               backdropFilter: "blur(7px)",
-              boxShadow: `0 0 25px rgba(200,255,0,0.05)`,
+              boxShadow: `0 0 25px rgba(var(--accent-rgb), 0.05)`,
             }}
           >
             <Box
@@ -371,8 +371,8 @@ export default function HotShotDetailHero({
                 width: 7,
                 height: 7,
                 borderRadius: "50%",
-                bgcolor: LIME,
-                boxShadow: `0 0 14px ${LIME}`,
+                bgcolor: ACCENT,
+                boxShadow: `0 0 14px ${ACCENT}`,
                 flexShrink: 0,
               }}
             />
@@ -380,13 +380,13 @@ export default function HotShotDetailHero({
             <BoltRoundedIcon
               sx={{
                 fontSize: 16,
-                color: LIME,
+                color: ACCENT,
               }}
             />
 
             <Typography
               sx={{
-                color: LIME,
+                color: ACCENT,
                 fontSize: {
                   xs: 9.5,
                   md: 10.5,
@@ -449,7 +449,7 @@ export default function HotShotDetailHero({
         </motion.div>
 
         {/* =======================================================
-            TITLE + LIME BAR
+            TITLE + ACCENT BAR
         ======================================================= */}
 
         <Box
@@ -498,13 +498,13 @@ export default function HotShotDetailHero({
               background: `
                 linear-gradient(
                   180deg,
-                  ${LIME},
-                  #00e5ff
+                  ${ACCENT},
+                  var(--accent-2)
                 )
               `,
               transformOrigin: "top",
               flexShrink: 0,
-              boxShadow: "0 0 20px rgba(200,255,0,0.12)",
+              boxShadow: "0 0 20px rgba(var(--accent-rgb), 0.12)",
             }}
           />
 
@@ -587,7 +587,7 @@ export default function HotShotDetailHero({
                   component={Link}
                   href="/"
                   sx={{
-                    color: LIME,
+                    color: ACCENT,
                     textDecoration: "none",
                     fontWeight: 800,
                     fontSize: {
@@ -627,7 +627,7 @@ export default function HotShotDetailHero({
                     transition: "color .25s ease",
 
                     "&:hover": {
-                      color: LIME,
+                      color: ACCENT,
                     },
                   }}
                 >
@@ -713,7 +713,7 @@ export default function HotShotDetailHero({
       </Box>
 
       {/* =========================================================
-          BOTTOM LIME LINE
+          BOTTOM ACCENT LINE
       ========================================================= */}
 
       <Box
@@ -731,8 +731,8 @@ export default function HotShotDetailHero({
           background: `
             linear-gradient(
               90deg,
-              ${LIME} 0%,
-              rgba(200,255,0,0.30) 42%,
+              ${ACCENT} 0%,
+              rgba(var(--accent-rgb), 0.30) 42%,
               transparent 100%
             )
           `,

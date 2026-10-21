@@ -10,8 +10,8 @@ import PhoneInTalkRoundedIcon from "@mui/icons-material/PhoneInTalkRounded";
 import BoltRoundedIcon from "@mui/icons-material/BoltRounded";
 import QuoteModal from "@/components/hot-shot/QuoteModal";
 import { ctaProps, useCta } from "@/components/common/CtaProvider";
+import { ACCENT, ACCENT_HOVER } from "@/theme/brand";
 
-const LIME = "#c8ff00";
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 export default function ServiceCTA({
@@ -35,7 +35,7 @@ export default function ServiceCTA({
       component="section"
       sx={{
         position: "relative",
-        bgcolor: "#0a0a0a",
+        bgcolor: "#081c31",
         color: "#fff",
         px: { xs: 3, sm: 4, md: 6, lg: 8 },
         py: { xs: 8, md: 12 },
@@ -54,7 +54,7 @@ export default function ServiceCTA({
           mx: "auto",
           borderRadius: "28px",
           p: "1.5px",
-          background: `linear-gradient(140deg, rgba(200,255,0,0.6), rgba(255,255,255,0.05) 45%)`,
+          background: `linear-gradient(140deg, rgba(var(--accent-rgb), 0.6), rgba(255,255,255,0.05) 45%)`,
           boxShadow: "0 30px 70px rgba(0,0,0,0.5)",
         }}
       >
@@ -63,7 +63,7 @@ export default function ServiceCTA({
             position: "relative",
             borderRadius: "27px",
             overflow: "hidden",
-            bgcolor: "#0d100c",
+            bgcolor: "#0a1b2b",
             px: { xs: 3.5, sm: 5, md: 8 },
             py: { xs: 6, md: 8 },
             textAlign: "center",
@@ -75,7 +75,7 @@ export default function ServiceCTA({
               position: "absolute",
               inset: 0,
               background:
-                "radial-gradient(ellipse at 50% 40%, rgba(200,255,0,0.14), transparent 60%)",
+                "radial-gradient(ellipse at 50% 40%, rgba(var(--accent-rgb), 0.14), transparent 60%)",
               pointerEvents: "none",
             }}
           />
@@ -94,7 +94,7 @@ export default function ServiceCTA({
                 height: 400,
                 borderRadius: "50%",
                 background:
-                  "radial-gradient(circle, rgba(200,255,0,0.12), transparent 65%)",
+                  "radial-gradient(circle, rgba(var(--accent-rgb), 0.12), transparent 65%)",
                 pointerEvents: "none",
               }}
             />
@@ -118,7 +118,7 @@ export default function ServiceCTA({
                   left: 0,
                   width: { xs: 90, md: 150 },
                   height: 2,
-                  background: `linear-gradient(90deg, transparent, ${LIME}66, transparent)`,
+                  background: `linear-gradient(90deg, transparent, ${ACCENT}66, transparent)`,
                   opacity: 0.4,
                   pointerEvents: "none",
                 }}
@@ -135,17 +135,17 @@ export default function ServiceCTA({
                 px: 1.6,
                 py: 0.6,
                 borderRadius: "999px",
-                bgcolor: "rgba(200,255,0,0.12)",
-                border: `1px solid ${LIME}55`,
+                bgcolor: "rgba(var(--accent-rgb), 0.12)",
+                border: `1px solid ${ACCENT}55`,
               }}
             >
-              <BoltRoundedIcon sx={{ fontSize: 16, color: LIME }} />
+              <BoltRoundedIcon sx={{ fontSize: 16, color: ACCENT }} />
               <Typography
                 sx={{
                   fontSize: 11,
                   fontWeight: 700,
                   letterSpacing: 1.5,
-                  color: LIME,
+                  color: ACCENT,
                 }}
               >
                 24/7 DISPATCH
@@ -166,7 +166,7 @@ export default function ServiceCTA({
               <Box
                 component="span"
                 sx={{
-                  background: `linear-gradient(90deg, ${LIME}, #00e5ff, ${LIME})`,
+                  background: `linear-gradient(90deg, ${ACCENT}, var(--accent-2), ${ACCENT})`,
                   backgroundSize: "200% auto",
                   WebkitBackgroundClip: "text",
                   backgroundClip: "text",
@@ -214,15 +214,15 @@ export default function ServiceCTA({
                 sx={{
                   position: "relative",
                   overflow: "hidden",
-                  bgcolor: LIME,
-                  color: "#0a0a0a",
+                  bgcolor: ACCENT,
+                  color: "#081c31",
                   fontWeight: 800,
                   borderRadius: "999px",
                   px: 4,
                   py: 1.4,
                   textTransform: "none",
                   fontSize: 15.5,
-                  "&:hover": { bgcolor: "#d4ff33" },
+                  "&:hover": { bgcolor: ACCENT_HOVER },
                   "& .sc-a": { transition: "transform .3s" },
                   "&:hover .sc-a": { transform: "translateX(4px)" },
                   "&::after": {
@@ -259,9 +259,9 @@ export default function ServiceCTA({
                   textTransform: "none",
                   fontSize: 15.5,
                   "&:hover": {
-                    borderColor: LIME,
-                    color: LIME,
-                    bgcolor: "rgba(200,255,0,0.05)",
+                    borderColor: ACCENT,
+                    color: ACCENT,
+                    bgcolor: "rgba(var(--accent-rgb), 0.05)",
                   },
                 }}
               >

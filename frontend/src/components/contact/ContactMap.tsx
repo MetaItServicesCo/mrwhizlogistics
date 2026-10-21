@@ -5,8 +5,8 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import LocationOnRoundedIcon from "@mui/icons-material/LocationOnRounded";
 import DirectionsRoundedIcon from "@mui/icons-material/DirectionsRounded";
+import { ACCENT, ACCENT_HOVER } from "@/theme/brand";
 
-const LIME = "#c8ff00";
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 export default function ContactMap({
@@ -24,7 +24,7 @@ export default function ContactMap({
       component="section"
       sx={{
         position: "relative",
-        bgcolor: "#0a0a0a",
+        bgcolor: "#081c31",
         px: { xs: 3, sm: 4, md: 6, lg: 8 },
         pb: { xs: 8, md: 13 },
       }}
@@ -41,7 +41,7 @@ export default function ContactMap({
           mx: "auto",
           borderRadius: "22px",
           p: "1.5px",
-          background: `linear-gradient(140deg, rgba(200,255,0,0.5), rgba(255,255,255,0.05) 45%)`,
+          background: `linear-gradient(140deg, rgba(var(--accent-rgb), 0.5), rgba(255,255,255,0.05) 45%)`,
           boxShadow: "0 26px 60px rgba(0,0,0,0.5)",
         }}
       >
@@ -50,7 +50,7 @@ export default function ContactMap({
             position: "relative",
             borderRadius: "21px",
             overflow: "hidden",
-            bgcolor: "#0d100c",
+            bgcolor: "#0a1b2b",
           }}
         >
           {/* map */}
@@ -80,9 +80,9 @@ export default function ContactMap({
               maxWidth: { xs: "calc(100% - 28px)", md: 380 },
               p: { xs: 2, md: 2.5 },
               borderRadius: "16px",
-              bgcolor: "rgba(13,16,12,0.9)",
+              bgcolor: "rgba(10,27,43,0.9)",
               backdropFilter: "blur(10px)",
-              border: `1px solid ${LIME}33`,
+              border: `1px solid ${ACCENT}33`,
               display: "flex",
               gap: 1.5,
               alignItems: "flex-start",
@@ -94,8 +94,8 @@ export default function ContactMap({
                 height: 40,
                 flexShrink: 0,
                 borderRadius: "12px",
-                bgcolor: LIME,
-                color: "#0a1f1a",
+                bgcolor: ACCENT,
+                color: "#0d2237",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -110,7 +110,7 @@ export default function ContactMap({
                   fontSize: 10.5,
                   fontWeight: 800,
                   letterSpacing: 1.5,
-                  color: LIME,
+                  color: ACCENT,
                   mb: 0.4,
                 }}
               >
@@ -137,9 +137,9 @@ export default function ContactMap({
                   gap: 0.7,
                   fontSize: 12.5,
                   fontWeight: 800,
-                  color: LIME,
+                  color: ACCENT,
                   textDecoration: "none",
-                  "&:hover": { color: "#d4ff33" },
+                  "&:hover": { color: ACCENT_HOVER },
                   "& svg": { fontSize: 16, transition: "transform .3s" },
                   "&:hover svg": { transform: "translateX(3px)" },
                 }}

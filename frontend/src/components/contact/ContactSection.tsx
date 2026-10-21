@@ -18,13 +18,13 @@ import EmailRoundedIcon from "@mui/icons-material/EmailRounded";
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 import ArrowOutwardRoundedIcon from "@mui/icons-material/ArrowOutwardRounded";
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
+import { ACCENT, ACCENT_HOVER } from "@/theme/brand";
 
-const LIME = "#c8ff00";
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 const fieldSx = {
   "& .MuiInputLabel-root": { color: "rgba(255,255,255,0.5)", fontSize: 14 },
-  "& .MuiInputLabel-root.Mui-focused": { color: LIME },
+  "& .MuiInputLabel-root.Mui-focused": { color: ACCENT },
   "& .MuiOutlinedInput-root": {
     color: "#fff",
     borderRadius: "12px",
@@ -35,8 +35,8 @@ const fieldSx = {
     },
     "&:hover fieldset": { borderColor: "rgba(255,255,255,0.3)" },
     "&.Mui-focused fieldset": {
-      borderColor: LIME,
-      boxShadow: "0 0 0 3px rgba(200,255,0,0.15)",
+      borderColor: ACCENT,
+      boxShadow: "0 0 0 3px rgba(var(--accent-rgb), 0.15)",
     },
   },
   "& input::placeholder, & textarea::placeholder": {
@@ -48,7 +48,7 @@ const fieldSx = {
 
 const menuSx = {
   "& .MuiPaper-root": {
-    bgcolor: "#141812",
+    bgcolor: "#0d2338",
     color: "#fff",
     borderRadius: "12px",
     border: "1px solid rgba(255,255,255,0.14)",
@@ -56,8 +56,8 @@ const menuSx = {
   },
   "& .MuiMenuItem-root": {
     fontSize: 14,
-    "&:hover": { bgcolor: "rgba(200,255,0,0.1)", color: LIME },
-    "&.Mui-selected": { bgcolor: "rgba(200,255,0,0.18)", color: LIME },
+    "&:hover": { bgcolor: "rgba(var(--accent-rgb), 0.1)", color: ACCENT },
+    "&.Mui-selected": { bgcolor: "rgba(var(--accent-rgb), 0.18)", color: ACCENT },
   },
 } as const;
 
@@ -115,7 +115,7 @@ export default function ContactSection({
       component="section"
       sx={{
         position: "relative",
-        bgcolor: "#0a0a0a",
+        bgcolor: "#081c31",
         color: "#fff",
         px: { xs: 3, sm: 4, md: 6, lg: 8 },
         py: { xs: 8, md: 13 },
@@ -131,7 +131,7 @@ export default function ContactSection({
           width: 520,
           height: 420,
           background:
-            "radial-gradient(ellipse, rgba(200,255,0,0.08), transparent 70%)",
+            "radial-gradient(ellipse, rgba(var(--accent-rgb), 0.08), transparent 70%)",
           pointerEvents: "none",
         }}
       />
@@ -163,8 +163,8 @@ export default function ContactSection({
             overflow: "hidden",
             borderRadius: "22px",
             p: { xs: 3, md: 4 },
-            background: "linear-gradient(160deg, #0e2a24, #071410)",
-            border: `1px solid ${LIME}22`,
+            background: "linear-gradient(160deg, #102b45, #0a1a2a)",
+            border: `1px solid ${ACCENT}22`,
           }}
         >
           <Box
@@ -177,7 +177,7 @@ export default function ContactSection({
               height: 200,
               borderRadius: "50%",
               background:
-                "radial-gradient(circle, rgba(200,255,0,0.14), transparent 70%)",
+                "radial-gradient(circle, rgba(var(--accent-rgb), 0.14), transparent 70%)",
             }}
           />
 
@@ -196,7 +196,7 @@ export default function ContactSection({
             sx={{
               width: 54,
               height: 3,
-              bgcolor: LIME,
+              bgcolor: ACCENT,
               borderRadius: 2,
               mb: 3.5,
             }}
@@ -235,10 +235,10 @@ export default function ContactSection({
                   border: "1px solid rgba(255,255,255,0.07)",
                   transition: "all .3s",
                   "&:hover": {
-                    borderColor: `${LIME}44`,
-                    bgcolor: "rgba(200,255,0,0.04)",
+                    borderColor: `${ACCENT}44`,
+                    bgcolor: "rgba(var(--accent-rgb), 0.04)",
                   },
-                  "&:hover .ci-icon": { bgcolor: LIME, color: "#0a1f1a" },
+                  "&:hover .ci-icon": { bgcolor: ACCENT, color: "#0d2237" },
                 }}
               >
                 <Box
@@ -248,8 +248,8 @@ export default function ContactSection({
                     height: 44,
                     flexShrink: 0,
                     borderRadius: "12px",
-                    bgcolor: "rgba(200,255,0,0.12)",
-                    color: LIME,
+                    bgcolor: "rgba(var(--accent-rgb), 0.12)",
+                    color: ACCENT,
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
@@ -279,7 +279,7 @@ export default function ContactSection({
                         color: "rgba(255,255,255,0.6)",
                         textDecoration: "none",
                         lineHeight: 1.6,
-                        "&:hover": { color: LIME },
+                        "&:hover": { color: ACCENT },
                       }}
                     >
                       {it.value}
@@ -316,7 +316,7 @@ export default function ContactSection({
               fontWeight: 800,
               fontSize: { xs: "1.9rem", md: "2.4rem" },
               mb: 1,
-              background: `linear-gradient(90deg, #ffffff, ${LIME}, #00e5ff, #ffffff)`,
+              background: `linear-gradient(90deg, #ffffff, ${ACCENT}, var(--accent-2), #ffffff)`,
               backgroundSize: "200% auto",
               WebkitBackgroundClip: "text",
               backgroundClip: "text",
@@ -335,7 +335,7 @@ export default function ContactSection({
             sx={{
               width: 54,
               height: 3,
-              bgcolor: LIME,
+              bgcolor: ACCENT,
               borderRadius: 2,
               mb: 3.5,
             }}
@@ -354,8 +354,8 @@ export default function ContactSection({
                     textAlign: "center",
                     py: 6,
                     borderRadius: "18px",
-                    bgcolor: "#101010",
-                    border: `1px solid ${LIME}33`,
+                    bgcolor: "#0b1d2e",
+                    border: `1px solid ${ACCENT}33`,
                   }}
                 >
                   <motion.div
@@ -370,7 +370,7 @@ export default function ContactSection({
                     style={{ display: "inline-flex" }}
                   >
                     <CheckCircleRoundedIcon
-                      sx={{ fontSize: 60, color: LIME }}
+                      sx={{ fontSize: 60, color: ACCENT }}
                     />
                   </motion.div>
                   <Typography
@@ -497,19 +497,19 @@ export default function ContactSection({
                     position: "relative",
                     overflow: "hidden",
                     mt: 3,
-                    bgcolor: LIME,
-                    color: "#0a0a0a",
+                    bgcolor: ACCENT,
+                    color: "#081c31",
                     fontWeight: 800,
                     borderRadius: "12px",
                     px: 4,
                     py: 1.4,
                     textTransform: "none",
                     fontSize: 15,
-                    "&:hover": { bgcolor: "#d4ff33" },
+                    "&:hover": { bgcolor: ACCENT_HOVER },
                     "&.Mui-disabled": {
-                      bgcolor: LIME,
+                      bgcolor: ACCENT,
                       opacity: 0.8,
-                      color: "#0a0a0a",
+                      color: "#081c31",
                     },
                     "& .c-arrow": { transition: "transform .3s ease" },
                     "&:hover .c-arrow": { transform: "translate(3px,-3px)" },
@@ -529,7 +529,7 @@ export default function ContactSection({
                   }}
                 >
                   {status === "loading" ? (
-                    <CircularProgress size={22} sx={{ color: "#0a0a0a" }} />
+                    <CircularProgress size={22} sx={{ color: "#081c31" }} />
                   ) : (
                     content.submitLabel
                   )}

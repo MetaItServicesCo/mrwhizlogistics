@@ -14,10 +14,10 @@ import LocalShippingRoundedIcon from "@mui/icons-material/LocalShippingRounded";
 import BuildRoundedIcon from "@mui/icons-material/BuildRounded";
 import SupportAgentRoundedIcon from "@mui/icons-material/SupportAgentRounded";
 import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
+import { ACCENT, ACCENT_HOVER } from "@/theme/brand";
 
-const LIME = "#c8ff00";
-const BG = "#0a0a0a";
-const CARD = "#111411";
+const BG = "#081c31";
+const CARD = "#0c2033";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -101,7 +101,7 @@ export default function RentalBenefits() {
           height: 420,
           borderRadius: "50%",
           background:
-            "radial-gradient(circle, rgba(200,255,0,0.08), transparent 68%)",
+            "radial-gradient(circle, rgba(var(--accent-rgb), 0.08), transparent 68%)",
           pointerEvents: "none",
         }}
       />
@@ -116,7 +116,7 @@ export default function RentalBenefits() {
           height: 450,
           borderRadius: "50%",
           background:
-            "radial-gradient(circle, rgba(200,255,0,0.06), transparent 70%)",
+            "radial-gradient(circle, rgba(var(--accent-rgb), 0.06), transparent 70%)",
           pointerEvents: "none",
         }}
       />
@@ -173,8 +173,8 @@ export default function RentalBenefits() {
               px: 1.5,
               py: 0.65,
               borderRadius: "999px",
-              bgcolor: "rgba(200,255,0,0.08)",
-              border: `1px solid ${LIME}33`,
+              bgcolor: "rgba(var(--accent-rgb), 0.08)",
+              border: `1px solid ${ACCENT}33`,
             }}
           >
             <Box
@@ -182,14 +182,14 @@ export default function RentalBenefits() {
                 width: 7,
                 height: 7,
                 borderRadius: "50%",
-                bgcolor: LIME,
-                boxShadow: `0 0 14px ${LIME}`,
+                bgcolor: ACCENT,
+                boxShadow: `0 0 14px ${ACCENT}`,
               }}
             />
 
             <Typography
               sx={{
-                color: LIME,
+                color: ACCENT,
                 fontSize: 11,
                 fontWeight: 800,
                 letterSpacing: 1.8,
@@ -217,7 +217,7 @@ export default function RentalBenefits() {
             <Box
               component="span"
               sx={{
-                color: LIME,
+                color: ACCENT,
                 ml: { xs: 0.8, sm: 1.2 },
               }}
             >
@@ -320,15 +320,15 @@ export default function RentalBenefits() {
             disableElevation
             sx={{
               flexShrink: 0,
-              bgcolor: LIME,
-              color: "#0a0a0a",
+              bgcolor: ACCENT,
+              color: "#081c31",
               borderRadius: "12px",
               px: 2.5,
               py: 1.25,
               fontWeight: 900,
               textTransform: "none",
               "&:hover": {
-                bgcolor: "#d8ff4d",
+                bgcolor: ACCENT_HOVER,
                 transform: "translateX(2px)",
               },
               transition: "all 0.25s ease",
@@ -400,7 +400,7 @@ function BenefitCard({
         border: "1px solid rgba(255,255,255,0.075)",
         transition: "border-color 0.3s ease, box-shadow 0.3s ease",
         "&:hover": {
-          borderColor: `${LIME}44`,
+          borderColor: `${ACCENT}44`,
           boxShadow: "0 20px 55px rgba(0,0,0,0.3)",
         },
       }}
@@ -414,7 +414,7 @@ function BenefitCard({
           left: 0,
           width: "42%",
           height: 2,
-          background: `linear-gradient(90deg, ${LIME}, transparent)`,
+          background: `linear-gradient(90deg, ${ACCENT}, transparent)`,
           opacity: 0.8,
         }}
       />
@@ -442,9 +442,9 @@ function BenefitCard({
           width: 52,
           height: 52,
           borderRadius: "15px",
-          bgcolor: "rgba(200,255,0,0.09)",
-          border: `1px solid ${LIME}22`,
-          color: LIME,
+          bgcolor: "rgba(var(--accent-rgb), 0.09)",
+          border: `1px solid ${ACCENT}22`,
+          color: ACCENT,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -495,7 +495,7 @@ function BenefitCard({
           background: `linear-gradient(
             90deg,
             transparent,
-            ${LIME}33,
+            ${ACCENT}33,
             transparent
           )`,
         }}

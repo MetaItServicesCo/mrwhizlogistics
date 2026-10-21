@@ -16,9 +16,12 @@ import InputAdornment from "@mui/material/InputAdornment";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import InboxRoundedIcon from "@mui/icons-material/InboxRounded";
+import { ACCENT, ACCENT_HOVER } from "@/theme/brand";
 
-export const LIME = "#c8ff00";
-export const CARD_BG = "#0f100f";
+export { ACCENT };
+/** @deprecated Use ACCENT. */
+export const LIME = ACCENT;
+export const CARD_BG = "#0b1d2d";
 export const BORDER = "1px solid rgba(255,255,255,0.08)";
 
 /* ------------------------------------------------------------------ */
@@ -27,14 +30,14 @@ export const BORDER = "1px solid rgba(255,255,255,0.08)";
 
 export const fieldSx = {
   "& .MuiInputLabel-root": { color: "rgba(255,255,255,0.5)", fontSize: 14 },
-  "& .MuiInputLabel-root.Mui-focused": { color: LIME },
+  "& .MuiInputLabel-root.Mui-focused": { color: ACCENT },
   "& .MuiOutlinedInput-root": {
     color: "#fff",
     borderRadius: "12px",
     bgcolor: "rgba(255,255,255,0.03)",
     "& fieldset": { borderColor: "rgba(255,255,255,0.14)" },
     "&:hover fieldset": { borderColor: "rgba(255,255,255,0.3)" },
-    "&.Mui-focused fieldset": { borderColor: LIME },
+    "&.Mui-focused fieldset": { borderColor: ACCENT },
   },
   "& .MuiFormHelperText-root": { color: "rgba(255,255,255,0.4)" },
   "& .MuiSvgIcon-root": { color: "rgba(255,255,255,0.4)" },
@@ -42,7 +45,7 @@ export const fieldSx = {
   // Chrome paints autofilled fields light blue with dark text, which broke the
   // dark design. Paint over it with the field's own colour instead.
   "& input:-webkit-autofill, & input:-webkit-autofill:hover, & input:-webkit-autofill:focus": {
-    WebkitBoxShadow: "0 0 0 1000px #151715 inset",
+    WebkitBoxShadow: "0 0 0 1000px #0d243a inset",
     WebkitTextFillColor: "#fff",
     caretColor: "#fff",
     transition: "background-color 600000s 0s",
@@ -95,15 +98,15 @@ export function PageHeader({
           startIcon={<AddRoundedIcon />}
           disableElevation
           sx={{
-            bgcolor: LIME,
-            color: "#0a0a0a",
+            bgcolor: ACCENT,
+            color: "#081c31",
             fontWeight: 800,
             borderRadius: "12px",
             px: 2.5,
             py: 1.1,
             textTransform: "none",
             whiteSpace: "nowrap",
-            "&:hover": { bgcolor: "#d4ff33" },
+            "&:hover": { bgcolor: ACCENT_HOVER },
           }}
         >
           {actionLabel}
@@ -184,7 +187,7 @@ export function LoadingState({ label = "Loading…" }: { label?: string }) {
         py: 8,
       }}
     >
-      <CircularProgress sx={{ color: LIME }} size={30} />
+      <CircularProgress sx={{ color: ACCENT }} size={30} />
       <Typography sx={{ color: "rgba(255,255,255,0.4)", fontSize: 14 }}>
         {label}
       </Typography>
@@ -249,7 +252,7 @@ export function ErrorState({
             <Button
               onClick={onRetry}
               size="small"
-              sx={{ color: LIME, textTransform: "none" }}
+              sx={{ color: ACCENT, textTransform: "none" }}
             >
               Retry
             </Button>
@@ -267,13 +270,13 @@ export function ErrorState({
 /* ------------------------------------------------------------------ */
 
 const STATUS_COLORS: Record<string, { fg: string; bg: string }> = {
-  new: { fg: LIME, bg: "rgba(200,255,0,0.12)" },
-  pending: { fg: LIME, bg: "rgba(200,255,0,0.12)" },
+  new: { fg: ACCENT, bg: "rgba(var(--accent-rgb), 0.12)" },
+  pending: { fg: ACCENT, bg: "rgba(var(--accent-rgb), 0.12)" },
   booked: { fg: "#4ade80", bg: "rgba(74,222,128,0.12)" },
   contacted: { fg: "#66b2ff", bg: "rgba(102,178,255,0.12)" },
   quoted: { fg: "#ffc46b", bg: "rgba(255,196,107,0.12)" },
   closed: { fg: "rgba(255,255,255,0.55)", bg: "rgba(255,255,255,0.07)" },
-  active: { fg: LIME, bg: "rgba(200,255,0,0.12)" },
+  active: { fg: ACCENT, bg: "rgba(var(--accent-rgb), 0.12)" },
   inactive: { fg: "rgba(255,255,255,0.55)", bg: "rgba(255,255,255,0.07)" },
   draft: { fg: "#66b2ff", bg: "rgba(102,178,255,0.12)" },
   sending: { fg: "#ffc46b", bg: "rgba(255,196,107,0.12)" },
@@ -312,7 +315,7 @@ export function StatusChip({ status }: { status: string | null | undefined }) {
 /* ------------------------------------------------------------------ */
 
 const dialogPaperSx = {
-  bgcolor: "#121312",
+  bgcolor: "#0c2033",
   color: "#fff",
   borderRadius: "18px",
   border: BORDER,
@@ -450,18 +453,18 @@ export function FormDialog({
           disabled={busy}
           disableElevation
           sx={{
-            bgcolor: LIME,
-            color: "#0a0a0a",
+            bgcolor: ACCENT,
+            color: "#081c31",
             fontWeight: 800,
             textTransform: "none",
             borderRadius: "10px",
             px: 3,
-            "&:hover": { bgcolor: "#d4ff33" },
-            "&.Mui-disabled": { bgcolor: LIME, opacity: 0.6, color: "#0a0a0a" },
+            "&:hover": { bgcolor: ACCENT_HOVER },
+            "&.Mui-disabled": { bgcolor: ACCENT, opacity: 0.6, color: "#081c31" },
           }}
         >
           {busy ? (
-            <CircularProgress size={19} sx={{ color: "#0a0a0a" }} />
+            <CircularProgress size={19} sx={{ color: "#081c31" }} />
           ) : (
             submitLabel
           )}
@@ -540,11 +543,11 @@ export function SelectField({
             slotProps: {
               paper: {
                 sx: {
-                  bgcolor: "#141514",
+                  bgcolor: "#0d2237",
                   color: "#fff",
                   border: BORDER,
                   "& .MuiMenuItem-root:hover": {
-                    bgcolor: "rgba(200,255,0,0.08)",
+                    bgcolor: "rgba(var(--accent-rgb), 0.08)",
                   },
                 },
               },

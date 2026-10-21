@@ -7,8 +7,8 @@ import ScaleRoundedIcon from "@mui/icons-material/ScaleRounded";
 import StraightenRoundedIcon from "@mui/icons-material/StraightenRounded";
 import SpeedRoundedIcon from "@mui/icons-material/SpeedRounded";
 import Link from "next/link";
+import { ACCENT, ACCENT_HOVER } from "@/theme/brand";
 
-const LIME = "#c8ff00";
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 const fleets = [
@@ -56,7 +56,7 @@ export default function FleetOverview() {
       component="section"
       sx={{
         py: { xs: 10, md: 14 },
-        bgcolor: "#0a0a0a",
+        bgcolor: "#081c31",
         color: "#fff",
         borderTop: "1px solid rgba(255,255,255,0.06)",
         borderBottom: "1px solid rgba(255,255,255,0.06)",
@@ -83,13 +83,13 @@ export default function FleetOverview() {
                 mb: 1.5,
               }}
             >
-              <Box sx={{ width: 22, height: 2, bgcolor: LIME }} />
+              <Box sx={{ width: 22, height: 2, bgcolor: ACCENT }} />
               <Typography
                 sx={{
                   fontSize: 11,
                   fontWeight: 800,
                   letterSpacing: 2,
-                  color: LIME,
+                  color: ACCENT,
                   textTransform: "uppercase",
                 }}
               >
@@ -113,11 +113,11 @@ export default function FleetOverview() {
             href="/rentals"
             endIcon={<ArrowForwardRoundedIcon />}
             sx={{
-              color: LIME,
+              color: ACCENT,
               fontWeight: 700,
               textTransform: "none",
               fontSize: 14,
-              "&:hover": { bgcolor: "transparent", color: "#d4ff33" },
+              "&:hover": { bgcolor: "transparent", color: ACCENT_HOVER },
             }}
           >
             View All Equipment & Rentals
@@ -138,13 +138,13 @@ export default function FleetOverview() {
                   height: "100%",
                   borderRadius: "22px",
                   overflow: "hidden",
-                  bgcolor: "#121212",
+                  bgcolor: "#0c2032",
                   border: "1px solid rgba(255,255,255,0.08)",
                   display: "flex",
                   flexDirection: "column",
                   transition: "border-color .3s ease, transform .3s ease",
                   "&:hover": {
-                    borderColor: `${LIME}55`,
+                    borderColor: `${ACCENT}55`,
                     transform: "translateY(-4px)",
                   },
                 }}
@@ -154,8 +154,8 @@ export default function FleetOverview() {
                   sx={{
                     height: 220,
                     position: "relative",
-                    bgcolor: "#1a1a1a",
-                    backgroundImage: `linear-gradient(to top, #121212, transparent), url("${fleet.image}")`,
+                    bgcolor: "#0f2941",
+                    backgroundImage: `linear-gradient(to top, #0c2032, transparent), url("${fleet.image}")`,
                     backgroundSize: "cover",
                     backgroundPosition: "center",
                   }}
@@ -176,7 +176,7 @@ export default function FleetOverview() {
                       sx={{
                         fontSize: 10,
                         fontWeight: 800,
-                        color: LIME,
+                        color: ACCENT,
                         letterSpacing: 1,
                       }}
                     >
@@ -200,7 +200,7 @@ export default function FleetOverview() {
                       sx={{
                         fontSize: 11,
                         fontWeight: 700,
-                        color: LIME,
+                        color: ACCENT,
                         textTransform: "uppercase",
                         mb: 0.5,
                       }}
@@ -250,7 +250,7 @@ export default function FleetOverview() {
                       <Box
                         sx={{ display: "flex", alignItems: "center", gap: 1 }}
                       >
-                        <ScaleRoundedIcon sx={{ fontSize: 14, color: LIME }} />
+                        <ScaleRoundedIcon sx={{ fontSize: 14, color: ACCENT }} />
                         <Typography
                           sx={{ fontSize: 12, color: "rgba(255,255,255,0.5)" }}
                         >
@@ -275,7 +275,7 @@ export default function FleetOverview() {
                         sx={{ display: "flex", alignItems: "center", gap: 1 }}
                       >
                         <StraightenRoundedIcon
-                          sx={{ fontSize: 14, color: LIME }}
+                          sx={{ fontSize: 14, color: ACCENT }}
                         />
                         <Typography
                           sx={{ fontSize: 12, color: "rgba(255,255,255,0.5)" }}
@@ -300,7 +300,7 @@ export default function FleetOverview() {
                       <Box
                         sx={{ display: "flex", alignItems: "center", gap: 1 }}
                       >
-                        <SpeedRoundedIcon sx={{ fontSize: 14, color: LIME }} />
+                        <SpeedRoundedIcon sx={{ fontSize: 14, color: ACCENT }} />
                         <Typography
                           sx={{ fontSize: 12, color: "rgba(255,255,255,0.5)" }}
                         >

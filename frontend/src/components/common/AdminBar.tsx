@@ -11,8 +11,8 @@ import ChevronLeftRoundedIcon from "@mui/icons-material/ChevronLeftRounded";
 import AdminPanelSettingsRoundedIcon from "@mui/icons-material/AdminPanelSettingsRounded";
 import { useAuth } from "@/lib/auth";
 import { editTargetFor, rememberSitePath } from "@/lib/adminNav";
+import { ACCENT, ACCENT_HOVER } from "@/theme/brand";
 
-const LIME = "#c8ff00";
 const COLLAPSED_KEY = "mrwhiz_admin_bar_collapsed";
 
 const pillBtn = {
@@ -88,9 +88,9 @@ export default function AdminBar() {
         gap: 0.6,
         p: 0.6,
         borderRadius: "999px",
-        bgcolor: "rgba(14,15,14,0.92)",
+        bgcolor: "rgba(10,27,44,0.92)",
         backdropFilter: "blur(10px)",
-        border: `1px solid ${LIME}55`,
+        border: `1px solid ${ACCENT}55`,
         boxShadow: "0 12px 30px rgba(0,0,0,0.5)",
         color: "#fff",
       }}
@@ -100,7 +100,7 @@ export default function AdminBar() {
           <IconButton
             aria-label="Show admin shortcuts"
             onClick={() => toggle(false)}
-            sx={{ color: LIME, width: 36, height: 36 }}
+            sx={{ color: ACCENT, width: 36, height: 36 }}
           >
             <AdminPanelSettingsRoundedIcon sx={{ fontSize: 20 }} />
           </IconButton>
@@ -111,7 +111,7 @@ export default function AdminBar() {
             component="a"
             href="/dashboard"
             aria-label="Dashboard"
-            sx={{ ...pillBtn, bgcolor: LIME, color: "#0a0a0a", "&:hover": { bgcolor: "#d4ff33" } }}
+            sx={{ ...pillBtn, bgcolor: ACCENT, color: "#081c31", "&:hover": { bgcolor: ACCENT_HOVER } }}
           >
             <DashboardRoundedIcon sx={{ fontSize: 18 }} />
             {/* Icon-only on phones so the bar stays clear of the chat button. */}
@@ -126,7 +126,7 @@ export default function AdminBar() {
                 ...pillBtn,
                 color: "#fff",
                 border: "1px solid rgba(255,255,255,0.18)",
-                "&:hover": { color: LIME, borderColor: `${LIME}88` },
+                "&:hover": { color: ACCENT, borderColor: `${ACCENT}88` },
               }}
             >
               <EditRoundedIcon sx={{ fontSize: 16 }} />

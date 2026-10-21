@@ -15,8 +15,8 @@ import LocalShippingRoundedIcon from "@mui/icons-material/LocalShippingRounded";
 import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
 import FireTruckRoundedIcon from "@mui/icons-material/FireTruckRounded";
 import { ctaProps, useCta } from "@/components/common/CtaProvider";
+import { ACCENT, ACCENT_HOVER } from "@/theme/brand";
 
-const LIME = "#c8ff00";
 
 type Tier = {
   n: string;
@@ -95,7 +95,7 @@ function TierCard({ tier }: { tier: Tier }) {
   const spotlight = useMotionTemplate`
     radial-gradient(
       220px circle at ${spotX}px ${spotY}px,
-      rgba(200,255,0,0.16),
+      rgba(var(--accent-rgb), 0.16),
       transparent 72%
     )
   `;
@@ -154,7 +154,7 @@ function TierCard({ tier }: { tier: Tier }) {
             p: "1.5px",
 
             background: tier.featured
-              ? "linear-gradient(160deg, rgba(200,255,0,0.7), rgba(255,255,255,0.05) 45%)"
+              ? "linear-gradient(160deg, rgba(var(--accent-rgb), 0.7), rgba(255,255,255,0.05) 45%)"
               : "rgba(255,255,255,0.09)",
 
             transform: {
@@ -166,8 +166,8 @@ function TierCard({ tier }: { tier: Tier }) {
 
             "&:hover": {
               background: tier.featured
-                ? "linear-gradient(160deg, rgba(200,255,0,0.95), rgba(200,255,0,0.15) 55%)"
-                : "rgba(200,255,0,0.35)",
+                ? "linear-gradient(160deg, rgba(var(--accent-rgb), 0.95), rgba(var(--accent-rgb), 0.15) 55%)"
+                : "rgba(var(--accent-rgb), 0.35)",
             },
 
             "&:hover .tier-spot": {
@@ -189,7 +189,7 @@ function TierCard({ tier }: { tier: Tier }) {
               position: "relative",
               height: "100%",
               borderRadius: "25px",
-              bgcolor: "#0d0d0d",
+              bgcolor: "#0a1a29",
               p: {
                 xs: 3,
                 md: 3.5,
@@ -220,8 +220,8 @@ function TierCard({ tier }: { tier: Tier }) {
                   top: 16,
                   right: 16,
                   zIndex: 2,
-                  bgcolor: LIME,
-                  color: "#000",
+                  bgcolor: ACCENT,
+                  color: "#040a11",
                   fontSize: 10,
                   fontWeight: 800,
                   letterSpacing: 1,
@@ -254,7 +254,7 @@ function TierCard({ tier }: { tier: Tier }) {
                   transition: "transform .5s ease",
 
                   background:
-                    "radial-gradient(circle at 30% 20%, rgba(200,255,0,0.16), transparent 55%), linear-gradient(150deg, #1c1c1c, #0a0a0a)",
+                    "radial-gradient(circle at 30% 20%, rgba(var(--accent-rgb), 0.16), transparent 55%), linear-gradient(150deg, #102b45, #081c31)",
 
                   display: "flex",
                   alignItems: "center",
@@ -263,7 +263,7 @@ function TierCard({ tier }: { tier: Tier }) {
                   // ICON SIZE UNCHANGED
                   "& svg": {
                     fontSize: 50,
-                    color: "rgba(200,255,0,0.85)",
+                    color: "rgba(var(--accent-rgb), 0.85)",
                   },
                 }}
               >
@@ -284,7 +284,7 @@ function TierCard({ tier }: { tier: Tier }) {
               {/* TRUCK TYPE — INCREASED */}
               <Typography
                 sx={{
-                  color: LIME,
+                  color: ACCENT,
 
                   // Increased from 11px
                   fontSize: {
@@ -349,8 +349,8 @@ function TierCard({ tier }: { tier: Tier }) {
                       transition: "all 0.2s ease",
 
                       "&:hover": {
-                        borderColor: "rgba(200,255,0,0.4)",
-                        bgcolor: "rgba(200,255,0,0.06)",
+                        borderColor: "rgba(var(--accent-rgb), 0.4)",
+                        bgcolor: "rgba(var(--accent-rgb), 0.06)",
                         color: "#fff",
                       },
                     }}
@@ -378,15 +378,15 @@ function TierCard({ tier }: { tier: Tier }) {
                 sx={
                   tier.featured
                     ? {
-                        bgcolor: LIME,
-                        color: "#000",
+                        bgcolor: ACCENT,
+                        color: "#040a11",
                         fontWeight: 700,
                         borderRadius: "999px",
                         py: 1.1,
                         textTransform: "none",
 
                         "&:hover": {
-                          bgcolor: "#d4ff33",
+                          bgcolor: ACCENT_HOVER,
                         },
                       }
                     : {
@@ -398,9 +398,9 @@ function TierCard({ tier }: { tier: Tier }) {
                         textTransform: "none",
 
                         "&:hover": {
-                          borderColor: LIME,
-                          color: LIME,
-                          bgcolor: "rgba(200,255,0,0.05)",
+                          borderColor: ACCENT,
+                          color: ACCENT,
+                          bgcolor: "rgba(var(--accent-rgb), 0.05)",
                         },
                       }
                 }
@@ -426,7 +426,7 @@ export default function TiersSection() {
       sx={{
         scrollMarginTop: 96,
         position: "relative",
-        bgcolor: "#0a0a0a",
+        bgcolor: "#081c31",
         color: "#fff",
         py: {
           xs: 8,
@@ -450,7 +450,7 @@ export default function TiersSection() {
           width: 700,
           height: 360,
           background:
-            "radial-gradient(ellipse, rgba(200,255,0,0.08), transparent 70%)",
+            "radial-gradient(ellipse, rgba(var(--accent-rgb), 0.08), transparent 70%)",
           pointerEvents: "none",
         }}
       />
@@ -488,7 +488,7 @@ export default function TiersSection() {
         >
           <Typography
             sx={{
-              color: LIME,
+              color: ACCENT,
               fontSize: 16,
               fontWeight: 800,
               letterSpacing: 2,
@@ -511,7 +511,7 @@ export default function TiersSection() {
                 md: "3.6rem",
               },
 
-              background: `linear-gradient(90deg, #ffffff, ${LIME}, #00e5ff, #ffffff)`,
+              background: `linear-gradient(90deg, #ffffff, ${ACCENT}, var(--accent-2), #ffffff)`,
               backgroundSize: "200% auto",
 
               WebkitBackgroundClip: "text",

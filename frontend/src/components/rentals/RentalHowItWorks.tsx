@@ -14,8 +14,8 @@ import LocalShippingRoundedIcon from "@mui/icons-material/LocalShippingRounded";
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
 import { ctaProps, useCta } from "@/components/common/CtaProvider";
+import { ACCENT, ACCENT_HOVER } from "@/theme/brand";
 
-const LIME = "#c8ff00";
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 type Step = {
@@ -68,7 +68,7 @@ export default function RentalHowItWorks({ content = RENTAL_DEFAULTS.page.sectio
       sx={{
         position: "relative",
         overflow: "hidden",
-        bgcolor: "#080a08",
+        bgcolor: "#081521",
         color: "#fff",
         py: {
           xs: 9,
@@ -92,7 +92,7 @@ export default function RentalHowItWorks({ content = RENTAL_DEFAULTS.page.sectio
           height: 500,
           borderRadius: "50%",
           background:
-            "radial-gradient(circle, rgba(200,255,0,0.02), transparent 68%)",
+            "radial-gradient(circle, rgba(var(--accent-rgb), 0.02), transparent 68%)",
           filter: "blur(15px)",
           pointerEvents: "none",
         }}
@@ -109,7 +109,7 @@ export default function RentalHowItWorks({ content = RENTAL_DEFAULTS.page.sectio
           height: 550,
           borderRadius: "50%",
           background:
-            "radial-gradient(circle, rgba(0,229,255,0.035), transparent 60%)",
+            "radial-gradient(circle, rgba(var(--accent-2-rgb), 0.035), transparent 60%)",
           filter: "blur(15px)",
           pointerEvents: "none",
         }}
@@ -133,7 +133,7 @@ export default function RentalHowItWorks({ content = RENTAL_DEFAULTS.page.sectio
           },
           borderRadius: "50%",
           background:
-            "radial-gradient(ellipse, rgba(200,255,0,0.025), transparent 20%)",
+            "radial-gradient(ellipse, rgba(var(--accent-rgb), 0.025), transparent 20%)",
           filter: "blur(70px)",
           pointerEvents: "none",
         }}
@@ -208,8 +208,8 @@ export default function RentalHowItWorks({ content = RENTAL_DEFAULTS.page.sectio
               px: 1.6,
               py: 0.65,
               borderRadius: "999px",
-              border: `1px solid ${LIME}35`,
-              bgcolor: `${LIME}08`,
+              border: `1px solid ${ACCENT}35`,
+              bgcolor: `${ACCENT}08`,
             }}
           >
             <Box
@@ -217,8 +217,8 @@ export default function RentalHowItWorks({ content = RENTAL_DEFAULTS.page.sectio
                 width: 7,
                 height: 7,
                 borderRadius: "50%",
-                bgcolor: LIME,
-                boxShadow: `0 0 10px ${LIME}90`,
+                bgcolor: ACCENT,
+                boxShadow: `0 0 10px ${ACCENT}90`,
               }}
             />
 
@@ -228,7 +228,7 @@ export default function RentalHowItWorks({ content = RENTAL_DEFAULTS.page.sectio
                 fontWeight: 800,
                 letterSpacing: 1.8,
                 textTransform: "uppercase",
-                color: LIME,
+                color: ACCENT,
               }}
             >{copy.simpleRentalProcess}</Typography>
           </Box>
@@ -251,7 +251,7 @@ export default function RentalHowItWorks({ content = RENTAL_DEFAULTS.page.sectio
             <Box
               component="span"
               sx={{
-                color: LIME,
+                color: ACCENT,
               }}
             >{copy.works}</Box>
           </Typography>
@@ -297,8 +297,8 @@ export default function RentalHowItWorks({ content = RENTAL_DEFAULTS.page.sectio
               background: `linear-gradient(
                 90deg,
                 transparent,
-                rgba(200,255,0,0.20) 12%,
-                rgba(200,255,0,0.20) 88%,
+                rgba(var(--accent-rgb), 0.20) 12%,
+                rgba(var(--accent-rgb), 0.20) 88%,
                 transparent
               )`,
             }}
@@ -383,22 +383,22 @@ export default function RentalHowItWorks({ content = RENTAL_DEFAULTS.page.sectio
                       transform: "translateY(-8px)",
 
                       /* subtle lime border */
-                      borderColor: `${LIME}42`,
+                      borderColor: `${ACCENT}42`,
 
                       /* almost invisible green tint */
-                      bgcolor: "rgba(200,255,0,0.018)",
+                      bgcolor: "rgba(var(--accent-rgb), 0.018)",
 
                       boxShadow: `
                         0 25px 60px rgba(0,0,0,0.32),
-                        0 0 24px rgba(200,255,0,0.035)
+                        0 0 24px rgba(var(--accent-rgb), 0.035)
                       `,
                     },
 
                     "&:hover .step-icon": {
-                      bgcolor: LIME,
-                      color: "#080a08",
+                      bgcolor: ACCENT,
+                      color: "#081521",
                       transform: "rotate(-4deg) scale(1.06)",
-                      boxShadow: `0 0 24px ${LIME}25`,
+                      boxShadow: `0 0 24px ${ACCENT}25`,
                     },
 
                     "&:hover .step-arrow": {
@@ -450,10 +450,10 @@ export default function RentalHowItWorks({ content = RENTAL_DEFAULTS.page.sectio
                       justifyContent: "center",
 
                       /* subtle icon background */
-                      bgcolor: "rgba(200,255,0,0.075)",
+                      bgcolor: "rgba(var(--accent-rgb), 0.075)",
 
-                      color: LIME,
-                      border: `1px solid ${LIME}20`,
+                      color: ACCENT,
+                      border: `1px solid ${ACCENT}20`,
                       transition: "all 0.35s ease",
 
                       "& svg": {
@@ -473,8 +473,8 @@ export default function RentalHowItWorks({ content = RENTAL_DEFAULTS.page.sectio
                         width: 13,
                         height: 13,
                         borderRadius: "50%",
-                        bgcolor: LIME,
-                        border: "3px solid #080a08",
+                        bgcolor: ACCENT,
+                        border: "3px solid #081521",
                       }}
                     />
                   </Box>
@@ -537,7 +537,7 @@ export default function RentalHowItWorks({ content = RENTAL_DEFAULTS.page.sectio
                       className="step-arrow"
                       sx={{
                         fontSize: 17,
-                        color: LIME,
+                        color: ACCENT,
                         opacity: 0.35,
                         transition: "all 0.3s ease",
                       }}
@@ -596,17 +596,17 @@ export default function RentalHowItWorks({ content = RENTAL_DEFAULTS.page.sectio
               px: 3,
               py: 1.35,
               borderRadius: "12px",
-              bgcolor: LIME,
-              color: "#080a08",
+              bgcolor: ACCENT,
+              color: "#081521",
               fontSize: 14,
               fontWeight: 900,
               textTransform: "none",
-              boxShadow: `0 12px 35px ${LIME}18`,
+              boxShadow: `0 12px 35px ${ACCENT}18`,
 
               "&:hover": {
-                bgcolor: "#d7ff3d",
+                bgcolor: ACCENT_HOVER,
                 transform: "translateY(-2px)",
-                boxShadow: `0 16px 40px ${LIME}25`,
+                boxShadow: `0 16px 40px ${ACCENT}25`,
               },
 
               transition: "all 0.25s ease",
@@ -637,8 +637,8 @@ export default function RentalHowItWorks({ content = RENTAL_DEFAULTS.page.sectio
               textTransform: "none",
 
               "&:hover": {
-                borderColor: `${LIME}60`,
-                bgcolor: `${LIME}06`,
+                borderColor: `${ACCENT}60`,
+                bgcolor: `${ACCENT}06`,
               },
             }}
           >

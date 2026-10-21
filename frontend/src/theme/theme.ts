@@ -1,11 +1,12 @@
 'use client';
 import { createTheme } from '@mui/material/styles';
+import { ACCENT, ACCENT_2, INK } from './brand';
 
 const theme = createTheme({
   cssVariables: true,
   palette: {
-    primary: { main: '#1976d2' },
-    secondary: { main: '#9c27b0' },
+    primary: { main: ACCENT, contrastText: INK },
+    secondary: { main: ACCENT_2, contrastText: INK },
   },
   typography: {
     fontFamily: 'var(--font-roboto)',

@@ -14,7 +14,7 @@ import { api } from "@/lib/api";
 import { useAction, useResource } from "@/lib/useResource";
 import { RENTAL_DEFAULTS, emptyRental, type RentalContentItem, type RentalPageContent } from "@/lib/rentalContent";
 import { slugify } from "@/lib/contentPages";
-import { ConfirmDialog, ErrorState, Field, FormDialog, LIME, LoadingState, PageHeader, Panel, Toast } from "@/components/admin/ui";
+import { ConfirmDialog, ErrorState, Field, FormDialog, ACCENT, LoadingState, PageHeader, Panel, Toast } from "@/components/admin/ui";
 import RichTextEditor from "@/components/admin/RichTextEditor";
 import ImageUploadField from "@/components/admin/ImageUploadField";
 import RentalContentFields, { type ContentValue } from "@/components/admin/RentalContentFields";
@@ -73,7 +73,7 @@ export default function RentalPagesEditor() {
 
   return <Box sx={{display: "grid", gap: 3}}>
     <PageHeader title="Rental pages" subtitle="Edit /rentals and its equipment sub-pages. Existing quote requests and button behavior are unchanged.">
-      <Button href="/rentals" target="_blank" rel="noopener" sx={{color: LIME}}>View rental page</Button>
+      <Button href="/rentals" target="_blank" rel="noopener" sx={{color: ACCENT}}>View rental page</Button>
     </PageHeader>
     <Alert severity="info">Rental requests remain in Rentals. Button labels, links and visibility remain in <Link href="/dashboard/settings?tab=buttons">Settings → Buttons</Link>.</Alert>
     <Tabs
@@ -86,15 +86,15 @@ export default function RentalPagesEditor() {
         bgcolor: "rgba(255,255,255,0.035)",
         border: "1px solid rgba(255,255,255,0.1)",
         borderRadius: "14px",
-        "& .MuiTabs-indicator": { bgcolor: LIME, height: 3, borderRadius: "3px 3px 0 0" },
+        "& .MuiTabs-indicator": { bgcolor: ACCENT, height: 3, borderRadius: "3px 3px 0 0" },
         "& .MuiTab-root": {
           minHeight: 50,
           color: "rgba(255,255,255,0.72)",
           fontWeight: 800,
           textTransform: "none",
           fontSize: 14,
-          "&:hover": { color: "#fff", bgcolor: "rgba(200,255,0,0.04)" },
-          "&.Mui-selected": { color: LIME },
+          "&:hover": { color: "#fff", bgcolor: "rgba(var(--accent-rgb), 0.04)" },
+          "&.Mui-selected": { color: ACCENT },
         },
       }}
     >
@@ -117,7 +117,7 @@ export default function RentalPagesEditor() {
         <RentalContentFields value={page.sections[key] as ContentValue} template={RENTAL_DEFAULTS.page.sections[key] as ContentValue}
           onChange={v => setPage({...page, sections: {...page.sections, [key]: v}} as RentalPageContent)} />
       </Panel>)}
-      <Box sx={{position: "sticky", bottom: 12, p: 2, bgcolor: "#141414", borderRadius: 2, zIndex: 10}}>
+      <Box sx={{position: "sticky", bottom: 12, p: 2, bgcolor: "#0d2236", borderRadius: 2, zIndex: 10}}>
         <Button variant="contained" disabled={busy || !dirty} onClick={() => void savePage()}>{busy ? "Saving…" : "Save rental page"}</Button>
         <Typography component="span" sx={{ml: 2}}>{dirty ? "Unsaved changes" : "All changes saved"}</Typography>
       </Box>

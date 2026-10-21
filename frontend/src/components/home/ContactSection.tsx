@@ -23,8 +23,8 @@ import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
+import { ACCENT, ACCENT_2, ACCENT_HOVER, SKY } from "@/theme/brand";
 
-const LIME = "#c8ff00";
 
 const BENEFITS = [
   "Right Equipment",
@@ -147,7 +147,7 @@ const fieldSx = {
   },
 
   "& .MuiInputLabel-root.Mui-focused": {
-    color: LIME,
+    color: ACCENT,
   },
 
   "& .MuiOutlinedInput-root": {
@@ -165,8 +165,8 @@ const fieldSx = {
     },
 
     "&.Mui-focused fieldset": {
-      borderColor: LIME,
-      boxShadow: `0 0 0 3px rgba(200,255,0,0.15)`,
+      borderColor: ACCENT,
+      boxShadow: `0 0 0 3px rgba(var(--accent-rgb), 0.15)`,
     },
   },
 
@@ -186,7 +186,7 @@ function Confetti() {
     x: (Math.random() - 0.5) * 260,
     y: -(70 + Math.random() * 150),
     rot: (Math.random() - 0.5) * 600,
-    color: ["#c8ff00", "#00e5ff", "#ff4dd8", "#fff"][i % 4],
+    color: [ACCENT, ACCENT_2, SKY, "#fff"][i % 4],
     delay: Math.random() * 0.1,
   }));
 
@@ -388,7 +388,7 @@ export default function ContactSection() {
       aria-labelledby="contact-title"
       sx={{
         position: "relative",
-        bgcolor: "#0a0a0a",
+        bgcolor: "#081c31",
         color: "#fff",
         py: { xs: 6, md: 6 },
         px: { xs: 3, sm: 4, md: 6, lg: 8 },
@@ -406,7 +406,7 @@ export default function ContactSection() {
           width: 560,
           height: 460,
           background:
-            "radial-gradient(ellipse, rgba(200,255,0,0.08), transparent 70%)",
+            "radial-gradient(ellipse, rgba(var(--accent-rgb), 0.08), transparent 70%)",
           pointerEvents: "none",
         }}
       />
@@ -443,7 +443,7 @@ export default function ContactSection() {
           <Typography
             component="p"
             sx={{
-              color: LIME,
+              color: ACCENT,
               letterSpacing: 3,
               fontSize: 12,
               fontWeight: 700,
@@ -465,7 +465,7 @@ export default function ContactSection() {
                 sm: "2.5rem",
                 md: "3.2rem",
               },
-              background: `linear-gradient(90deg, #ffffff, ${LIME}, #00e5ff, #ffffff)`,
+              background: `linear-gradient(90deg, #ffffff, ${ACCENT}, var(--accent-2), #ffffff)`,
               backgroundSize: "200% auto",
               WebkitBackgroundClip: "text",
               backgroundClip: "text",
@@ -590,8 +590,8 @@ export default function ContactSection() {
                     width: 24,
                     height: 24,
                     borderRadius: "50%",
-                    bgcolor: "rgba(200,255,0,0.14)",
-                    border: `1px solid ${LIME}55`,
+                    bgcolor: "rgba(var(--accent-rgb), 0.14)",
+                    border: `1px solid ${ACCENT}55`,
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
@@ -599,7 +599,7 @@ export default function ContactSection() {
 
                     "& svg": {
                       fontSize: 15,
-                      color: LIME,
+                      color: ACCENT,
                     },
                   }}
                 >
@@ -629,14 +629,14 @@ export default function ContactSection() {
             p: "1.5px",
 
             background:
-              "linear-gradient(160deg, rgba(200,255,0,0.5), rgba(255,255,255,0.05) 45%)",
+              "linear-gradient(160deg, rgba(var(--accent-rgb), 0.5), rgba(255,255,255,0.05) 45%)",
           }}
         >
           <Box
             sx={{
               position: "relative",
               borderRadius: "23px",
-              bgcolor: "#0d100c",
+              bgcolor: "#0a1b2b",
               p: {
                 xs: 3,
                 md: 4,
@@ -655,7 +655,7 @@ export default function ContactSection() {
                 width: 260,
                 height: 260,
                 background:
-                  "radial-gradient(circle, rgba(200,255,0,0.16), transparent 65%)",
+                  "radial-gradient(circle, rgba(var(--accent-rgb), 0.16), transparent 65%)",
                 pointerEvents: "none",
               }}
             />
@@ -704,7 +704,7 @@ export default function ContactSection() {
                     <CheckCircleRoundedIcon
                       sx={{
                         fontSize: 64,
-                        color: LIME,
+                        color: ACCENT,
                       }}
                     />
                   </motion.div>
@@ -867,7 +867,7 @@ export default function ContactSection() {
                       <Box
                         component="span"
                         sx={{
-                          color: LIME,
+                          color: ACCENT,
                         }}
                       >
                         *
@@ -886,7 +886,7 @@ export default function ContactSection() {
                         borderRadius: "12px",
                         border:
                           truckOpen || selectedTruck
-                            ? `1px solid ${LIME}`
+                            ? `1px solid ${ACCENT}`
                             : "1px solid rgba(255,255,255,0.14)",
 
                         bgcolor: "rgba(255,255,255,0.03)",
@@ -906,7 +906,7 @@ export default function ContactSection() {
                         transition: "all .25s ease",
 
                         boxShadow: truckOpen
-                          ? `0 0 0 3px rgba(200,255,0,0.15)`
+                          ? `0 0 0 3px rgba(var(--accent-rgb), 0.15)`
                           : "none",
 
                         "&:hover": {
@@ -924,11 +924,11 @@ export default function ContactSection() {
                           borderRadius: "10px",
 
                           bgcolor: selectedTruck
-                            ? "rgba(200,255,0,0.12)"
+                            ? "rgba(var(--accent-rgb), 0.12)"
                             : "rgba(255,255,255,0.06)",
 
                           border: selectedTruck
-                            ? `1px solid ${LIME}44`
+                            ? `1px solid ${ACCENT}44`
                             : "1px solid rgba(255,255,255,0.08)",
 
                           display: "flex",
@@ -939,7 +939,7 @@ export default function ContactSection() {
 
                           "& svg": {
                             color: selectedTruck
-                              ? LIME
+                              ? ACCENT
                               : "rgba(255,255,255,0.55)",
                             fontSize: 20,
                           },
@@ -1032,11 +1032,11 @@ export default function ContactSection() {
 
                             maxWidth: "calc(100vw - 48px)",
 
-                            bgcolor: "#10130f",
+                            bgcolor: "#0b1e30",
 
                             color: "#fff",
 
-                            border: "1px solid rgba(200,255,0,0.25)",
+                            border: "1px solid rgba(var(--accent-rgb), 0.25)",
 
                             borderRadius: "16px",
 
@@ -1079,7 +1079,7 @@ export default function ContactSection() {
                               },
 
                               "&.Mui-focused fieldset": {
-                                borderColor: LIME,
+                                borderColor: ACCENT,
                               },
                             },
 
@@ -1185,12 +1185,12 @@ export default function ContactSection() {
                                   cursor: "pointer",
                                   textAlign: "left",
                                   bgcolor: isSelected
-                                    ? "rgba(200,255,0,0.12)"
+                                    ? "rgba(var(--accent-rgb), 0.12)"
                                     : "transparent",
                                   transition: "background-color .2s ease",
                                   "&:hover": {
                                     bgcolor: isSelected
-                                      ? "rgba(200,255,0,0.18)"
+                                      ? "rgba(var(--accent-rgb), 0.18)"
                                       : "rgba(255,255,255,0.05)",
                                   },
                                   mb: 0.5,
@@ -1202,10 +1202,10 @@ export default function ContactSection() {
                                     height: 36,
                                     borderRadius: "8px",
                                     bgcolor: isSelected
-                                      ? "rgba(200,255,0,0.2)"
+                                      ? "rgba(var(--accent-rgb), 0.2)"
                                       : "rgba(255,255,255,0.05)",
                                     border: isSelected
-                                      ? `1px solid ${LIME}66`
+                                      ? `1px solid ${ACCENT}66`
                                       : "1px solid rgba(255,255,255,0.08)",
                                     display: "flex",
                                     alignItems: "center",
@@ -1214,7 +1214,7 @@ export default function ContactSection() {
                                     "& svg": {
                                       fontSize: 18,
                                       color: isSelected
-                                        ? LIME
+                                        ? ACCENT
                                         : "rgba(255,255,255,0.6)",
                                     },
                                   }}
@@ -1234,7 +1234,7 @@ export default function ContactSection() {
                                       sx={{
                                         fontSize: 14,
                                         fontWeight: isSelected ? 700 : 600,
-                                        color: isSelected ? LIME : "#fff",
+                                        color: isSelected ? ACCENT : "#fff",
                                       }}
                                     >
                                       {item.name}
@@ -1268,7 +1268,7 @@ export default function ContactSection() {
 
                                 {isSelected && (
                                   <CheckRoundedIcon
-                                    sx={{ fontSize: 18, color: LIME }}
+                                    sx={{ fontSize: 18, color: ACCENT }}
                                   />
                                 )}
                               </Box>
@@ -1349,20 +1349,20 @@ export default function ContactSection() {
                       sx={{
                         position: "relative",
                         overflow: "hidden",
-                        bgcolor: LIME,
-                        color: "#0a0a0a",
+                        bgcolor: ACCENT,
+                        color: "#081c31",
                         fontWeight: 800,
                         borderRadius: "12px",
                         py: 1.5,
                         textTransform: "none",
                         fontSize: 15,
                         "&:hover": {
-                          bgcolor: "#d4ff33",
+                          bgcolor: ACCENT_HOVER,
                         },
                         "&.Mui-disabled": {
-                          bgcolor: LIME,
+                          bgcolor: ACCENT,
                           opacity: 0.8,
-                          color: "#0a0a0a",
+                          color: "#081c31",
                         },
                         "&::after": {
                           content: '""',
@@ -1382,7 +1382,7 @@ export default function ContactSection() {
                       }}
                     >
                       {status === "loading" ? (
-                        <CircularProgress size={22} sx={{ color: "#0a0a0a" }} />
+                        <CircularProgress size={22} sx={{ color: "#081c31" }} />
                       ) : (
                         "Send Message"
                       )}

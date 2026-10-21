@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { ChatHttpError, chatAdmin } from "@/lib/chatClient";
-import { LIME } from "@/components/admin/ui";
+import { ACCENT } from "@/components/admin/ui";
 
 export interface ConversationRow {
   id: string;
@@ -80,7 +80,7 @@ export function useChatAdmin<T>(path: string | null) {
 
 export function Pill({ label, tone = "muted" }: { label: string; tone?: "lime" | "muted" | "warn" }) {
   const styles = {
-    lime: { bgcolor: `${LIME}22`, color: LIME },
+    lime: { bgcolor: `${ACCENT}22`, color: ACCENT },
     muted: { bgcolor: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.7)" },
     warn: { bgcolor: "rgba(255,170,60,0.15)", color: "#ffbf66" },
   }[tone];
@@ -96,7 +96,7 @@ export function Pill({ label, tone = "muted" }: { label: string; tone?: "lime" |
 
 export function StatTile({ label, value, hint }: { label: string; value: string; hint?: string }) {
   return (
-    <Box sx={{ p: 2.2, borderRadius: "14px", bgcolor: "#0f100f", border: "1px solid rgba(255,255,255,0.08)", minWidth: 0 }}>
+    <Box sx={{ p: 2.2, borderRadius: "14px", bgcolor: "#0b1d2d", border: "1px solid rgba(255,255,255,0.08)", minWidth: 0 }}>
       <Typography sx={{ fontSize: 12, fontWeight: 700, color: "rgba(255,255,255,0.55)", mb: 0.6 }}>{label}</Typography>
       <Typography sx={{ fontSize: 26, fontWeight: 800, color: "#fff", lineHeight: 1.1 }}>{value}</Typography>
       {hint && <Typography sx={{ fontSize: 12, color: "rgba(255,255,255,0.45)", mt: 0.6 }}>{hint}</Typography>}

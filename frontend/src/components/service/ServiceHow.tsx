@@ -9,8 +9,8 @@ import EventAvailableRoundedIcon from "@mui/icons-material/EventAvailableRounded
 import LocalShippingRoundedIcon from "@mui/icons-material/LocalShippingRounded";
 import TaskAltRoundedIcon from "@mui/icons-material/TaskAltRounded";
 import BoltRoundedIcon from "@mui/icons-material/BoltRounded";
+import { ACCENT } from "@/theme/brand";
 
-const LIME = "#c8ff00";
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 export type StepItem = { icon?: string; t: string; d: string };
@@ -56,7 +56,7 @@ function StepCard({ s, i }: { s: StepItem; i: number }) {
             width: { xs: 66, md: 84 },
             height: { xs: 66, md: 84 },
             borderRadius: "50%",
-            bgcolor: "#101010",
+            bgcolor: "#0b1d2e",
             border: `1px solid rgba(255,255,255,0.12)`,
             display: "flex",
             alignItems: "center",
@@ -65,13 +65,13 @@ function StepCard({ s, i }: { s: StepItem; i: number }) {
               "transform .35s ease, border-color .35s ease, box-shadow .35s ease",
             "& svg": {
               fontSize: { xs: 28, md: 34 },
-              color: LIME,
+              color: ACCENT,
               transition: "transform .35s ease",
             },
             "&:hover": {
               transform: "translateY(-5px)",
-              borderColor: `${LIME}66`,
-              boxShadow: "0 16px 38px rgba(200,255,0,0.16)",
+              borderColor: `${ACCENT}66`,
+              boxShadow: "0 16px 38px rgba(var(--accent-rgb), 0.16)",
             },
             "&:hover svg": { transform: "scale(1.12)" },
           }}
@@ -86,14 +86,14 @@ function StepCard({ s, i }: { s: StepItem; i: number }) {
             width: 28,
             height: 28,
             borderRadius: "50%",
-            bgcolor: LIME,
-            color: "#080808",
+            bgcolor: ACCENT,
+            color: "#07141f",
             fontSize: 13,
             fontWeight: 800,
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            border: "3px solid #0a0a0a",
+            border: "3px solid #081c31",
           }}
         >
           {i + 1}
@@ -150,7 +150,7 @@ export default function ServiceHow({
       component="section"
       sx={{
         position: "relative",
-        bgcolor: "#0a0a0a",
+        bgcolor: "#081c31",
         color: "#fff",
         px: { xs: 3, sm: 4, md: 6, lg: 8 },
         py: { xs: 8, md: 13 },
@@ -167,7 +167,7 @@ export default function ServiceHow({
           width: 660,
           height: 320,
           background:
-            "radial-gradient(ellipse, rgba(200,255,0,0.06), transparent 70%)",
+            "radial-gradient(ellipse, rgba(var(--accent-rgb), 0.06), transparent 70%)",
           pointerEvents: "none",
         }}
       />
@@ -196,11 +196,11 @@ export default function ServiceHow({
               mb: 2,
             }}
           >
-            <Box sx={{ width: 28, height: 2, bgcolor: LIME, opacity: 0.7 }} />
+            <Box sx={{ width: 28, height: 2, bgcolor: ACCENT, opacity: 0.7 }} />
             <Typography
               component="p"
               sx={{
-                color: LIME,
+                color: ACCENT,
                 letterSpacing: 3,
                 fontSize: 12,
                 fontWeight: 700,
@@ -209,7 +209,7 @@ export default function ServiceHow({
             >
               {eyebrow}
             </Typography>
-            <Box sx={{ width: 28, height: 2, bgcolor: LIME, opacity: 0.7 }} />
+            <Box sx={{ width: 28, height: 2, bgcolor: ACCENT, opacity: 0.7 }} />
           </Box>
           <Typography
             component="h2"
@@ -218,7 +218,7 @@ export default function ServiceHow({
               lineHeight: 1.1,
               letterSpacing: "-0.5px",
               fontSize: { xs: "2rem", sm: "2.7rem", md: "3.4rem" },
-              background: `linear-gradient(90deg, #ffffff, ${LIME}, #00e5ff, #ffffff)`,
+              background: `linear-gradient(90deg, #ffffff, ${ACCENT}, var(--accent-2), #ffffff)`,
               backgroundSize: "200% auto",
               WebkitBackgroundClip: "text",
               backgroundClip: "text",
@@ -278,7 +278,7 @@ export default function ServiceHow({
               height: "100%",
               width: "100%",
               transformOrigin: "left",
-              background: `linear-gradient(90deg, ${LIME}, #00e5ff)`,
+              background: `linear-gradient(90deg, ${ACCENT}, var(--accent-2))`,
               borderRadius: 2,
             }}
           />
@@ -306,7 +306,7 @@ export default function ServiceHow({
               width: "100%",
               height: "100%",
               transformOrigin: "top",
-              background: `linear-gradient(180deg, ${LIME}, #00e5ff)`,
+              background: `linear-gradient(180deg, ${ACCENT}, var(--accent-2))`,
               borderRadius: 2,
             }}
           />

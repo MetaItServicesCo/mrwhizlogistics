@@ -22,7 +22,7 @@ import {
   type ContactPageText,
 } from "@/lib/contactPage";
 import type { SiteSetting } from "@/lib/types";
-import { Field, LIME, Panel } from "@/components/admin/ui";
+import { Field, ACCENT, Panel } from "@/components/admin/ui";
 
 type TextKey = (typeof CONTACT_TEXT_FIELDS)[number]["key"];
 
@@ -199,12 +199,12 @@ export default function ContactPageSettingsPanel({
           gap: 2,
           flexWrap: "wrap",
           borderRadius: "16px",
-          bgcolor: "rgba(20,21,20,0.95)",
+          bgcolor: "rgba(13,34,55,0.95)",
           backdropFilter: "blur(8px)",
           border: "1px solid rgba(255,255,255,0.1)",
         }}
       >
-        <Button href="/contact" target="_blank" rel="noopener" endIcon={<OpenInNewRoundedIcon sx={{ fontSize: 16 }} />} sx={{ color: LIME, textTransform: "none", fontWeight: 700 }}>
+        <Button href="/contact" target="_blank" rel="noopener" endIcon={<OpenInNewRoundedIcon sx={{ fontSize: 16 }} />} sx={{ color: ACCENT, textTransform: "none", fontWeight: 700 }}>
           View Contact page
         </Button>
         <Typography sx={{ flex: 1, minWidth: 160, fontSize: 13.5, color: "rgba(255,255,255,0.6)" }}>
@@ -220,13 +220,13 @@ export default function ContactPageSettingsPanel({
           disableElevation
           startIcon={saving ? <CircularProgress size={16} sx={{ color: "inherit" }} /> : undefined}
           sx={{
-            bgcolor: LIME,
-            color: "#0a0a0a",
+            bgcolor: ACCENT,
+            color: "#081c31",
             fontWeight: 800,
             textTransform: "none",
             borderRadius: "999px",
             px: 3,
-            "&:hover": { bgcolor: "#b5e600" },
+            "&:hover": { bgcolor: "#e66f00" },
             "&.Mui-disabled": { bgcolor: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.35)" },
           }}
         >

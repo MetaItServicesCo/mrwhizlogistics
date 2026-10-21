@@ -12,8 +12,9 @@ import Typography from "@mui/material/Typography";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import DeleteOutlineRoundedIcon from "@mui/icons-material/DeleteOutlineRounded";
 import { chatAdmin } from "@/lib/chatClient";
-import { ConfirmDialog, EmptyState, ErrorState, LIME, LoadingState, Panel, SearchBox, fmtDateTime } from "@/components/admin/ui";
+import { ConfirmDialog, EmptyState, ErrorState, ACCENT, LoadingState, Panel, SearchBox, fmtDateTime } from "@/components/admin/ui";
 import { type ConversationRow, Pill, ROUTE_LABELS, type TranscriptMessage, friendlyError, useChatAdmin } from "./shared";
+import { ACCENT_HOVER } from "@/theme/brand";
 
 interface Listing {
   items: ConversationRow[];
@@ -79,7 +80,7 @@ export function TranscriptDrawer({
       anchor="right"
       open={Boolean(conversationId)}
       onClose={onClose}
-      slotProps={{ paper: { sx: { width: { xs: "100%", sm: 520 }, bgcolor: "#0b0c0b", color: "#fff", borderLeft: "1px solid rgba(255,255,255,0.08)" } } }}
+      slotProps={{ paper: { sx: { width: { xs: "100%", sm: 520 }, bgcolor: "#091826", color: "#fff", borderLeft: "1px solid rgba(255,255,255,0.08)" } } }}
     >
       <Box sx={{ display: "flex", alignItems: "center", gap: 1, p: 2, borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
         <Typography component="h2" sx={{ flex: 1, fontSize: 16, fontWeight: 800 }}>
@@ -108,7 +109,7 @@ export function TranscriptDrawer({
             {data.lead_id && (
               <Button
                 href="/dashboard/leads/quotes"
-                sx={{ mb: 2, bgcolor: LIME, color: "#0a0a0a", fontWeight: 800, textTransform: "none", borderRadius: "999px", px: 2, "&:hover": { bgcolor: "#d4ff33" } }}
+                sx={{ mb: 2, bgcolor: ACCENT, color: "#081c31", fontWeight: 800, textTransform: "none", borderRadius: "999px", px: 2, "&:hover": { bgcolor: ACCENT_HOVER } }}
               >
                 Open lead #{data.lead_id} in Quote Requests
               </Button>
@@ -126,8 +127,8 @@ export function TranscriptDrawer({
                       overflowWrap: "anywhere",
                       borderRadius: m.role === "user" ? "14px 14px 4px 14px" : "4px 14px 14px 14px",
                       ...(m.role === "user"
-                        ? { bgcolor: LIME, color: "#0a0a0a", fontWeight: 500 }
-                        : { bgcolor: "#16181a", color: "rgba(255,255,255,0.9)", border: m.flagged ? "1px solid #ffbf66" : "1px solid rgba(255,255,255,0.05)" }),
+                        ? { bgcolor: ACCENT, color: "#081c31", fontWeight: 500 }
+                        : { bgcolor: "#0e273d", color: "rgba(255,255,255,0.9)", border: m.flagged ? "1px solid #ffbf66" : "1px solid rgba(255,255,255,0.05)" }),
                     }}
                   >
                     {m.content}
@@ -141,7 +142,7 @@ export function TranscriptDrawer({
                   {m.sources.length > 0 && (
                     <Box sx={{ mt: 0.4, display: "flex", flexWrap: "wrap", gap: 0.6 }}>
                       {m.sources.map((s) => (
-                        <Box key={s.url} component="a" href={s.url} target="_blank" rel="noopener" sx={{ fontSize: 11, color: LIME }}>
+                        <Box key={s.url} component="a" href={s.url} target="_blank" rel="noopener" sx={{ fontSize: 11, color: ACCENT }}>
                           {s.title}
                         </Box>
                       ))}
@@ -189,7 +190,7 @@ export default function ChatbotConversations({
             setFilter(v);
             setPage(1);
           }}
-          sx={{ flex: 1, minHeight: 0, "& .MuiTab-root": { color: "rgba(255,255,255,0.6)", textTransform: "none", minHeight: 40 }, "& .Mui-selected": { color: `${LIME} !important` }, "& .MuiTabs-indicator": { bgcolor: LIME } }}
+          sx={{ flex: 1, minHeight: 0, "& .MuiTab-root": { color: "rgba(255,255,255,0.6)", textTransform: "none", minHeight: 40 }, "& .Mui-selected": { color: `${ACCENT} !important` }, "& .MuiTabs-indicator": { bgcolor: ACCENT } }}
         >
           {FILTERS.map((f) => (
             <Tab key={f.value} value={f.value} label={f.label} />
@@ -268,7 +269,7 @@ export default function ChatbotConversations({
                 count={Math.ceil(data.total / PAGE_SIZE)}
                 page={page}
                 onChange={(_, p) => setPage(p)}
-                sx={{ "& .MuiPaginationItem-root": { color: "rgba(255,255,255,0.7)" }, "& .Mui-selected": { bgcolor: `${LIME} !important`, color: "#0a0a0a" } }}
+                sx={{ "& .MuiPaginationItem-root": { color: "rgba(255,255,255,0.7)" }, "& .Mui-selected": { bgcolor: `${ACCENT} !important`, color: "#081c31" } }}
               />
             </Box>
           )}

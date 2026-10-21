@@ -11,8 +11,8 @@ import PhoneInTalkRoundedIcon from "@mui/icons-material/PhoneInTalkRounded";
 import type { HotShotService } from "@/types/hotShot";
 import QuoteModal from "@/components/hot-shot/QuoteModal";
 import { ctaProps, useCta } from "@/components/common/CtaProvider";
+import { ACCENT, ACCENT_HOVER } from "@/theme/brand";
 
-const LIME = "#c8ff00";
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 export default function HotShotQuote({ service }: { service: HotShotService }) {
@@ -36,7 +36,7 @@ export default function HotShotQuote({ service }: { service: HotShotService }) {
             mt: 9,
             borderRadius: "20px",
             p: "1.5px",
-            background: `linear-gradient(140deg, rgba(200,255,0,.55), rgba(255,255,255,.05) 45%)`,
+            background: `linear-gradient(140deg, rgba(var(--accent-rgb), .55), rgba(255,255,255,.05) 45%)`,
             boxShadow: "0 26px 60px rgba(0,0,0,.5)",
           }}
         >
@@ -45,7 +45,7 @@ export default function HotShotQuote({ service }: { service: HotShotService }) {
               position: "relative",
               overflow: "hidden",
               borderRadius: "19px",
-              bgcolor: "#0d100c",
+              bgcolor: "#0a1b2b",
               p: { xs: 3.5, md: 5 },
             }}
           >
@@ -60,7 +60,7 @@ export default function HotShotQuote({ service }: { service: HotShotService }) {
                 top: -160,
                 borderRadius: "50%",
                 background:
-                  "radial-gradient(circle, rgba(200,255,0,.14), transparent 70%)",
+                  "radial-gradient(circle, rgba(var(--accent-rgb), .14), transparent 70%)",
                 pointerEvents: "none",
               }}
             />
@@ -74,7 +74,7 @@ export default function HotShotQuote({ service }: { service: HotShotService }) {
                 bottom: -110,
                 borderRadius: "50%",
                 background:
-                  "radial-gradient(circle, rgba(0,229,255,.1), transparent 70%)",
+                  "radial-gradient(circle, rgba(var(--accent-2-rgb), .1), transparent 70%)",
                 pointerEvents: "none",
               }}
             />
@@ -101,14 +101,14 @@ export default function HotShotQuote({ service }: { service: HotShotService }) {
                     px: 1.4,
                     py: 0.6,
                     borderRadius: "999px",
-                    bgcolor: "rgba(200,255,0,.1)",
-                    border: `1px solid ${LIME}44`,
+                    bgcolor: "rgba(var(--accent-rgb), .1)",
+                    border: `1px solid ${ACCENT}44`,
                   }}
                 >
-                  <RequestQuoteRoundedIcon sx={{ color: LIME, fontSize: 16 }} />
+                  <RequestQuoteRoundedIcon sx={{ color: ACCENT, fontSize: 16 }} />
                   <Typography
                     sx={{
-                      color: LIME,
+                      color: ACCENT,
                       fontSize: 9.5,
                       fontWeight: 900,
                       letterSpacing: 1.6,
@@ -130,7 +130,7 @@ export default function HotShotQuote({ service }: { service: HotShotService }) {
                   }}
                 >
                   Get your{" "}
-                  <Box component="span" sx={{ color: LIME }}>
+                  <Box component="span" sx={{ color: ACCENT }}>
                     {service.title}
                   </Box>{" "}
                   quote.
@@ -166,8 +166,8 @@ export default function HotShotQuote({ service }: { service: HotShotService }) {
                   sx={{
                     position: "relative",
                     overflow: "hidden",
-                    bgcolor: LIME,
-                    color: "#080808",
+                    bgcolor: ACCENT,
+                    color: "#07141f",
                     fontWeight: 900,
                     borderRadius: "12px",
                     px: 3.5,
@@ -175,7 +175,7 @@ export default function HotShotQuote({ service }: { service: HotShotService }) {
                     textTransform: "none",
                     fontSize: 14.5,
                     whiteSpace: "nowrap",
-                    "&:hover": { bgcolor: "#d4ff33" },
+                    "&:hover": { bgcolor: ACCENT_HOVER },
                     "& .hq-a": { transition: "transform .3s ease" },
                     "&:hover .hq-a": { transform: "translateX(4px)" },
                     "&::after": {
@@ -213,9 +213,9 @@ export default function HotShotQuote({ service }: { service: HotShotService }) {
                     fontSize: 14,
                     whiteSpace: "nowrap",
                     "&:hover": {
-                      borderColor: LIME,
-                      color: LIME,
-                      bgcolor: "rgba(200,255,0,.05)",
+                      borderColor: ACCENT,
+                      color: ACCENT,
+                      bgcolor: "rgba(var(--accent-rgb), .05)",
                     },
                   }}
                 >

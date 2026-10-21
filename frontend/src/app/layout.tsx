@@ -4,6 +4,7 @@ import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import theme from "@/theme/theme";
+import { BRAND_CSS_VARIABLES } from "@/theme/brand";
 import { AuthProvider } from "@/lib/auth";
 import { SITE_URL } from "@/lib/site";
 import { DEFAULT_DESCRIPTION, DEFAULT_TITLE, SITE_NAME, sharedOpenGraph } from "@/lib/seo";
@@ -52,6 +53,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className="antialiased"
       suppressHydrationWarning
     >
+      <head>
+        {/* Brand colour variables (var(--accent) etc.), from src/theme/brand.ts */}
+        <style dangerouslySetInnerHTML={{ __html: BRAND_CSS_VARIABLES }} />
+      </head>
       <body>
         <AppRouterCacheProvider options={{ enableCssLayer: true }}>
           <ThemeProvider theme={theme}>

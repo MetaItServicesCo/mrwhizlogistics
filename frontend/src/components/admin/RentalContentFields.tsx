@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Switch from "@mui/material/Switch";
 import Typography from "@mui/material/Typography";
-import { Field, LIME } from "@/components/admin/ui";
+import { Field, ACCENT } from "@/components/admin/ui";
 import ImageUploadField from "@/components/admin/ImageUploadField";
 
 export type ContentValue = string | boolean | ContentValue[] | { [key: string]: ContentValue };
@@ -47,7 +47,7 @@ export default function RentalContentFields({ value, template, onChange, label =
           <Button color="error" onClick={() => onChange(value.filter((_, i) => i !== index))}>Remove</Button>
         </Box>
       </Box>)}
-      <Button disabled={value.length >= 30} sx={{color: LIME, justifySelf: "start"}}
+      <Button disabled={value.length >= 30} sx={{color: ACCENT, justifySelf: "start"}}
         onClick={() => onChange([...value, structuredClone(sample)])}>Add {label.toLowerCase()}</Button>
     </Box>;
   }

@@ -8,8 +8,8 @@ import IconButton from "@mui/material/IconButton";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import type { BlogPost } from "@/data/blogPosts";
 import CoverImage from "@/components/common/CoverImage";
+import { ACCENT, ACCENT_HOVER } from "@/theme/brand";
 
-const LIME = "#c8ff00";
 
 const CATEGORIES = [
   "Logistics",
@@ -42,12 +42,12 @@ function Widget({
         mb: 3,
         p: 3,
         borderRadius: "16px",
-        bgcolor: "#101010",
+        bgcolor: "#0b1d2e",
         border: "1px solid rgba(255,255,255,0.08)",
       }}
     >
       <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 2.5 }}>
-        <Box sx={{ width: 20, height: 3, bgcolor: LIME, borderRadius: 2 }} />
+        <Box sx={{ width: 20, height: 3, bgcolor: ACCENT, borderRadius: 2 }} />
         <Typography sx={{ fontSize: 16, fontWeight: 800, color: "#fff" }}>
           {title}
         </Typography>
@@ -78,9 +78,9 @@ export default function BlogSidebar({
             "& .MuiOutlinedInput-root": {
               color: "#fff",
               borderRadius: "12px",
-              bgcolor: "#101010",
+              bgcolor: "#0b1d2e",
               "& fieldset": { borderColor: "rgba(255,255,255,0.12)" },
-              "&.Mui-focused fieldset": { borderColor: LIME },
+              "&.Mui-focused fieldset": { borderColor: ACCENT },
             },
             "& input::placeholder": {
               color: "rgba(255,255,255,0.4)",
@@ -90,10 +90,10 @@ export default function BlogSidebar({
         />
         <IconButton
           sx={{
-            bgcolor: LIME,
-            color: "#0a0a0a",
+            bgcolor: ACCENT,
+            color: "#081c31",
             borderRadius: "12px",
-            "&:hover": { bgcolor: "#d4ff33" },
+            "&:hover": { bgcolor: ACCENT_HOVER },
           }}
         >
           <SearchRoundedIcon />
@@ -120,9 +120,9 @@ export default function BlogSidebar({
                 border: "1px solid rgba(255,255,255,0.06)",
                 transition: "all .25s",
                 "&:hover": {
-                  color: "#0a0a0a",
-                  bgcolor: LIME,
-                  borderColor: LIME,
+                  color: "#081c31",
+                  bgcolor: ACCENT,
+                  borderColor: ACCENT,
                 },
               }}
             >
@@ -147,7 +147,7 @@ export default function BlogSidebar({
                 gap: 1.5,
                 textDecoration: "none",
                 alignItems: "center",
-                "&:hover .rp-title": { color: LIME },
+                "&:hover .rp-title": { color: ACCENT },
               }}
             >
               <Box
@@ -157,7 +157,7 @@ export default function BlogSidebar({
                   borderRadius: "10px",
                   flexShrink: 0,
                   overflow: "hidden",
-                  bgcolor: "#1a1a1a",
+                  bgcolor: "#0f2941",
                   position: "relative",
                 }}
               >
@@ -212,9 +212,9 @@ export default function BlogSidebar({
                 border: "1px solid rgba(255,255,255,0.12)",
                 transition: "all .2s",
                 "&:hover": {
-                  color: "#0a0a0a",
-                  bgcolor: LIME,
-                  borderColor: LIME,
+                  color: "#081c31",
+                  bgcolor: ACCENT,
+                  borderColor: ACCENT,
                 },
               }}
             >

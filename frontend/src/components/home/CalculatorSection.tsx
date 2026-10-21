@@ -15,8 +15,8 @@ import Slider from "@mui/material/Slider";
 import Button from "@mui/material/Button";
 import TrendingUpRoundedIcon from "@mui/icons-material/TrendingUpRounded";
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
+import { ACCENT, ACCENT_2, ACCENT_HOVER, SKY } from "@/theme/brand";
 
-const LIME = "#c8ff00";
 const WEEKS = 52;
 
 const fieldSx = {
@@ -27,7 +27,7 @@ const fieldSx = {
     fontWeight: 600,
     "& fieldset": { borderColor: "rgba(255,255,255,0.14)" },
     "&:hover fieldset": { borderColor: "rgba(255,255,255,0.32)" },
-    "&.Mui-focused fieldset": { borderColor: LIME },
+    "&.Mui-focused fieldset": { borderColor: ACCENT },
   },
 } as const;
 
@@ -192,8 +192,8 @@ function Gauge({ value, active }: { value: number; active: boolean }) {
         />
         <defs>
           <linearGradient id="gaugeGrad" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#c8ff00" />
-            <stop offset="100%" stopColor="#00e5ff" />
+            <stop offset="0%" stopColor={ACCENT} />
+            <stop offset="100%" stopColor={ACCENT_2} />
           </linearGradient>
         </defs>
       </Box>
@@ -211,7 +211,7 @@ function Gauge({ value, active }: { value: number; active: boolean }) {
           sx={{
             fontSize: { xs: 20, md: 24 },
             fontWeight: 800,
-            color: LIME,
+            color: ACCENT,
             lineHeight: 1,
           }}
         >
@@ -264,7 +264,7 @@ function Bar({
           position: "relative",
           height: "100%",
           borderRadius: 3,
-          background: `linear-gradient(90deg, ${LIME}, #7fb800)`,
+          background: `linear-gradient(90deg, ${ACCENT}, #b85900)`,
           overflow: "hidden",
         }}
       >
@@ -302,7 +302,7 @@ function Confetti() {
         x: (Math.random() - 0.5) * 220,
         y: -(90 + Math.random() * 150),
         rot: (Math.random() - 0.5) * 620,
-        color: ["#c8ff00", "#00e5ff", "#ff4dd8", "#ffffff"][i % 4],
+        color: [ACCENT, ACCENT_2, SKY, "#ffffff"][i % 4],
         delay: Math.random() * 0.12,
       })),
     [],
@@ -366,15 +366,15 @@ function MagneticButton({
         disableElevation
         onClick={onClick}
         sx={{
-          bgcolor: LIME,
-          color: "#000",
+          bgcolor: ACCENT,
+          color: "#040a11",
           fontWeight: 700,
           borderRadius: "12px",
           px: 3,
           py: 1,
           textTransform: "none",
           whiteSpace: "nowrap",
-          "&:hover": { bgcolor: "#d4ff33" },
+          "&:hover": { bgcolor: ACCENT_HOVER },
         }}
       >
         {children}
@@ -475,7 +475,7 @@ export default function CalculatorSection() {
       aria-labelledby="calc-title"
       sx={{
         position: "relative",
-        bgcolor: "#0a0a0a",
+        bgcolor: "#081c31",
         color: "#fff",
         py: { xs: 8, md: 2 },
         px: { xs: 3, md: 6 },
@@ -491,7 +491,7 @@ export default function CalculatorSection() {
           width: 560,
           height: 420,
           background:
-            "radial-gradient(ellipse, rgba(200,255,0,0.09), transparent 70%)",
+            "radial-gradient(ellipse, rgba(var(--accent-rgb), 0.09), transparent 70%)",
           pointerEvents: "none",
         }}
       />
@@ -514,7 +514,7 @@ export default function CalculatorSection() {
           <Typography
             component="p"
             sx={{
-              color: LIME,
+              color: ACCENT,
               letterSpacing: 3,
               fontSize: 12,
               fontWeight: 700,
@@ -533,7 +533,7 @@ export default function CalculatorSection() {
               fontSize: { xs: "2rem", sm: "2.7rem", md: "3.4rem" },
               maxWidth: 760,
               mx: "auto",
-              background: `linear-gradient(90deg, #ffffff, ${LIME}, #00e5ff, #ffffff)`,
+              background: `linear-gradient(90deg, #ffffff, ${ACCENT}, var(--accent-2), #ffffff)`,
               backgroundSize: "200% auto",
               WebkitBackgroundClip: "text",
               backgroundClip: "text",
@@ -656,7 +656,7 @@ export default function CalculatorSection() {
                 { value: 2, label: "High" },
               ]}
               sx={{
-                color: LIME,
+                color: ACCENT,
                 "& .MuiSlider-rail": {
                   bgcolor: "rgba(255,255,255,0.15)",
                   opacity: 1,
@@ -668,7 +668,7 @@ export default function CalculatorSection() {
                 },
                 "& .MuiSlider-thumb": {
                   "&:hover, &.Mui-focusVisible": {
-                    boxShadow: "0 0 0 8px rgba(200,255,0,0.16)",
+                    boxShadow: "0 0 0 8px rgba(var(--accent-rgb), 0.16)",
                   },
                 },
               }}
@@ -690,14 +690,14 @@ export default function CalculatorSection() {
               borderRadius: "24px",
               p: "1.5px",
               background:
-                "linear-gradient(160deg, rgba(200,255,0,0.5), rgba(255,255,255,0.05) 45%)",
+                "linear-gradient(160deg, rgba(var(--accent-rgb), 0.5), rgba(255,255,255,0.05) 45%)",
             }}
           >
             <Box
               sx={{
                 position: "relative",
                 borderRadius: "23px",
-                bgcolor: "#0d100c",
+                bgcolor: "#0a1b2b",
                 p: { xs: 3, md: 4 },
                 overflow: "hidden",
               }}
@@ -711,7 +711,7 @@ export default function CalculatorSection() {
                   width: 300,
                   height: 300,
                   background:
-                    "radial-gradient(circle, rgba(200,255,0,0.18), transparent 65%)",
+                    "radial-gradient(circle, rgba(var(--accent-rgb), 0.18), transparent 65%)",
                   pointerEvents: "none",
                 }}
               />
@@ -738,7 +738,7 @@ export default function CalculatorSection() {
                       width: 8,
                       height: 8,
                       borderRadius: "50%",
-                      bgcolor: LIME,
+                      bgcolor: ACCENT,
                       display: "inline-block",
                     }}
                   />
@@ -777,7 +777,7 @@ export default function CalculatorSection() {
                       sx={{
                         fontSize: { xs: "2.2rem", md: "3rem" },
                         fontWeight: 800,
-                        color: LIME,
+                        color: ACCENT,
                       }}
                     >
                       <Odometer value={calc.total} active={inView} prefix="$" />
@@ -884,7 +884,7 @@ export default function CalculatorSection() {
                       py: 1,
                     }}
                   >
-                    <CheckCircleRoundedIcon sx={{ color: LIME }} />
+                    <CheckCircleRoundedIcon sx={{ color: ACCENT }} />
                     <Typography
                       sx={{ fontSize: 14, color: "rgba(255,255,255,0.85)" }}
                     >
@@ -903,7 +903,7 @@ export default function CalculatorSection() {
                       }}
                     >
                       <TrendingUpRoundedIcon
-                        sx={{ color: LIME, fontSize: 20 }}
+                        sx={{ color: ACCENT, fontSize: 20 }}
                       />
                       <Typography sx={{ fontSize: 15, fontWeight: 700 }}>
                         Want a precise number?

@@ -17,8 +17,8 @@ import StorefrontRoundedIcon from "@mui/icons-material/StorefrontRounded";
 import { HOT_SHOT_SERVICES } from "@/data/hotShotServices";
 import type { HotShotService } from "@/types/hotShot";
 import CoverImage from "@/components/common/CoverImage";
+import { ACCENT } from "@/theme/brand";
 
-const LIME = "#c8ff00";
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 function getIcon(icon: string) {
@@ -85,13 +85,13 @@ function ServiceCard({
           color: "#fff",
           overflow: "hidden",
           borderRadius: "20px",
-          bgcolor: "#101010",
+          bgcolor: "#0b1d2e",
           border: "1px solid rgba(255,255,255,.08)",
           transition: "all .45s ease",
 
           "&:hover": {
             transform: "translateY(-10px)",
-            borderColor: "rgba(200,255,0,.45)",
+            borderColor: "rgba(var(--accent-rgb), .45)",
             boxShadow: "0 30px 80px rgba(0,0,0,.55)",
           },
 
@@ -100,8 +100,8 @@ function ServiceCard({
           },
 
           "&:hover .service-arrow": {
-            backgroundColor: LIME,
-            color: "#080808",
+            backgroundColor: ACCENT,
+            color: "#07141f",
             transform: "translateX(5px)",
           },
         }}
@@ -136,7 +136,7 @@ function ServiceCard({
               position: "absolute",
               inset: 0,
               background:
-                "linear-gradient(180deg, rgba(0,0,0,.05) 20%, rgba(8,8,8,.96) 100%)",
+                "linear-gradient(180deg, rgba(0,0,0,.05) 20%, rgba(7,20,31,.96) 100%)",
             }}
           />
 
@@ -157,7 +157,7 @@ function ServiceCard({
           >
             <Typography
               sx={{
-                color: LIME,
+                color: ACCENT,
                 fontSize: 12,
                 fontWeight: 900,
               }}
@@ -176,13 +176,13 @@ function ServiceCard({
               width: 52,
               height: 52,
               borderRadius: "14px",
-              bgcolor: LIME,
-              color: "#080808",
+              bgcolor: ACCENT,
+              color: "#07141f",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               zIndex: 2,
-              boxShadow: "0 15px 35px rgba(200,255,0,.25)",
+              boxShadow: "0 15px 35px rgba(var(--accent-rgb), .25)",
               "& svg": {
                 fontSize: 25,
               },
@@ -205,7 +205,7 @@ function ServiceCard({
         >
           <Typography
             sx={{
-              color: LIME,
+              color: ACCENT,
               fontSize: 9,
               fontWeight: 900,
               letterSpacing: 2,
@@ -265,7 +265,7 @@ function ServiceCard({
               >
                 <CheckCircleRoundedIcon
                   sx={{
-                    color: LIME,
+                    color: ACCENT,
                     fontSize: 17,
                   }}
                 />
@@ -312,8 +312,8 @@ function ServiceCard({
                 width: 38,
                 height: 38,
                 borderRadius: "50%",
-                border: "1px solid rgba(200,255,0,.45)",
-                color: LIME,
+                border: "1px solid rgba(var(--accent-rgb), .45)",
+                color: ACCENT,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -348,7 +348,7 @@ export default function HotShotServices({
       component="section"
       sx={{
         position: "relative",
-        bgcolor: "#080808",
+        bgcolor: "#07141f",
         color: "#fff",
         px: {
           xs: 2.5,
@@ -374,7 +374,7 @@ export default function HotShotServices({
           width: 700,
           height: 400,
           background:
-            "radial-gradient(circle, rgba(200,255,0,.08), transparent 70%)",
+            "radial-gradient(circle, rgba(var(--accent-rgb), .08), transparent 70%)",
           pointerEvents: "none",
         }}
       />
@@ -396,7 +396,7 @@ export default function HotShotServices({
       >
         <Typography
           sx={{
-            color: LIME,
+            color: ACCENT,
             fontSize: 11,
             fontWeight: 900,
             letterSpacing: 3,
