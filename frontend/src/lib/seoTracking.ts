@@ -11,6 +11,7 @@
 import { contactContent } from "@/lib/contactPage";
 import { DEFAULT_DESCRIPTION } from "@/lib/seo";
 import { brandLogoUrl } from "@/lib/branding";
+import { socialLinks } from "@/lib/socialLinks";
 
 export const SEO_TRACKING_KEY = "seo_tracking";
 
@@ -165,6 +166,8 @@ export interface CompanyInfo {
   hours?: string;
   logo?: string;
   description?: string;
+  /** Social profile URLs (schema.org sameAs). */
+  sameAs?: string[];
 }
 
 /** Site-wide LocalBusiness JSON-LD from the company details in Settings. */
@@ -183,6 +186,8 @@ export function businessSchema(siteUrl: string, c: CompanyInfo): Record<string, 
     email: c.email || undefined,
     address: c.address ? { "@type": "PostalAddress", streetAddress: c.address.replace(/\s*\n\s*/g, ", ") } : undefined,
     openingHours: c.hours || undefined,
+    // Social profiles (Dashboard -> Settings -> Social media)
+    sameAs: c.sameAs?.length ? c.sameAs : undefined,
   };
   return JSON.parse(JSON.stringify(schema));
 }
@@ -198,5 +203,7 @@ export function companyInfo(settings: Record<string, string | null | undefined>)
     hours: c.hours,
     logo: brandLogoUrl(settings),
     description: DEFAULT_DESCRIPTION,
+    // WhatsApp is a chat link, not a profile page.
+    sameAs: socialLinks(settings).filter((s) => s.id !== "whatsapp").map((s) => s.url),
   };
 }

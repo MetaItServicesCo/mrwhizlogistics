@@ -13,6 +13,7 @@ import { pagePath } from "@/lib/contentPages";
 import { settingsMap } from "@/lib/contentAdapters";
 import { serializeJsonLd } from "@/lib/blogSchema";
 import { SITE_URL } from "@/lib/site";
+import { socialLinks } from "@/lib/socialLinks";
 import { SEO_TRACKING_KEY, businessSchema, companyInfo, parseSchemaJson, parseSeoTracking } from "@/lib/seoTracking";
 import { CHATBOT_SETTINGS_KEY, parseChatbotSettings } from "@/lib/chatbotSettings";
 import {
@@ -87,9 +88,7 @@ export default async function PublicLayout({
         companyName={settings.company_name}
         phone={settings.phone}
         email={settings.email}
-        linkedinUrl={settings.linkedin_url}
-        xUrl={settings.x_url}
-        youtubeUrl={settings.youtube_url}
+        socials={socialLinks(settings)}
         logo={logo}
         footerLogo={footerLogoFromSettings(settings)}
         address={settings.address}

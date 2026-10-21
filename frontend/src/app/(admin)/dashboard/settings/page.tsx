@@ -14,6 +14,8 @@ import type { SiteSetting, User } from "@/lib/types";
 import DataTable, { type Column } from "@/components/admin/DataTable";
 import LogoSettingsPanel from "@/components/admin/LogoSettingsPanel";
 import CtaSettingsPanel from "@/components/admin/CtaSettingsPanel";
+import SocialLinksPanel from "@/components/admin/SocialLinksPanel";
+import { SOCIAL_SETTING_KEYS } from "@/lib/socialLinks";
 import ContactPageSettingsPanel from "@/components/admin/ContactPageSettingsPanel";
 import { ADDRESS_KEY, CONTACT_PAGE_KEY, WORKING_HOURS_KEY } from "@/lib/contactPage";
 import { CTA_SETTING_KEY } from "@/lib/cta";
@@ -41,6 +43,8 @@ import {
 /** Managed by the Branding and Buttons tabs, so kept out of the generic table. */
 const BRANDING_KEYS = new Set([
   ...BRANDING_KEY_LIST,
+  // Social media tab
+  ...SOCIAL_SETTING_KEYS,
   CTA_SETTING_KEY,
   // Edited in the blog editor
   AUTHOR_BIOS_KEY,
@@ -62,7 +66,7 @@ const BRANDING_KEYS = new Set([
   ...SEO_PAGES.map((page) => seoPageSettingKey(page.id)),
 ]);
 
-type SettingsTab = "branding" | "buttons" | "contact" | "settings" | "users";
+type SettingsTab = "branding" | "social" | "buttons" | "contact" | "settings" | "users";
 
 const ROLE_OPTIONS = [
   { value: "admin", label: "Admin" },
@@ -81,7 +85,7 @@ function SettingsPage() {
   // first render.
   const [tab, setTab] = useState<SettingsTab>(() => {
     const t = params.get("tab");
-    return t && ["branding", "buttons", "contact", "settings", "users"].includes(t) ? (t as SettingsTab) : "branding";
+    return t && ["branding", "social", "buttons", "contact", "settings", "users"].includes(t) ? (t as SettingsTab) : "branding";
   });
   const [search, setSearch] = useState("");
   const [toast, setToast] = useState<string | null>(null);
@@ -338,7 +342,8 @@ function SettingsPage() {
   const onBrandingTab = tab === "branding";
   const onButtonsTab = tab === "buttons";
   const onContactTab = tab === "contact";
-  const onPanelTab = onBrandingTab || onButtonsTab || onContactTab;
+  const onSocialTab = tab === "social";
+  const onPanelTab = onBrandingTab || onButtonsTab || onContactTab || onSocialTab;
 
   return (
     <Box>
@@ -369,6 +374,7 @@ function SettingsPage() {
         }}
       >
         <Tab value="branding" label="Branding" />
+        <Tab value="social" label="Social media" />
         <Tab value="buttons" label="Buttons" />
         <Tab value="contact" label="Contact page" />
         <Tab value="settings" label={`Site settings (${generalSettings.length})`} />
@@ -396,6 +402,20 @@ function SettingsPage() {
           <ErrorState message={settings.error} onRetry={settings.reload} />
         ) : (
           <CtaSettingsPanel
+            settings={settings.items}
+            onSaved={(msg) => {
+              setToast(msg);
+              void settings.reload();
+            }}
+          />
+        )
+      ) : onSocialTab ? (
+        settings.loading && !settings.items.length ? (
+          <LoadingState label="Loading social media…" />
+        ) : settings.error ? (
+          <ErrorState message={settings.error} onRetry={settings.reload} />
+        ) : (
+          <SocialLinksPanel
             settings={settings.items}
             onSaved={(msg) => {
               setToast(msg);

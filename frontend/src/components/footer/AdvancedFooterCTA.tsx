@@ -6,10 +6,9 @@ import { motion } from "motion/react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
-import LinkedInIcon from "@mui/icons-material/LinkedIn";
-import XIcon from "@mui/icons-material/X";
-import YouTubeIcon from "@mui/icons-material/YouTube";
-import { externalUrl, mailtoHref, telHref } from "@/lib/contact";
+import SocialIcon from "@/components/common/SocialIcon";
+import type { SocialLink } from "@/lib/socialLinks";
+import { mailtoHref, telHref } from "@/lib/contact";
 import {
   DEFAULT_FOOTER_LOGO_SETTINGS,
   logoAlt,
@@ -25,9 +24,7 @@ export default function AdvancedFooterCTA({
   companyName = "Mr. Whiz Logistics",
   phone = "+1 (469) 767 8853",
   email = "dispatch@mrwhizlogistics.com",
-  linkedinUrl,
-  xUrl,
-  youtubeUrl,
+  socials = [],
   logo,
   footerLogo,
   address,
@@ -36,10 +33,8 @@ export default function AdvancedFooterCTA({
   companyName?: string;
   phone?: string;
   email?: string;
-  /** Social profile URLs from site settings; an icon is shown only when set. */
-  linkedinUrl?: string;
-  xUrl?: string;
-  youtubeUrl?: string;
+  /** Filled-in profiles from Dashboard -> Settings -> Social media. */
+  socials?: SocialLink[];
   /** Header logo; the footer reuses it unless a footer logo is uploaded. */
   logo?: LogoSettings;
   /** Footer logo image, size and name toggle from the Branding tab. */
@@ -50,13 +45,6 @@ export default function AdvancedFooterCTA({
   pageLinks?: { title: string; href: string }[];
 }) {
   const footer = footerLogo ?? DEFAULT_FOOTER_LOGO_SETTINGS;
-  // Every social icon used to link to "#". Only show the ones that have a
-  // real URL configured under Dashboard -> Settings.
-  const socials = [
-    { label: "LinkedIn", url: externalUrl(linkedinUrl), icon: <LinkedInIcon sx={{ fontSize: 18 }} /> },
-    { label: "X (Twitter)", url: externalUrl(xUrl), icon: <XIcon sx={{ fontSize: 16 }} /> },
-    { label: "YouTube", url: externalUrl(youtubeUrl), icon: <YouTubeIcon sx={{ fontSize: 18 }} /> },
-  ].filter((s): s is typeof s & { url: string } => Boolean(s.url));
 
   return (
     <Box
@@ -553,10 +541,10 @@ export default function AdvancedFooterCTA({
 
             {/* SOCIAL ICONS */}
             {socials.length > 0 && (
-              <Stack direction="row" spacing={1.5}>
+              <Stack direction="row" useFlexGap sx={{ flexWrap: "wrap", gap: 1.5 }}>
                 {socials.map((social) => (
                   <Box
-                    key={social.label}
+                    key={social.id}
                     component="a"
                     href={social.url}
                     target="_blank"
@@ -573,12 +561,12 @@ export default function AdvancedFooterCTA({
                       color: "var(--fg)",
                       transition: "0.2s",
                       "&:hover": {
-                        bgcolor: ACCENT,
-                        color: "#040a11",
+                        bgcolor: social.color,
+                        color: "#ffffff",
                       },
                     }}
                   >
-                    {social.icon}
+                    <SocialIcon id={social.id} sx={{ fontSize: social.id === "x" ? 16 : 18 }} />
                   </Box>
                 ))}
               </Stack>
